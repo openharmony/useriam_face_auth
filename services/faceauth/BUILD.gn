@@ -1,0 +1,105 @@
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//base/useriam/faceauth/useriam.gni")
+import("//build/ohos.gni")
+
+config("face_auth_services_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = []
+
+  cflags = []
+  if (target_cpu == "arm") {
+    cflags += [ "-DBINDER_IPC_32BIT" ]
+  }
+
+  defines = [
+    "APP_LOG_TAG = \"FaceAuth\"",
+    "LOG_DOMAIN = 0xD002422",
+  ]
+}
+
+config("face_auth_services_public_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [
+    "${useriam_common_path}/log/include",
+    "${face_auth_innerkits_path}/include",
+    "${face_auth_services_path}/include",
+    "${face_auth_services_path}/mock/include",
+    "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler/include",
+    "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy/include",
+    "//utils/native/base/include",
+    "//utils/system/safwk/native/include",
+    "//foundation/multimedia/camera_standard/interfaces/innerkits/native/camera/include/",
+    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata/include/",
+    "//foundation/multimedia/camera_standard/services/camera_service/binder/base/include/",
+    "//foundation/multimedia/camera_standard/services/camera_service/binder/client/include/",
+    "//foundation/multimedia/camera_standard/services/camera_service/binder/server/include/",
+
+    "//foundation/aafwk/standard/interfaces/innerkits/ability_manager/include",
+    "${aafwk_path}/services/abilitymgr/include",
+  ]
+}
+
+ohos_shared_library("face_auth_services") {
+  sources = [
+     "${face_auth_services_path}/src/face_auth_algo_dispatcher.cpp",
+     "${face_auth_services_path}/src/face_auth_event_handler.cpp",
+     "${face_auth_services_path}/src/face_auth_manager.cpp",
+     "${face_auth_services_path}/src/face_auth_service.cpp",
+     "${face_auth_services_path}/src/face_auth_camera.cpp",
+     "${face_auth_services_path}/src/face_auth_camera_buffer_listener.cpp",
+     "${face_auth_services_path}/src/face_auth_req.cpp",
+     "${face_auth_services_path}/src/face_auth_thread_pool.cpp",
+     "${face_auth_services_path}/src/face_auth_event.cpp",
+     "${face_auth_services_path}/mock/src/face_auth_algo_adapter.cpp",
+     "${face_auth_services_path}/mock/src/face_auth_ca.cpp",
+     "${face_auth_services_path}/mock/src/face_auth_algo_impl.cpp",
+      ]
+
+  configs = [ ":face_auth_services_config" ]
+
+  public_configs = [ ":face_auth_services_public_config" ]
+
+  deps = [
+    "${useriam_common_path}:faceauth_common",
+    "${face_auth_innerkits_path}:face_auth_innerkits",
+    "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler:libeventhandler",
+    "//foundation/distributedschedule/safwk/interfaces/innerkits/safwk:system_ability_fwk",
+    "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
+    "//utils/native/base:utils",
+    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/camera:camera_framework",
+    "//foundation/multimedia/camera_standard/services/camera_service:camera_service",
+    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata:metadata",
+    "//foundation/graphic/standard:libsurface",
+    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_core:appexecfwk_core",
+    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_base:appexecfwk_base",
+    "//foundation/aafwk/standard/interfaces/innerkits/base:base",
+    "//base/startup/syspara_lite/interfaces/innerkits/native/syspara:syspara",
+    "${aafwk_path}/services/abilitymgr:abilityms",
+    "${useriam_sa_path}:face_auth_service.rc",
+  ]
+
+  external_deps = [
+    "hiviewdfx_hilog_native:libhilog",
+    "ipc:ipc_core",
+    "aafwk_standard:want",
+    "safwk:system_ability_fwk",
+    "samgr_standard:samgr_proxy",
+  ]
+
+  subsystem_name = "useriam"
+  part_name = "faceauth"
+}

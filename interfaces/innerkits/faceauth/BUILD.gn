@@ -1,0 +1,71 @@
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//base/useriam/faceauth/useriam.gni")
+import("//build/ohos.gni")
+
+config("face_auth_innerkits_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = []
+
+  cflags = []
+  if (target_cpu == "arm") {
+    cflags += [ "-DBINDER_IPC_32BIT" ]
+  }
+
+  defines = [
+    "APP_LOG_TAG = \"FaceAuth\"",
+    "LOG_DOMAIN = 0xD002422",
+  ]
+}
+
+config("face_auth_innerkits_public_config") {
+  visibility = [ ":*" ]
+
+  include_dirs = [
+    "${useriam_common_path}/log/include",
+    "${face_auth_innerkits_path}/include",
+    "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy/include",
+    "//utils/native/base/include",
+    "//utils/system/safwk/native/include",
+  ]
+}
+
+ohos_shared_library("face_auth_innerkits") {
+  sources = [
+    "${face_auth_innerkits_path}/src/face_auth_client.cpp",
+    "${face_auth_innerkits_path}/src/face_auth_death_recipient.cpp",
+    "${face_auth_innerkits_path}/src/face_auth_innerkit.cpp",
+    "${face_auth_innerkits_path}/src/face_auth_proxy.cpp",
+    "${face_auth_innerkits_path}/src/face_auth_stub.cpp",
+  ]
+
+  configs = [ ":face_auth_innerkits_config" ]
+
+  public_configs = [ ":face_auth_innerkits_public_config" ]
+
+  deps = [
+    "${useriam_common_path}:faceauth_common",
+    "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
+    "//foundation/graphic/standard:libsurface",
+  ]
+
+  external_deps = [
+    "hiviewdfx_hilog_native:libhilog",
+    "ipc:ipc_core",
+  ]
+
+  subsystem_name = "useriam"
+  part_name = "faceauth"
+}

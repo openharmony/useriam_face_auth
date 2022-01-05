@@ -1,0 +1,292 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "faceEnroll"
+    },
+    {
+      "name": "mainability_description",
+      "value": "JS_Phone_Empty Feature Ability"
+    },
+    {
+      "name": "face_record",
+      "value": "正在录入"
+    },
+    {
+      "name": "face_record_3d_record_fail",
+      "value": "录入失败"
+    },
+    {
+      "name": "enrolling_timeout",
+      "value": "录入超时"
+    },
+    {
+      "name": "face_2dguide_light_notify_universal",
+      "value": "打开”拿起手机亮屏“，提升解锁体验"
+    },
+    {
+      "name": "face_checker",
+      "value": "人脸识别"
+    },
+    {
+      "name": "face_record_success",
+      "value": "录入成功"
+    },
+    {
+      "name": "enroll_face_guide_title",
+      "value": "如何录入面部数据"
+    },
+    {
+      "name": "face_guide_2d_way",
+      "value": "首先，确保摄像头清洁、面部无遮挡，录入环境光线充足、无阳光直射。然后，正对屏幕，将面部完整移入识别区。"
+    },
+    {
+      "name": "face_guide_2d_announce",
+      "value": "人脸识别可用于解锁屏幕及访问应用锁。点击“开始录入”即表示您同意"
+    },
+    {
+      "name": "face_guide_2d_announce_link",
+      "value": "关于人脸识别的声明。"
+    },
+    {
+      "name": "face_guide_3d_way",
+      "value": "首先，请确保您的面部全部显示在识别区内。然后注视屏幕并缓缓转动头部以完成全方位采集。"
+    },
+    {
+      "name": "face_guide_3d_announce",
+      "value": "人脸识别可用于解锁屏幕，访问应用锁、保密柜及支付。点击“开始录入”即表示您同意"
+    },
+    {
+      "name": "face_guide_3d_announce_link",
+      "value": "关于3D人脸识别的声明。"
+    },
+    {
+      "name": "face_recognitin_guide",
+      "value": "开始录入"
+    },
+    {
+      "name": "face_unlock_guide_3d_tip1",
+      "value": "请确保摄像头清洁，面部无遮挡，在光线充足、无阳光直射的环境里录入。"
+    },
+    {
+      "name": "enroll_info",
+      "value": "请保持不动"
+    },
+    {
+      "name": "enroll_info_cancel",
+      "value": "被取消"
+    },
+    {
+      "name": "enroll_info_algorithm_not_init",
+      "value": "算法未初始化"
+    },
+    {
+      "name": "enroll_info_hal_invalid",
+      "value": "人脸识别demon不可用"
+    },
+    {
+      "name": "enroll_info_over_max_faces",
+      "value": "录入超过最大上限"
+    },
+    {
+      "name": "enroll_info_invalid_parameters",
+      "value": "入参无效"
+    },
+    {
+      "name": "enroll_info_busy",
+      "value": "人脸流程正在进行中，请求busy"
+    },
+    {
+      "name": "enroll_info_has_registered",
+      "value": "当前人脸已经录入过"
+    },
+    {
+      "name": "enroll_info_bad_quality",
+      "value": "图像质量太差"
+    },
+    {
+      "name": "enroll_info_not_found",
+      "value": "没检测到人脸"
+    },
+    {
+      "name": "face_record_3d_tip_close",
+      "value": "人脸太小"
+    },
+    {
+      "name": "face_record_3d_tip_far",
+      "value": "人脸太大"
+    },
+    {
+      "name": "face_enroll_too_left",
+      "value": "人脸太靠左"
+    },
+    {
+      "name": "face_enroll_too_high",
+      "value": "人脸太靠上"
+    },
+    {
+      "name": "face_enroll_too_right",
+      "value": "人脸太靠右"
+    },
+    {
+      "name": "face_enroll_too_low",
+      "value": "人脸太靠下"
+    },
+    {
+      "name": "enroll_info_liveness_warning",
+      "value": "活体检测有风险"
+    },
+    {
+      "name": "enroll_info_liveness_failure",
+      "value": "活体检测失败"
+    },
+    {
+      "name": "face_rotate_too_left",
+      "value": "头向左转的角度太大"
+    },
+    {
+      "name": "face_rotate_too_high",
+      "value": "头抬的角度太高"
+    },
+    {
+      "name": "enroll_info_face_has_registered",
+      "value": "转动头部"
+    },
+    {
+      "name": "face_rotate_too_right",
+      "value": "头向右转的角度太大"
+    },
+    {
+      "name": "face_rotate_too_low",
+      "value": "头抬的角度太低"
+    },
+    {
+      "name": "enroll_info_eye_occlusion",
+      "value": "眼睛不清晰"
+    },
+    {
+      "name": "enroll_info_eye_close",
+      "value": "闭眼"
+    },
+    {
+      "name": "enroll_info_mouth_occlusion",
+      "value": "嘴巴不清晰"
+    },
+    {
+      "name": "face_record_3d_tip_multi",
+      "value": "出现多张脸"
+    },
+    {
+      "name": "enroll_info_blur",
+      "value": "脸不清晰"
+    },
+    {
+      "name": "enroll_info_not_complete",
+      "value": "脸不完整"
+    },
+    {
+      "name": "enroll_info_darklight",
+      "value": "光线太暗"
+    },
+    {
+      "name": "enroll_info_highlight",
+      "value": "光线太强"
+    },
+    {
+      "name": "enroll_info_half_shadow",
+      "value": "阴阳脸"
+    },
+    {
+      "name": "enroll_info_darkpic",
+      "value": "图片太暗"
+    },
+    {
+      "name": "enroll_info_rotate_top_right",
+      "value": "人脸头顶朝右"
+    },
+    {
+      "name": "enroll_info_rotate_top_left",
+      "value": "人脸头顶朝左"
+    },
+    {
+      "name": "enroll_info_rotate_bottom_right",
+      "value": "人脸下巴朝右"
+    },
+    {
+      "name": "enroll_info_rotate_bottom_left",
+      "value": "人脸下巴朝左"
+    },
+    {
+      "name": "enroll_info_open_camera_failed",
+      "value": "打开Camera失败"
+    },
+    {
+      "name": "enroll_button_content",
+      "value": "重新录入"
+    },
+    {
+      "name": "face_recognize_annouce",
+      "value": "免责声明"
+    },
+    {
+      "name": "face_recognize_annouce_message_01",
+      "value": "       人脸识别是一种基于人的脸部特征信息进行身份识别的生物识别技术。它通过手机前置摄像头捕捉人脸面部数据，进而快速完成面部特征比对和身份认证。可用于解锁屏幕、访问应用锁等场景。"
+    },
+    {
+      "name": "face_recognize_annouce_message_02",
+      "value": "录入面部数据时，需注意以下事项："
+    },
+    {
+      "name": "face_recognize_annouce_message_03",
+      "value": "确保摄像头清洁；"
+    },
+    {
+      "name": "face_recognize_annouce_message_04",
+      "value": "在光线充足的环境下录入，但需避免强光直射；"
+    },
+    {
+      "name": "face_recognize_annouce_message_05",
+      "value": "勿用衣帽、头发、墨镜、口罩、浓妆等遮挡面部；"
+    },
+    {
+      "name": "face_recognize_annouce_message_06",
+      "value": "确保面部正面完整清晰地出现在提示框内，不要闭眼、大幅度仰头或低头；"
+    },
+    {
+      "name": "face_recognize_annouce_message_07",
+      "value": "避免其他人出现在录入画面中。"
+    },
+    {
+      "name": "face_recognize_annouce_message_08",
+      "value": "任何技术都存在一定局限和风险，使用人脸识别时，需注意以下事项："
+    },
+    {
+      "name": "face_recognize_annouce_message_09",
+      "value": "在暗光、强光、逆光或角度过大等场景下，人脸识别的成功率会有所降低；"
+    },
+    {
+      "name": "face_recognize_annouce_message_10",
+      "value": "您的设备可能会被容貌、外形与您相近的人或物品解锁；"
+    },
+    {
+      "name": "face_recognize_annouce_message_11",
+      "value": "请勿将设备随意交给他人使用，避免人脸识别功能被恶意利用；"
+    },
+    {
+      "name": "face_recognize_annouce_message_12",
+      "value": "除以上事项外，您还需注意其他可能影响人脸识别功能正常使用的情况。"
+    },
+    {
+      "name": "face_recognize_annouce_message_13",
+      "value": "隐私声明"
+    },
+    {
+      "name": "face_recognize_annouce_message_14",
+      "value": "       您的面部数据将受到严格保护。该数据仅加密保存于本设备的安全隔离区域，华为不会进行备份，其他应用也无法访问或备份。例如，您使用人脸识别进行应用内认证时，应用仅能收到认证是否成功的通知，而无法访问、备份或录入面部数据。"
+    },
+    {
+      "name": "face_recognize_annouce_message_15",
+      "value": "您拥有人脸识别的自主控制权，可灵活控制人脸识别的使用及适用范围。例如，您不想使用人脸识别访问应用锁，在“设置”中将其关闭即可，此时人脸识别仍可用于其他操作，但不可用于进入应用锁。您还可彻底删除."
+    }
+  ]
+}
