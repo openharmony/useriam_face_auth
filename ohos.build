@@ -1,0 +1,21 @@
+{
+  "subsystem": "useriam",
+  "parts": {
+    "faceauth": {
+      "variants": [
+        "phone",
+        "wearable"
+      ],
+      "inner_kits": [
+      ],
+      "module_list": [
+        "//base/useriam/faceauth:faceauth_system",
+        "//base/useriam/faceauth/interfaces/kits/napi/faceauth_mgr:napi_packages"
+      ],
+      "test_list": [
+        "//base/useriam/faceauth:faceauth_build_module_standard_test",
+        "//test/xts/acts/useriam/faceauth:systemtest"
+      ]
+    }
+  }
+}
