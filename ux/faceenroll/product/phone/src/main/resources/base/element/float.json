@@ -1,0 +1,69 @@
+{
+  "float": [
+
+    {
+      "name": "back_margin",
+      "value": "5"
+    },
+    {
+      "name": "enroll_title_position_X",
+      "value": "0"
+    },
+    {
+      "name": "startImage_3D_width",
+      "value": "256"
+    },
+    {
+      "name": "checkbox_size",
+      "value": "25"
+    },
+    {
+      "name": "enroll_center_position_X",
+      "value": "0"
+    },
+    {
+      "name": "enroll_info_X",
+      "value": "20"
+    },
+    {
+      "name": "progress_width",
+      "value": "230"
+    },
+    {
+      "name": "progress_value_start",
+      "value": "0"
+    },
+    {
+      "name": "blur_start",
+      "value": "0"
+    },
+    {
+      "name": "blur_end",
+      "value": "40"
+    },
+    {
+      "name": "aperture1_width",
+      "value": "133"
+    },
+    {
+      "name": "aperture2_width",
+      "value": "132"
+    },
+    {
+      "name": "aperture34_width",
+      "value": "142"
+    },
+    {
+      "name": "aperture5_width",
+      "value": "233"
+    },
+    {
+      "name": "success_image",
+      "value": "102"
+    },
+    {
+      "name": "success_margin",
+      "value": "100"
+    }
+  ]
+}

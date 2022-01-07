@@ -1,0 +1,292 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "faceEnroll"
+    },
+    {
+      "name": "mainability_description",
+      "value": "JS_Phone_Empty Feature Ability"
+    },
+    {
+      "name": "face_record",
+      "value": "Set up Face Recognition"
+    },
+    {
+      "name": "face_record_3d_record_fail",
+      "value": "Setup failed"
+    },
+    {
+      "name": "enrolling_timeout",
+      "value": "Enter the timeout"
+    },
+    {
+      "name": "face_2dguide_light_notify_universal",
+      "value": "Enable raise to wake"
+    },
+    {
+      "name": "face_checker",
+      "value": "Face Recognition"
+    },
+    {
+      "name": "face_record_success",
+      "value": "Setup complete"
+    },
+    {
+      "name": "enroll_face_guide_title",
+      "value": "Set up Face Recognition"
+    },
+    {
+      "name": "face_guide_2d_way",
+      "value": "Before starting, make sure the camera is clean, your face is unobstructed, and the environment is well-lit."
+    },
+    {
+      "name": "face_guide_2d_announce",
+      "value": "You can use Face Recognition to unlock your device and open locked apps.Click \"Start typing\" to indicate your consent"
+    },
+    {
+      "name": "face_guide_2d_announce_link",
+      "value": "Statement About Face Recognition。"
+    },
+    {
+      "name": "face_guide_3d_way",
+      "value": "First, position your face in the frame. Then slowly move your head in a circle while looking at the screen to show all angles of your face."
+    },
+    {
+      "name": "face_guide_3d_announce",
+      "value": "You can use Face Recognition to unlock your device, confirm payments, open locked apps, and more.Click \"Start typing\" to indicate your consent"
+    },
+    {
+      "name": "face_guide_3d_announce_link",
+      "value": "Statement About 3D Face Recognition。"
+    },
+    {
+      "name": "face_recognitin_guide",
+      "value": "Get started"
+    },
+    {
+      "name": "face_unlock_guide_3d_tip1",
+      "value": "Make sure that the camera is clean, your face is not covered, and you are in a well-lit environment (avoid direct sunlight)."
+    },
+    {
+      "name": "enroll_info",
+      "value": "Please hold still"
+    },
+    {
+      "name": "enroll_info_cancel",
+      "value": "cancelled"
+    },
+    {
+      "name": "enroll_info_algorithm_not_init",
+      "value": "The algorithm is not initialized"
+    },
+    {
+      "name": "enroll_info_hal_invalid",
+      "value": "Demon is unavailable"
+    },
+    {
+      "name": "enroll_info_over_max_faces",
+      "value": "The input exceeds the upper limit"
+    },
+    {
+      "name": "enroll_info_invalid_parameters",
+      "value": "The parameter is invalid"
+    },
+    {
+      "name": "enroll_info_busy",
+      "value": "Face flow in progress, request BUSY"
+    },
+    {
+      "name": "enroll_info_has_registered",
+      "value": "The current face has been entered"
+    },
+    {
+      "name": "enroll_info_bad_quality",
+      "value": "Poor image quality"
+    },
+    {
+      "name": "enroll_info_not_found",
+      "value": "No faces detected"
+    },
+    {
+      "name": "face_record_3d_tip_close",
+      "value": "The face is too small"
+    },
+    {
+      "name": "face_record_3d_tip_far",
+      "value": "The face is too big"
+    },
+    {
+      "name": "face_enroll_too_left",
+      "value": "Face too far to the left"
+    },
+    {
+      "name": "face_enroll_too_high",
+      "value": "Face too close up"
+    },
+    {
+      "name": "face_enroll_too_right",
+      "value": "Face too far to the right"
+    },
+    {
+      "name": "face_enroll_too_low",
+      "value": "Face too far down "
+    },
+    {
+      "name": "enroll_info_liveness_warning",
+      "value": "In vivo testing is risky  "
+    },
+    {
+      "name": "enroll_info_liveness_failure",
+      "value": "In vivo test failed"
+    },
+    {
+      "name": "face_rotate_too_left",
+      "value": "Too much head to the left "
+    },
+    {
+      "name": "face_rotate_too_high",
+      "value": "Head raised at too high an Angle"
+    },
+    {
+      "name": "enroll_info_face_has_registered",
+      "value": "Turn the head"
+    },
+    {
+      "name": "face_rotate_too_right",
+      "value": "Head turned too far to the right"
+    },
+    {
+      "name": "face_rotate_too_low",
+      "value": "Head raised too low"
+    },
+    {
+      "name": "enroll_info_eye_occlusion",
+      "value": "Poor eyesight"
+    },
+    {
+      "name": "enroll_info_eye_close",
+      "value": "close one's eyes"
+    },
+    {
+      "name": "enroll_info_mouth_occlusion",
+      "value": "Your mouth is not clear"
+    },
+    {
+      "name": "face_record_3d_tip_multi",
+      "value": "Multiple faces appear"
+    },
+    {
+      "name": "enroll_info_blur",
+      "value": "Face is not clear"
+    },
+    {
+      "name": "enroll_info_not_complete",
+      "value": "Face is not complete"
+    },
+    {
+      "name": "enroll_info_darklight",
+      "value": "The light is too dim"
+    },
+    {
+      "name": "enroll_info_highlight",
+      "value": "The light is too strong"
+    },
+    {
+      "name": "enroll_info_half_shadow",
+      "value": "Yin and Yang face"
+    },
+    {
+      "name": "enroll_info_darkpic",
+      "value": "Picture too dark"
+    },
+    {
+      "name": "enroll_info_rotate_top_right",
+      "value": "Head to the right"
+    },
+    {
+      "name": "enroll_info_rotate_top_left",
+      "value": "Head to the left"
+    },
+    {
+      "name": "enroll_info_rotate_bottom_right",
+      "value": "Face with chin to the right"
+    },
+    {
+      "name": "enroll_info_rotate_bottom_left",
+      "value": "Face with chin to the left"
+    },
+    {
+      "name": "enroll_info_open_camera_failed",
+      "value": "Failed to open Camera  "
+    },
+    {
+      "name": "enroll_button_content",
+      "value": "re-enter"
+    },
+    {
+      "name": "face_recognize_annouce",
+      "value": "Disclaimer"
+    },
+    {
+      "name": "face_recognize_annouce_message_01",
+      "value": "       Face Recognition is a biometric identification technology that allows your phone to recognize the features of your face. It uses the front camera to capture facial data, and then compares it to pre-stored data to quickly verify your identity. You can use this feature to unlock your device, open locked apps, and more."
+    },
+    {
+      "name": "face_recognize_annouce_message_02",
+      "value": "Please note the following when setting up this feature:"
+    },
+    {
+      "name": "face_recognize_annouce_message_03",
+      "value": "Make sure that the camera lens is clean."
+    },
+    {
+      "name": "face_recognize_annouce_message_04",
+      "value": "Scan your face in a well-lit environment, avoiding direct sunlight."
+    },
+    {
+      "name": "face_recognize_annouce_message_05",
+      "value": "Avoid covering your face with items of clothing, hair, sunglasses, masks, or thick makeup."
+    },
+    {
+      "name": "face_recognize_annouce_message_06",
+      "value": "Make sure your face is completely displayed in the frame. Look straight at the camera, and avoid raising and lowering your head or closing your eyes."
+    },
+    {
+      "name": "face_recognize_annouce_message_07",
+      "value": "Make sure that no one else appears in the frame.。"
+    },
+    {
+      "name": "face_recognize_annouce_message_08",
+      "value": "Please note the following when using Face Recognition:"
+    },
+    {
+      "name": "face_recognize_annouce_message_09",
+      "value": "Face Recognition may not work as well in dim, very bright, or backlit environments, or if the angle between your face and the camera is too great."
+    },
+    {
+      "name": "face_recognize_annouce_message_10",
+      "value": "There is a small chance that your device may be unlocked by people that closely resemble you or by objects that represent close depictions of your likeness."
+    },
+    {
+      "name": "face_recognize_annouce_message_11",
+      "value": "To prevent Face Recognition from being used without your consent, please exercise caution before allowing other people to use your device."
+    },
+    {
+      "name": "face_recognize_annouce_message_12",
+      "value": "The functionality of Face Recognition may also be affected in scenarios other than those described above."
+    },
+    {
+      "name": "face_recognize_annouce_message_13",
+      "value": "Privacy Statement"
+    },
+    {
+      "name": "face_recognize_annouce_message_14",
+      "value": "      Your <b>facial data</b> is rigorously protected. This data is encrypted and stored in an isolated zone on your device, where it will not be copied by Huawei, and cannot be copied or accessed by any app. When you use Face Recognition in an app, the app is only informed whether or not verification is successful, and cannot access your actual <b>facial data</b>."
+    },
+    {
+      "name": "face_recognize_annouce_message_15",
+      "value": "As the owner of your <b>facial data</b>, you are entitled to decide how you use the Face Recognition feature. For example, if you don\\'t want to use Face Recognition to access App Lock, you can disable this feature in Settings. You can also choose to permanently delete your <b>facial data</b> from your device."
+    }
+  ]
+}
