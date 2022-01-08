@@ -20,7 +20,7 @@ useriam_faceauth是用户身份认证与访问控制子系统的人脸认证组�
 
 ## 编译构建
 
-useriam_faceauth是Open Harmony标准系统的组件，安装依赖工具、获取源码、编译流程请参考Open Harmony官方构建文档。链接如下：
+useriam_faceauth是OpenHarmony标准系统的组件，安装依赖工具、获取源码、编译流程请参考OpenHarmony官方构建文档。链接如下：
 
 [搭建Windows开发环境](https://www.openharmony.cn/pages/00010101/)
 
@@ -31,14 +31,14 @@ useriam_faceauth是Open Harmony标准系统的组件，安装依赖工具、获�
 在完成全量构建后，可以单独构建faceauth组件，命令如下：
 
 ```bash
-# ./build.sh $platform_build_comand --build-target faceauth
+# ./build.sh $platform_build_command --build-target faceauth
 # 以Hi3516DV300为例，其他产品构建命令有所不同
 ./build.sh --product-name Hi3516DV300 --build-target faceauth
 ```
 
 ## 使用说明
 
-本模块实现了Harmony OS用户认证接口，接口说明请参考[用户认证 JSAPI参考](https://developer.harmonyos.com/cn/docs/documentation/doc-references/js-apis-useriam-userauth-0000001168311785)。
+本模块实现了用户认证接口，接口说明请参考[用户认证 JSAPI参考](https://developer.harmonyos.com/cn/docs/documentation/doc-references/js-apis-useriam-userauth-0000001168311785)。
 
 使用示例：
 
@@ -99,7 +99,7 @@ export default {
 1. 在完成全量构建后，构建人脸faceauth UT测试例
 
 ```bash
-# ./build.sh $platform_build_comand --build-target faceauth_build_module_standard_test
+# ./build.sh $platform_build_command --build-target faceauth_build_module_standard_test
 # 以Hi3516DV300为例，其他产品构建命令有所不同
 ./build.sh --product-name Hi3516DV300 --build-target faceauth_build_module_standard_test
 ```

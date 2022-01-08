@@ -28,6 +28,7 @@
 #include "iservice_registry.h"
 #include "ipc_skeleton.h"
 #include "sa_mgr_client.h"
+#include "face_auth_bms_adapter.h"
 
 using namespace OHOS::AAFwk;
 
@@ -58,8 +59,8 @@ FaceAuthManager::~FaceAuthManager()
 
 int32_t FaceAuthManager::Enroll(const EnrollParam &param, const sptr<OnFaceAuth> &callback)
 {
-    FACEAUTH_LABEL_LOGI(
-        "reqId: xxxx%04llu, challenge: %{private}lld,faceId: %{private}d", param.reqId, param.challenge, param.faceId);
+    FACEAUTH_LABEL_LOGI("reqId: xxxx%04llu, challenge: %{private}lld,faceId: %{private}d", param.reqId, param.challenge,
+        param.faceId);
     if (CheckEnrollParam(param, callback) != FA_RET_OK) {
         return FA_RET_ERROR;
     }
@@ -122,10 +123,7 @@ int32_t FaceAuthManager::Authenticate(const AuthParam &param, const sptr<OnFaceA
 {
     FACEAUTH_LABEL_LOGI("reqId: xxxx%04llu, flags: %{public}d, challenge: %{private}lld, "
                         "faceId: %{private}d",
-        param.reqId,
-        param.flags,
-        param.challenge,
-        param.faceId);
+        param.reqId, param.flags, param.challenge, param.faceId);
     if (CheckAuthParam(param, callback) != 0) {
         return FA_RET_ERROR;
     }
@@ -188,7 +186,7 @@ int32_t FaceAuthManager::CheckAuthParam(const AuthParam &param, const sptr<OnFac
 int32_t FaceAuthManager::Init()
 {
     FACEAUTH_LABEL_LOGI("FaceAuthManager::Init");
-    std::string bundleName = GetCallingBundleName();
+    std::string bundleName = FaceAuthBmsAdapter::GetInstance()->GetCallingBundleName();
     if (bundleName == "") {
         FACEAUTH_LABEL_LOGE("FaceAuthManager::Init GetCallingBundleName Fail!");
         return FA_RET_ERROR;
@@ -200,7 +198,7 @@ int32_t FaceAuthManager::Init()
 int32_t FaceAuthManager::Release()
 {
     FACEAUTH_LABEL_LOGI("FaceAuthManager::Release");
-    std::string bundleName = GetCallingBundleName();
+    std::string bundleName = FaceAuthBmsAdapter::GetInstance()->GetCallingBundleName();
     if (bundleName == "") {
         FACEAUTH_LABEL_LOGE("FaceAuthManager::Release GetCallingBundleName Fail!");
         return FA_RET_ERROR;
@@ -218,9 +216,7 @@ void FaceAuthManager::HandleCallEnroll(const EnrollParam &param, const sptr<OnFa
 {
     FACEAUTH_LABEL_LOGI("reqId: xxxx%04llu, challenge: %{private}lld, "
                         "faceId: %{private}d",
-        param.reqId,
-        param.challenge,
-        param.faceId);
+        param.reqId, param.challenge, param.faceId);
     if (CheckEnrollParam(param, callback) != FA_RET_OK) {
         return;
     }
@@ -230,8 +226,9 @@ void FaceAuthManager::HandleCallEnroll(const EnrollParam &param, const sptr<OnFa
     FaceReqType reqType;
     reqType.reqId = param.reqId;
     reqType.operateType = FACE_OPERATE_TYPE_ENROLL;
-    FaceAuthThreadPool::GetInstance()->AddTask(
-        [&promiseobj, &producer]() { promiseobj.set_value(FaceAuthCamera::GetInstance()->OpenCamera(producer)); });
+    FaceAuthThreadPool::GetInstance()->AddTask([&promiseobj, &producer]() {
+        promiseobj.set_value(FaceAuthCamera::GetInstance()->OpenCamera(producer));
+    });
     Prepare(HW_EXEC_TYPE_ENROOL);
     CallBackParam cbParam;
     cbParam.reqId = param.reqId;
@@ -271,10 +268,7 @@ void FaceAuthManager::HandleCallAuthenticate(const AuthParam &param, const sptr<
 {
     FACEAUTH_LABEL_LOGI("reqId: xxxx%04llu, flags: %{public}d, challenge: %{private}lld, "
                         "faceId: %{private}d",
-        param.reqId,
-        param.flags,
-        param.challenge,
-        param.faceId);
+        param.reqId, param.flags, param.challenge, param.faceId);
 
     if (CheckAuthParam(param, callback) != FA_RET_OK) {
         return;
@@ -285,8 +279,9 @@ void FaceAuthManager::HandleCallAuthenticate(const AuthParam &param, const sptr<
     std::future<int32_t> futureobj = promiseobj.get_future();
     FaceReqType reqType = CreateAuthReqInfo(param.reqId, param.flags);
     FACEAUTH_LABEL_LOGI("FaceAuthCurTaskNum is %{public}d ", FaceAuthThreadPool::GetInstance()->GetCurTaskNum());
-    FaceAuthThreadPool::GetInstance()->AddTask(
-        [&promiseobj, &producer]() { promiseobj.set_value(FaceAuthCamera::GetInstance()->OpenCamera(producer)); });
+    FaceAuthThreadPool::GetInstance()->AddTask([&promiseobj, &producer]() {
+        promiseobj.set_value(FaceAuthCamera::GetInstance()->OpenCamera(producer));
+    });
     Prepare(HW_EXEC_TYPE_UNLOCK);
     SetChallenge(param.challenge);
     CallBackParam cbParam;
@@ -332,8 +327,8 @@ void FaceAuthManager::HandleCallRemove(const RemoveParam &param, const sptr<OnFa
     return;
 }
 
-void FaceAuthManager::ExecuteEnrollEvent(
-    uint64_t reqId, int32_t faceId, std::vector<uint8_t> token, const sptr<OnFaceAuth> &callback)
+void FaceAuthManager::ExecuteEnrollEvent(uint64_t reqId, int32_t faceId, std::vector<uint8_t> token,
+    const sptr<OnFaceAuth> &callback)
 {
     int32_t authErrorCode;
     FICode code;
@@ -467,8 +462,8 @@ void FaceAuthManager::ExecuteAuthEvent(const uint64_t reqId, const int32_t flags
     return;
 }
 
-void FaceAuthManager::HandleExceptionCallback(
-    const FIResultType type, CallBackParam cbParam, const int32_t resetValue, const sptr<OnFaceAuth> &callback)
+void FaceAuthManager::HandleExceptionCallback(const FIResultType type, CallBackParam cbParam, const int32_t resetValue,
+    const sptr<OnFaceAuth> &callback)
 {
     FaceReqType reqType;
     reqType.reqId = cbParam.reqId;
@@ -496,7 +491,9 @@ bool FaceAuthManager::CheckLockOutMode(const uint64_t reqId, const sptr<OnFaceAu
     if (errorCount_ >= AUTH_FAIL_MAX_TIMES) {
         isLockOutMode_ = true;
         FACEAUTH_LABEL_LOGI("FaceAuthCurTaskNum is %{public}d ", FaceAuthThreadPool::GetInstance()->GetCurTaskNum());
-        FaceAuthThreadPool::GetInstance()->AddTask([this]() { StartTimer(); });
+        FaceAuthThreadPool::GetInstance()->AddTask([this]() {
+            StartTimer();
+        });
         CallBackParam cbParam;
         cbParam.reqId = reqId;
         cbParam.code = CODE_CALLBACK_RESULT;
@@ -644,14 +641,11 @@ int32_t FaceAuthManager::Remove(const RemoveParam &param, const sptr<OnFaceAuth>
     return FA_RET_OK;
 }
 
-void FaceAuthManager::SendCallback(
-    const FIResultType type, const CallBackParam cbParam, const sptr<OnFaceAuth> &callback)
+void FaceAuthManager::SendCallback(const FIResultType type, const CallBackParam cbParam,
+    const sptr<OnFaceAuth> &callback)
 {
-    FACEAUTH_LABEL_LOGI("type: %{public}d, reqId: xxxx%04llu, code: %{public}d, errorCode: %{public}d",
-        type,
-        cbParam.reqId,
-        cbParam.code,
-        cbParam.errorCode);
+    FACEAUTH_LABEL_LOGI("type: %{public}d, reqId: xxxx%04llu, code: %{public}d, errorCode: %{public}d", type,
+        cbParam.reqId, cbParam.code, cbParam.errorCode);
     Bundle bundleInfo;
     for (std::vector<uint8_t>::const_iterator iter = cbParam.authtoken.begin(); iter != cbParam.authtoken.end();
          ++iter) {
@@ -743,36 +737,6 @@ int32_t FaceAuthManager::SendCameraImage(std::unique_ptr<CameraImageStream> img)
     return FA_RET_OK;
 }
 
-std::string FaceAuthManager::GetCallingBundleName()
-{
-    FACEAUTH_LABEL_LOGI("FaceAuthManager GetCallingBundleName start");
-    int32_t uid = IPCSkeleton::GetCallingUid();
-    FACEAUTH_LABEL_LOGI("uid is %{public}d", uid);
-    if (iBundleMgr_ == nullptr) {
-        auto bundleObj =
-            OHOS::DelayedSingleton<SaMgrClient>::GetInstance()->GetSystemAbility(BUNDLE_MGR_SERVICE_SYS_ABILITY_ID);
-        if (bundleObj == nullptr) {
-            FACEAUTH_LABEL_LOGE("failed to get bundle manager service.");
-            return nullptr;
-        }
-        iBundleMgr_ = iface_cast<AppExecFwk::IBundleMgr>(bundleObj);
-        if (iBundleMgr_ == nullptr) {
-            FACEAUTH_LABEL_LOGI("iBundleMgr is null");
-            return "";
-        }
-    }
-    std::string bundleName;
-    bool result = iBundleMgr_->GetBundleNameForUid(uid, bundleName);
-    FACEAUTH_LABEL_LOGI("bundleName is %{public}s", bundleName.c_str());
-    FACEAUTH_LABEL_LOGI("result is %{public}d", result);
-    if (!result) {
-        FACEAUTH_LABEL_LOGE("cannot get bundle name by uid %{public}d", uid);
-        return "";
-    }
-    FACEAUTH_LABEL_LOGI("FaceAuthManager GetCallingBundleName end");
-    return bundleName;
-}
-
 std::list<int32_t> FaceAuthManager::GetEnrolledFaceIDs(const int32_t userId)
 {
     std::list<int32_t> faceInfolist;
@@ -787,10 +751,8 @@ std::list<int32_t> FaceAuthManager::GetEnrolledFaceIDs(const int32_t userId)
 bool FaceAuthManager::CheckFaceIDValidity(int32_t faceId)
 {
     std::list<int32_t> enrolled_faceids = GetEnrolledFaceIDs(USER_ID_DEFAULT);
-    FACEAUTH_LABEL_LOGI("faceId: %{public}d,enrolled_faceids size: %{public}d,enrolled_faceids[0]:%{public}d",
-        faceId,
-        enrolled_faceids.front(),
-        enrolled_faceids.size());
+    FACEAUTH_LABEL_LOGI("faceId: %{public}d,enrolled_faceids size: %{public}d,enrolled_faceids[0]:%{public}d", faceId,
+        enrolled_faceids.front(), enrolled_faceids.size());
     if (std::find(enrolled_faceids.begin(), enrolled_faceids.end(), faceId) != enrolled_faceids.end()) {
         return true;
     }
@@ -867,12 +829,12 @@ uint32_t FaceAuthManager::GenerateEventId()
     t.tv_sec = 0;
     t.tv_nsec = 0;
     clock_gettime(CLOCK_REALTIME, &t);
-    int64_t elapsedTime {((t.tv_sec) * SEC_TO_NANOSEC + t.tv_nsec)};
+    int64_t elapsedTime { ((t.tv_sec) * SEC_TO_NANOSEC + t.tv_nsec) };
     size_t elapsedHash = std::hash<std::string>()(std::to_string(elapsedTime));
     uint32_t eventId = static_cast<uint32_t>(elapsedHash);
     FACEAUTH_LABEL_LOGI("GenerateEventId generate eventId %{public}u", eventId);
     return eventId;
 }
-}  // namespace FaceAuth
-}  // namespace UserIAM
-}  // namespace OHOS
+} // namespace FaceAuth
+} // namespace UserIAM
+} // namespace OHOS
