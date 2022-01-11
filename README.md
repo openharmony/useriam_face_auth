@@ -1,9 +1,16 @@
-# faceauth
+# 人脸识别组件
 
-## 介绍
+- [人脸识别组件](#人脸识别组件)
+  - [简介<a name="section11660541593"></a>](#简介)
+  - [目录<a name="section161941989596"></a>](#目录)
+  - [安装<a name="section14778154275818"></a>](#安装)
+  - [相关仓<a name="section1371113476307"></a>](#相关仓)
+
+## 简介<a name="section11660541593"></a>
 faceauth是用户身份认证与访问控制子系统的人脸认证组件。提供了人脸认证相关接口（如人脸录入、人脸认证、人脸删除）和人脸认证UX界面（如设置页面、录入页面）。
 
-## 目录
+## 目录<a name="section161941989596"></a>
+
 ```bash
 //base/useriam/faceauth
 ├── BUILD.gn                 # 组件构建脚本
@@ -15,121 +22,19 @@ faceauth是用户身份认证与访问控制子系统的人脸认证组件。提
 ├── sa_profile               # Service Ability 配置文件
 ├── service                  # Service Ability 服务实现
 ├── useriam.gni              # 构建配置
-└── ux                       # UX界面
+└── ui                       # 用户界面
 ```
 
-## 编译构建
+## 安装<a name="section14778154275818"></a>
 
-useriam_faceauth是OpenHarmony标准系统的组件，安装依赖工具、获取源码、编译流程请参考OpenHarmony官方构建文档。链接如下：
+人脸识别组件随用户身份认证与访问控制子系统编译和系统镜像打包。
 
-[搭建Windows开发环境](https://www.openharmony.cn/pages/00010101/)
+## 相关仓<a name="section1371113476307"></a>
 
-[搭建Ubuntu环境-Docker方式](https://www.openharmony.cn/pages/00010102/)
+distributedschedule_samgr
 
-[搭建Ubuntu环境-安装包方式](https://www.openharmony.cn/pages/00010103/)
+distributedschedule_safwk
 
-在完成全量构建后，可以单独构建faceauth组件，命令如下：
+appexecfwk_standard
 
-```bash
-# ./build.sh $platform_build_command --build-target faceauth
-# 以Hi3516DV300为例，其他产品构建命令有所不同
-./build.sh --product-name Hi3516DV300 --build-target faceauth
-```
-
-## 使用说明
-
-本模块实现了用户认证接口，接口说明请参考[用户认证 JSAPI参考](https://developer.harmonyos.com/cn/docs/documentation/doc-references/js-apis-useriam-userauth-0000001168311785)。
-
-使用示例：
-
-```javascript
-import userIAM_userAuth from '@ohos.userIAM.userAuth';
-
-export default {
-    startAuth() {
-        console.info("start auth");
-        let tipCallback = (tip)=>{
-            console.info("receive tip: errorCode(" + tip.errorCode + ") code(" + tip.tipCode + ") event(" +
-                tip.tipEvent + ") info(" + tip.tipInfo + ")");
-            // 此处添加提示信息显示逻辑
-        };
-        let auth = userIAM_userAuth.getAuthenticator();
-        auth.on("tip", tipCallback);
-        auth.execute("FACE_ONLY", "S2").then((code)=>{
-            auth.off("tip", tipCallback);
-            console.info("auth success");
-            // 此处添加认证成功逻辑
-        }).catch((code)=>{
-            auth.off("tip", tipCallback);
-            console.error("auth fail, code = " + code);
-            // 此处添加认证失败逻辑
-        });
-    },
-
-    checkAuthSupport() {
-        console.info("start check auth support");
-        let auth = userIAM_userAuth.getAuthenticator();
-        let checkCode = auth.checkAvailability("FACE_ONLY", "S2");
-        if (checkCode == userIAM_userAuth.CheckAvailabilityResult.SUPPORTED) {
-            console.info("check auth support success");
-            // 此处添加支持指定类型认证的逻辑
-        } else {
-            console.error("check auth support fail, code = " + checkCode);
-            // 此处添加不支持指定类型认证的逻辑
-        }
-    },
-
-    cancelAuth() {
-        console.info("start cancel auth");
-        let auth = userIAM_userAuth.getAuthenticator();
-        let cancelCode = auth.cancel();
-        if (cancelCode == userIAM_userAuth.Result.SUCCESS) {
-            console.info("cancel auth success");
-        } else {
-            console.error("cancel auth fail");
-        }
-    }
-}
-```
-
-## 测试用例
-
-### 执行UT用例
-
-1. 在完成全量构建后，构建人脸faceauth UT测试例
-
-```bash
-# ./build.sh $platform_build_command --build-target faceauth_build_module_standard_test
-# 以Hi3516DV300为例，其他产品构建命令有所不同
-./build.sh --product-name Hi3516DV300 --build-target faceauth_build_module_standard_test
-```
-
-2. 将UT测试例的二进制推送到设备上
-
-```bash
-# 以Hi3516DV300为例，其他产品输出路径有所不同
-hdc file send out/hi3516dv300/tests/unittest/faceauth/faceauthtest/face_auth_manager_auth_test /data/face_auth_manager_auth_test
-hdc file send out/hi3516dv300/tests/unittest/faceauth/faceauthtest/face_auth_manager_enroll_test /data/face_auth_manager_enroll_test
-hdc file send out/hi3516dv300/tests/unittest/faceauth/faceauthtest/face_auth_manager_scenario_test /data/face_auth_manager_scenario_test
-```
-
-3. 执行测试例，观察测试结果
-
-```bash
-hdc shell /data/face_auth_manager_auth_test
-hdc shell /data/face_auth_manager_enroll_test
-hdc shell /data/face_auth_manager_scenario_test
-```
-
-测试结果样例：
-
-```bash
-[----------] 36 tests from FaceAuthManagerTest (222079 ms total)
-
-[----------] Global test environment tear-down
-Gtest xml output finished
-[==========] 36 tests from 1 test case ran. (222093 ms total)
-[  PASSED  ] 36 tests.
-```
-
-测试结果中样例数总数和成功用例数数量相同即为测试成功。
+graphic_standard
