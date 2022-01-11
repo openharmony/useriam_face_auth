@@ -13,20 +13,29 @@
  * limitations under the License.
  */
 
-#ifndef DISRIBUTED_PERMISSION_KIT_H
-#define DISRIBUTED_PERMISSION_KIT_H
+#ifndef FACE_AUTH_BMS_ADAPTER_H
+#define FACE_AUTH_BMS_ADAPTER_H
 
-#include <iostream>
+#include <mutex>
+#include "bundle_mgr_interface.h"
 
 namespace OHOS {
-namespace Security {
-namespace Permission {
-class DistributedPermissionKit {
+namespace UserIAM {
+namespace FaceAuth {
+class FaceAuthBmsAdapter {
 public:
-    static int32_t CheckPermission(const std::string &permissionName, const std::string &appIdInfo);
-};
-} // namespace Permission
-} // namespace Security
-} // namespace OHOS
+    FaceAuthBmsAdapter() = default;
+    virtual ~FaceAuthBmsAdapter() = default;
+    static std::shared_ptr<FaceAuthBmsAdapter> GetInstance();
+    std::string GetCallingBundleName();
 
-#endif // DISRIBUTED_PERMISSION_KIT_H
+private:
+    sptr<AppExecFwk::IBundleMgr> GetBundleManager();
+    static std::mutex mutex_;
+    static std::shared_ptr<FaceAuthBmsAdapter> instance_;
+    sptr<AppExecFwk::IBundleMgr> iBundleManager_;
+};
+} // namespace FaceAuth
+} // namespace UserIAM
+} // namespace OHOS
+#endif // FACE_AUTH_BMS_ADAPTER_H

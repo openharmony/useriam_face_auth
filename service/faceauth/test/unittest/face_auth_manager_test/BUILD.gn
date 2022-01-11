@@ -24,6 +24,7 @@ ohos_unittest("face_auth_manager_auth_test") {
       "src/face_auth_manager_auth_test.cpp",
       "${face_auth_services_path}/src/face_auth_service.cpp",
         "../../mock/src/mock_bundle_mgr.cpp",
+        "../../mock/src/mock_bms_adapter.cpp",
   ]
 
   configs = [
@@ -69,6 +70,7 @@ ohos_unittest("face_auth_manager_enroll_test") {
       "src/face_auth_manager_enroll_test.cpp",
       "${face_auth_services_path}/src/face_auth_service.cpp",
         "../../mock/src/mock_bundle_mgr.cpp",
+        "../../mock/src/mock_bms_adapter.cpp",
   ]
 
   configs = [
@@ -115,6 +117,7 @@ ohos_unittest("face_auth_manager_scenario_test") {
       "src/face_auth_manager_scenario_test.cpp",
       "${face_auth_services_path}/src/face_auth_service.cpp",
         "../../mock/src/mock_bundle_mgr.cpp",
+        "../../mock/src/mock_bms_adapter.cpp",
   ]
 
   configs = [

@@ -194,7 +194,7 @@ static int64_t GetTimestamp()
     t.tv_sec = 0;
     t.tv_nsec = 0;
     clock_gettime(CLOCK_REALTIME, &t);
-    int64_t elapsedTime{((t.tv_sec) * SEC_TO_NANOSEC + t.tv_nsec)};
+    int64_t elapsedTime { ((t.tv_sec) * SEC_TO_NANOSEC + t.tv_nsec) };
     return elapsedTime;
 }
 
@@ -380,7 +380,7 @@ napi_value FaceauthMgr::CreateExecutePromise(napi_env env, AsyncFaceAuthCallback
 napi_value FaceauthMgr::Execute(napi_env env, napi_callback_info info)
 {
     size_t argc = ARGS_NUMBER_THREE;
-    napi_value argv[ARGS_NUMBER_THREE] = {nullptr};
+    napi_value argv[ARGS_NUMBER_THREE] = { nullptr };
     napi_value thisArg;
     void *data = nullptr;
     NAPI_CALL(env, napi_get_cb_info(env, info, &argc, argv, &thisArg, &data));
@@ -391,11 +391,11 @@ napi_value FaceauthMgr::Execute(napi_env env, napi_callback_info info)
     ParseString(env, type, argv[0]);
     ParseString(env, level, argv[1]);
     uint64_t reqId = GetTimestamp() % MAX_REQ_ID_COUNT;
-    AsyncFaceAuthCallbackInfo *asyncCallbackInfo = new AsyncFaceAuthCallbackInfo {.env = env,
+    AsyncFaceAuthCallbackInfo *asyncCallbackInfo = new AsyncFaceAuthCallbackInfo { .env = env,
         .asyncWork = nullptr,
         .deferred = nullptr,
         .type = type,
-        .level = level};
+        .level = level };
     InsertMap(reqId, asyncCallbackInfo);
 
     if (argc == ARGS_NUMBER_THREE) {
@@ -433,7 +433,7 @@ napi_value FaceauthMgr::CheckAvailability(napi_env env, napi_callback_info info)
 {
     FACEAUTH_LABEL_LOGI("Enter CheckAvailability.");
     size_t argc = ARGS_NUMBER_THREE;
-    napi_value argv[ARGS_NUMBER_THREE] = {nullptr};
+    napi_value argv[ARGS_NUMBER_THREE] = { nullptr };
     napi_value thisArg;
     void *data = nullptr;
     NAPI_CALL(env, napi_get_cb_info(env, info, &argc, argv, &thisArg, &data));
@@ -468,7 +468,7 @@ napi_value FaceauthMgr::JsOn(napi_env env, napi_callback_info info)
 {
     FACEAUTH_LABEL_LOGI("JsOn in");
     size_t argc = ARGS_NUMBER_TWO;
-    napi_value argv[ARGS_NUMBER_TWO] = {nullptr};
+    napi_value argv[ARGS_NUMBER_TWO] = { nullptr };
     napi_value thisArg;
     void *data = nullptr;
     NAPI_CALL(env, napi_get_cb_info(env, info, &argc, argv, &thisArg, &data));
@@ -504,7 +504,7 @@ napi_value FaceauthMgr::JsOff(napi_env env, napi_callback_info info)
 {
     FACEAUTH_LABEL_LOGI("JsOff in");
     size_t argc = ARGS_NUMBER_TWO;
-    napi_value argv[ARGS_NUMBER_TWO] = {nullptr};
+    napi_value argv[ARGS_NUMBER_TWO] = { nullptr };
     napi_value thisArg;
     void *data = nullptr;
     NAPI_CALL(env, napi_get_cb_info(env, info, &argc, argv, &thisArg, &data));
@@ -666,7 +666,7 @@ void FaceauthMgr::CreateEnrollAsynch(napi_env env, uint64_t reqId, napi_value ca
 {
     FACEAUTH_LABEL_LOGI("CreateEnrollAsynch reqId = xxxx%04llu", reqId);
     AsyncFaceAuthCallbackInfo *asyncCallbackInfo =
-        new AsyncFaceAuthCallbackInfo {.env = env, .asyncWork = nullptr, .deferred = nullptr, .reqId = reqId};
+        new AsyncFaceAuthCallbackInfo { .env = env, .asyncWork = nullptr, .deferred = nullptr, .reqId = reqId };
     InsertMap(reqId, asyncCallbackInfo);
 
     FACEAUTH_LABEL_LOGI("Enroll asyncCallback.");
@@ -704,7 +704,7 @@ void FaceauthMgr::CreateEnrollAsynch(napi_env env, uint64_t reqId, napi_value ca
 napi_value FaceauthMgr::Enroll(napi_env env, napi_callback_info info)
 {
     size_t argc = ARGS_NUMBER_TWO;
-    napi_value argv[ARGS_NUMBER_TWO] = {nullptr};
+    napi_value argv[ARGS_NUMBER_TWO] = { nullptr };
     napi_value thisArg;
     void *data = nullptr;
     NAPI_CALL(env, napi_get_cb_info(env, info, &argc, argv, &thisArg, &data));
@@ -859,7 +859,7 @@ napi_value FaceauthMgr::Remove(napi_env env, napi_callback_info info)
 {
     FACEAUTH_LABEL_LOGI("Enter Remove.");
     size_t argc = ARGS_NUMBER_TWO;
-    napi_value argv[ARGS_NUMBER_TWO] = {nullptr};
+    napi_value argv[ARGS_NUMBER_TWO] = { nullptr };
     napi_value thisArg;
     void *data = nullptr;
     NAPI_CALL(env, napi_get_cb_info(env, info, &argc, argv, &thisArg, &data));
@@ -872,7 +872,7 @@ napi_value FaceauthMgr::Remove(napi_env env, napi_callback_info info)
     removeParam.reqId = reqId;
     removeParam.faceId = faceId;
     AsyncFaceAuthCallbackInfo *asyncCallbackInfo =
-        new AsyncFaceAuthCallbackInfo {.env = env, .asyncWork = nullptr, .deferred = nullptr};
+        new AsyncFaceAuthCallbackInfo { .env = env, .asyncWork = nullptr, .deferred = nullptr };
     InsertMap(reqId, asyncCallbackInfo);
 
     if (argc == ARGS_NUMBER_TWO) {
@@ -901,7 +901,7 @@ napi_value FaceauthMgr::GetEnrolledFaceIds(napi_env env, napi_callback_info info
     FACEAUTH_LABEL_LOGI("Enter GetEnrolledFaceIds.");
 
     size_t argc = ARGS_NUMBER_ONE;
-    napi_value argv[ARGS_NUMBER_ONE] = {nullptr};
+    napi_value argv[ARGS_NUMBER_ONE] = { nullptr };
     napi_value thisArg;
     void *data = nullptr;
     NAPI_CALL(env, napi_get_cb_info(env, info, &argc, argv, &thisArg, &data));
@@ -953,13 +953,13 @@ EXTERN_C_END
 /*
  * Module define
  */
-static napi_module _module = {.nm_version = 1,
+static napi_module _module = { .nm_version = 1,
     .nm_flags = 0,
     .nm_filename = nullptr,
     .nm_register_func = Init,
     .nm_modname = "userIAM.userAuth",
     .nm_priv = ((void *) 0),
-    .reserved = {0}};
+    .reserved = { 0 } };
 /*
  * Module register function
  */
@@ -971,4 +971,3 @@ extern "C" __attribute__((constructor)) void RegisterModule(void)
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
-
