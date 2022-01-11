@@ -1,7 +1,7 @@
-# useriam_faceauth
+# faceauth
 
 ## 介绍
-useriam_faceauth是用户身份认证与访问控制子系统的人脸认证组件。提供了人脸认证相关接口（如人脸录入、人脸认证、人脸删除）和人脸认证UX界面（如设置页面、录入页面）。
+faceauth是用户身份认证与访问控制子系统的人脸认证组件。提供了人脸认证相关接口（如人脸录入、人脸认证、人脸删除）和人脸认证UX界面（如设置页面、录入页面）。
 
 ## 目录
 ```bash
@@ -9,11 +9,11 @@ useriam_faceauth是用户身份认证与访问控制子系统的人脸认证组�
 ├── BUILD.gn                 # 组件构建脚本
 ├── common                   # 组件公共文件
 ├── interfaces               # 接口
-│   ├── innerkit             # 内部接口，供系统应用使用
-│   └── kits                 # 开放接口，供应用开发者使用
+│   ├── innerkit             # 对内接口，供系统应用使用
+│   └── kits                 # 对外接口，供应用开发者使用
 ├── ohos.build               # 组件描述文件
-├── sa_profile               # SA 配置文件
-├── services                 # SA 服务实现
+├── sa_profile               # Service Ability 配置文件
+├── service                  # Service Ability 服务实现
 ├── useriam.gni              # 构建配置
 └── ux                       # UX界面
 ```
@@ -131,3 +131,5 @@ Gtest xml output finished
 [==========] 36 tests from 1 test case ran. (222093 ms total)
 [  PASSED  ] 36 tests.
 ```
+
+测试结果中样例数总数和成功用例数数量相同即为测试成功。
