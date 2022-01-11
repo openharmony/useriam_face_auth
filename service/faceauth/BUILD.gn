@@ -38,6 +38,7 @@ config("face_auth_services_public_config") {
     "${face_auth_innerkits_path}/include",
     "${face_auth_services_path}/include",
     "${face_auth_services_path}/mock/include",
+    "${face_auth_services_path}/test/mock/include",
     "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler/include",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy/include",
     "//utils/native/base/include",
@@ -67,6 +68,7 @@ ohos_shared_library("face_auth_services") {
      "${face_auth_services_path}/mock/src/face_auth_algo_adapter.cpp",
      "${face_auth_services_path}/mock/src/face_auth_ca.cpp",
      "${face_auth_services_path}/mock/src/face_auth_algo_impl.cpp",
+     "${face_auth_services_path}/src/face_auth_bms_adapter.cpp",
       ]
 
   configs = [ ":face_auth_services_config" ]

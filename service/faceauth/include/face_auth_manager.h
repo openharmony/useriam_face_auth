@@ -72,7 +72,6 @@ private:
     void Prepare(HWExeType type);
     void SetChallenge(int64_t challenge);
     int32_t VerifyAuthToken(std::unique_ptr<uint8_t[]> authToken, uint32_t length, int type);
-    std::string GetCallingBundleName();
     bool CheckFaceIDValidity(int32_t faceId);
     uint32_t SwitchFaceErrorCode(int32_t authErrorCode);
     bool CheckLockOutMode(const uint64_t reqId, const sptr<OnFaceAuth> &callback);
