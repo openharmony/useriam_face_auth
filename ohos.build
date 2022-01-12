@@ -9,12 +9,12 @@
       "inner_kits": [
       ],
       "module_list": [
-        "//base/useriam/faceauth:faceauth_system",
-        "//base/useriam/faceauth/interfaces/kits/napi/faceauth_mgr:napi_packages"
+        "//base/user_iam/face_auth:faceauth_system",
+        "//base/user_iam/face_auth/interfaces/kits/napi/faceauth_mgr:napi_packages"
       ],
       "test_list": [
-        "//base/useriam/faceauth:faceauth_build_module_standard_test",
-        "//test/xts/acts/useriam/faceauth:systemtest"
+        "//base/user_iam/face_auth:faceauth_build_module_standard_test",
+        "//test/xts/acts/user_iam/face_auth:systemtest"
       ]
     }
   }
