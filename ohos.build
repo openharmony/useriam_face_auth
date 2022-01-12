@@ -13,8 +13,7 @@
         "//base/user_iam/face_auth/interfaces/kits/napi/faceauth_mgr:napi_packages"
       ],
       "test_list": [
-        "//base/user_iam/face_auth:faceauth_build_module_standard_test",
-        "//test/xts/acts/user_iam/face_auth:systemtest"
+        "//base/user_iam/face_auth:faceauth_build_module_standard_test"
       ]
     }
   }
