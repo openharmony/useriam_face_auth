@@ -7,12 +7,12 @@
   - [相关仓<a name="section1371113476307"></a>](#相关仓)
 
 ## 简介<a name="section11660541593"></a>
-faceauth是用户身份认证与访问控制子系统的人脸认证组件。提供了人脸认证相关接口（如人脸录入、人脸认证、人脸删除）和人脸认证UX界面（如设置页面、录入页面）。
+faceauth是用户身份认证与访问控制子系统的人脸认证组件。提供了人脸认证相关接口（如人脸录入、人脸认证、人脸删除）和人脸认证UI界面（如设置页面、录入页面）。
 
 ## 目录<a name="section161941989596"></a>
 
 ```bash
-//base/useriam/faceauth
+//base/user_iam/face_auth
 ├── BUILD.gn                 # 组件构建脚本
 ├── common                   # 组件公共文件
 ├── interfaces               # 接口

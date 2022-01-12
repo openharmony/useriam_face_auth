@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-useriam_path = "//base/useriam/faceauth"
+useriam_path = "//base/user_iam/face_auth"
 useriam_common_path = "${useriam_path}/common"
 face_auth_innerkits_path = "${useriam_path}/interfaces/innerkits/faceauth"
 useriam_auth_kits_path = "${useriam_path}/interfaces/kits"
@@ -19,5 +19,5 @@ face_auth_services_path = "${useriam_path}/services/faceauth"
 useriam_sa_path="${useriam_path}/sa_profile"
 aafwk_path = "//foundation/aafwk/standard"
 appexecfwk_path = "//foundation/appexecfwk/standard"
-face_auth_test_app_path = "//test/xts/acts/useriam/faceauth/cpp_api_scene_test/resource/faceauthtestability/abilitySrc"
+face_auth_test_app_path = "//test/xts/acts/user_iam/face_auth/cpp_api_scene_test/resource/faceauthtestability/abilitySrc"
 
