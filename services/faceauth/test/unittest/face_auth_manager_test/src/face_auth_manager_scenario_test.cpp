@@ -82,6 +82,8 @@ static sptr<Surface> CreatePreviewOutput4UI()
     FACEAUTH_LABEL_LOGI("CreatePreviewOutput4UI.");
     sptr<Surface> previewBuffer = Surface::CreateSurfaceAsConsumer();
     previewBuffer->SetDefaultWidthAndHeight(PREVIEW_DEFAULT_WIDTH, PREVIEW_DEFAULT_HEIGHT);
+    previewBuffer->SetUserData(CameraStandard::CameraManager::surfaceFormat,
+                               std::to_string(OHOS_CAMERA_FORMAT_YCRCB_420_SP));
     sptr<FaceAuthScenarioTest::FaceAuthCameraBufferListener> listener =
         new FaceAuthScenarioTest::FaceAuthCameraBufferListener();
     listener->cameraBuffer_ = previewBuffer;

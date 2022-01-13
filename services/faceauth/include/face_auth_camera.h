@@ -33,8 +33,8 @@ public:
     void CloseCamera();
     void SetZoomRatio(float zoom);
     void SetFlashMode(camera_flash_mode_enum_t flash);
-    void SetFocusMode(camera_focus_mode_enum_t focus);
-    void SetExposureMode(camera_exposure_mode_enum_t exposure);
+    void SetFocusMode(camera_af_mode_t focus);
+    void SetExposureMode(camera_ae_mode_t exposure);
 
 private:
     int32_t CreateCamera(sptr<IBufferProducer> producer);
