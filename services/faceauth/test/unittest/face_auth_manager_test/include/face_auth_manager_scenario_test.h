@@ -22,6 +22,7 @@
 #include "faceauth_log_wrapper.h"
 #include "constant.h"
 #include "iface_auth.h"
+#include "input/camera_manager.h"
 #include "iremote_broker.h"
 #include "iremote_object.h"
 #include "if_system_ability_manager.h"
