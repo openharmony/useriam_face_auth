@@ -12,40 +12,36 @@
 # limitations under the License.
 
 import("//base/user_iam/face_auth/useriam.gni")
+
 #import("//build/ohos.gni")
 import("//build/test.gni")
-
 module_output_path = "faceauth/faceauthtest"
 
 ohos_unittest("face_auth_manager_auth_test") {
   module_out_path = module_output_path
-  include_dirs = ["include/face_auth_manager_auth_test.h"]
+  include_dirs = [ "include/face_auth_manager_auth_test.h" ]
   sources = [
-      "src/face_auth_manager_auth_test.cpp",
-      "${face_auth_services_path}/src/face_auth_service.cpp",
-        "../../mock/src/mock_bundle_mgr.cpp",
-        "../../mock/src/mock_bms_adapter.cpp",
+    "${face_auth_services_path}/src/face_auth_service.cpp",
+    "../../mock/src/mock_bms_adapter.cpp",
+    "../../mock/src/mock_bundle_mgr.cpp",
+    "src/face_auth_manager_auth_test.cpp",
   ]
 
-  configs = [
-    "${face_auth_services_path}/test:face_auth_test_config",
-  ]
-
+  configs = [ "${face_auth_services_path}/test:face_auth_test_config" ]
 
   deps = [
-    "${useriam_common_path}:faceauth_common",
     "${face_auth_innerkits_path}:face_auth_innerkits",
     "${face_auth_services_path}:face_auth_services",
+    "${useriam_common_path}:faceauth_common",
+    "//base/startup/syspara_lite/interfaces/innerkits/native/syspara:syspara",
+    "//foundation/aafwk/standard/interfaces/innerkits/base:base",
+    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_base:appexecfwk_base",
+    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_core:appexecfwk_core",
     "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler:libeventhandler",
     "//foundation/distributedschedule/safwk/interfaces/innerkits/safwk:system_ability_fwk",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
-    "//utils/native/base:utils",
     "//foundation/graphic/standard:libsurface",
-
-    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_core:appexecfwk_core",
-    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_base:appexecfwk_base",
-    "//foundation/aafwk/standard/interfaces/innerkits/base:base",
-    "//base/startup/syspara_lite/interfaces/innerkits/native/syspara:syspara",
+    "//utils/native/base:utils",
   ]
 
   cflags = []
@@ -54,10 +50,9 @@ ohos_unittest("face_auth_manager_auth_test") {
   }
 
   external_deps = [
+    "aafwk_standard:want",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
-
-    "aafwk_standard:want",
     "safwk:system_ability_fwk",
     "samgr_standard:samgr_proxy",
   ]
@@ -65,34 +60,40 @@ ohos_unittest("face_auth_manager_auth_test") {
 
 ohos_unittest("face_auth_manager_enroll_test") {
   module_out_path = module_output_path
-  include_dirs = ["include/face_auth_manager_enroll_test.h"]
+  include_dirs = [
+    "include/face_auth_manager_enroll_test.h",
+    "//foundation/multimedia/camera_standard/interfaces/innerkits/native/camera/include/",
+    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata/include/",
+    "//foundation/multimedia/camera_standard/services/camera_service/binder/base/include/",
+    "//foundation/multimedia/camera_standard/services/camera_service/binder/client/include/",
+    "//foundation/multimedia/camera_standard/services/camera_service/binder/server/include/",
+  ]
   sources = [
-      "src/face_auth_manager_enroll_test.cpp",
-      "${face_auth_services_path}/src/face_auth_service.cpp",
-        "../../mock/src/mock_bundle_mgr.cpp",
-        "../../mock/src/mock_bms_adapter.cpp",
+    "${face_auth_services_path}/src/face_auth_service.cpp",
+    "../../mock/src/mock_bms_adapter.cpp",
+    "../../mock/src/mock_bundle_mgr.cpp",
+    "src/face_auth_manager_enroll_test.cpp",
   ]
 
-  configs = [
-    "${face_auth_services_path}/test:face_auth_test_config",
-  ]
-
+  configs = [ "${face_auth_services_path}/test:face_auth_test_config" ]
 
   deps = [
-    "${useriam_common_path}:faceauth_common",
-    "${useriam_auth_kits_path}:faceauth_auth_kits",
     "${face_auth_innerkits_path}:face_auth_innerkits",
     "${face_auth_services_path}:face_auth_services",
+    "${useriam_auth_kits_path}:faceauth_auth_kits",
+    "${useriam_common_path}:faceauth_common",
+    "//base/startup/syspara_lite/interfaces/innerkits/native/syspara:syspara",
+    "//foundation/aafwk/standard/interfaces/innerkits/base:base",
+    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_base:appexecfwk_base",
+    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_core:appexecfwk_core",
     "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler:libeventhandler",
     "//foundation/distributedschedule/safwk/interfaces/innerkits/safwk:system_ability_fwk",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
-    "//utils/native/base:utils",
     "//foundation/graphic/standard:libsurface",
-
-    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_core:appexecfwk_core",
-    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_base:appexecfwk_base",
-    "//foundation/aafwk/standard/interfaces/innerkits/base:base",
-    "//base/startup/syspara_lite/interfaces/innerkits/native/syspara:syspara",
+    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/camera:camera_framework",
+    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata:metadata",
+    "//foundation/multimedia/camera_standard/services/camera_service:camera_service",
+    "//utils/native/base:utils",
   ]
 
   cflags = []
@@ -101,10 +102,9 @@ ohos_unittest("face_auth_manager_enroll_test") {
   }
 
   external_deps = [
+    "aafwk_standard:want",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
-
-    "aafwk_standard:want",
     "safwk:system_ability_fwk",
     "samgr_standard:samgr_proxy",
   ]
@@ -112,34 +112,40 @@ ohos_unittest("face_auth_manager_enroll_test") {
 
 ohos_unittest("face_auth_manager_scenario_test") {
   module_out_path = module_output_path
-  include_dirs = ["include/face_auth_manager_scenario_test.h"]
+  include_dirs = [
+    "include/face_auth_manager_scenario_test.h",
+    "//foundation/multimedia/camera_standard/interfaces/innerkits/native/camera/include/",
+    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata/include/",
+    "//foundation/multimedia/camera_standard/services/camera_service/binder/base/include/",
+    "//foundation/multimedia/camera_standard/services/camera_service/binder/client/include/",
+    "//foundation/multimedia/camera_standard/services/camera_service/binder/server/include/",
+  ]
   sources = [
-      "src/face_auth_manager_scenario_test.cpp",
-      "${face_auth_services_path}/src/face_auth_service.cpp",
-        "../../mock/src/mock_bundle_mgr.cpp",
-        "../../mock/src/mock_bms_adapter.cpp",
+    "${face_auth_services_path}/src/face_auth_service.cpp",
+    "../../mock/src/mock_bms_adapter.cpp",
+    "../../mock/src/mock_bundle_mgr.cpp",
+    "src/face_auth_manager_scenario_test.cpp",
   ]
 
-  configs = [
-    "${face_auth_services_path}/test:face_auth_test_config",
-  ]
-
+  configs = [ "${face_auth_services_path}/test:face_auth_test_config" ]
 
   deps = [
-    "${useriam_common_path}:faceauth_common",
-    "${useriam_auth_kits_path}:faceauth_auth_kits",
     "${face_auth_innerkits_path}:face_auth_innerkits",
     "${face_auth_services_path}:face_auth_services",
+    "${useriam_auth_kits_path}:faceauth_auth_kits",
+    "${useriam_common_path}:faceauth_common",
+    "//base/startup/syspara_lite/interfaces/innerkits/native/syspara:syspara",
+    "//foundation/aafwk/standard/interfaces/innerkits/base:base",
+    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_base:appexecfwk_base",
+    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_core:appexecfwk_core",
     "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler:libeventhandler",
     "//foundation/distributedschedule/safwk/interfaces/innerkits/safwk:system_ability_fwk",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
-    "//utils/native/base:utils",
     "//foundation/graphic/standard:libsurface",
-
-    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_core:appexecfwk_core",
-    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_base:appexecfwk_base",
-    "//foundation/aafwk/standard/interfaces/innerkits/base:base",
-    "//base/startup/syspara_lite/interfaces/innerkits/native/syspara:syspara",
+    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/camera:camera_framework",
+    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata:metadata",
+    "//foundation/multimedia/camera_standard/services/camera_service:camera_service",
+    "//utils/native/base:utils",
   ]
 
   cflags = []
@@ -148,10 +154,9 @@ ohos_unittest("face_auth_manager_scenario_test") {
   }
 
   external_deps = [
+    "aafwk_standard:want",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
-
-    "aafwk_standard:want",
     "safwk:system_ability_fwk",
     "samgr_standard:samgr_proxy",
   ]
@@ -159,7 +164,9 @@ ohos_unittest("face_auth_manager_scenario_test") {
 
 group("unittest") {
   testonly = true
-  deps = [ ":face_auth_manager_auth_test" ,
-           ":face_auth_manager_enroll_test",
-           ":face_auth_manager_scenario_test"]
+  deps = [
+    ":face_auth_manager_auth_test",
+    ":face_auth_manager_enroll_test",
+    ":face_auth_manager_scenario_test",
+  ]
 }

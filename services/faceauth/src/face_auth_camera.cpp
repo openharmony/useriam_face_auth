@@ -55,6 +55,8 @@ sptr<CameraStandard::CaptureOutput> FaceAuthCamera::CreatePreviewOutput(
     FACEAUTH_LABEL_LOGI("CreatePreviewOutput.");
     sptr<Surface> previewBuffer = Surface::CreateSurfaceAsConsumer();
     previewBuffer->SetDefaultWidthAndHeight(PREVIEW_DEFAULT_WIDTH, PREVIEW_DEFAULT_HEIGHT);
+    previewBuffer->SetUserData(CameraStandard::CameraManager::surfaceFormat,
+                               std::to_string(OHOS_CAMERA_FORMAT_YCRCB_420_SP));
     sptr<FaceAuthCameraBufferListener> listener = new FaceAuthCameraBufferListener();
     listener->cameraBuffer_ = previewBuffer;
     previewBuffer->RegisterConsumerListener((sptr<IBufferConsumerListener> &) listener);
@@ -212,7 +214,7 @@ int32_t FaceAuthCamera::CreateDisplayPreviewOutput(sptr<CameraStandard::CameraMa
 {
     int32_t intResult = FA_RET_OK;
     FACEAUTH_LABEL_LOGI("Use UI's producer");
-    disPlayPreviewOutput_ = camManagerObj->CreatePreviewOutput(producer);
+    disPlayPreviewOutput_ = camManagerObj->CreatePreviewOutput(producer, OHOS_CAMERA_FORMAT_YCRCB_420_SP);
     if (disPlayPreviewOutput_ == nullptr) {
         FACEAUTH_LABEL_LOGE("Failed to create PreviewOutput for UI");
         return FA_RET_ERROR;
@@ -249,7 +251,7 @@ void FaceAuthCamera::SetFlashMode(camera_flash_mode_enum_t flash)
     return;
 }
 
-void FaceAuthCamera::SetFocusMode(camera_focus_mode_enum_t focus)
+void FaceAuthCamera::SetFocusMode(camera_af_mode_t focus)
 {
     if (camInput_ != nullptr) {
         ((sptr<CameraStandard::CameraInput> &) camInput_)->LockForControl();
@@ -261,7 +263,7 @@ void FaceAuthCamera::SetFocusMode(camera_focus_mode_enum_t focus)
     return;
 }
 
-void FaceAuthCamera::SetExposureMode(camera_exposure_mode_enum_t exposure)
+void FaceAuthCamera::SetExposureMode(camera_ae_mode_t exposure)
 {
     if (camInput_ != nullptr) {
         ((sptr<CameraStandard::CameraInput> &) camInput_)->LockForControl();
