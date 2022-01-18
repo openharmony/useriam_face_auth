@@ -1,0 +1,64 @@
+{
+    "name": "@openharmony/faceauth",
+    "version": "3.1.0",
+    "description": "Face authentication capability",
+    "homePage": "https://gitee.com/openharmony",
+    "author": {},
+    "repository": "",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+      "destPath" : "base/user_iam/face_auth"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+      "name": "faceauth",
+      "subsystem": "useriam",
+      "adapted_system_type": [ "standard" ],
+      "syscap": ["SystemCapability.UserIAM.UserAuth.BiometricAuth.Faceauth"],
+      "features": [],
+      "rom": "10000KB",
+      "ram": "16000KB",
+      "deps": {
+        "components": [
+            "hiviewdfx_hilog_native",
+            "ipc",
+            "aafwk_standard",
+            "safwk",
+            "samgr_standard"
+        ],
+        "third_party": [
+        ]
+      },
+      "build": {
+        "sub_component": [
+          "//base/user_iam/face_auth/common:faceauth_common",
+          "//base/user_iam/face_auth/interfaces/kits:faceauth_auth_kits",
+          "//base/user_iam/face_auth/services/faceauth:face_auth_services",
+          "//base/user_iam/face_auth/sa_profile:face_auth_sa_profile",
+          "//base/user_iam/face_auth/interfaces/kits/napi/faceauth_mgr:napi_packages"		  
+        ],
+        "inner_kits": [
+          {
+            "type": "so",
+            "name": "//base/user_iam/face_auth/interfaces/innerkits/faceauth:face_auth_innerkits",
+            "header": {
+              "header_files": [
+                "face_auth_client.h",
+                "face_auth_death_recipient.h",
+                "face_auth_innerkit.h",
+                "face_auth_proxy.h",
+                "face_auth_stub.h",
+                "iface_auth.h"
+              ],
+              "header_base": "//base/user_iam/face_auth/interfaces/innerkits/faceauth/include"
+            }
+          }
+        ],
+        "test": [
+           "//base/user_iam/face_auth/services/faceauth/test:unittest"
+        ]
+      }
+    }
+  }
