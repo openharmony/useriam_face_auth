@@ -13,7 +13,6 @@
 
 import("//base/user_iam/face_auth/useriam.gni")
 
-
 config("face_auth_test_config") {
   visibility = [ ":*" ]
   include_dirs = [
@@ -26,7 +25,7 @@ config("face_auth_test_config") {
 
   defines = [
     "APP_LOG_TAG = \"FaceAuth\"",
-    "LOG_DOMAIN = 0xD002422",  
+    "LOG_DOMAIN = 0xD002422",
   ]
   cflags_cc = [ "-DHILOG_ENABLE" ]
 
@@ -35,7 +34,5 @@ config("face_auth_test_config") {
 
 group("unittest") {
   testonly = true
-  deps = [
-    "unittest/face_auth_manager_test:unittest",
-  ]
+  deps = [ "unittest/face_auth_manager_test:unittest" ]
 }

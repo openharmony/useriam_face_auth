@@ -26,7 +26,7 @@ config("face_auth_services_config") {
 
   defines = [
     "APP_LOG_TAG = \"FaceAuth\"",
-    "LOG_DOMAIN = 0xD002422", 
+    "LOG_DOMAIN = 0xD002422",
   ]
 }
 
@@ -40,7 +40,7 @@ config("face_auth_services_public_config") {
     "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler/include",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy/include",
     "//utils/native/base/include",
-    "//utils/system/safwk/native/include",
+    "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy/include",
     "${aafwk_path}/services/abilitymgr/include",
   ]
 }
@@ -53,13 +53,13 @@ ohos_shared_library("face_auth_services") {
   public_configs = [ ":face_auth_services_public_config" ]
 
   deps = [
-    "${useriam_common_path}:faceauth_common",
+    "${aafwk_path}/services/abilitymgr:abilityms",
     "${face_auth_innerkits_path}:face_auth_innerkits",
+    "${useriam_common_path}:faceauth_common",
     "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler:libeventhandler",
     "//foundation/distributedschedule/safwk/interfaces/innerkits/safwk:system_ability_fwk",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
     "//utils/native/base:utils",
-    "${aafwk_path}/services/abilitymgr:abilityms",
   ]
 
   external_deps = [
@@ -70,4 +70,3 @@ ohos_shared_library("face_auth_services") {
   subsystem_name = "useriam"
   part_name = "faceauth"
 }
-
