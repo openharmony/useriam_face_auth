@@ -15,7 +15,7 @@
 <info>
     <process>face_service</process>
     <systemability>
-        <name>922</name>
+        <name>942</name>
         <libpath>/system/lib64/libface_auth_services.z.so</libpath>
         <run-on-create>true</run-on-create>
         <distributed>false</distributed>

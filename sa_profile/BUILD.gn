@@ -15,7 +15,7 @@ import("//build/ohos.gni")
 import("//build/ohos/sa_profile/sa_profile.gni")
 
 ohos_sa_profile("face_auth_sa_profile") {
-  sources = [ "922.xml" ]
+  sources = [ "942.xml" ]
 
   part_name = "faceauth"
 }
@@ -23,7 +23,7 @@ ohos_sa_profile("face_auth_sa_profile") {
 ohos_prebuilt_etc("face_auth_service.rc") {
   if (use_musl) {
     source = "face_auth_service.cfg"
-  }else{
+  } else {
     source = "face_auth_service.rc"
   }
   relative_install_dir = "init"
