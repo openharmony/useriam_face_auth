@@ -38,7 +38,7 @@ config("face_auth_innerkits_public_config") {
     "${face_auth_innerkits_path}/include",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy/include",
     "//utils/native/base/include",
-    "//utils/system/safwk/native/include",
+    "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy/include",
   ]
 }
 

@@ -40,7 +40,7 @@ config("faceauth_auth_kits_public_config") {
     "${useriam_auth_kits_path}/include",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy/include",
     "//utils/native/base/include",
-    "//utils/system/safwk/native/include",
+    "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy/include",
   ]
 }
 
@@ -52,8 +52,9 @@ ohos_shared_library("faceauth_auth_kits") {
   public_configs = [ ":faceauth_auth_kits_public_config" ]
 
   deps = [
-    "${useriam_common_path}:faceauth_common",
     "${face_auth_innerkits_path}:face_auth_innerkits",
+    "${useriam_common_path}:faceauth_common",
+
     # "//foundation/distributedschedule/safwk/interfaces/innerkits/safwk:system_ability_fwk",
     # "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
     # "//utils/native/base:utils",
