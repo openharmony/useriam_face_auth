@@ -50,7 +50,8 @@ ohos_unittest("face_auth_manager_auth_test") {
   }
 
   external_deps = [
-    "aafwk_standard:want",
+    "ability_runtime:app_manager",
+    "ability_runtime:want",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
     "safwk:system_ability_fwk",
@@ -102,7 +103,8 @@ ohos_unittest("face_auth_manager_enroll_test") {
   }
 
   external_deps = [
-    "aafwk_standard:want",
+    "ability_runtime:app_manager",
+    "ability_runtime:want",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
     "safwk:system_ability_fwk",
@@ -154,7 +156,8 @@ ohos_unittest("face_auth_manager_scenario_test") {
   }
 
   external_deps = [
-    "aafwk_standard:want",
+    "ability_runtime:app_manager",
+    "ability_runtime:want",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
     "safwk:system_ability_fwk",

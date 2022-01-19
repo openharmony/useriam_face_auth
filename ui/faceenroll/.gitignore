@@ -1,9 +1,0 @@
-/product/phone/build
-/common/build
-/build/
-/features/batterycomponent/build/
-/features/noticeitem/build/
-/features/notificationservice/build/
-/features/screenlock/build/
-/.idea
-/.gradle
