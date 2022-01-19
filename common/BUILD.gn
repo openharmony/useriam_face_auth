@@ -15,7 +15,7 @@ import("//base/user_iam/face_auth/useriam.gni")
 import("//build/ohos.gni")
 
 config("faceauth_config") {
-  include_dirs = [ 
+  include_dirs = [
     "//third_party/json/include",
     "${useriam_common_path}/log/include",
     "${useriam_common_path}/include",
@@ -23,7 +23,7 @@ config("faceauth_config") {
 }
 
 ohos_shared_library("faceauth_common") {
-  sources = [ 
+  sources = [
     "log/src/faceauth_log_wrapper.cpp",
     "src/constant.cpp",
     "src/on_faceauth_proxy.cpp",
@@ -44,11 +44,11 @@ ohos_shared_library("faceauth_common") {
     "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler:libeventhandler",
     "//foundation/distributedschedule/safwk/interfaces/innerkits/safwk:system_ability_fwk",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
-    "//utils/native/base:utils",
     "//foundation/graphic/standard:libsurface",
+    "//utils/native/base:utils",
   ]
 
-  external_deps = [ 
+  external_deps = [
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
   ]
