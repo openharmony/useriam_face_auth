@@ -56,48 +56,49 @@ config("face_auth_services_public_config") {
 
 ohos_shared_library("face_auth_services") {
   sources = [
-     "${face_auth_services_path}/src/face_auth_algo_dispatcher.cpp",
-     "${face_auth_services_path}/src/face_auth_event_handler.cpp",
-     "${face_auth_services_path}/src/face_auth_manager.cpp",
-     "${face_auth_services_path}/src/face_auth_service.cpp",
-     "${face_auth_services_path}/src/face_auth_camera.cpp",
-     "${face_auth_services_path}/src/face_auth_camera_buffer_listener.cpp",
-     "${face_auth_services_path}/src/face_auth_req.cpp",
-     "${face_auth_services_path}/src/face_auth_thread_pool.cpp",
-     "${face_auth_services_path}/src/face_auth_event.cpp",
-     "${face_auth_services_path}/mock/src/face_auth_algo_adapter.cpp",
-     "${face_auth_services_path}/mock/src/face_auth_ca.cpp",
-     "${face_auth_services_path}/mock/src/face_auth_algo_impl.cpp",
-     "${face_auth_services_path}/src/face_auth_bms_adapter.cpp",
-      ]
+    "${face_auth_services_path}/mock/src/face_auth_algo_adapter.cpp",
+    "${face_auth_services_path}/mock/src/face_auth_algo_impl.cpp",
+    "${face_auth_services_path}/mock/src/face_auth_ca.cpp",
+    "${face_auth_services_path}/src/face_auth_algo_dispatcher.cpp",
+    "${face_auth_services_path}/src/face_auth_bms_adapter.cpp",
+    "${face_auth_services_path}/src/face_auth_camera.cpp",
+    "${face_auth_services_path}/src/face_auth_camera_buffer_listener.cpp",
+    "${face_auth_services_path}/src/face_auth_event.cpp",
+    "${face_auth_services_path}/src/face_auth_event_handler.cpp",
+    "${face_auth_services_path}/src/face_auth_manager.cpp",
+    "${face_auth_services_path}/src/face_auth_req.cpp",
+    "${face_auth_services_path}/src/face_auth_service.cpp",
+    "${face_auth_services_path}/src/face_auth_thread_pool.cpp",
+  ]
 
   configs = [ ":face_auth_services_config" ]
 
   public_configs = [ ":face_auth_services_public_config" ]
 
   deps = [
-    "${useriam_common_path}:faceauth_common",
+    "${aafwk_path}/services/abilitymgr:abilityms",
     "${face_auth_innerkits_path}:face_auth_innerkits",
+    "${useriam_common_path}:faceauth_common",
+    "${useriam_sa_path}:face_auth_service.rc",
+    "//base/startup/syspara_lite/interfaces/innerkits/native/syspara:syspara",
+    "//foundation/aafwk/standard/interfaces/innerkits/base:base",
+    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_base:appexecfwk_base",
+    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_core:appexecfwk_core",
     "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler:libeventhandler",
     "//foundation/distributedschedule/safwk/interfaces/innerkits/safwk:system_ability_fwk",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
-    "//utils/native/base:utils",
-    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/camera:camera_framework",
-    "//foundation/multimedia/camera_standard/services/camera_service:camera_service",
-    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata:metadata",
     "//foundation/graphic/standard:libsurface",
-    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_core:appexecfwk_core",
-    "//foundation/appexecfwk/standard/interfaces/innerkits/appexecfwk_base:appexecfwk_base",
-    "//foundation/aafwk/standard/interfaces/innerkits/base:base",
-    "//base/startup/syspara_lite/interfaces/innerkits/native/syspara:syspara",
-    "${aafwk_path}/services/abilitymgr:abilityms",
-    "${useriam_sa_path}:face_auth_service.rc",
+    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/camera:camera_framework",
+    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata:metadata",
+    "//foundation/multimedia/camera_standard/services/camera_service:camera_service",
+    "//utils/native/base:utils",
   ]
 
   external_deps = [
+    "ability_runtime:app_manager",
+    "ability_runtime:want",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
-    "aafwk_standard:want",
     "safwk:system_ability_fwk",
     "samgr_standard:samgr_proxy",
   ]

@@ -15,8 +15,10 @@ import("//base/user_iam/face_auth/useriam.gni")
 import("//build/ohos.gni")
 
 group("napi_packages") {
-  deps = [ "//base/user_iam/face_auth/interfaces/kits/napi/faceauth_mgr:userauth",
-  "//base/user_iam/face_auth/interfaces/kits/napi/faceauth_mgr:enroll" ]
+  deps = [
+    "//base/user_iam/face_auth/interfaces/kits/napi/faceauth_mgr:enroll",
+    "//base/user_iam/face_auth/interfaces/kits/napi/faceauth_mgr:userauth",
+  ]
 }
 
 config("face_auth_napi_config") {
@@ -58,8 +60,6 @@ config("face_auth_napi_public_config") {
 }
 
 ohos_shared_library("userauth") {
-
-
   sources = [
     "faceauth_mgr.cpp",
     "faceauth_native_event.cpp",
@@ -70,9 +70,9 @@ ohos_shared_library("userauth") {
   public_configs = [ ":face_auth_napi_public_config" ]
 
   deps = [
-    "${useriam_common_path}:faceauth_common",
-    "${useriam_auth_kits_path}:faceauth_auth_kits",
     "${face_auth_innerkits_path}:face_auth_innerkits",
+    "${useriam_auth_kits_path}:faceauth_auth_kits",
+    "${useriam_common_path}:faceauth_common",
     "//base/notification/ans_standard/frameworks/ans/core:ans_core",
     "//base/notification/ans_standard/frameworks/wantagent:wantagent_innerkits",
     "//base/startup/syspara_lite/interfaces/innerkits/native/syspara:syspara",
@@ -83,12 +83,13 @@ ohos_shared_library("userauth") {
     "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler:libeventhandler",
     "//foundation/distributedschedule/safwk/interfaces/innerkits/safwk:system_ability_fwk",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
-    "//utils/native/base:utils",
     "//foundation/graphic/standard:libsurface",
+    "//utils/native/base:utils",
   ]
   cflags_cc = [ "-DHILOG_ENABLE" ]
   external_deps = [
-    "aafwk_standard:want",
+    "ability_runtime:app_manager",
+    "ability_runtime:want",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
   ]
@@ -99,7 +100,6 @@ ohos_shared_library("userauth") {
 }
 
 ohos_shared_library("enroll") {
-
   sources = [
     "faceauth_mgr.cpp",
     "faceauth_native_event.cpp",
@@ -110,9 +110,9 @@ ohos_shared_library("enroll") {
   public_configs = [ ":face_auth_napi_public_config" ]
 
   deps = [
-    "${useriam_common_path}:faceauth_common",
-    "${useriam_auth_kits_path}:faceauth_auth_kits",
     "${face_auth_innerkits_path}:face_auth_innerkits",
+    "${useriam_auth_kits_path}:faceauth_auth_kits",
+    "${useriam_common_path}:faceauth_common",
     "//base/notification/ans_standard/frameworks/ans/core:ans_core",
     "//base/notification/ans_standard/frameworks/wantagent:wantagent_innerkits",
     "//base/startup/syspara_lite/interfaces/innerkits/native/syspara:syspara",
@@ -123,12 +123,13 @@ ohos_shared_library("enroll") {
     "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler:libeventhandler",
     "//foundation/distributedschedule/safwk/interfaces/innerkits/safwk:system_ability_fwk",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
-    "//utils/native/base:utils",
     "//foundation/graphic/standard:libsurface",
+    "//utils/native/base:utils",
   ]
   cflags_cc = [ "-DHILOG_ENABLE" ]
   external_deps = [
-    "aafwk_standard:want",
+    "ability_runtime:app_manager",
+    "ability_runtime:want",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
   ]
