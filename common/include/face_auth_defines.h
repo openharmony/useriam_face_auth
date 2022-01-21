@@ -84,13 +84,13 @@ static const int64_t SEC_TO_NANOSEC = 1000000000;
 struct AuthParam {
     uint64_t reqId = 0;
     int32_t flags = 0;
-    sptr<IBufferProducer> producer = nullptr;
+    int32_t previewId = 0;
     int64_t challenge = 0;
     int32_t faceId = 0;
 };
 struct EnrollParam {
     uint64_t reqId = 0;
-    sptr<IBufferProducer> producer = nullptr;
+    int32_t previewId = 0;
     int64_t challenge = 0;
     int32_t faceId = 0;
     std::vector<uint8_t> token;

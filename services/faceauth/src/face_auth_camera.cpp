@@ -64,7 +64,7 @@ sptr<CameraStandard::CaptureOutput> FaceAuthCamera::CreatePreviewOutput(
     return previewOutput;
 }
 
-int32_t FaceAuthCamera::CreateCamera(sptr<IBufferProducer> producer)
+int32_t FaceAuthCamera::CreateCamera(int32_t previewId)
 {
     FACEAUTH_LABEL_LOGI("Create Camera start.");
     sptr<CameraStandard::CameraManager> camManagerObj = OHOS::CameraStandard::CameraManager::GetInstance();
@@ -93,7 +93,7 @@ int32_t FaceAuthCamera::CreateCamera(sptr<IBufferProducer> producer)
         FACEAUTH_LABEL_LOGE("Create Camera Input Failed");
         return FA_RET_ERROR;
     }
-    int32_t intResult = PrepareCamera(producer);
+    int32_t intResult = PrepareCamera(previewId);
     if (intResult != 0) {
         FACEAUTH_LABEL_LOGE("Prepare Camera Failed");
         return FA_RET_ERROR;
@@ -102,7 +102,7 @@ int32_t FaceAuthCamera::CreateCamera(sptr<IBufferProducer> producer)
     return FA_RET_OK;
 }
 
-int32_t FaceAuthCamera::PrepareCamera(sptr<IBufferProducer> producer)
+int32_t FaceAuthCamera::PrepareCamera(int32_t previewId)
 {
     int32_t intResult = FA_RET_OK;
     FACEAUTH_LABEL_LOGI("Prepare Camera start.");
@@ -131,7 +131,7 @@ int32_t FaceAuthCamera::PrepareCamera(sptr<IBufferProducer> producer)
         return FA_RET_ERROR;
     }
     if (isDisplay_) {
-        if (CreateDisplayPreviewOutput(camManagerObj, producer) != FA_RET_OK) {
+        if (CreateDisplayPreviewOutput(camManagerObj, previewId) != FA_RET_OK) {
             FACEAUTH_LABEL_LOGE("Switch PreviewOutput Failed!");
             return FA_RET_ERROR;
         }
@@ -145,12 +145,12 @@ int32_t FaceAuthCamera::PrepareCamera(sptr<IBufferProducer> producer)
     return FA_RET_OK;
 }
 
-int32_t FaceAuthCamera::OpenCamera(sptr<IBufferProducer> producer)
+int32_t FaceAuthCamera::OpenCamera(int32_t previewId)
 {
-    if (producer != nullptr) {
+    if (previewId != 0) {
         isDisplay_ = true;
     }
-    if (CreateCamera(producer) != FA_RET_OK) {
+    if (CreateCamera(previewId) != FA_RET_OK) {
         return FA_RET_ERROR;
     }
     return Start();
@@ -209,18 +209,33 @@ void FaceAuthCamera::Release()
     return;
 }
 
+sptr<Surface> FaceAuthCamera::GetXComponentSurfaceById(std::string id)
+{
+    return nullptr;
+}
+
 int32_t FaceAuthCamera::CreateDisplayPreviewOutput(sptr<CameraStandard::CameraManager> &camManagerObj,
-    sptr<IBufferProducer> producer)
+    int32_t previewId)
 {
     int32_t intResult = FA_RET_OK;
-    FACEAUTH_LABEL_LOGI("Use UI's producer");
-    disPlayPreviewOutput_ = camManagerObj->CreatePreviewOutput(producer, OHOS_CAMERA_FORMAT_YCRCB_420_SP);
+    FACEAUTH_LABEL_LOGI("Use UI's PreviewBuffer");
+    std::string id = std::to_string(previewId);
+    FACEAUTH_LABEL_LOGI("GetXComponentSurfaceById Id:%{public}s", id.c_str());
+    sptr<Surface> previewBuffer = GetXComponentSurfaceById(id);
+    if (previewBuffer == nullptr) {
+        isDisplay_ = false;
+        FACEAUTH_LABEL_LOGE("Failed to GetXComponentSurfaceById");
+        return FA_RET_OK;
+    }
+    sptr<CameraStandard::CaptureOutput> disPlayPreviewOutput_ = camManagerObj->CreatePreviewOutput(previewBuffer);
     if (disPlayPreviewOutput_ == nullptr) {
+        isDisplay_ = false;
         FACEAUTH_LABEL_LOGE("Failed to create PreviewOutput for UI");
         return FA_RET_ERROR;
     }
     intResult = capSession_->AddOutput(disPlayPreviewOutput_);
     if (intResult != FA_RET_OK) {
+        isDisplay_ = false;
         FACEAUTH_LABEL_LOGE("Failed to Add PreviewOutput For UI");
         return FA_RET_ERROR;
     }

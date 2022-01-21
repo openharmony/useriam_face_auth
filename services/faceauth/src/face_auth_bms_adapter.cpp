@@ -57,6 +57,10 @@ std::string FaceAuthBmsAdapter::GetCallingBundleName()
     FACEAUTH_LABEL_LOGI("FaceAuthBmsAdapter GetCallingBundleName start");
     int32_t uid = IPCSkeleton::GetCallingUid();
     FACEAUTH_LABEL_LOGI("uid is %{public}d", uid);
+    if (uid == 0) {
+        FACEAUTH_LABEL_LOGI("bundleName is system");
+        return "system";
+    }
     if (iBundleManager_ == nullptr) {
         iBundleManager_ = GetBundleManager();
     }
