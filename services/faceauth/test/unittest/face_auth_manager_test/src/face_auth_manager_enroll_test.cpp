@@ -30,68 +30,8 @@ namespace FaceAuth {
 const auto timeFast = std::chrono::milliseconds(100);
 const auto waitcamera = std::chrono::milliseconds(1500);
 static const int32_t ENROLL_SUCCESS = 998;
-const std::int32_t FILE_PERMISSION_FLAG = 00766;
 const int32_t PERFORMANCE_TEST_TIMES = 1000;
 static int32_t FACEID = 1;
-
-static int32_t SaveYUV(const char *buffer, int32_t size)
-{
-    char path[PATH_MAX] = {0};
-    int32_t retlen = 0;
-    retlen = sprintf_s(path, sizeof(path) / sizeof(path[0]), "/data/%s.yuv", "ST");
-    if (retlen < 0) {
-        FACEAUTH_LABEL_LOGI("Path Assignment failed");
-        return -1;
-    }
-
-    FACEAUTH_LABEL_LOGI("%s, saving file to %{public}s", __FUNCTION__, path);
-    int32_t imgFd = open(path, O_RDWR | O_CREAT, FILE_PERMISSION_FLAG);
-    if (imgFd == -1) {
-        FACEAUTH_LABEL_LOGI("%s, open file failed, errno = %{public}s.", __FUNCTION__, strerror(errno));
-        return -1;
-    }
-    int32_t ret = write(imgFd, buffer, size);
-    if (ret == -1) {
-        FACEAUTH_LABEL_LOGI("%s, write file failed, error = %{public}s", __FUNCTION__, strerror(errno));
-        close(imgFd);
-        return -1;
-    }
-    close(imgFd);
-    return 0;
-}
-
-void FaceEnrollManagerTest::FaceAuthCameraBufferListener::OnBufferAvailable()
-{
-    int32_t flushFence = 0;
-    int64_t timestamp = 0;
-    OHOS::Rect damage;
-    FACEAUTH_LABEL_LOGI("FaceAuthCameraBufferListener OnBufferAvailable");
-    OHOS::sptr<OHOS::SurfaceBuffer> buffer = nullptr;
-    cameraBuffer_->AcquireBuffer(buffer, flushFence, timestamp, damage);
-    if (buffer != nullptr) {
-        char *addr = static_cast<char *>(buffer->GetVirAddr());
-        int32_t size = buffer->GetSize();
-        FACEAUTH_LABEL_LOGI("Calling SaveYUV");
-        SaveYUV(addr, size);
-        cameraBuffer_->ReleaseBuffer(buffer, -1);
-    } else {
-        FACEAUTH_LABEL_LOGI("AcquireBuffer failed!");
-    }
-}
-
-static sptr<Surface> CreatePreviewOutput4UI()
-{
-    FACEAUTH_LABEL_LOGI("CreatePreviewOutput4UI.");
-    sptr<Surface> previewBuffer = Surface::CreateSurfaceAsConsumer();
-    previewBuffer->SetDefaultWidthAndHeight(PREVIEW_DEFAULT_WIDTH, PREVIEW_DEFAULT_HEIGHT);
-    previewBuffer->SetUserData(CameraStandard::CameraManager::surfaceFormat,
-                               std::to_string(OHOS_CAMERA_FORMAT_YCRCB_420_SP));
-    sptr<FaceEnrollManagerTest::FaceAuthCameraBufferListener> listener =
-        new FaceEnrollManagerTest::FaceAuthCameraBufferListener();
-    listener->cameraBuffer_ = previewBuffer;
-    previewBuffer->RegisterConsumerListener((sptr<IBufferConsumerListener> &) listener);
-    return previewBuffer;
-}
 
 void FaceEnrollManagerTest::WriteFile(int32_t caseNum, int32_t codeNum, std::map<int32_t, ResultInfo> resultInfos_)
 {
@@ -191,8 +131,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Performance_Enroll_0100, Function | Mediu
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     for (int32_t run_times = 0; run_times < PERFORMANCE_TEST_TIMES; run_times++) {
         param.reqId++;
         callback->isCallback_ = false;
@@ -240,8 +179,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Performance_CancelEnroll_0100, Function |
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     for (int32_t run_times = 0; run_times < PERFORMANCE_TEST_TIMES; run_times++) {
         OHOS::sptr<TestCallback> callbackCancel(new TestCallback());
         auto startTime = std::chrono::high_resolution_clock::now();
@@ -438,8 +376,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Function_CancelEnroll_0100, Function | Me
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     std::map<int32_t, ResultInfo> resultInfos_;
     WriteFile(ENROLL_SUCCESS, 0, resultInfos_);
     service->Enroll(param, callback);
@@ -479,8 +416,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Function_CancelEnroll_0200, Function | Me
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     std::map<int32_t, ResultInfo> resultInfos_;
     WriteFile(ENROLL_SUCCESS, 0, resultInfos_);
     service->Enroll(param, callback);
@@ -557,8 +493,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Function_CancelEnroll_0500, Function | Me
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     std::map<int32_t, ResultInfo> resultInfos_;
     WriteFile(ENROLL_SUCCESS, 0, resultInfos_);
     OHOS::sptr<TestCallback> callback(new TestCallback());
@@ -892,8 +827,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Function_Enroll_0100, Function | MediumTe
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     int32_t result = service->Enroll(param, callback);
     while (!callback->isCallback_) {
         std::this_thread::sleep_for(timeFast);
@@ -925,8 +859,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Function_Enroll_0200, Function | MediumTe
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     int32_t result = service->Enroll(param, callback);
     while (!callback->isCallback_) {
         std::this_thread::sleep_for(timeFast);
@@ -958,8 +891,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Function_Enroll_0300, Function | MediumTe
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     std::map<int32_t, ResultInfo> resultInfos_;
     WriteFile(ENROLL_SUCCESS, 0, resultInfos_);
     int32_t result = service->Enroll(param, callback);
@@ -992,8 +924,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Function_Enroll_0400, Function | MediumTe
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     std::map<int32_t, ResultInfo> resultInfos_;
     WriteFile(ENROLL_SUCCESS, 0, resultInfos_);
     OHOS::sptr<TestCallback> enrollCallback(new TestCallback());
@@ -1028,8 +959,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Function_Enroll_0500, Function | MediumTe
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     CreateEnroll();
     OHOS::sptr<TestCallback> enrollCallback(new TestCallback());
     std::map<int32_t, ResultInfo> resultInfos_;
@@ -1065,8 +995,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Function_Enroll_0600, Function | MediumTe
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     std::map<int32_t, ResultInfo> resultInfos_;
     WriteFile(ENROLL_SUCCESS, 0, resultInfos_);
     int32_t result = service->Enroll(param, nullptr);
@@ -1098,8 +1027,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Function_Enroll_0800, Function | MediumTe
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     int32_t result = service->Enroll(param, callback);
     result = service->Enroll(param, callback1);
     while (!callback->isCallback_) {
@@ -1135,8 +1063,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Function_Enroll_0900, Function | MediumTe
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     std::map<int32_t, ResultInfo> resultInfos_;
     WriteFile(FACE_AUTH_GETRESULT_FAIL, 0, resultInfos_);
     int32_t result = service->Enroll(param, callback);
@@ -1170,8 +1097,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Function_Enroll_1000, Function | MediumTe
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     std::map<int32_t, ResultInfo> resultInfos_;
     WriteFile(FACE_AUTH_GETRESULT_TIMEOUT, 0, resultInfos_);
     int32_t result = service->Enroll(param, callback);
@@ -1205,8 +1131,7 @@ HWTEST_F(FaceEnrollManagerTest, CPPAPI_Function_Enroll_1100, Function | MediumTe
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         param.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    param.producer = cameraBuffer->GetProducer();
+    param.previewId = 0;
     int32_t kill_times = 5;
     const auto temp_time = std::chrono::milliseconds(1000);
     while (kill_times) {

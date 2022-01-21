@@ -22,7 +22,6 @@
 #include "faceauth_log_wrapper.h"
 #include "constant.h"
 #include "iface_auth.h"
-#include "input/camera_manager.h"
 #include "iremote_broker.h"
 #include "iremote_object.h"
 #include "if_system_ability_manager.h"
@@ -100,11 +99,6 @@ public:
     AuthParam CPPAPI_Function_Scenario_0400_CoAuth();
     EnrollParam CPPAPI_Function_Scenario_0400_Enroll();
     RemoveParam CPPAPI_Function_Scenario_0400_Remove();
-    class FaceAuthCameraBufferListener : public IBufferConsumerListener {
-    public:
-        sptr<Surface> cameraBuffer_;
-        void OnBufferAvailable();
-    };
 };
 } // namespace FaceAuth
 } // namespace UserIAM
