@@ -54,15 +54,12 @@ int32_t FaceAuthStub::FaceAuthAuthenticate(MessageParcel &data, MessageParcel &r
     AuthParam param;
     param.reqId = data.ReadUint64();
     param.flags = data.ReadInt32();
+    param.previewId = data.ReadInt32();
     param.challenge = data.ReadInt64();
     param.faceId = data.ReadInt32();
     sptr<OnFaceAuth> callback = iface_cast<OnFaceAuth>(data.ReadRemoteObject());
     if (callback == nullptr) {
         return FA_RET_ERROR;
-    }
-    sptr<IRemoteObject> remoteObj = data.ReadRemoteObject();
-    if (remoteObj != nullptr) {
-        param.producer = iface_cast<OHOS::IBufferProducer>(remoteObj);
     }
     int32_t ret = Authenticate(param, callback);
     if (!reply.WriteInt32(ret)) {
@@ -195,6 +192,7 @@ int32_t FaceAuthStub::FaceAuthEnroll(MessageParcel &data, MessageParcel &reply)
 {
     EnrollParam param;
     param.reqId = data.ReadUint64();
+    param.previewId = data.ReadInt32();
     param.challenge = data.ReadInt64();
     param.faceId = data.ReadInt32();
     data.ReadUInt8Vector(&param.token);
@@ -204,10 +202,6 @@ int32_t FaceAuthStub::FaceAuthEnroll(MessageParcel &data, MessageParcel &reply)
     sptr<OnFaceAuth> callback = iface_cast<OnFaceAuth>(data.ReadRemoteObject());
     if (callback == nullptr) {
         return FA_RET_ERROR;
-    }
-    sptr<IRemoteObject> remoteObj = data.ReadRemoteObject();
-    if (remoteObj != nullptr) {
-        param.producer = iface_cast<OHOS::IBufferProducer>(remoteObj);
     }
     int32_t ret = Enroll(param, callback);
     if (!reply.WriteInt32(ret)) {

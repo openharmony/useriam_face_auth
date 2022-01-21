@@ -30,66 +30,6 @@ namespace FaceAuth {
 const auto timeFast = std::chrono::milliseconds(100);
 const auto timebusy = std::chrono::milliseconds(500);
 const auto waitcamera = std::chrono::milliseconds(1500);
-const std::int32_t FILE_PERMISSION_FLAG = 00766;
-
-static int32_t SaveYUV(const char *buffer, int32_t size)
-{
-    char path[PATH_MAX] = {0};
-    int32_t retlen = 0;
-    retlen = sprintf_s(path, sizeof(path) / sizeof(path[0]), "/data/%s.yuv", "ST");
-    if (retlen < 0) {
-        FACEAUTH_LABEL_LOGI("Path Assignment failed");
-        return -1;
-    }
-
-    FACEAUTH_LABEL_LOGI("%s, saving file to %{public}s", __FUNCTION__, path);
-    int32_t imgFd = open(path, O_RDWR | O_CREAT, FILE_PERMISSION_FLAG);
-    if (imgFd == -1) {
-        FACEAUTH_LABEL_LOGI("%s, open file failed, errno = %{public}s.", __FUNCTION__, strerror(errno));
-        return -1;
-    }
-    int32_t ret = write(imgFd, buffer, size);
-    if (ret == -1) {
-        FACEAUTH_LABEL_LOGI("%s, write file failed, error = %{public}s", __FUNCTION__, strerror(errno));
-        close(imgFd);
-        return -1;
-    }
-    close(imgFd);
-    return 0;
-}
-
-void FaceAuthScenarioTest::FaceAuthCameraBufferListener::OnBufferAvailable()
-{
-    int32_t flushFence = 0;
-    int64_t timestamp = 0;
-    OHOS::Rect damage;
-    FACEAUTH_LABEL_LOGI("FaceAuthCameraBufferListener OnBufferAvailable");
-    OHOS::sptr<OHOS::SurfaceBuffer> buffer = nullptr;
-    cameraBuffer_->AcquireBuffer(buffer, flushFence, timestamp, damage);
-    if (buffer != nullptr) {
-        char *addr = static_cast<char *>(buffer->GetVirAddr());
-        int32_t size = buffer->GetSize();
-        FACEAUTH_LABEL_LOGI("Calling SaveYUV");
-        SaveYUV(addr, size);
-        cameraBuffer_->ReleaseBuffer(buffer, -1);
-    } else {
-        FACEAUTH_LABEL_LOGI("AcquireBuffer failed!");
-    }
-}
-
-static sptr<Surface> CreatePreviewOutput4UI()
-{
-    FACEAUTH_LABEL_LOGI("CreatePreviewOutput4UI.");
-    sptr<Surface> previewBuffer = Surface::CreateSurfaceAsConsumer();
-    previewBuffer->SetDefaultWidthAndHeight(PREVIEW_DEFAULT_WIDTH, PREVIEW_DEFAULT_HEIGHT);
-    previewBuffer->SetUserData(CameraStandard::CameraManager::surfaceFormat,
-                               std::to_string(OHOS_CAMERA_FORMAT_YCRCB_420_SP));
-    sptr<FaceAuthScenarioTest::FaceAuthCameraBufferListener> listener =
-        new FaceAuthScenarioTest::FaceAuthCameraBufferListener();
-    listener->cameraBuffer_ = previewBuffer;
-    previewBuffer->RegisterConsumerListener((sptr<IBufferConsumerListener> &) listener);
-    return previewBuffer;
-}
 
 void FaceAuthScenarioTest::WriteFile(int32_t caseNum, int32_t codeNum, std::map<int32_t, ResultInfo> resultInfos_)
 {
@@ -149,8 +89,7 @@ HWTEST_F(FaceAuthScenarioTest, CPPAPI_Function_Scenario_0100, Function | MediumT
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         enrollParam.token.push_back(*iter);
     }
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    enrollParam.producer = cameraBuffer->GetProducer();
+    enrollParam.previewId = 0;
     enrollParam.faceId = 0;
     for (std::vector<uint8_t>::const_iterator iter = token.begin(); iter != token.end(); ++iter) {
         enrollParam.token.push_back(*iter);
@@ -397,8 +336,7 @@ EnrollParam FaceAuthScenarioTest::CPPAPI_Function_Scenario_0400_Enroll()
         enrollParam.token.push_back(*iter);
     }
     enrollParam.reqId = reqIdEnrollNum;
-    sptr<Surface> cameraBuffer = CreatePreviewOutput4UI();
-    enrollParam.producer = cameraBuffer->GetProducer();
+    enrollParam.previewId = 0;
     return enrollParam;
 }
 
