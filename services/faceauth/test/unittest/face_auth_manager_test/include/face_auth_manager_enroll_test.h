@@ -101,11 +101,6 @@ public:
     void WritePreFile(int32_t caseNum, int32_t codeNum, std::map<int32_t, ResultInfo> resultInfos_);
     void WritePostFile(int32_t caseNum, int32_t codeNum, std::map<int32_t, ResultInfo> resultInfos_);
     void CreateEnroll();
-    class FaceAuthCameraBufferListener : public IBufferConsumerListener {
-    public:
-        sptr<Surface> cameraBuffer_;
-        void OnBufferAvailable();
-    };
 };
 } // namespace FaceAuth
 } // namespace UserIAM

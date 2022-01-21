@@ -100,11 +100,6 @@ public:
     AuthParam CPPAPI_Function_Scenario_0400_CoAuth();
     EnrollParam CPPAPI_Function_Scenario_0400_Enroll();
     RemoveParam CPPAPI_Function_Scenario_0400_Remove();
-    class FaceAuthCameraBufferListener : public IBufferConsumerListener {
-    public:
-        sptr<Surface> cameraBuffer_;
-        void OnBufferAvailable();
-    };
 };
 } // namespace FaceAuth
 } // namespace UserIAM
