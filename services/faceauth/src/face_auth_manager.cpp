@@ -220,14 +220,14 @@ void FaceAuthManager::HandleCallEnroll(const EnrollParam &param, const sptr<OnFa
     if (CheckEnrollParam(param, callback) != FA_RET_OK) {
         return;
     }
-    sptr<IBufferProducer> producer = param.producer;
+    int32_t previewId = param.previewId;
     std::promise<int32_t> promiseobj;
     std::future<int32_t> futureobj = promiseobj.get_future();
     FaceReqType reqType;
     reqType.reqId = param.reqId;
     reqType.operateType = FACE_OPERATE_TYPE_ENROLL;
-    FaceAuthThreadPool::GetInstance()->AddTask([&promiseobj, &producer]() {
-        promiseobj.set_value(FaceAuthCamera::GetInstance()->OpenCamera(producer));
+    FaceAuthThreadPool::GetInstance()->AddTask([&promiseobj, &previewId]() {
+        promiseobj.set_value(FaceAuthCamera::GetInstance()->OpenCamera(previewId));
     });
     Prepare(HW_EXEC_TYPE_ENROOL);
     CallBackParam cbParam;
@@ -274,13 +274,13 @@ void FaceAuthManager::HandleCallAuthenticate(const AuthParam &param, const sptr<
         return;
     }
     // Asynchronously call STD:: async to configure and turn on the camera
-    sptr<IBufferProducer> producer = param.producer;
+    int32_t previewId = param.previewId;
     std::promise<int32_t> promiseobj;
     std::future<int32_t> futureobj = promiseobj.get_future();
     FaceReqType reqType = CreateAuthReqInfo(param.reqId, param.flags);
     FACEAUTH_LABEL_LOGI("FaceAuthCurTaskNum is %{public}d ", FaceAuthThreadPool::GetInstance()->GetCurTaskNum());
-    FaceAuthThreadPool::GetInstance()->AddTask([&promiseobj, &producer]() {
-        promiseobj.set_value(FaceAuthCamera::GetInstance()->OpenCamera(producer));
+    FaceAuthThreadPool::GetInstance()->AddTask([&promiseobj, &previewId]() {
+        promiseobj.set_value(FaceAuthCamera::GetInstance()->OpenCamera(previewId));
     });
     Prepare(HW_EXEC_TYPE_UNLOCK);
     SetChallenge(param.challenge);
@@ -359,6 +359,7 @@ void FaceAuthManager::ExecuteEnrollEvent(uint64_t reqId, int32_t faceId, std::ve
             FACEAUTH_LABEL_LOGI("GetEnrollResult Fail");
             cbParam.errorCode = ERRCODE_FAIL;
             HandleExceptionCallback(TYPE_CALLBACK_ENROLL, cbParam, FACE_ERROR_FAIL, callback);
+            return;
         }
         if (code != CODE_CALLBACK_RESULT && code != CODE_CALLBACK_FACEID) {
             cbParam.code = CODE_CALLBACK_ACQUIRE;
@@ -435,6 +436,7 @@ void FaceAuthManager::ExecuteAuthEvent(const uint64_t reqId, const int32_t flags
             FACEAUTH_LABEL_LOGI("GetAuthResult Fail");
             cbParam.errorCode = ERRCODE_FAIL;
             HandleExceptionCallback(TYPE_CALLBACK_AUTH, cbParam, FACE_ERROR_FAIL, callback);
+            return;
         }
         if (code != CODE_CALLBACK_RESULT && code != CODE_CALLBACK_FACEID) {
             cbParam.code = CODE_CALLBACK_ACQUIRE;
