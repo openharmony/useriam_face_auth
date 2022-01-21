@@ -33,7 +33,7 @@ int32_t FaceAuthProxy::Init()
 {
     MessageParcel data;
     MessageParcel reply;
-    int32_t result = 0;
+    int32_t result = FA_RET_ERROR;
     bool ret = SendRequest(FACE_AUTH_INIT, data, reply);
     if (ret) {
         result = reply.ReadInt32();
@@ -46,7 +46,7 @@ int32_t FaceAuthProxy::Release()
 {
     MessageParcel data;
     MessageParcel reply;
-    int32_t result = 0;
+    int32_t result = FA_RET_ERROR;
     bool ret = SendRequest(FACE_AUTH_RELEASE, data, reply);
     if (ret) {
         result = reply.ReadInt32();
@@ -60,6 +60,10 @@ int32_t FaceAuthProxy::Enroll(const EnrollParam &param, const sptr<OnFaceAuth> &
     MessageParcel data;
     if (!data.WriteUint64(param.reqId)) {
         FACEAUTH_LABEL_LOGE("failed to WriteInt32(reqId).");
+        return FA_RET_ERROR;
+    }
+    if (!data.WriteInt32(param.previewId)) {
+        FACEAUTH_LABEL_LOGE("failed to WriteInt32(previewId).");
         return FA_RET_ERROR;
     }
     if (!data.WriteInt64(param.challenge)) {
@@ -78,17 +82,11 @@ int32_t FaceAuthProxy::Enroll(const EnrollParam &param, const sptr<OnFaceAuth> &
         FACEAUTH_LABEL_LOGE("failed to WriteRemoteObject(callback).");
         return FA_RET_ERROR;
     }
-    if (param.producer != nullptr) {
-        if (!data.WriteRemoteObject(param.producer->AsObject())) {
-            FACEAUTH_LABEL_LOGE("failed to WriteRemoteObject(producer).");
-            return FA_RET_ERROR;
-        }
-    }
     for (std::vector<uint8_t>::const_iterator iter = param.token.begin(); iter != param.token.end(); ++iter) {
         FACEAUTH_LABEL_LOGI("proxy param.token is %{public}d", *iter);
     }
     MessageParcel reply;
-    int32_t result = 0;
+    int32_t result = FA_RET_ERROR;
     bool ret = SendRequest(FACE_AUTH_ENROLL, data, reply);
     if (ret) {
         result = reply.ReadInt32();
@@ -110,6 +108,10 @@ int32_t FaceAuthProxy::Authenticate(const AuthParam &param, const sptr<OnFaceAut
         FACEAUTH_LABEL_LOGE("failed to WriteInt32(flags).");
         return FA_RET_ERROR;
     }
+    if (!data.WriteInt32(param.previewId)) {
+        FACEAUTH_LABEL_LOGE("failed to WriteInt32(previewId).");
+        return FA_RET_ERROR;
+    }
     if (!data.WriteInt64(param.challenge)) {
         FACEAUTH_LABEL_LOGE("failed to WriteInt64(challenge).");
         return FA_RET_ERROR;
@@ -121,12 +123,6 @@ int32_t FaceAuthProxy::Authenticate(const AuthParam &param, const sptr<OnFaceAut
     if (!data.WriteRemoteObject(callback->AsObject())) {
         FACEAUTH_LABEL_LOGE("failed to WriteRemoteObject(callback).");
         return FA_RET_ERROR;
-    }
-    if (param.producer != nullptr) {
-        if (!data.WriteRemoteObject(param.producer->AsObject())) {
-            FACEAUTH_LABEL_LOGE("failed to WriteRemoteObject(producer).");
-            return FA_RET_ERROR;
-        }
     }
     MessageParcel reply;
     int32_t result = FA_RET_ERROR;
