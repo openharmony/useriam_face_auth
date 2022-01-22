@@ -27,10 +27,9 @@
 #include "useriam_auth_kit.h"
 #include "face_auth_innerkit.h"
 #include "faceauth_native_event.h"
-#include "napi/native_common.h"
-#include "napi/native_node_api.h"
-#include "on_faceauth_stub.h"
 #include "napi/native_api.h"
+#include "napi/native_common.h"
+#include "on_faceauth_stub.h"
 
 namespace OHOS {
 namespace UserIAM {
