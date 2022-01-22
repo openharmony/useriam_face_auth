@@ -19,6 +19,7 @@
 #include "face_auth_defines.h"
 #include "face_auth_manager.h"
 #include "face_auth_event.h"
+#include "system_ability_definition.h"
 
 namespace OHOS {
 namespace UserIAM {
@@ -41,7 +42,7 @@ std::shared_ptr<FaceAuthService> FaceAuthService::GetInstance()
 }
 
 FaceAuthService::FaceAuthService()
-    : SystemAbility(SA_ID_FACE_AUTH_SERVICE, true),
+    : SystemAbility(SUBSYS_USERIAM_SYS_ABILITY_FACEAUTH, true),
       serviceRunningState_(ServiceRunningState::STATE_NOT_START),
       runner_(nullptr)
 {}
