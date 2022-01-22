@@ -27,7 +27,6 @@ namespace UserIAM {
 namespace FaceAuth {
 class IFaceAuth : public IRemoteBroker {
 public:
-    static const int32_t SA_ID_FACE_AUTH_SERVICE = 922;
     DECLARE_INTERFACE_DESCRIPTOR(u"ohos.faceauth.IFaceAuth");
 
     /**
