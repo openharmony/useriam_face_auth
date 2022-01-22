@@ -114,7 +114,7 @@ bool FaceAuthClient::GetFaceAuthProxy()
             FACEAUTH_LABEL_LOGE("failed to get systemAbilityManager.");
             return false;
         }
-        sptr<IRemoteObject> remoteObject = systemAbilityManager->GetSystemAbility(IFaceAuth::SA_ID_FACE_AUTH_SERVICE);
+        sptr<IRemoteObject> remoteObject = systemAbilityManager->GetSystemAbility(SUBSYS_USERIAM_SYS_ABILITY_FACEAUTH);
         if (!remoteObject) {
             FACEAUTH_LABEL_LOGE("failed to get remoteObject.");
             return false;
