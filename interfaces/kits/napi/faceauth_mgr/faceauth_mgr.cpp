@@ -16,7 +16,7 @@
 
 #include "faceauth_log_wrapper.h"
 #include "napi/native_api.h"
-#include "napi/native_node_api.h"
+#include "napi/native_common.h"
 #include "securec.h"
 #include "system_ability_definition.h"
 #include "singleton.h"
