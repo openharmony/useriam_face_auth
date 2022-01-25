@@ -63,8 +63,8 @@ ohos_unittest("face_auth_manager_enroll_test") {
   module_out_path = module_output_path
   include_dirs = [
     "include/face_auth_manager_enroll_test.h",
-    "//foundation/multimedia/camera_standard/interfaces/innerkits/native/camera/include/",
-    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata/include/",
+    "//foundation/multimedia/camera_standard/interfaces/inner_api/native/camera/include/",
+    "//foundation/multimedia/camera_standard/frameworks/native/metadata/include/",
     "//foundation/multimedia/camera_standard/services/camera_service/binder/base/include/",
     "//foundation/multimedia/camera_standard/services/camera_service/binder/client/include/",
     "//foundation/multimedia/camera_standard/services/camera_service/binder/server/include/",
@@ -91,8 +91,8 @@ ohos_unittest("face_auth_manager_enroll_test") {
     "//foundation/distributedschedule/safwk/interfaces/innerkits/safwk:system_ability_fwk",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
     "//foundation/graphic/standard:libsurface",
-    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/camera:camera_framework",
-    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata:metadata",
+    "//foundation/multimedia/camera_standard/frameworks/native/camera:camera_framework",
+    "//foundation/multimedia/camera_standard/frameworks/native/metadata:metadata",
     "//foundation/multimedia/camera_standard/services/camera_service:camera_service",
     "//utils/native/base:utils",
   ]
@@ -116,8 +116,8 @@ ohos_unittest("face_auth_manager_scenario_test") {
   module_out_path = module_output_path
   include_dirs = [
     "include/face_auth_manager_scenario_test.h",
-    "//foundation/multimedia/camera_standard/interfaces/innerkits/native/camera/include/",
-    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata/include/",
+    "//foundation/multimedia/camera_standard/interfaces/inner_api/native/camera/include/",
+    "//foundation/multimedia/camera_standard/frameworks/native/metadata/include/",
     "//foundation/multimedia/camera_standard/services/camera_service/binder/base/include/",
     "//foundation/multimedia/camera_standard/services/camera_service/binder/client/include/",
     "//foundation/multimedia/camera_standard/services/camera_service/binder/server/include/",
@@ -144,8 +144,8 @@ ohos_unittest("face_auth_manager_scenario_test") {
     "//foundation/distributedschedule/safwk/interfaces/innerkits/safwk:system_ability_fwk",
     "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
     "//foundation/graphic/standard:libsurface",
-    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/camera:camera_framework",
-    "//foundation/multimedia/camera_standard/frameworks/innerkitsimpl/metadata:metadata",
+    "//foundation/multimedia/camera_standard/frameworks/native/camera:camera_framework",
+    "//foundation/multimedia/camera_standard/frameworks/native/metadata:metadata",
     "//foundation/multimedia/camera_standard/services/camera_service:camera_service",
     "//utils/native/base:utils",
   ]
