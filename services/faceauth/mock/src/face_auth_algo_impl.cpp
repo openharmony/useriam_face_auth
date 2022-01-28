@@ -108,8 +108,7 @@ FIRetCode FaceAuthAlgoImpl::GetResult(int32_t &resultCode, int32_t param[RESULT_
     std::lock_guard<std::mutex> lock_l(mutex_);
     std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_NUM));
     ReadFile();
-    FACEAUTH_LABEL_LOGI("resultNum_ is %{public}d", resultNum_);
-    FACEAUTH_LABEL_LOGI("resultInfos_.size() is %{public}d", resultInfos_.size());
+    FACEAUTH_LABEL_LOGI("resultNum_ is %{public}d, resultInfos_.size is %{public}d", resultNum_, resultInfos_.size());
     if (resultNum_ < resultInfos_.size()) {
         resultCode = resultInfos_[resultNum_].resultCode;
         FACEAUTH_LABEL_LOGI("memcpy_s length is %{public}d", sizeof(int32_t) * RESULT_MAX_SIZE);
@@ -117,7 +116,9 @@ FIRetCode FaceAuthAlgoImpl::GetResult(int32_t &resultCode, int32_t param[RESULT_
                 sizeof(int32_t) * RESULT_MAX_SIZE) != EOK) {
             return FIRetCode::FI_RC_ERROR;
         }
-        if (resultNum_ >= 1 && resultInfos_[resultNum_ - 1].resultCode == FACE_DETECTED) {
+
+        bool faceDetected = (resultNum_ >= 1 && resultInfos_[resultNum_ - 1].resultCode == FACE_DETECTED);
+        if (faceDetected) {
             std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_LONG_NUM));
         }
         resultNum_++;
@@ -140,14 +141,14 @@ FIRetCode FaceAuthAlgoImpl::GetResult(int32_t &resultCode, int32_t param[RESULT_
             return FIRetCode::FI_RC_OK;
         }
 
-        if ((resultCode >= FI_ENROLL_SUCCESS && resultCode <= FI_COMPARE_FAIL) || resultCode == IFACE_OVER_MAX_FACES ||
-            resultCode == IFACE_ENROLL_HAS_REGISTERED || resultCode == FACE_AUTH_GETRESULT_FAIL ||
-            resultCode == FACE_AUTH_GETRESULT_TIMEOUT) {
-            if (result != FACE_MOVED) {
-                resultInfos_.clear();
-                resultNum_ = 0;
-                remove(CONFIG_FILENAME);
-            }
+        bool needClearResultInfo = ((resultCode >= FI_ENROLL_SUCCESS && resultCode <= FI_COMPARE_FAIL) ||
+            resultCode == IFACE_OVER_MAX_FACES || resultCode == IFACE_ENROLL_HAS_REGISTERED ||
+            resultCode == FACE_AUTH_GETRESULT_FAIL || resultCode == FACE_AUTH_GETRESULT_TIMEOUT) &&
+            (result != FACE_MOVED);
+        if (needClearResultInfo) {
+            resultInfos_.clear();
+            resultNum_ = 0;
+            remove(CONFIG_FILENAME);
         }
         FACEAUTH_LABEL_LOGI("authErrorCode is %{public}d", resultCode);
         if (param[0] != 0) {
