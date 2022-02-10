@@ -88,8 +88,7 @@ ohos_shared_library("userauth") {
   ]
   cflags_cc = [ "-DHILOG_ENABLE" ]
   external_deps = [
-    "ability_runtime:app_manager",
-    "ability_runtime:want",
+    "ability_base:want",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
   ]
@@ -128,8 +127,7 @@ ohos_shared_library("enroll") {
   ]
   cflags_cc = [ "-DHILOG_ENABLE" ]
   external_deps = [
-    "ability_runtime:app_manager",
-    "ability_runtime:want",
+    "ability_base:want",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
   ]
