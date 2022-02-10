@@ -95,8 +95,8 @@ ohos_shared_library("face_auth_services") {
   ]
 
   external_deps = [
+    "ability_base:want",
     "ability_runtime:app_manager",
-    "ability_runtime:want",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
     "safwk:system_ability_fwk",
