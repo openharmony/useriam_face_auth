@@ -13,20 +13,18 @@
  * limitations under the License.
  */
 
-import router from '@system.router'
-import fileio from '@ohos.fileio';
-import Log from '../../../../../../../common/src/main/ets/default/Log.ets'
-import Constants from '../common/constant.ets'
-const TAG = 'startViews_3D'
+import router from '@system.router';
+import Constants from '../common/constant.ets';
+import mFaceModel from "../model_3D.ets";
 
 async function routeEnroll_3D() {
   let options = {
     uri: 'pages/enroll_3D'
   }
   try {
-    await router.push(options)
+    await router.push(options);
   } catch (err) {
-    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`)
+    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`);
   }
 }
 async function routeDeclare() {
@@ -34,21 +32,36 @@ async function routeDeclare() {
     uri: 'pages/declare'
   }
   try {
-    await router.push(options)
+    await router.push(options);
   } catch (err) {
-    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`)
+    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`);
   }
 }
 
-
 @Entry
 @Component
-
 export default
-
 struct StartViews_3D {
-  @StorageLink('checkbox_color') checkbox_color : any = $r('app.color.startView_color')
+  private pageHideFlag: number = 0;
+  @StorageLink('checkbox_color') checkbox_color : any = $r('app.color.startView_color');
 
+  public openSessionCallBack() {
+    routeEnroll_3D();
+  }
+
+  private onPageHide(): void {
+    if (this.pageHideFlag == 0) {
+      router.push({
+        uri: 'pages/entryView'
+      })
+    }
+  }
+  private onBackPress(): void{
+    AppStorage.Delete('faceToken');
+    router.push({
+      uri: 'pages/entryView',
+    })
+  }
   build() {
     Flex({ direction: FlexDirection.Column,alignItems: ItemAlign.Center}) {
 
@@ -100,12 +113,12 @@ struct StartViews_3D {
             .textCase(TextCase.UpperCase)
             .fontSize(Constants.FONT_SIZE)
             .fontColor($r('app.color.startView_color'))
-          }
-          .margin({ top: Constants.CONTENT2_MARGIN })
-          .textAlign(TextAlign.Center)
-          .onClick(() => {
-            routeDeclare()
-          })
+        }
+        .margin({ top: Constants.CONTENT2_MARGIN })
+        .textAlign(TextAlign.Center)
+        .onClick(() => {
+          routeDeclare();
+        })
       }.width(Constants.ENROLL_INFO_WIDTH)
       .margin({ top: Constants.IMAGE_MARGIN })
 
@@ -129,7 +142,8 @@ struct StartViews_3D {
         }
         .backgroundColor($r('app.color.startView_color')) .width(Constants.BUTTON_WIDTH).height(Constants.BUTTON_HEIGHT)
         .onClick(() => {
-          routeEnroll_3D()
+          this.pageHideFlag = 1;
+          mFaceModel.openSession(this.openSessionCallBack.bind(this));
         })
       }.position({ x:$r('app.float.enroll_center_position_X'), y: Constants.BUTTON_POSITION})
     }

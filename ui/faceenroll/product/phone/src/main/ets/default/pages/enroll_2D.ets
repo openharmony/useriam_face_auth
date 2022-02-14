@@ -14,45 +14,61 @@
  */
 
 import router from '@system.router';
-import mFaceModel from "../model_2D.ets"
-import Log from '../../../../../../../common/src/main/ets/default/Log.ets'
-import Constants from '../common/constant.ets'
-const TAG = 'faceenroll_2D'
+import mFaceModel from "../model_2D.ets";
+import Constants from '../common/constant.ets';
+const SUBTYPE_FACE_2D = 20000;
+const AUTHTYPE_FACE = 2;
 
 async function route_back() {
   let options = {
-    uri: 'pages/index'
+    uri: 'pages/entryView'
   }
   try {
-    await router.push(options)
+    await router.push(options);
   } catch (err) {
-    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`)
+    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`);
   }
 }
 
 @Entry
 @Component
 export default struct Enroll_2D {
-  @StorageLink('showAperture') showAperture: boolean = true
-  @StorageLink('blur') blur: number = Constants.BLUR_START
-  @StorageLink('width') width: any = Constants.SHELTER_START_WIDTH
-  @StorageLink('height') height: any = Constants.SHELTER_START_HEIGHT
-  @StorageLink('showPrg') showPrg: boolean = false
-  @StorageLink('prgValue') prgValue: number = Constants.PROGRESS_START
-  @StorageLink('enrollInfo') enrollInfo: any = $r('app.string.enroll_info')
-  @StorageLink('enrollTitle') enrollTitle: any = $r('app.string.face_record')
-  @StorageLink('showBtn') showBtn: boolean = false
-  @StorageLink('showBack') showBack: boolean = true
+  @StorageLink('showAperture') showAperture: boolean = true;
+  @StorageLink('blur') blur: number = Constants.BLUR_START;
+  @StorageLink('width') width: any = Constants.SHELTER_START_WIDTH;
+  @StorageLink('height') height: any = Constants.SHELTER_START_HEIGHT;
+  @StorageLink('showPrg') showPrg: boolean = false;
+  @StorageLink('prgValue') prgValue: number = Constants.PROGRESS_START;
+  @StorageLink('enrollInfo') enrollInfo: any = '';
+  @StorageLink('enrollTitle') enrollTitle: any = '';
+  @StorageLink('showBtn') showBtn: boolean = false;
+  @StorageLink('showBack') showBack: boolean = true;
+  private credentialInfo;
 
-  //init page
   private aboutToAppear(): void  {
-    mFaceModel.initFaceModel()
-    Log.showInfo(TAG, 'aboutToAppear');
+    setTimeout(()=> {
+      AppStorage.Delete('faceToken');
+      router.push({
+        uri: 'pages/entryView'
+      });
+    }, 180000)
+
+    this.credentialInfo = {
+      credType:AUTHTYPE_FACE,
+      credSubType:SUBTYPE_FACE_2D,
+      token:AppStorage.Get('token')
+    };
+    mFaceModel.initFaceModel(this.credentialInfo);
   }
-  //hide page change
+
   private onPageHide() {
-    mFaceModel.uninitFaceModel()
-    Log.showInfo(TAG, 'PageHide');
+    mFaceModel.uninitFaceModel();
+  }
+  private onBackPress(): void{
+    AppStorage.Delete('faceToken');
+    router.push({
+      uri: 'pages/entryView',
+    })
   }
   build() {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center }) {
@@ -61,8 +77,6 @@ export default struct Enroll_2D {
         .height(Constants.CENTER_HEIGHT)
         .align(Alignment.Center)
         .position({x: $r('app.float.enroll_center_position_X'),y:Constants.ENROLL_CENTER_POSITION_Y})
-
-
       Flex()
         .width('100%')
         .height(Constants.CENTER_HEIGHT)
@@ -70,14 +84,12 @@ export default struct Enroll_2D {
         .blur(this.blur)
         .position({x:$r('app.float.enroll_center_position_X'),y: Constants.ENROLL_CENTER_POSITION_Y})
         .animation({ duration: Constants.SHELTER_ANIMATOR, curve: Curve.Linear })
-
       if (this.showAperture) {
         Flex({ alignItems: ItemAlign.Center , justifyContent:FlexAlign.Center}) {
           Image($r('app.media.aperture1'))
             .width(Constants.APERTURE1_WIDTH)
             .height(Constants.APERTURE1_WIDTH)
             .align(Alignment.Center)
-          //    .position({ x: $r('app.float.aperture1_position_X'), y: $r('app.float.aperture1_position_Y') })
         }
         .position({x:$r('app.float.enroll_center_position_X'),y:Constants.ENROLL_CENTER_POSITION_Y})
         .height(Constants.CENTER_HEIGHT)
@@ -86,8 +98,7 @@ export default struct Enroll_2D {
 
       Flex()
         .width('100%')
-      .height(Constants.ENROLL_CENTER_POSITION_Y)
-
+        .height(Constants.ENROLL_CENTER_POSITION_Y)
       Flex({ alignItems: ItemAlign.Center , justifyContent:FlexAlign.Center}) {
         Image($r('app.media.shelter'))
           .width(this.width)
@@ -95,7 +106,6 @@ export default struct Enroll_2D {
           .animation({ duration: Constants.SHELTER_ANIMATOR, curve: Curve.Linear })
       }.width('100%')
       .height(Constants.CENTER_HEIGHT)
-
 
       if(this.showPrg) {
         Flex({ alignItems: ItemAlign.Center , justifyContent:FlexAlign.Center}) {
@@ -107,24 +117,22 @@ export default struct Enroll_2D {
         .height(Constants.CENTER_HEIGHT)
         .width('100%')
       }
-
       if(this.showBack) {
         Flex() {
           Image($r('app.media.back'))
             .width(Constants.BACK_WIDTH)
             .height(Constants.BACK_HEIGHT)
             .onClick(() => {
-              router.back()
+              mFaceModel.cancelEnroll();
+              router.back();
             })
         }.position({ x: $r('app.float.enroll_center_position_X'), y: Constants.CENTER_POSITION_Y })
       }
-
       Flex({ alignItems: ItemAlign.Center , justifyContent:FlexAlign.Center}) {
         Text(this.enrollTitle)
           .fontSize(Constants.TITLE_FONT_SIZE)
           .fontWeight(Constants.ENROll_TITLE)
       }.position({x:$r('app.float.enroll_title_position_X'),y:Constants.TITLE_ENROLLING_MARGIN})
-
       Flex({justifyContent:FlexAlign.Center}) {
         Text(this.enrollInfo)
           .fontSize(Constants.ERROR_CODE_INFO_SIZE)
@@ -132,7 +140,6 @@ export default struct Enroll_2D {
       }
       .position({ x:$r('app.float.enroll_info_X'), y: Constants.ENROLL_INFO_POSITION})
       .width(Constants.ENROLL_INFO_WIDTH)
-
       if(this.showBtn){
         Flex({justifyContent:FlexAlign.Center}) {
           Button({ type: ButtonType.Capsule, stateEffect: true }) {
@@ -144,7 +151,7 @@ export default struct Enroll_2D {
           .width(Constants.BUTTON_WIDTH)
           .height(Constants.BUTTON_HEIGHT)
           .onClick(() => {
-            route_back()
+            route_back();
           })
         }.position({ x:$r('app.float.enroll_center_position_X'), y: Constants.BUTTON_POSITION})
       }

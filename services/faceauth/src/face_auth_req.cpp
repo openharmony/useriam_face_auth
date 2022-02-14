@@ -14,8 +14,7 @@
  */
 
 #include "face_auth_req.h"
-#include "faceauth_log_wrapper.h"
-#include "face_auth_algo_impl.h"
+#include "face_auth_log_wrapper.h"
 #include "face_auth_defines.h"
 
 namespace OHOS {
@@ -46,14 +45,14 @@ bool FaceAuthReq::IsReqNumReachedMax(FaceOperateType type)
 {
     std::lock_guard<std::mutex> lock_l(mutex_);
     for (auto iterinfo = reqInfoList_.begin(); iterinfo != reqInfoList_.end(); ++iterinfo) {
-        FACEAUTH_LABEL_LOGI(
+        FACEAUTH_HILOGI(MODULE_SERVICE,
             "ListInfo:reqId:xxxx%04llu,Type:%{public}d,eventId:%{public}u,uId:%{public}d,isCanceled:%{public}d",
             iterinfo->first.reqId, iterinfo->first.operateType, iterinfo->second.eventId, iterinfo->second.uId,
             iterinfo->second.isCanceled);
     }
-    FACEAUTH_LABEL_LOGI("type is %{public}d", type);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "type is %{public}d", type);
     if (type > FACE_OPERATE_TYPE_MAX || type < FACE_INVALID_OPERATE_TYPE) {
-        FACEAUTH_LABEL_LOGE("Parameter check error.type is %{public}d", type);
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.type is %{public}d", type);
         return true;
     }
     if (type == FACE_OPERATE_TYPE_CO_AUTH) {
@@ -68,9 +67,9 @@ bool FaceAuthReq::IsReqNumReachedMax(FaceOperateType type)
         }
     } else {
         for (auto iter = reqInfoList_.begin(); iter != reqInfoList_.end(); ++iter) {
-            FACEAUTH_LABEL_LOGI("operateType is %{public}d", iter->first.operateType);
+            FACEAUTH_HILOGI(MODULE_SERVICE, "operateType is %{public}d", iter->first.operateType);
             if (iter->first.operateType == type) {
-                FACEAUTH_LABEL_LOGI("reqId is xxxx%04llu", iter->first.reqId);
+                FACEAUTH_HILOGI(MODULE_SERVICE, "reqId is xxxx%04llu", iter->first.reqId);
                 return true;
             }
         }
@@ -81,13 +80,13 @@ bool FaceAuthReq::IsReqNumReachedMax(FaceOperateType type)
 void FaceAuthReq::AddReqInfo(FaceReqType reqType, FaceInfo reqInfo)
 {
     std::lock_guard<std::mutex> lock_l(mutex_);
-    FACEAUTH_LABEL_LOGI("reqType.reqId is xxxx%04llu", reqType.reqId);
-    FACEAUTH_LABEL_LOGI("reqType.operateType is %{public}d", reqType.operateType);
-    FACEAUTH_LABEL_LOGI("reqInfo.eventId is %{public}u", reqInfo.eventId);
-    FACEAUTH_LABEL_LOGI("reqInfo.uId is %{public}d", reqInfo.uId);
-    FACEAUTH_LABEL_LOGI("reqInfo.isCanceled is %{public}d", reqInfo.isCanceled);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reqType.reqId is xxxx%04llu", reqType.reqId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reqType.operateType is %{public}d", reqType.operateType);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reqInfo.eventId is %{public}u", reqInfo.eventId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reqInfo.uId is %{public}d", reqInfo.uId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reqInfo.isCanceled is %{public}d", reqInfo.isCanceled);
     if (reqType.operateType < FACE_INVALID_OPERATE_TYPE || reqType.operateType > FACE_OPERATE_TYPE_MAX) {
-        FACEAUTH_LABEL_LOGE("Parameter check error.reqInfo.operateType is %{public}d", reqType.operateType);
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.reqInfo.operateType is %{public}d", reqType.operateType);
         return;
     }
     reqInfoList_.insert(std::pair<FaceReqType, FaceInfo>(reqType, reqInfo));
@@ -98,13 +97,13 @@ void FaceAuthReq::RemoveRequireInfo(FaceReqType reqType)
 {
     std::lock_guard<std::mutex> lock_l(mutex_);
     for (auto iter = reqInfoList_.begin(); iter != reqInfoList_.end(); ++iter) {
-        FACEAUTH_LABEL_LOGI(
+        FACEAUTH_HILOGI(MODULE_SERVICE,
             "Remove before reqId:xxxx%04llu,Type:%{public}d,eventId:%{public}d,uId:%{public}d,isCanceled:%{public}d",
             iter->first.reqId, iter->first.operateType, iter->second.eventId, iter->second.uId,
             iter->second.isCanceled);
     }
-    FACEAUTH_LABEL_LOGI("Remove reqType.reqId is xxxx%04llu", reqType.reqId);
-    FACEAUTH_LABEL_LOGI("Remove reqType.operateType is %{public}d", reqType.operateType);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "Remove reqType.reqId is xxxx%04llu", reqType.reqId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "Remove reqType.operateType is %{public}d", reqType.operateType);
     auto iterrm = reqInfoList_.find(reqType);
     if (iterrm != reqInfoList_.end()) {
         reqInfoList_.erase(reqType);
@@ -121,7 +120,7 @@ void FaceAuthReq::RemoveAllRequireInfo()
 FaceOperateType FaceAuthReq::GetOperateType(uint32_t eventId)
 {
     std::lock_guard<std::mutex> lock_l(mutex_);
-    FACEAUTH_LABEL_LOGI("eventId is %{public}u", eventId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "eventId is %{public}u", eventId);
     for (auto iter = reqInfoList_.begin(); iter != reqInfoList_.end(); ++iter) {
         if (iter->second.eventId == eventId) {
             return iter->first.operateType;
@@ -133,43 +132,44 @@ FaceOperateType FaceAuthReq::GetOperateType(uint32_t eventId)
 uint32_t FaceAuthReq::GetEventId(FaceReqType reqType)
 {
     std::lock_guard<std::mutex> lock_l(mutex_);
-    FACEAUTH_LABEL_LOGI("reqType.reqId is xxxx%04llu", reqType.reqId);
-    FACEAUTH_LABEL_LOGI("reqType.operateType is %{public}d", reqType.operateType);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reqType.reqId is xxxx%04llu", reqType.reqId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reqType.operateType is %{public}d", reqType.operateType);
     auto iter = reqInfoList_.find(reqType);
     if (iter != reqInfoList_.end()) {
         return reqInfoList_[reqType].eventId;
     }
-    FACEAUTH_LABEL_LOGI("reqType is not in reqInfoList,reqType.reqId is xxxx%04llu", reqType.reqId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reqType is not in reqInfoList,reqType.reqId is xxxx%04llu", reqType.reqId);
     return 0;
 }
 
 bool FaceAuthReq::SetCancelFlag(FaceReqType reqType, int32_t uId)
 {
     std::lock_guard<std::mutex> lock_l(mutex_);
-    FACEAUTH_LABEL_LOGI("reqType.reqId is xxxx%04llu", reqType.reqId);
-    FACEAUTH_LABEL_LOGI("reqType.operateType is %{public}d", reqType.operateType);
-    FACEAUTH_LABEL_LOGI("uId is %{public}d", uId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reqType.reqId is xxxx%04llu", reqType.reqId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reqType.operateType is %{public}d", reqType.operateType);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "uId is %{public}d", uId);
     auto iter = reqInfoList_.find(reqType);
     if (iter != reqInfoList_.end() && uId == reqInfoList_[reqType].uId) {
         reqInfoList_[reqType].isCanceled = true;
         return true;
     }
-    FACEAUTH_LABEL_LOGI("reqType or uId is not in reqInfoList,reqType.reqId is xxxx%04llu,uid is%{public}d",
-        reqType.reqId, uId);
+    FACEAUTH_HILOGI(MODULE_SERVICE,
+        "reqType or uId is not in reqInfoList,reqType.reqId is xxxx%04llu,uid is%{public}d", reqType.reqId, uId);
     return false;
 }
 
 bool FaceAuthReq::isCanceled(uint32_t eventId, int32_t uId)
 {
     std::lock_guard<std::mutex> lock_l(mutex_);
-    FACEAUTH_LABEL_LOGI("eventId is %{public}u", eventId);
-    FACEAUTH_LABEL_LOGI("uId is %{public}d", uId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "eventId is %{public}u", eventId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "uId is %{public}d", uId);
     for (auto iter = reqInfoList_.begin(); iter != reqInfoList_.end(); ++iter) {
         if (iter->second.eventId == eventId && uId == iter->second.uId) {
             return iter->second.isCanceled;
         }
     }
-    FACEAUTH_LABEL_LOGI("eventId or uId is not in reqInfoList,eventId is %{public}u,uid is%{public}d", eventId, uId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "eventId or uId is not in reqInfoList,eventId is %{public}u,uid is%{public}d",
+        eventId, uId);
     return false;
 }
 

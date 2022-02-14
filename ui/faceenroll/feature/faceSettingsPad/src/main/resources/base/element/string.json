@@ -1,0 +1,129 @@
+{
+  "string": [
+    {
+      "name": "entry_MainAbility",
+      "value": "entry_MainAbility"
+    },
+    {
+      "name": "mainability_description",
+      "value": "ETS_Empty Ability"
+    },
+    {
+      "name": "face_checker",
+      "value": "人脸识别"
+    },
+
+    {
+      "name": "face_unlock_method",
+      "value": "解锁屏幕"
+    },
+    {
+      "name": "face_recognize_slideunlock_title",
+      "value": "滑动解锁"
+    },
+    {
+      "name": "title_apps_security_pref",
+      "value": "访问应用锁"
+    },
+    {
+      "name": "title_fill_light",
+      "value": "暗光环境下屏幕补光"
+    },
+    {
+      "name": "recommend_preference_title",
+      "value": "是否在寻找其他设置项？"
+    },
+    {
+      "name": "face_config_light_01_universal",
+      "value": "拿起手机亮屏"
+    },
+    {
+      "name": "multiface_list_title",
+      "value": "面部列表"
+    },
+    {
+      "name": "multiface_default_face_name_1",
+      "value": "面部 1"
+    },
+    {
+      "name": "multiface_default_face_name",
+      "value": "面部"
+    },
+    {
+      "name": "multiface_enroll_new_face",
+      "value": "新建面部数据"
+    },
+    {
+      "name": "multiface_face_name_title",
+      "value": "面部名称"
+    },
+    {
+      "name": "delete_face",
+      "value": "删除面部"
+    },
+    {
+      "name": "multiface_save",
+      "value": "保存"
+    },
+    {
+      "name": "face_unlock_method_close",
+      "value": "关闭"
+    },
+    {
+      "name": "face_recognize_unlock_title",
+      "value": "直接解锁"
+    },
+    {
+      "name": "face_3dguide_info_2",
+      "value": "人脸识别可基于您的面部特征信息进行身份识别，了解"
+    },
+    {
+      "name": "face_guide_2d_announce_link",
+      "value": "关于人脸识别的声明。"
+    },
+    {
+      "name": "activate_app_lock",
+      "value": "启用应用锁"
+    },
+    {
+      "name": "face_inform_open_applock_msg",
+      "value": "需开启应用锁功能才能完成人脸关联。是否立即启用应用锁？"
+    },
+    {
+      "name": "face_record_cancel",
+      "value": "取消"
+    },
+    {
+      "name": "enable",
+      "value": "启用"
+    },
+    {
+      "name": "face_recognize_unlock_summary_3d",
+      "value": "人脸识别成功后直接解锁"
+    },
+    {
+      "name": "face_recognize_slideunlock_summary_3d",
+      "value": "人脸识别成功后，滑动屏幕解锁"
+    },
+    {
+      "name": "face_recognition_is_used",
+      "value": "人脸识别用于"
+    },
+    {
+      "name": "face_introdution_title",
+      "value": "解锁时需连接可信设备"
+    },
+    {
+      "name": "face_enterance_off",
+      "value": "已关闭"
+    },
+    {
+      "name": "face_fingerprint_settings_switch_title",
+      "value": "自动填充账号和密码"
+    },
+    {
+      "name": "face_fingerprint_settings_switch_summary",
+      "value": "使用密码保险箱保存的帐号和密码"
+    }
+  ]
+}

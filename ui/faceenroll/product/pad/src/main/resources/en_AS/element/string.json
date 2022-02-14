@@ -1,0 +1,562 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "faceEnroll"
+    },
+    {
+      "name": "mainability_description",
+      "value": "JS_Phone_Empty Feature Ability"
+    },
+    {
+      "name": "deleteTitle",
+      "value": "delete"
+    },
+    {
+      "name": "face_fingerprint_settings_switch_title",
+      "value": "Autofill usernames and passwords"
+    },
+    {
+      "name": "face_fingerprint_settings_switch_summary",
+      "value": "Usernames and passwords are accessed from Password Vault."
+    },
+    {
+      "name": "face_guide_2d_announce_link",
+      "value": "Statement About Face Recognition"
+    },
+    {
+      "name": "face_feature_desc",
+      "value": "Feature description"
+    },
+    {
+      "name": "face_recognize_annouce_message_01",
+      "value": "Face Recognition is a biometric identification technology that allows your phone to recognize the features of your face. It uses the front camera to capture facial data, and then compares it to pre-stored data to quickly verify your identity. You can use this feature to unlock your device, open locked apps, and more."
+    },
+    {
+      "name": "face_recognize_annouce_message_02",
+      "value": "Please note the following when setting up this feature:"
+    },
+    {
+      "name": "face_recognize_annouce_message_03",
+      "value": "1.Make sure that the camera lens is clean."
+    },
+    {
+      "name": "face_recognize_annouce_message_04",
+      "value": "2.Scan your face in a well-lit environment, avoiding direct sunlight.；"
+    },
+    {
+      "name": "face_recognize_annouce_message_05",
+      "value": "3.Avoid covering your face with items of clothing, hair, sunglasses, masks, or thick makeup."
+    },
+    {
+      "name": "face_recognize_annouce_message_06",
+      "value": "4.Make sure your face is completely displayed in the frame. Look straight at the camera, and avoid raising and lowering your head or closing your eyes."
+    },
+    {
+      "name": "face_recognize_annouce_message_07",
+      "value": "5.Make sure that no one else appears in the frame."
+    },
+    {
+      "name": "face_recognize_annouce_message_08",
+      "value": "Please note the following when using Face Recognition:"
+    },
+    {
+      "name": "face_recognize_annouce_message_09",
+      "value": "1.Face Recognition may not work as well in dim, very bright, or backlit environments, or if the angle between your face and the camera is too great."
+    },
+    {
+      "name": "face_annouce_tip1_item2_3d",
+      "value": "2.Face Recognition is less secure than other unlock methods such as Pattern, PIN, and Password."
+    },
+    {
+      "name": "face_recognize_annouce_message_10",
+      "value": "There is a small chance that your device may be unlocked by people that closely resemble you or by objects that represent close depictions of your likeness."
+    },
+    {
+      "name": "face_recognize_annouce_message_11",
+      "value": "To prevent Face Recognition from being used without your consent, please exercise caution before allowing other people to use your device."
+    },
+    {
+      "name": "face_recognize_annouce_message_12",
+      "value": "The functionality of Face Recognition may also be affected in scenarios other than those described above."
+    },
+    {
+      "name": "face_recognize_annouce_message_13",
+      "value": "Privacy Statement"
+    },
+    {
+      "name": "face_recognize_annouce_message_14_1",
+      "value": "Your"
+    },
+    {
+      "name": "face_recognize_annouce_message_14_2",
+      "value": "is rigorously protected. This data is encrypted and stored in an isolated zone on your device, where it will not be copied by Huawei, and cannot be copied or accessed by any app. When you use Face Recognition in an app, the app is only informed whether or not verification is successful, and cannot access your actual"
+    },
+    {
+      "name": "face_recognize_annouce_message_14_3",
+      "value": "facial data"
+    },
+    {
+      "name": "face_recognize_annouce_message_15_1",
+      "value": "As the owner of your"
+    },
+    {
+      "name": "face_recognize_annouce_message_15_2",
+      "value": ", you are entitled to decide how you use the Face Recognition feature. For example, if you don't want to use Face Recognition to access App Lock, you can disable this feature in Settings. You can also choose to permanently delete your。"
+    },
+    {
+      "name": "face_recognize_annouce_message_15_3",
+      "value": "facial data"
+    },
+    {
+      "name": "face_recognize_annouce_message_15_4",
+      "value": "from your device."
+    },
+    {
+      "name": "face_guide_3d_announce_link",
+      "value": "Statement About 3D Face Recognition"
+    },
+    {
+      "name": "face_3drecognize_annouce_message_01",
+      "value": "3D Face Recognition uses depth-sensing technology to create a sophisticated, three-dimensional model of your face, which can be used to verify your identity. This lets you securely unlock your device, confirm payments, and access features such as App Lock and Safe by simply looking at the screen. 3D Face Recognition is more secure and robust than 2D face recognition technologies, and can even be used in the dark."
+    }
+  ,
+    {
+      "name": "face_introdution_title",
+      "value": "Require trusted device"
+    },
+    {
+      "name": "face_introdution_tip",
+      "value": "Add an extra layer of security by only allowing this device to be unlocked with facial recognition when a trusted device is connected."
+    },
+    {
+      "name": "trusted_devices_title",
+      "value": "Trusted devices"
+    },
+    {
+      "name": "face_introdution_button",
+      "value": "Add trusted device"
+    },
+    {
+      "name": "connect_tip",
+      "value": "Connected"
+    },
+    {
+      "name": "disconnect_tip",
+      "value": "Not connected"
+    },
+    {
+      "name": "cancel_button",
+      "value": "Cancel"
+    },
+    {
+      "name": "remove_device_button",
+      "value": "Remove"
+    },
+    {
+      "name": "add_device_button",
+      "value": "Add"
+    },
+    {
+      "name": "remove_device_tip",
+      "value": "Once removed, a trusted device will no longer be required to unlock this device with facial recognition."
+    },
+    {
+      "name": "remove_device_title",
+      "value": "Remove trusted device"
+    },
+    {
+      "name": "add_device_or_not_tip",
+      "value": "Add trusted device?"
+    },
+    {
+      "name": "using_tips",
+      "value": "Note"
+    },
+    {
+      "name": "add_device_tip",
+      "value": "You will only be able to unlock this device with facial recognition when a trusted device is connected over Bluetooth. Other unlock methods will not be affected."
+    }
+
+
+
+  ,
+    {
+      "name": "face_recognition",
+      "value": "人脸识别"
+    },
+    {
+      "name": "face_recognition_is_used",
+      "value": "人脸识别用于"
+    },
+    {
+      "name": "unlock_screen",
+      "value": "解锁屏幕"
+    },
+    {
+      "name": "slide_to_unlock",
+      "value": "滑动解锁"
+    },
+    {
+      "name": "smart_display_lock_screen_notification",
+      "value": "智能显示锁屏通知"
+    },
+    {
+      "name": "access_safe",
+      "value": "访问保密柜"
+    },
+    {
+      "name": "access_app_lock",
+      "value": "访问应用锁"
+    },
+    {
+      "name": "automatically_fill_in_account",
+      "value": "自动填充账号和密码"
+    },
+    {
+      "name": "use_password_safe_to_save_account",
+      "value": "使用密码保险箱保存账号和密码"
+    },
+    {
+      "name": "delete_face_data",
+      "value": "删除面部数据"
+    },
+    {
+      "name": "set_backup_face",
+      "value": "设置备用面容"
+    },
+    {
+      "name": "recognize_another_face",
+      "value": "除继续学习您的长相外，还可识别另一种面容"
+    },
+    {
+      "name": "main_and_backup_faces",
+      "value": "已设置主用及备用面容"
+    },
+    {
+      "name": "trusted_device_be_connected_when_unlocking",
+      "value": "解锁时需连接可信设备"
+    },
+    {
+      "name": "closed",
+      "value": "已关闭"
+    },
+    {
+      "name": "look_at_screen_during_face_recognition",
+      "value": "人脸识别时需注视屏幕"
+    },
+    {
+      "name": "fill_light",
+      "value": "暗光环境下屏幕补光"
+    },
+    {
+      "name": "auxiliary_mode",
+      "value": "辅助模式"
+    },
+    {
+      "name": "recognize_without_opening_eyes",
+      "value": "开启屏幕朗读后无需睁眼即可识别"
+    },
+    {
+      "name": "be_based_on_facial_feature_information",
+      "value": "人脸识别可基于您的面部特征信息进行身份识别，了解"
+    },
+    {
+      "name": "statement_on_face_recognition",
+      "value": "关于人脸识别的声明。"
+    },
+    {
+      "name": "statement3D_on_face_recognition",
+      "value": "关于3D人脸识别的声明。"
+    },
+    {
+      "name": "looking_for_other_settings",
+      "value": "是否在寻找其设置项？"
+    },
+    {
+      "name": "pick_up_phone_turn_on_screen",
+      "value": "拿起手机亮屏"
+    },
+    {
+      "name": "annotation_screen_keeps_on",
+      "value": "注视屏幕不息屏"
+    },
+    {
+      "name": "unlock_directly",
+      "value": "直接解锁"
+    },
+    {
+      "name": "unlock_directly_after_successful_face_recognition",
+      "value": "人脸识别成功后直接解锁"
+    },
+    {
+      "name": "Slide_to_unlock_after_successful_face_recognition",
+      "value": "人脸识别成功后滑动屏幕解锁"
+    },
+    {
+      "name": "close",
+      "value": "关闭"
+    },
+    {
+      "name": "cancel",
+      "value": "取消"
+    },
+    {
+      "name": "enable",
+      "value": "启用"
+    },
+    {
+      "name": "activate_safe",
+      "value": "启动保密柜"
+    },
+    {
+      "name": "whether_to_enable_safe",
+      "value": "需开启应用文件管理保密柜完成人脸关联。是否启用?"
+    },
+
+    {
+      "name": "activate_app_lock",
+      "value": "启动应用锁"
+    },
+    {
+      "name": "Whether_to_activate_app_lock",
+      "value": "需开启应用锁功能才能完成人脸关联。是否立即启动应用锁?"
+    },
+    {
+      "name": "delete_all_face_data",
+      "value": "删除主用及备用面容"
+    },
+    {
+      "name": "delete",
+      "value": "删除"
+    },
+    {
+      "name": "wether_delete_face_data",
+      "value": "删除后，基于面部数据的功能将不可用。是否删除？"
+    },
+    {
+      "name": "pick_up_phone",
+      "value": "同时关闭拿起手机亮屏"
+    },
+
+
+    {
+      "name": "entry_MainAbility",
+      "value": "entry_MainAbility"
+    },
+    {
+      "name": "face_lists",
+      "value": "面部列表"
+    },
+    {
+      "name": "face_1",
+      "value": "面部1"
+    },
+    {
+      "name": "face",
+      "value": "面部"
+    },
+    {
+      "name": "new_face",
+      "value": "新建面部数据"
+    },
+    {
+      "name": "face_name",
+      "value": "面部名称"
+    },
+    {
+      "name": "delete_face",
+      "value": "删除面容"
+    },
+    {
+      "name": "save",
+      "value": "保存"
+    },
+    {
+      "name": "face_checker",
+      "value": "Face Recognition"
+    },
+
+    {
+      "name": "face_unlock_method",
+      "value": "Unlock device"
+    },
+    {
+      "name": "face_recognize_slideunlock_title",
+      "value": "Slide to unlock"
+    },
+    {
+      "name": "title_apps_security_pref",
+      "value": "Access App Lock"
+    },
+    {
+      "name": "title_fill_light",
+      "value": "Low light compensation"
+    },
+    {
+      "name": "recommend_preference_title",
+      "value": "Looking for other settings?"
+    },
+    {
+      "name": "face_config_light_01_universal",
+      "value": "Raise to wake"
+    },
+    {
+      "name": "multiface_list_title",
+      "value": "Facial profiles"
+    },
+    {
+      "name": "multiface_default_face_name_1",
+      "value": "Profile 1"
+    },
+    {
+      "name": "multiface_default_face_name",
+      "value": "Profile "
+    },
+    {
+      "name": "multiface_enroll_new_face",
+      "value": "Add facial profile"
+    },
+    {
+      "name": "multiface_face_name_title",
+      "value": "Name"
+    },
+    {
+      "name": "multiface_save",
+      "value": "Save"
+    },
+    {
+      "name": "face_unlock_method_close",
+      "value": "Off"
+    },
+    {
+      "name": "face_recognize_unlock_title",
+      "value": "Direct unlock"
+    },
+    {
+      "name": "face_3dguide_info_2",
+      "value": "Face Recognition verifies your identity based on your facial features. To learn more, see the"
+    },
+    {
+      "name": "face_inform_open_applock_msg",
+      "value": "App Lock is not enabled. Enable now?"
+    },
+    {
+      "name": "face_record_cancel",
+      "value": "Cancel"
+    },
+    {
+      "name": "face_recognize_unlock_summary_3d",
+      "value": "Unlock directly after successful facial recognition."
+    },
+    {
+      "name": "face_recognize_slideunlock_summary_3d",
+      "value": "Slide to unlock after successful facial recognition."
+    },
+    {
+      "name": "face_enterance_off",
+      "value": "Off"
+    },
+    {
+      "name": "open_bluetooth",
+      "value": "Bluetooth must be enabled. Touch to enable"
+    },
+    {
+      "name": "no_available_devices_title",
+      "value": "No available devices"
+    },
+    {
+      "name": "no_available_devices_tip",
+      "value": "No paired devices found. Pair one now?"
+    },
+    {
+      "name": "pair_button",
+      "value": "Go pair"
+    }
+  ,
+    {
+      "name": "face_record",
+      "value": "Set up Face Recognition"
+    },
+    {
+      "name": "face_record_3d_record_fail",
+      "value": "Setup failed"
+    },
+    {
+      "name": "enroll_face_guide_title",
+      "value": "Set up Face Recognition"
+    },
+    {
+      "name": "face_guide_2d_way",
+      "value": "Before starting, make sure the camera is clean, your face is unobstructed, and the environment is well-lit."
+    },
+    {
+      "name": "face_guide_2d_announce",
+      "value": "You can use Face Recognition to unlock your device and open locked apps.Click \"Start typing\" to indicate your consent"
+    },
+    {
+      "name": "face_2dguide_light_notify_universal",
+      "value": "Enable raise to wake"
+    },
+    {
+      "name": "face_guide_3d_way",
+      "value": "First, position your face in the frame. Then slowly move your head in a circle while looking at the screen to show all angles of your face."
+    },
+    {
+      "name": "face_guide_3d_announce",
+      "value": "You can use Face Recognition to unlock your device, confirm payments, open locked apps, and more.Click \"Start typing\" to indicate your consent"
+    },
+    {
+      "name": "face_recognitin_guide",
+      "value": "Get started"
+    },
+    {
+      "name": "face_record_success",
+      "value": "Setup complete"
+    },
+    {
+      "name": "face_record_3d_tip_close",
+      "value": "The face is too small"
+    },
+    {
+      "name": "face_record_3d_tip_far",
+      "value": "The face is too big"
+    },
+    {
+      "name": "face_enroll_too_left",
+      "value": "Face too far to the left"
+    },
+    {
+      "name": "face_enroll_too_high",
+      "value": "Face too close up"
+    },
+    {
+      "name": "face_enroll_too_right",
+      "value": "Face too far to the right"
+    },
+    {
+      "name": "face_enroll_too_low",
+      "value": "Face too far down "
+    },
+    {
+      "name": "face_record_3d_tip_multi",
+      "value": "Multiple faces appear"
+    },
+    {
+      "name": "face_rotate_too_left",
+      "value": "Too much head to the left "
+    },
+    {
+      "name": "face_rotate_too_high",
+      "value": "Head raised at too high an Angle"
+    },
+    {
+      "name": "face_rotate_too_right",
+      "value": "Head turned too far to the right"
+    },
+    {
+      "name": "face_rotate_too_low",
+      "value": "Head raised too low"
+    }
+  ]
+}

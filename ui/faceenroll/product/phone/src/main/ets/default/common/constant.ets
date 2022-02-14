@@ -13,9 +13,6 @@
  * limitations under the License.
  */
 import router from '@system.router';
-import Log from '../../../../../../../common/src/main/ets/default/Log.ets'
-
-const TAG = 'constant'
 
 async function routeSuccess() {
   let options = {
@@ -30,7 +27,7 @@ async function routeSuccess() {
 
 async function route_back() {
   let options = {
-    uri: 'pages/index'
+    uri: 'pages/userAuth'
   }
   try {
     await router.push(options)
@@ -41,7 +38,7 @@ async function route_back() {
 
 export default class Constants {
 
-//code and errorCode
+  //code and errorCode
   static CODE_RESULT = 1
   static CODE_CANCEL = 2
   static CODE_ACQUIRE = 3
@@ -93,6 +90,7 @@ export default class Constants {
   static FLAGS = 0
   static FACEID = 0
   static PREVIEWID = 2
+
 
   //setTimeout
   static TIMEOUT_100 = 100
@@ -154,6 +152,7 @@ export default class Constants {
   static CHECKBOX_TEXT_POSITION_X = '18%'
   static CHECKBOX_TEXT_POSITION_Y = '87%'
 
+
   static PROGRESS_WIDTH = '460lpx'
   static BACK_WIDTH = '136lpx'
   static BACK_HEIGHT = '110lpx'
@@ -174,13 +173,15 @@ export default class Constants {
   static ERROR_CODE_INFO_SIZE = '32lpx'
   static ENROLL_CENTER_POSITION_Y = '240lpx'
   static SUCCESS_WIDTH = '204lpx'
-  static CHECKBOX_SIZE = '70lpx'
+  static CHECKBOX_SIZE = '60lpx'
   static APERTURE1_WIDTH = '266lpx'
   static APERTURE2_WIDTH = '264lpx'
   static APERTURE34_WIDTH = '284lpx'
   static APERTURE5_WIDTH = '466lpx'
 
- //PROGRESS
+
+
+  //PROGRESS
   static PROGRESS_VALUE_5 = 5
   static PROGRESS_VALUE_10 = 10
   static PROGRESS_VALUE_15 = 15
@@ -202,42 +203,62 @@ export default class Constants {
   static PROGRESS_VALUE_95 = 95
   static PROGRESS_VALUE_100 = 100
 
-//errorCode value
-   static value(){
-     const info = new Map()
-     info.set(Constants.ERROR_CODE_BAD_QUALITY,$r('app.string.enroll_info_bad_quality'))
-     info.set(Constants.ERROR_CODE_NOT_FOUND,$r('app.string.enroll_info_not_found'))
-     info.set(Constants.ERROR_CODE_TOO_SMALL,$r('app.string.face_record_3d_tip_close'))
-     info.set(Constants.ERROR_CODE_TOO_LARGE,$r('app.string.face_record_3d_tip_far'))
-     info.set(Constants.ERROR_CODE_OFFSET_LEFT,$r('app.string.face_enroll_too_left'))
-     info.set(Constants.ERROR_CODE_OFFSET_TOP,$r('app.string.face_enroll_too_high'))
-     info.set(Constants.ERROR_CODE_OFFSET_RIGHT,$r('app.string.face_enroll_too_right'))
-     info.set(Constants.ERROR_CODE_OFFSET_BOTTOM,$r('app.string.face_enroll_too_low'))
-     info.set(Constants.ERROR_CODE_LIVENESS_WARNING,$r('app.string.enroll_info_liveness_warning'))
-     info.set(Constants.ERROR_CODE_LIVENESS_FAILURE,$r('app.string.enroll_info_liveness_failure'))
-     info.set(Constants.ERROR_CODE_ROTATED_LEFT,$r('app.string.face_rotate_too_left'))
-     info.set(Constants.ERROR_CODE_RISE,$r('app.string.face_rotate_too_high'))
-     info.set(Constants.ERROR_CODE_ROTATED_RIGHT,$r('app.string.face_rotate_too_right'))
-     info.set(Constants.ERROR_CODE_DOWN,$r('app.string.face_rotate_too_low'))
-     info.set(Constants.ERROR_CODE_EYE_OCCLUSION,$r('app.string.enroll_info_eye_occlusion'))
-     info.set(Constants.ERROR_CODE_EYE_CLOSE,$r('app.string.enroll_info_eye_close'))
-     info.set(Constants.ERROR_CODE_MOUTH_OCCLUSION,$r('app.string.enroll_info_mouth_occlusion'))
-     info.set(Constants.ERROR_CODE_MULTI,$r('app.string.face_record_3d_tip_multi'))
-     info.set(Constants.ERROR_CODE_BLUR,$r('app.string.enroll_info_blur'))
-     info.set(Constants.ERROR_CODE_NOT_COMPLETE,$r('app.string.enroll_info_not_complete'))
-     info.set(Constants.ERROR_CODE_DARKLIGHT,$r('app.string.enroll_info_darklight'))
-     info.set(Constants.ERROR_CODE_HIGHTLIGHT,$r('app.string.enroll_info_highlight'))
-     info.set(Constants.ERROR_CODE_HALF_SHADOW,$r('app.string.enroll_info_half_shadow'))
-     info.set(Constants.ERROR_CODE_HAS_REGISTERED,$r('app.string.enroll_info_face_has_registered'))
-     info.set(Constants.ERROR_CODE_DARKPIC,$r('app.string.enroll_info_darkpic'))
-     info.set(Constants.ERROR_CODE_ROTATE_TOP_RIGHT,$r('app.string.enroll_info_rotate_top_right'))
-     info.set(Constants.ERROR_CODE_ROTATE_TOP_LEFT,$r('app.string.enroll_info_rotate_top_left'))
-     info.set(Constants.ERROR_CODE_ROTATE_BOTTOM_RIGHT,$r('app.string.enroll_info_rotate_bottom_right'))
-     info.set(Constants.ERROR_CODE_ROTATE_BOTTOM_LEFT,$r('app.string.enroll_info_rotate_bottom_left'))
-     info.set(Constants.ERROR_CODE_OPEN_CAMERA_FAILED,$r('app.string.enroll_info_open_camera_failed'))
+  static DECLARE_WIDTH = '90%'
+  static DECLARE_MAX_WIDTH = '100%'
+  static DECLARE_TITLE_FONT_SIZE = 25
+  static DECLARE_SECONDARY_TITLE_FONT_SIZE = 23
+  static DECLARE_TEXT_FONT_SIZE = 22
+  static DECLARE_ITEM_MARGIN_BOTTOM = 10
+  static DECLARE_TITLE_MARGIN_TOP = 20
+  static DECLARE_TITLE_MARGIN_BOTTOM = 20
+  static DECLARE_TEXT_LINE_HEIGHT = 33
+  static DECLARE_SCROLL_BAR_WIDTH = 0
+  static DECLARE_BACKGROUND_COLOR = "#F2F3F5"
+  static DECLARE_TITLE_2 = "2."
+  static DECLARE_TITLE_3 = "3."
+  static DECLARE_TITLE_4 = "4."
+  static DECLARE_TITLE_5 = "5."
 
-     return info
-   }
+
+
+
+  //errorCode value
+  static value(){
+    const info = new Map()
+    info.set(Constants.ERROR_CODE_BAD_QUALITY,$r('app.string.enroll_info_bad_quality'))
+    info.set(Constants.ERROR_CODE_NOT_FOUND,$r('app.string.enroll_info_not_found'))
+    info.set(Constants.ERROR_CODE_TOO_SMALL,$r('app.string.face_record_3d_tip_close'))
+    info.set(Constants.ERROR_CODE_TOO_LARGE,$r('app.string.face_record_3d_tip_far'))
+    info.set(Constants.ERROR_CODE_OFFSET_LEFT,$r('app.string.face_enroll_too_left'))
+    info.set(Constants.ERROR_CODE_OFFSET_TOP,$r('app.string.face_enroll_too_high'))
+    info.set(Constants.ERROR_CODE_OFFSET_RIGHT,$r('app.string.face_enroll_too_right'))
+    info.set(Constants.ERROR_CODE_OFFSET_BOTTOM,$r('app.string.face_enroll_too_low'))
+    info.set(Constants.ERROR_CODE_LIVENESS_WARNING,$r('app.string.enroll_info_liveness_warning'))
+    info.set(Constants.ERROR_CODE_LIVENESS_FAILURE,$r('app.string.enroll_info_liveness_failure'))
+    info.set(Constants.ERROR_CODE_ROTATED_LEFT,$r('app.string.face_rotate_too_left'))
+    info.set(Constants.ERROR_CODE_RISE,$r('app.string.face_rotate_too_high'))
+    info.set(Constants.ERROR_CODE_ROTATED_RIGHT,$r('app.string.face_rotate_too_right'))
+    info.set(Constants.ERROR_CODE_DOWN,$r('app.string.face_rotate_too_low'))
+    info.set(Constants.ERROR_CODE_EYE_OCCLUSION,$r('app.string.enroll_info_eye_occlusion'))
+    info.set(Constants.ERROR_CODE_EYE_CLOSE,$r('app.string.enroll_info_eye_close'))
+    info.set(Constants.ERROR_CODE_MOUTH_OCCLUSION,$r('app.string.enroll_info_mouth_occlusion'))
+    info.set(Constants.ERROR_CODE_MULTI,$r('app.string.face_record_3d_tip_multi'))
+    info.set(Constants.ERROR_CODE_BLUR,$r('app.string.enroll_info_blur'))
+    info.set(Constants.ERROR_CODE_NOT_COMPLETE,$r('app.string.enroll_info_not_complete'))
+    info.set(Constants.ERROR_CODE_DARKLIGHT,$r('app.string.enroll_info_darklight'))
+    info.set(Constants.ERROR_CODE_HIGHTLIGHT,$r('app.string.enroll_info_highlight'))
+    info.set(Constants.ERROR_CODE_HALF_SHADOW,$r('app.string.enroll_info_half_shadow'))
+    info.set(Constants.ERROR_CODE_HAS_REGISTERED,$r('app.string.enroll_info_face_has_registered'))
+    info.set(Constants.ERROR_CODE_DARKPIC,$r('app.string.enroll_info_darkpic'))
+    info.set(Constants.ERROR_CODE_ROTATE_TOP_RIGHT,$r('app.string.enroll_info_rotate_top_right'))
+    info.set(Constants.ERROR_CODE_ROTATE_TOP_LEFT,$r('app.string.enroll_info_rotate_top_left'))
+    info.set(Constants.ERROR_CODE_ROTATE_BOTTOM_RIGHT,$r('app.string.enroll_info_rotate_bottom_right'))
+    info.set(Constants.ERROR_CODE_ROTATE_BOTTOM_LEFT,$r('app.string.enroll_info_rotate_bottom_left'))
+    info.set(Constants.ERROR_CODE_OPEN_CAMERA_FAILED,$r('app.string.enroll_info_open_camera_failed'))
+
+    return info
+  }
+
   //face progress_3D
   static progress() {
     const pro = new Map()
@@ -247,7 +268,6 @@ export default class Constants {
 
     return pro
   }
-
   static result() {
     const res = new Map()
     res.set(Constants.ERROR_CODE_FAIL,'')
@@ -264,8 +284,6 @@ export default class Constants {
 
   //face progress_2D
   static progress_2D(){
-    Log.showInfo(TAG,'progress_2D')
-
     setTimeout(()=>{
       AppStorage.Set('prgValue',Constants.PROGRESS_VALUE_5)
     },Constants.TIMEOUT_100);
@@ -326,10 +344,7 @@ export default class Constants {
     setTimeout(()=>{
       AppStorage.Set('prgValue',Constants.PROGRESS_VALUE_100)
       routeSuccess()
-    },Constants.TIMEOUT_2000);
-    setTimeout(()=>{
-      route_back()
-    },Constants.TIMEOUT_3000)
+    },Constants.TIMEOUT_2000)
   }
 
   static aperture(){
@@ -349,5 +364,60 @@ export default class Constants {
       AppStorage.Set('showAperture4',false)
       AppStorage.Set('showAperture5',true)
     }, Constants.TIMEOUT_1900)
+  }
+  static RESULT_CODE_SUCCESS = 0
+  static RESULT_CODE_FAIL = 1
+  static RESULT_CODE_GENERAL_ERROR = 2
+  static RESULT_CODE_CANCELED = 3
+  static RESULT_CODE_TIMEOUT = 4
+  static RESULT_CODE_TYPE_NOT_SUPPORT = 5
+  static RESULT_CODE_TRUST_LEVEL_NOT_SUPPORT = 6
+  static RESULT_CODE_BUSY = 7
+  static RESULT_CODE_INVALID_PARAMETERS = 8
+  static RESULT_CODE_LOCKED = 9
+  static RESULT_CODE_NOT_ENROLLED = 10
+
+  static resultCode(){
+    const Code = new Map()
+    Code.set(Constants.RESULT_CODE_SUCCESS,$r('app.string.enroll_success'))
+    Code.set(Constants.RESULT_CODE_FAIL,$r('app.string.enrolling_fail'))
+    Code.set(Constants.RESULT_CODE_GENERAL_ERROR,$r('app.string.enrolling_fail'))
+    Code.set(Constants.RESULT_CODE_CANCELED,$r('app.string.enroll_info_cancel'))
+    Code.set(Constants.RESULT_CODE_TIMEOUT,$r('app.string.enrolling_timeout'))
+    Code.set(Constants.RESULT_CODE_TYPE_NOT_SUPPORT,$r('app.string.enrolling_fail'))
+    Code.set(Constants.RESULT_CODE_TRUST_LEVEL_NOT_SUPPORT,$r('app.string.enrolling_fail'))
+    Code.set(Constants.RESULT_CODE_BUSY,$r('app.string.enrolling_fail'))
+    Code.set(Constants.RESULT_CODE_INVALID_PARAMETERS,$r('app.string.enrolling_fail'))
+    Code.set(Constants.RESULT_CODE_LOCKED,$r('app.string.enrolling_fail'))
+    Code.set(Constants.RESULT_CODE_NOT_ENROLLED,$r('app.string.enrolling_fail'))
+    return Code
+  }
+
+  static FACE_AUTH_TIP_TOO_BRIGHT = 1
+  static FACE_AUTH_TIP_TOO_DARK = 2
+  static FACE_AUTH_TIP_TOO_CLOSE = 3
+  static FACE_AUTH_TIP_TOO_FAR = 4
+  static FACE_AUTH_TIP_TOO_HIGH = 5
+  static FACE_AUTH_TIP_TOO_LOW = 6
+  static FACE_AUTH_TIP_TOO_RIGHT = 7
+  static FACE_AUTH_TIP_TOO_LEFT = 8
+  static FACE_AUTH_TIP_TOO_MUCH_MOTION = 9
+  static FACE_AUTH_TIP_POOR_GAZE = 10
+  static FACE_AUTH_TIP_NOT_DETECTED = 11
+
+  static FaceTips(){
+    const Tips = new Map()
+    Tips.set(Constants.FACE_AUTH_TIP_TOO_BRIGHT,$r('app.string.enroll_info_highlight'))
+    Tips.set(Constants.FACE_AUTH_TIP_TOO_DARK,$r('app.string.enroll_info_darklight'))
+    Tips.set(Constants.FACE_AUTH_TIP_TOO_CLOSE,$r('app.string.enroll_info_scale_too_large'))
+    Tips.set(Constants.FACE_AUTH_TIP_TOO_FAR,$r('app.string.enroll_info_scale_too_small'))
+    Tips.set(Constants.FACE_AUTH_TIP_TOO_HIGH,$r('app.string.enroll_info_offset_top'))
+    Tips.set(Constants.FACE_AUTH_TIP_TOO_LOW,$r('app.string.enroll_info_offset_bottom'))
+    Tips.set(Constants.FACE_AUTH_TIP_TOO_RIGHT,$r('app.string.enroll_info_offset_right'))
+    Tips.set(Constants.FACE_AUTH_TIP_TOO_LEFT,$r('app.string.enroll_info_offset_left'))
+    Tips.set(Constants.FACE_AUTH_TIP_TOO_MUCH_MOTION,$r('app.string.enroll_info_blur'))
+    Tips.set(Constants.FACE_AUTH_TIP_POOR_GAZE,$r('app.string.enroll_info_eye_occlusion'))
+    Tips.set(Constants.FACE_AUTH_TIP_NOT_DETECTED,$r('app.string.enroll_info_not_found'))
+    return Tips
   }
 }
