@@ -13,22 +13,36 @@
  * limitations under the License.
  */
 import router from '@system.router';
-import Constants from '../common/constant.ets'
+import Constants from '../common/constant.ets';
 
 async function routeCase() {
   let options = {
-    uri: 'pages/index'
+    uri: 'pages/entryView'
   }
   try {
-    await router.push(options)
+    await router.push(options);
   } catch (err) {
-    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`)
+    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`);
   }
 }
 
 @Entry
 @Component
 struct Success {
+
+  onPageShow(){
+    setTimeout(()=>{
+      router.push({
+        uri: 'pages/userAuth'
+      })
+    },Constants.TIMEOUT_2000)
+  }
+  private onBackPress(): void{
+    AppStorage.Delete('faceToken');
+    router.push({
+      uri: 'pages/entryView',
+    })
+  }
   build() {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center }) {
       Flex() {

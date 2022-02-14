@@ -29,7 +29,7 @@ public:
     static std::shared_ptr<FaceAuthCamera> GetInstance();
     FaceAuthCamera();
     virtual ~FaceAuthCamera();
-    int32_t OpenCamera(int32_t previewId);
+    int32_t OpenCamera(sptr<Surface> surface);
     void CloseCamera();
     void SetZoomRatio(float zoom);
     void SetFlashMode(camera_flash_mode_enum_t flash);
@@ -37,15 +37,15 @@ public:
     void SetExposureMode(camera_ae_mode_t exposure);
 
 private:
-    int32_t CreateCamera(int32_t previewId);
-    int32_t PrepareCamera(int32_t previewId);
-    int32_t CreateDisplayPreviewOutput(sptr<CameraStandard::CameraManager> &camManagerObj, int32_t previewId);
+    int32_t CreateCamera(sptr<Surface> surface);
+    int32_t PrepareCamera(sptr<Surface> surface);
+    int32_t CreateDisplayPreviewOutput(sptr<CameraStandard::CameraManager> &camManagerObj,
+        sptr<Surface> surface);
     int32_t Start();
     void Stop();
     void Release();
     sptr<CameraStandard::CaptureOutput> CreatePreviewOutput(sptr<CameraStandard::CameraManager> &camManagerObj);
     sptr<CameraStandard::CaptureOutput> CreateTempPreviewOutput(sptr<CameraStandard::CameraManager> &camManagerObj);
-    sptr<Surface> GetXComponentSurfaceById(std::string id);
     sptr<CameraStandard::CaptureInput> camInput_;
     sptr<CameraStandard::CaptureSession> capSession_;
     sptr<CameraStandard::CaptureOutput> previewOutput_;

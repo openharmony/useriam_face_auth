@@ -12,5 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-include ':phone',':common',':features'
+
+include ':phone', ':common', ':feature', ':feature:facesettings', ':feature:faceSettingsPad', ':feature:trustedDevice',':pad', ':feature:trusteddevicepad'
 project(':phone').projectDir = new File('./product/phone')
+project(':pad').projectDir = new File('./product/pad')

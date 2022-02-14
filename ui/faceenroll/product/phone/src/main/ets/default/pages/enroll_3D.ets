@@ -14,48 +14,62 @@
  */
 
 import router from '@system.router';
-import Aperture from './aperture.ets'
-import Log from '../../../../../../../common/src/main/ets/default/Log.ets'
-import mFaceModel from '../model_3D.ets'
-import Constants from '../common/constant.ets'
-const TAG = 'faceenroll_3D'
+import Aperture from './aperture.ets';
+import mFaceModel from '../model_3D.ets';
+import Constants from '../common/constant.ets';
+const SUBTYPE_FACE_2D = 20000;
+const AUTHTYPE_FACE = 2;
 
 async function route_back() {
   let options = {
-    uri: 'pages/index'
+    uri: 'pages/entryView'
   }
   try {
-    await router.push(options)
+    await router.push(options);
   } catch (err) {
-    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`)
+    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`);
   }
 }
 
 @Entry
 @Component
-
 struct Enroll_3D {
+  @StorageLink('blur') blur: number = Constants.BLUR_START;
+  @StorageLink('width') width: any = Constants.SHELTER_START_WIDTH;
+  @StorageLink('height') height: any = Constants.SHELTER_START_HEIGHT;
+  @StorageLink('showPrg') showPrg: boolean = false;
+  @StorageLink('prgValue') prgValue: number = Constants.PROGRESS_START;
+  @StorageLink('enrollInfo') enrollInfo: any = $r('app.string.enroll_info');
+  @StorageLink('enrollTitle') enrollTitle: any = $r('app.string.face_record');
+  @StorageLink('showBtn') showBtn: boolean = false;
+  @StorageLink('showBack') showBack: boolean = true;
+  private credentialInfo;
 
-  @StorageLink('blur') blur: number = Constants.BLUR_START
-  @StorageLink('width') width: any = Constants.SHELTER_START_WIDTH
-  @StorageLink('height') height: any = Constants.SHELTER_START_HEIGHT
-  @StorageLink('showPrg') showPrg: boolean = false
-  @StorageLink('prgValue') prgValue: number = Constants.PROGRESS_START
-  @StorageLink('enrollInfo') enrollInfo: any = $r('app.string.enroll_info')
-  @StorageLink('enrollTitle') enrollTitle: any = $r('app.string.face_record')
-  @StorageLink('showBtn') showBtn: boolean = false
-  @StorageLink('showBack') showBack: boolean = true
-
-  //init page
   private aboutToAppear(): void  {
-    mFaceModel.initFaceModel()
-    Log.showInfo(TAG, 'aboutToAppear');
-  }
-  //hide page change
-  private onPageHide() {
+    setTimeout(()=> {
+      AppStorage.Delete('faceToken');
+      router.push({
+        uri: 'pages/entryView'
+      });
+    }, 180000)
 
-    mFaceModel.uninitFaceModel()
-    Log.showInfo(TAG, 'PageHide');
+    this.credentialInfo = {
+      credType:AUTHTYPE_FACE,
+      credSubType:SUBTYPE_FACE_2D,
+      token:AppStorage.Get('token')
+    };
+    mFaceModel.initFaceModel(this.credentialInfo);
+  }
+
+  private onPageHide() {
+    mFaceModel.uninitFaceModel();
+  }
+
+  private onBackPress(): void{
+    AppStorage.Delete('faceToken');
+    router.push({
+      uri: 'pages/entryView',
+    })
   }
 
   build() {
@@ -76,7 +90,7 @@ struct Enroll_3D {
 
       Flex()
         .width('100%')
-      .height(Constants.ENROLL_CENTER_POSITION_Y)
+        .height(Constants.ENROLL_CENTER_POSITION_Y)
 
       Flex({ alignItems: ItemAlign.Center , justifyContent:FlexAlign.Center}) {
         Image($r('app.media.shelter'))
@@ -92,14 +106,11 @@ struct Enroll_3D {
             .value(this.prgValue)
             .width(Constants.PROGRESS_WIDTH)
             .color(0x317aff)
-          //            .position({ x: $r('app.float.enroll_progress_2D_X'), y: $r('app.float.enroll_progress_Y') })
         }.position({x:$r('app.float.enroll_center_position_X'),y: Constants.ENROLL_CENTER_POSITION_Y})
         .height(Constants.CENTER_HEIGHT)
         .width('100%')
       }
-
       Aperture()
-
       Flex({justifyContent:FlexAlign.Center}) {
         Text(this.enrollInfo)
           .fontSize(Constants.ERROR_CODE_INFO_SIZE)
@@ -114,7 +125,8 @@ struct Enroll_3D {
           .height(Constants.BACK_HEIGHT)
           .position({ x:$r('app.float.enroll_center_position_X'), y: Constants.CENTER_POSITION_Y })
           .onClick(() => {
-            router.back()
+            mFaceModel.cancelEnroll();
+            router.back();
           })
       }
       Flex({ alignItems: ItemAlign.Center , justifyContent:FlexAlign.Center}) {
@@ -134,12 +146,11 @@ struct Enroll_3D {
           .width(Constants.BUTTON_WIDTH)
           .height(Constants.BUTTON_HEIGHT)
           .onClick(() => {
-            route_back()
+            route_back();
           })
         }.position({ x:$r('app.float.enroll_center_position_X'), y: Constants.BUTTON_POSITION})
       }
     }
-
     .width('100%')
     .height('100%')
   }

@@ -14,82 +14,53 @@
  * limitations under the License.
  */
 
-import Log from '../../../../../../common/src/main/ets/default/Log.ets'
-import router from '@system.router';
-import userEnroll from '@ohos.enroll'
-import Constants from '../default/common/constant.ets'
+import Constants from '../default/common/constant.ets';
+import UserIDM from '@ohos.useridm';
 
-const TAG = 'faceenroll-faceModel_3D';
-var mPrgValue
-var mValue = Constants.value()
-var mPro = Constants.progress()
-var mRes = Constants.result()
+var mPrgvalue;
+var mResultCode = Constants.resultCode();
+var mFaceTips = Constants.FaceTips();
 
-
-async function routeSuccess() {
-  let options = {
-    uri: 'pages/success'
-  }
-  try {
-    await router.push(options)
-  } catch (err) {
-    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`)
-  }
-}
-
-async function route_back() {
-  let options = {
-    uri: 'pages/index'
-  }
-  try {
-    await router.push(options)
-  } catch (err) {
-    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`)
-  }
-}
 
 export class model_3D {
-  //    init page
-  initFaceModel() {
-    Log.showInfo(TAG, 'initFaceModel');
+  private UserIDM;
 
+  constructor() {
+    this.UserIDM = UserIDM.constructor();
+  }
+
+  /**
+   * init FaceModel
+   */
+  initFaceModel(credentialInfo) {
+    console.info("FaceEnroll model_3D initFaceModel start");
     AppStorage.Link('width');
     AppStorage.Link('height');
     AppStorage.Link('showPrg');
-    mPrgValue = AppStorage.Link('prgValue');
+    mPrgvalue = AppStorage.Link('prgValue');
     AppStorage.Link('showBtn');
     AppStorage.Link('blur');
     AppStorage.Link('showBack');
     AppStorage.Set('enrollInfo', $r('app.string.enroll_info'))
     AppStorage.Set('enrollTitle', $r('app.string.face_record'))
     AppStorage.Link('showAperture1')
-
-    var result = userEnroll.init()
-    Log.showInfo(TAG,'initFaceModel init result:' + result)
-
-    var challenge = userEnroll.preEnroll()
-    Log.showInfo(TAG,'initFaceModel perEnroll challenge:'+ challenge)
-
-    var angle = userEnroll.getAngleDim()
-    Log.showInfo(TAG,'initFaceModel getAngleDim angle:' + angle )
-
-    this.startEnroll();
+    this.startEnroll(credentialInfo);
+    console.info("FaceEnroll model_3D initFaceModel end");
   }
-  //resume page
+
+  /**
+   * resume page, unInit FaceModel
+   */
   uninitFaceModel() {
-    if(mPrgValue != Constants.PROGRESS_TOTAL)
-    {
-      var cal = userEnroll.cancelEnroll()
-      Log.showInfo(TAG,'uninitFaceModel cancel cal:' + cal)
+    console.info(" FaceEnroll model_3D uninitFaceModel start");
+    if (mPrgvalue != Constants.PROGRESS_TOTAL) {
+      this.cancelEnroll();
     }
-
-    setTimeout(()=> {
-      Log.showInfo(TAG, 'uninitFaceModel');
-
+    setTimeout(() => {
       AppStorage.Set('width', Constants.SHELTER_START_WIDTH);
       AppStorage.Set('height', Constants.SHELTER_START_HEIGHT);
       AppStorage.Set('showPrg', false)
-      mPrgValue = AppStorage.Set('prgValue', $r('app.float.progress_value_start'))
+      mPrgvalue = AppStorage.Set('prgValue', $r('app.float.progress_value_start'))
       AppStorage.Set('showBack', true)
       AppStorage.Set('blur',  Constants.BLUR_START)
       AppStorage.Set('showBtn', false)
@@ -104,90 +75,181 @@ export class model_3D {
     },Constants.TIMEOUT_500)
   }
 
-  //get callback value
-  private startEnroll(){
-    userEnroll.enroll({enrollParam:{
-      token: Constants.PARAM_TOKEN,
-      flags: Constants.FLAGS,
-      faceId: Constants.FACEID,
-      previewId: Constants.PREVIEWID
-    }},function(data) {
-      Log.showInfo(TAG,'startEnroll enroll data:' + data.code)
-      Log.showInfo(TAG,'startEnroll enroll data:' + data.errorCode)
-
-      if(data.code == Constants.CODE_ACQUIRE) {
-        if (data.errorCode == Constants.ERROR_CODE_FACE_DETECTED) {
-          setTimeout(() => {
-            AppStorage.Set('width', Constants.SHELTER_END_WIDTH);
-            AppStorage.Set('height', Constants.SHELTER_3D_END_HEIGHT);
-          }, Constants.TIMEOUT_1000)
-          Constants.aperture()
-
-        }
-
-        var pro = mPro.has(data.errorCode)
-
-        Log.showInfo(TAG,'startEnroll enroll pro:' + pro)
-        if(pro) {
-          AppStorage.Set('showPrg',true)
-          mPrgValue = AppStorage.Set('prgValue',mPro.get(data.errorCode))
-        }
-
-        var have = mValue.has(data.errorCode)
-        Log.showInfo(TAG,'startEnroll enroll have:' + have)
-        if(have){
-          AppStorage.Set('enrollInfo',mValue.get(data.errorCode))
-        }
+  /**
+   * Open session and get challenge.
+   * @param callback
+   */
+  openSession(callback) {
+    console.info("FaceEnroll model_3D openSession start");
+    this.UserIDM.openSession((data) => {
+      try {
+        console.info("FaceEnroll model_3D openSession data", data);
+        callback(data);
       }
-
-      if(data.code == Constants.CODE_CANCEL) {
-        Log.showInfo(TAG,'startEnroll cancel data:' + data.errorCode)
-      }
-
-      if(data.code == Constants.CODE_RESULT) {
-        if(data.errorCode == Constants.ERROR_CODE_SUCCESS){
-
-            routeSuccess()
-            setTimeout(()=>{
-              route_back()
-            },Constants.TIMEOUT_1000)
-        }
-
-        var res = mRes.has(data.errorCode)
-        if(res){
-          AppStorage.Set('enrollTitle', $r('app.string.face_record_3d_record_fail'))
-          AppStorage.Set('enrollInfo',mRes.get(data.errorCode))
-          AppStorage.Set('blur',Constants.BLUR_END)
-          AppStorage.Set('showBtn',true)
-          AppStorage.Set('showBack',false)
-          AppStorage.Set('prgValue',$r('app.float.progress_value_start'))
-          AppStorage.Set('showAperture5',false)
-        }
-        if(data.errorCode == Constants.ERROR_CODE_TIMEOUT){
-          AppStorage.Set('enrollTitle', $r('app.string.enrolling_timeout'))
-          AppStorage.Set('enrollInfo','')
-          AppStorage.Set('blur',Constants.BLUR_END)
-          AppStorage.Set('showBtn',true)
-          AppStorage.Set('showBack',false)
-          AppStorage.Set('prgValue',$r('app.float.progress_value_start'))
-          AppStorage.Set('showAperture5',false)
-        }
+      catch (e) {
+        console.info("FaceEnroll model_3D openSession error", e);
       }
     })
-    this.endEnroll()
-  }
-  //post and release
-  private endEnroll(){
-    var post = userEnroll.postEnroll()
-    Log.showInfo(TAG,'endEnroll postEnroll post:' +post)
-
-    var res = userEnroll.release()
-    Log.showInfo(TAG,'endEnroll release res:' + res )
+    callback();
+    console.info("FaceEnroll model_3D openSession end");
   }
 
-  private toSuccess() {
-    routeSuccess()
+  /**
+   * start enroll, get callback value
+   */
+  startEnroll(credentialInfo) {
+    console.info(" FaceEnroll model_3D startEnroll 3d start ");
+    this.UserIDM.addCredential(credentialInfo, {
+      onResult: (result, extraInfo) => {
+        if (result == Constants.RESULT_CODE_SUCCESS) {
+          console.info(" FaceEnroll model_3D startEnroll UserIDM.addCredential onResult result", result);
+            AppStorage.Set('showPrg', true);
+            Constants.progress_2D();
+            this.endEnroll();
+        }
+        if (result == Constants.RESULT_CODE_FAIL) {
+          console.info(" FaceEnroll model_3D startEnroll UserIDM.addCredential onResult result", result);
+            AppStorage.Set('width', Constants.SHELTER_END_WIDTH);
+            AppStorage.Set('height', Constants.SHELTER_END_HEIGHT);
+            AppStorage.Set('showAperture', false);
+            AppStorage.Set('enrollTitle', $r('app.string.face_record_3d_record_fail'));
+            AppStorage.Set('enrollInfo', mResultCode.get(result));
+            AppStorage.Set('blur', Constants.BLUR_END);
+            AppStorage.Set('showBtn', true);
+            AppStorage.Set('showBack', false);
+            AppStorage.Set('prgValue', $r('app.float.progress_value_start'));
+        }
+        if (result == Constants.RESULT_CODE_GENERAL_ERROR) {
+          console.info(" FaceEnroll model_3D startEnroll UserIDM.addCredential onResult result", result);
+            AppStorage.Set('width', Constants.SHELTER_END_WIDTH);
+            AppStorage.Set('height', Constants.SHELTER_END_HEIGHT);
+            AppStorage.Set('showAperture', false);
+            AppStorage.Set('enrollTitle', $r('app.string.face_record_3d_record_fail'));
+            AppStorage.Set('enrollInfo', mResultCode.get(result));
+            AppStorage.Set('blur', Constants.BLUR_END);
+            AppStorage.Set('showBtn', true);
+            AppStorage.Set('showBack', false);
+            AppStorage.Set('prgValue', $r('app.float.progress_value_start'));
+        }
+        if (result == Constants.RESULT_CODE_CANCELED) {
+          console.info(" FaceEnroll model_3D startEnroll UserIDM.addCredential onResult result", result);
+        }
+        if (result == Constants.RESULT_CODE_TIMEOUT) {
+          console.info(" FaceEnroll model_3D startEnroll UserIDM.addCredential onResult result", result);
+            AppStorage.Set('width', Constants.SHELTER_END_WIDTH);
+            AppStorage.Set('height', Constants.SHELTER_END_HEIGHT);
+            AppStorage.Set('showAperture', false);
+            AppStorage.Set('enrollTitle', $r('app.string.enrolling_timeout'));
+            AppStorage.Set('enrollInfo', mResultCode.get(result));
+            AppStorage.Set('blur', Constants.BLUR_END);
+            AppStorage.Set('showBtn', true);
+            AppStorage.Set('showBack', false);
+            AppStorage.Set('prgValue', $r('app.float.progress_value_start'));
+        }
+        if (result == Constants.RESULT_CODE_TYPE_NOT_SUPPORT) {
+          console.info(" FaceEnroll model_3D startEnroll UserIDM.addCredential onResult result", result);
+            AppStorage.Set('width', Constants.SHELTER_END_WIDTH);
+            AppStorage.Set('height', Constants.SHELTER_END_HEIGHT);
+            AppStorage.Set('showAperture', false);
+            AppStorage.Set('enrollTitle', $r('app.string.face_record_3d_record_fail'));
+            AppStorage.Set('enrollInfo', mResultCode.get(result));
+            AppStorage.Set('blur', Constants.BLUR_END);
+            AppStorage.Set('showBtn', true);
+            AppStorage.Set('showBack', false);
+            AppStorage.Set('prgValue', $r('app.float.progress_value_start'));
+        }
+        if (result == Constants.RESULT_CODE_TRUST_LEVEL_NOT_SUPPORT) {
+          console.info(" FaceEnroll model_3D startEnroll UserIDM.addCredential onResult result", result);
+            AppStorage.Set('width', Constants.SHELTER_END_WIDTH);
+            AppStorage.Set('height', Constants.SHELTER_END_HEIGHT);
+            AppStorage.Set('showAperture', false);
+            AppStorage.Set('enrollTitle', $r('app.string.face_record_3d_record_fail'));
+            AppStorage.Set('enrollInfo', mResultCode.get(result));
+            AppStorage.Set('blur', Constants.BLUR_END);
+            AppStorage.Set('showBtn', true);
+            AppStorage.Set('showBack', false);
+            AppStorage.Set('prgValue', $r('app.float.progress_value_start'));
+        }
+        if (result == Constants.RESULT_CODE_BUSY) {
+          console.info(" FaceEnroll model_3D startEnroll UserIDM.addCredential onResult result", result);
+            AppStorage.Set('width', Constants.SHELTER_END_WIDTH);
+            AppStorage.Set('height', Constants.SHELTER_END_HEIGHT);
+            AppStorage.Set('showAperture', false);
+            AppStorage.Set('enrollTitle', $r('app.string.face_record_3d_record_fail'));
+            AppStorage.Set('enrollInfo', mResultCode.get(result));
+            AppStorage.Set('blur', Constants.BLUR_END);
+            AppStorage.Set('showBtn', true);
+            AppStorage.Set('showBack', false);
+            AppStorage.Set('prgValue', $r('app.float.progress_value_start'));
+        }
+        if (result == Constants.RESULT_CODE_INVALID_PARAMETERS) {
+          console.info(" FaceEnroll model_3D startEnroll UserIDM.addCredential onResult result", result);
+            AppStorage.Set('width', Constants.SHELTER_END_WIDTH);
+            AppStorage.Set('height', Constants.SHELTER_END_HEIGHT);
+            AppStorage.Set('showAperture', false);
+            AppStorage.Set('enrollTitle', $r('app.string.face_record_3d_record_fail'));
+            AppStorage.Set('enrollInfo', mResultCode.get(result));
+            AppStorage.Set('blur', Constants.BLUR_END);
+            AppStorage.Set('showBtn', true);
+            AppStorage.Set('showBack', false);
+            AppStorage.Set('prgValue', $r('app.float.progress_value_start'));
+        }
+        if (result == Constants.RESULT_CODE_LOCKED) {
+          console.info(" FaceEnroll model_3D startEnroll UserIDM.addCredential onResult result", result);
+            AppStorage.Set('width', Constants.SHELTER_END_WIDTH);
+            AppStorage.Set('height', Constants.SHELTER_END_HEIGHT);
+            AppStorage.Set('showAperture', false);
+            AppStorage.Set('enrollTitle', $r('app.string.face_record_3d_record_fail'));
+            AppStorage.Set('enrollInfo', mResultCode.get(result));
+            AppStorage.Set('blur', Constants.BLUR_END);
+            AppStorage.Set('showBtn', true);
+            AppStorage.Set('showBack', false);
+            AppStorage.Set('prgValue', $r('app.float.progress_value_start'));
+        }
+        if (result == Constants.RESULT_CODE_NOT_ENROLLED) {
+          console.info(" FaceEnroll model_3D startEnroll UserIDM.addCredential onResult result", result);
+            AppStorage.Set('width', Constants.SHELTER_END_WIDTH);
+            AppStorage.Set('height', Constants.SHELTER_END_HEIGHT);
+            AppStorage.Set('showAperture', false);
+            AppStorage.Set('enrollTitle', $r('app.string.face_record_3d_record_fail'));
+            AppStorage.Set('enrollInfo', mResultCode.get(result));
+            AppStorage.Set('blur', Constants.BLUR_END);
+            AppStorage.Set('showBtn', true);
+            AppStorage.Set('showBack', false);
+            AppStorage.Set('prgValue', $r('app.float.progress_value_start'));
+        }
+      },
+      onAcquireInfo: (callbackModule, acquire, extraInfo) => {
+        AppStorage.Set('width', Constants.SHELTER_END_WIDTH);
+        AppStorage.Set('height', Constants.SHELTER_END_HEIGHT);
+        AppStorage.Set('showAperture', false);
+        AppStorage.Set('enrollTitle', $r('app.string.enrolling'));
+        AppStorage.Set('enrollInfo', mFaceTips.get(acquire));
+      }
+    })
+    this.endEnroll();
+  }
 
+  /**
+   * end enroll
+   */
+  endEnroll() {
+    console.info("FaceEnroll model_3D endEnroll start");
+    this.UserIDM.closeSession();
+    console.info("FaceEnroll model_3D endEnroll userEnroll.closeSession()");
+    AppStorage.Delete('faceSession');
+    console.info("FaceEnroll model_3D endEnroll end");
+  }
+
+  /**
+   * cancel enroll
+   */
+  cancelEnroll() {
+    console.info("FaceEnroll model_3D cancelEnroll start");
+    let can = this.UserIDM.cancel(AppStorage.Get('faceSession'));
+    console.info("FaceEnroll model_3D cancelEnroll userEnroll.cancel() can" + can);
+    this.endEnroll();
+    console.info("FaceEnroll model_3D cancelEnroll end");
   }
 
 }
