@@ -12,12 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#ifndef FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_EVENT_H
-#define FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_EVENT_H
-
+#ifndef FACE_AUTH_EVENT_H
+#define FACE_AUTH_EVENT_H
 #include <mutex>
-#include "event_handler.h"
 #include "face_auth_defines.h"
 #include "face_auth_event_handler.h"
 
@@ -30,15 +27,13 @@ public:
     virtual ~FaceAuthEvent();
     static std::shared_ptr<FaceAuthEvent> GetInstance();
     void HandleTask(const AppExecFwk::InnerEvent::Pointer &event);
-    void AuthenticateTask(const AppExecFwk::InnerEvent::Pointer &event, const bool isCanceled);
-    void CoAuthenticateTask(const AppExecFwk::InnerEvent::Pointer &event, const bool isCanceled);
-    void EnrollTask(const AppExecFwk::InnerEvent::Pointer &event, const bool isCanceled);
+    void AuthenticateTask(const AppExecFwk::InnerEvent::Pointer &event);
+    void EnrollTask(const AppExecFwk::InnerEvent::Pointer &event);
     void RemoveTask(const AppExecFwk::InnerEvent::Pointer &event);
     inline void SetEventHandler(const std::shared_ptr<FaceAuthEventHandler> &handler)
     {
         eventHandler_ = handler;
     }
-
 private:
     static std::mutex mutex_;
     static std::shared_ptr<FaceAuthEvent> instance_;
@@ -47,5 +42,4 @@ private:
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
-
-#endif // FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_EVENT_H
+#endif // FACE_AUTH_EVENT_H

@@ -13,20 +13,17 @@
  * limitations under the License.
  */
 
-import Constants from '../common/constant.ets'
+import Constants from '../common/constant.ets';
 
 @Entry
 @Component
-
 export default
-
 struct Aperture {
-
-  @StorageLink('showAperture1') showAperture1:boolean = true
-  @StorageLink('showAperture2') showAperture2:boolean = false
-  @StorageLink('showAperture3') showAperture3:boolean = false
-  @StorageLink('showAperture4') showAperture4:boolean = false
-  @StorageLink('showAperture5') showAperture5:boolean = false
+  @StorageLink('showAperture1') showAperture1:boolean = true;
+  @StorageLink('showAperture2') showAperture2:boolean = false;
+  @StorageLink('showAperture3') showAperture3:boolean = false;
+  @StorageLink('showAperture4') showAperture4:boolean = false;
+  @StorageLink('showAperture5') showAperture5:boolean = false;
 
   build() {
     Flex({ alignItems: ItemAlign.Center , justifyContent:FlexAlign.Center}) {

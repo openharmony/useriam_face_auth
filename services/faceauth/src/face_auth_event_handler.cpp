@@ -12,9 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #include "face_auth_event_handler.h"
-#include "faceauth_log_wrapper.h"
+#include "face_auth_log_wrapper.h"
 #include "face_auth_defines.h"
 #include "face_auth_event.h"
 
@@ -30,7 +29,7 @@ FaceAuthEventHandler::~FaceAuthEventHandler()
 
 void FaceAuthEventHandler::RemoveEvent(const uint64_t reqId)
 {
-    FACEAUTH_LABEL_LOGI("RemoveEvent: xxxx%04llu.", reqId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "RemoveEvent: xxxx%04llu.", reqId);
     EventHandler::RemoveEvent(reqId);
     return;
 }
@@ -38,7 +37,7 @@ void FaceAuthEventHandler::RemoveEvent(const uint64_t reqId)
 void FaceAuthEventHandler::ProcessEvent(const AppExecFwk::InnerEvent::Pointer &event)
 {
     if (event == nullptr) {
-        FACEAUTH_LABEL_LOGE("FaceAuthEventHandler::ProcessEvent event is nullptr");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthEventHandler::ProcessEvent event is nullptr");
         return;
     }
     FaceAuthEvent::GetInstance()->HandleTask(event);

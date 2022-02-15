@@ -29,35 +29,17 @@
             "samgr_standard"
         ],
         "third_party": [
+	    "openssl"
         ]
       },
       "build": {
         "sub_component": [
-          "//base/user_iam/face_auth/common:faceauth_common",
-          "//base/user_iam/face_auth/interfaces/kits:faceauth_auth_kits",
-          "//base/user_iam/face_auth/services/faceauth:face_auth_services",
-          "//base/user_iam/face_auth/sa_profile:face_auth_sa_profile",
-          "//base/user_iam/face_auth/interfaces/kits/napi/faceauth_mgr:napi_packages"		  
+          "//base/user_iam/face_auth/services:face_auth_service",
+          "//base/user_iam/face_auth/sa_profile:face_auth_sa_profile"
         ],
         "inner_kits": [
-          {
-            "type": "so",
-            "name": "//base/user_iam/face_auth/interfaces/innerkits/faceauth:face_auth_innerkits",
-            "header": {
-              "header_files": [
-                "face_auth_client.h",
-                "face_auth_death_recipient.h",
-                "face_auth_innerkit.h",
-                "face_auth_proxy.h",
-                "face_auth_stub.h",
-                "iface_auth.h"
-              ],
-              "header_base": "//base/user_iam/face_auth/interfaces/innerkits/faceauth/include"
-            }
-          }
         ],
         "test": [
-           "//base/user_iam/face_auth/services/faceauth/test:unittest"
         ]
       }
     }
