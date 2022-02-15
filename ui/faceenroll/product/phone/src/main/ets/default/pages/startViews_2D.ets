@@ -13,21 +13,18 @@
  * limitations under the License.
  */
 
-import router from '@system.router'
-import Log from '../../../../../../../common/src/main/ets/default/Log.ets'
-import Constants from '../common/constant.ets'
-import fileio from '@ohos.fileio'
-
-const TAG = 'startViews_2D'
+import router from '@system.router';
+import Constants from '../common/constant.ets';
+import mFaceModel from "../model_2D.ets";
 
 async function routeDeclare() {
   let options = {
     uri: 'pages/declare'
   }
   try {
-    await router.push(options)
+    await router.push(options);
   } catch (err) {
-    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`)
+    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`);
   }
 }
 async function routeEnroll_2D() {
@@ -35,20 +32,36 @@ async function routeEnroll_2D() {
     uri: 'pages/enroll_2D'
   }
   try {
-    await router.push(options)
+    await router.push(options);
   } catch (err) {
-    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`)
+    console.error(`fail callback, code: ${err.code}, msg: ${err.msg}`);
   }
 }
 
 @Entry
 @Component
-
 export default
-
 struct StartViews_2D {
-  @StorageLink('checkbox_color') checkbox_color : any = $r('app.color.startView_color')
+  @StorageLink('checkbox_color') checkbox_color : any = $r('app.color.startView_color');
+  private pageHideFlag: number = 0;
 
+  public openSessionCallBack() {
+    routeEnroll_2D();
+  }
+
+  private onPageHide(): void {
+    if (this.pageHideFlag == 0) {
+      router.push({
+        uri: 'pages/entryView'
+      })
+    }
+  }
+  private onBackPress(): void{
+    AppStorage.Delete('faceToken');
+    router.push({
+      uri: 'pages/entryView',
+    })
+  }
   build() {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center }) {
 
@@ -67,41 +80,40 @@ struct StartViews_2D {
         .fontWeight(FontWeight.Bold)
         .margin({ top: Constants.TITLE_MARGIN })
 
-        Image($r('app.media.startImage_2D'))
-          .width('100%')
-          .height(Constants.IMAGE_2D_HEIGHT)
-          .margin({ top: Constants.IMAGE_MARGIN})
+      Image($r('app.media.startImage_2D'))
+        .width('100%')
+        .height(Constants.IMAGE_2D_HEIGHT)
+        .margin({ top: Constants.IMAGE_MARGIN})
 
-        Column() {
-          Text($r('app.string.enroll_face_guide_title'))
-            .fontSize(Constants.SMALL_TITLE_FONT_SIZE)
-            .fontWeight(Constants.FONT_WEIGHT)
-            .textAlign(TextAlign.Center)
-
-          Text($r('app.string.face_guide_2d_way'))
-            .fontSize(Constants.FONT_SIZE)
-            .fontColor($r('app.color.font_color'))
-            .textAlign(TextAlign.Center)
-            .margin({ top: Constants.CONTENT1_MARGIN })
-
-          Text() {
-            Span($r('app.string.face_guide_2d_announce'))
-              .fontColor($r('app.color.font_color'))
-              .textCase(TextCase.UpperCase)
-              .fontSize(Constants.FONT_SIZE)
-            Span($r('app.string.face_guide_2d_announce_link'))
-              .textCase(TextCase.UpperCase)
-              .fontSize(Constants.FONT_SIZE)
-              .fontColor($r('app.color.startView_color'))
-          }.margin({ top: Constants.CONTENT2_MARGIN })
+      Column() {
+        Text($r('app.string.enroll_face_guide_title'))
+          .fontSize(Constants.SMALL_TITLE_FONT_SIZE)
+          .fontWeight(Constants.FONT_WEIGHT)
           .textAlign(TextAlign.Center)
-          .onClick(() => {
-            Log.showInfo(TAG, 'declare')
-            routeDeclare()
-          })
 
-        }.width(Constants.ENROLL_INFO_WIDTH)
-         .margin({ top: Constants.IMAGE_MARGIN })
+        Text($r('app.string.face_guide_2d_way'))
+          .fontSize(Constants.FONT_SIZE)
+          .fontColor($r('app.color.font_color'))
+          .textAlign(TextAlign.Center)
+          .margin({ top: Constants.CONTENT1_MARGIN })
+
+        Text() {
+          Span($r('app.string.face_guide_2d_announce'))
+            .fontColor($r('app.color.font_color'))
+            .textCase(TextCase.UpperCase)
+            .fontSize(Constants.FONT_SIZE)
+          Span($r('app.string.face_guide_2d_announce_link'))
+            .textCase(TextCase.UpperCase)
+            .fontSize(Constants.FONT_SIZE)
+            .fontColor($r('app.color.startView_color'))
+        }.margin({ top: Constants.CONTENT2_MARGIN })
+        .textAlign(TextAlign.Center)
+        .onClick(() => {
+          routeDeclare();
+        })
+
+      }.width(Constants.ENROLL_INFO_WIDTH)
+      .margin({ top: Constants.IMAGE_MARGIN })
 
       Flex() {
         Toggle({ type: ToggleType.Checkbox, isOn: true })
@@ -118,11 +130,12 @@ struct StartViews_2D {
 
       Flex({justifyContent:FlexAlign.Center}) {
         Button({ type: ButtonType.Capsule, stateEffect: true }) {
-          Text($r('app.string.face_recognitin_guide')).fontSize(Constants.BUTTON_FONT_SIZE).fontColor(0xffffff)
+          Text($r('app.string.face_record')).fontSize(Constants.BUTTON_FONT_SIZE).fontColor(0xffffff)
         }
         .backgroundColor($r('app.color.startView_color')).width(Constants.BUTTON_WIDTH).height(Constants.BUTTON_HEIGHT)
         .onClick(() => {
-         routeEnroll_2D()
+          this.pageHideFlag = 1;
+          mFaceModel.openSession(this.openSessionCallBack.bind(this));
         })
       }.position({ x:$r('app.float.enroll_center_position_X'), y: Constants.BUTTON_POSITION})
     }

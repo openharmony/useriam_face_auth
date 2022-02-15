@@ -14,59 +14,72 @@
 import("//base/user_iam/face_auth/useriam.gni")
 import("//build/ohos.gni")
 
-config("face_auth_services_config") {
-  visibility = [ ":*" ]
-
-  include_dirs = []
-
-  cflags = []
-  if (target_cpu == "arm") {
-    cflags += [ "-DBINDER_IPC_32BIT" ]
-  }
-
-  defines = [
-    "APP_LOG_TAG = \"FaceAuth\"",
-    "LOG_DOMAIN = 0xD002422",
-  ]
-}
-
-config("face_auth_services_public_config") {
-  visibility = [ ":*" ]
-
+ohos_shared_library("face_auth_service") {
   include_dirs = [
-    "${useriam_common_path}/log/include",
-    "${face_auth_innerkits_path}/include",
-    "${face_auth_services_path}/include",
+    "//foundation/multimedia/camera_standard/interfaces/inner_api/native/camera/include",
+    "//base/user_iam/face_auth/services/faceauth/include",
+    "//base/user_iam/face_auth/services/common/include",
+    "//base/user_iam/face_auth/services/temp/include",
+    "//base/user_iam/face_auth/services/common/log/include",
+    "//base/user_iam/auth_executor_mgr/interfaces/innerkits/include",
+    "//base/user_iam/auth_executor_mgr/services/include",
+    "//base/user_iam/auth_executor_mgr/frameworks/kitsimpl/include",
+    "//base/user_iam/auth_executor_mgr/utils/native/include",
     "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler/include",
-    "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy/include",
+    "//foundation/multimedia/camera_standard/interfaces/innerkits/native/camera/include",
+    "//foundation/multimedia/camera_standard/frameworks/native/metadata/include",
+    "//foundation/multimedia/camera_standard/services/camera_service/binder/base/include",
+    "//foundation/multimedia/camera_standard/services/camera_service/binder/client/include",
+    "//foundation/multimedia/camera_standard/services/camera_service/binder/server/include",
+    "//foundation/distributeddatamgr/distributeddatamgr/services/distributeddataservice/adapter/include/autils",
     "//utils/native/base/include",
-    "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy/include",
-    "${aafwk_path}/services/abilitymgr/include",
+    "//third_party/openssl/include",
+    "//base/notification/ces_standard/interfaces/innerkits/native/include",
+    "//foundation/aafwk/standard/interfaces/innerkits/want/include/ohos/aafwk/content",
+    "//foundation/distributedschedule/dmsfwk/services/dtbschedmgr/include",
   ]
-}
 
-ohos_shared_library("face_auth_services") {
-  sources = [ "${face_auth_services_path}/src/face_auth_service.cpp" ]
-
-  configs = [ ":face_auth_services_config" ]
-
-  public_configs = [ ":face_auth_services_public_config" ]
+  sources = [
+    "//base/user_iam/face_auth/services/common/src/constant.cpp",
+    "//base/user_iam/face_auth/services/faceauth/src/face_auth_camera.cpp",
+    "//base/user_iam/face_auth/services/faceauth/src/face_auth_camera_buffer_listener.cpp",
+    "//base/user_iam/face_auth/services/faceauth/src/face_auth_common_event_subscriber.cpp",
+    "//base/user_iam/face_auth/services/faceauth/src/face_auth_event.cpp",
+    "//base/user_iam/face_auth/services/faceauth/src/face_auth_event_handler.cpp",
+    "//base/user_iam/face_auth/services/faceauth/src/face_auth_executor_callback.cpp",
+    "//base/user_iam/face_auth/services/faceauth/src/face_auth_manager.cpp",
+    "//base/user_iam/face_auth/services/faceauth/src/face_auth_query_callback.cpp",
+    "//base/user_iam/face_auth/services/faceauth/src/face_auth_req.cpp",
+    "//base/user_iam/face_auth/services/faceauth/src/face_auth_service.cpp",
+    "//base/user_iam/face_auth/services/faceauth/src/face_auth_thread_pool.cpp",
+    "//base/user_iam/face_auth/services/temp/src/adaptor_algorithm.cpp",
+    "//base/user_iam/face_auth/services/temp/src/buffer.cpp",
+    "//base/user_iam/face_auth/services/temp/src/face_auth_ca.cpp",
+    "//base/user_iam/face_auth/services/temp/src/face_auth_func.cpp",
+  ]
 
   deps = [
-    "${aafwk_path}/services/abilitymgr:abilityms",
-    "${face_auth_innerkits_path}:face_auth_innerkits",
-    "${useriam_common_path}:faceauth_common",
+    "//base/user_iam/auth_executor_mgr/interfaces/innerkits:coauth_framework",
+    "//base/user_iam/auth_executor_mgr/services:coauthservice",
     "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler:libeventhandler",
     "//foundation/distributedschedule/safwk/interfaces/innerkits/safwk:system_ability_fwk",
-    "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
+    "//foundation/distributedschedule/samgr/interfaces/innerkits/samgr_proxy",
+    "//foundation/graphic/standard:libsurface",
+    "//foundation/multimedia/camera_standard/frameworks/native/camera:camera_framework",
+    "//foundation/multimedia/camera_standard/frameworks/native/metadata:metadata",
+    "//foundation/multimedia/camera_standard/services/camera_service:camera_service",
+    "//third_party/openssl:libcrypto_static",
     "//utils/native/base:utils",
   ]
-
   external_deps = [
+    "ability_base:want",
+    "ability_runtime:app_manager",
+    "ces_standard:cesfwk_innerkits",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
+    "safwk:system_ability_fwk",
+    "samgr_standard:samgr_proxy",
   ]
-
   subsystem_name = "useriam"
-  part_name = "faceauth"
+  part_name = "face_auth"
 }

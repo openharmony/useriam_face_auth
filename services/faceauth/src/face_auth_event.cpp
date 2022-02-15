@@ -14,18 +14,18 @@
  */
 
 #include "face_auth_event.h"
-#include "faceauth_log_wrapper.h"
+#include "face_auth_log_wrapper.h"
 #include "face_auth_defines.h"
 #include "face_auth_event_handler.h"
 #include "face_auth_manager.h"
 #include "face_auth_req.h"
-#include "ipc_skeleton.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 std::mutex FaceAuthEvent::mutex_;
 std::shared_ptr<FaceAuthEvent> FaceAuthEvent::instance_ = nullptr;
+
 FaceAuthEvent::FaceAuthEvent()
 {}
 
@@ -38,7 +38,7 @@ std::shared_ptr<FaceAuthEvent> FaceAuthEvent::GetInstance()
         std::lock_guard<std::mutex> lock_l(mutex_);
         if (instance_ == nullptr) {
             instance_ = std::make_shared<FaceAuthEvent>();
-        }
+            }
     }
     return instance_;
 }
@@ -46,26 +46,20 @@ std::shared_ptr<FaceAuthEvent> FaceAuthEvent::GetInstance()
 void FaceAuthEvent::HandleTask(const AppExecFwk::InnerEvent::Pointer &event)
 {
     if (event == nullptr) {
-        FACEAUTH_LABEL_LOGE("FaceAuthEvent::HandleTask event is nullptr");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthEvent::HandleTask event is nullptr");
         return;
     }
     uint32_t event_id = event->GetInnerEventId();
-    FACEAUTH_LABEL_LOGI("FaceAuthEvent::HandleTask inner event id obtained: %{public}u.", event_id);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthEvent::HandleTask inner event id obtained: %{public}u.", event_id);
     FaceOperateType operateType = FaceAuthReq::GetInstance()->GetOperateType(event_id);
-    FACEAUTH_LABEL_LOGI("operateType is %{public}d", operateType);
-    int32_t uId = IPCSkeleton::GetCallingUid();
-    bool isCanceled = FaceAuthReq::GetInstance()->isCanceled(event_id, uId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "operateType is %{public}d", operateType);
     switch (operateType) {
         case FACE_OPERATE_TYPE_LOCAL_AUTH: {
-            AuthenticateTask(event, isCanceled);
-            break;
-        }
-        case FACE_OPERATE_TYPE_CO_AUTH: {
-            CoAuthenticateTask(event, isCanceled);
+            AuthenticateTask(event);
             break;
         }
         case FACE_OPERATE_TYPE_ENROLL: {
-            EnrollTask(event, isCanceled);
+            EnrollTask(event);
             break;
         }
         case FACE_OPERATE_TYPE_DEL: {
@@ -73,86 +67,51 @@ void FaceAuthEvent::HandleTask(const AppExecFwk::InnerEvent::Pointer &event)
             break;
         }
         default: {
-            FACEAUTH_LABEL_LOGI("operateType is invalid, %{public}d", operateType);
+            FACEAUTH_HILOGI(MODULE_SERVICE, "operateType is invalid, %{public}d", operateType);
             break;
         }
     }
     return;
 }
-
-void FaceAuthEvent::AuthenticateTask(const AppExecFwk::InnerEvent::Pointer &event, const bool isCanceled)
+void FaceAuthEvent::EnrollTask(const AppExecFwk::InnerEvent::Pointer &event)
 {
-    auto object = event->GetUniqueObject<CallsAuthInfo>();
-    CallsAuthInfo info = *object;
+    auto object = event->GetUniqueObject<EnrollParam>();
+    EnrollParam info = *object;
+    uint64_t uId = info.callerUID;
+    uint32_t event_id = event->GetInnerEventId();
+    bool isCanceled = FaceAuthReq::GetInstance()->isCanceled(event_id, uId);
     if (isCanceled) {
-        CallBackParam cbParam;
-        cbParam.reqId = info.param.reqId;
-        cbParam.code = CODE_CALLBACK_RESULT;
-        cbParam.errorCode = ERRCODE_CANCEL;
-        FaceAuthManager::GetInstance()->SendCallback(TYPE_CALLBACK_AUTH, cbParam, info.callback);
         FaceReqType reqType;
-        reqType.reqId = info.param.reqId;
-        reqType.operateType = FACE_OPERATE_TYPE_LOCAL_AUTH;
-        FaceAuthReq::GetInstance()->RemoveRequireInfo(reqType);
-        return;
-    }
-    FaceAuthManager::GetInstance()->HandleCallAuthenticate(info.param, info.callback);
-    return;
-}
-
-void FaceAuthEvent::CoAuthenticateTask(const AppExecFwk::InnerEvent::Pointer &event, const bool isCanceled)
-{
-    auto object = event->GetUniqueObject<CallsAuthInfo>();
-    CallsAuthInfo info = *object;
-    if (isCanceled) {
-        CallBackParam cbParam;
-        cbParam.reqId = info.param.reqId;
-        cbParam.code = CODE_CALLBACK_RESULT;
-        cbParam.errorCode = ERRCODE_CANCEL;
-        FaceAuthManager::GetInstance()->SendCallback(TYPE_CALLBACK_AUTH, cbParam, info.callback);
-        FaceReqType reqType;
-        reqType.reqId = info.param.reqId;
-        reqType.operateType = FACE_OPERATE_TYPE_CO_AUTH;
-        FaceAuthReq::GetInstance()->RemoveRequireInfo(reqType);
-        return;
-    }
-    if (FaceAuthReq::GetInstance()->FindLocalAuth()) {
-        FACEAUTH_LABEL_LOGI(
-            "There is Local authentication in the current queue. collaborative authentication cannot be performed");
-        FaceAuthEventHandler::Priority priority = FaceAuthEventHandler::Priority::LOW;
-        auto authInfo = std::make_unique<CallsAuthInfo>(info.param, info.callback);
-        eventHandler_->SendEvent(event->GetInnerEventId(), std::move(authInfo), priority);
-        return;
-    }
-    FaceAuthManager::GetInstance()->HandleCallAuthenticate(info.param, info.callback);
-    return;
-}
-
-void FaceAuthEvent::EnrollTask(const AppExecFwk::InnerEvent::Pointer &event, const bool isCanceled)
-{
-    auto object = event->GetUniqueObject<CallsEnrollInfo>();
-    CallsEnrollInfo info = *object;
-    if (isCanceled) {
-        CallBackParam cbParam;
-        cbParam.reqId = info.param.reqId;
-        cbParam.code = CODE_CALLBACK_RESULT;
-        cbParam.errorCode = ERRCODE_CANCEL;
-        FaceAuthManager::GetInstance()->SendCallback(TYPE_CALLBACK_ENROLL, cbParam, info.callback);
-        FaceReqType reqType;
-        reqType.reqId = info.param.reqId;
+        reqType.reqId = info.scheduleID;
         reqType.operateType = FACE_OPERATE_TYPE_ENROLL;
         FaceAuthReq::GetInstance()->RemoveRequireInfo(reqType);
         return;
     }
-    FaceAuthManager::GetInstance()->HandleCallEnroll(info.param, info.callback);
+    FaceAuthManager::GetInstance()->HandleCallEnroll(info);
     return;
 }
-
+void FaceAuthEvent::AuthenticateTask(const AppExecFwk::InnerEvent::Pointer &event)
+{
+    auto object = event->GetUniqueObject<AuthParam>();
+    AuthParam info = *object;
+    uint64_t uId = info.callerUID;
+    uint32_t event_id = event->GetInnerEventId();
+    bool isCanceled = FaceAuthReq::GetInstance()->isCanceled(event_id, uId);
+    if (isCanceled) {
+        FaceReqType reqType;
+        reqType.reqId = info.scheduleID;
+        reqType.operateType = FACE_OPERATE_TYPE_LOCAL_AUTH;
+        FaceAuthReq::GetInstance()->RemoveRequireInfo(reqType);
+        return;
+    }
+    FaceAuthManager::GetInstance()->HandleCallAuthenticate(info);
+    return;
+}
 void FaceAuthEvent::RemoveTask(const AppExecFwk::InnerEvent::Pointer &event)
 {
-    auto object = event->GetUniqueObject<CallsRemoveInfo>();
-    CallsRemoveInfo info = *object;
-    FaceAuthManager::GetInstance()->HandleCallRemove(info.param, info.callback);
+    auto object = event->GetUniqueObject<RemoveParam>();
+    RemoveParam info = *object;
+    FaceAuthManager::GetInstance()->HandleCallRemove(info);
     return;
 }
 } // namespace FaceAuth

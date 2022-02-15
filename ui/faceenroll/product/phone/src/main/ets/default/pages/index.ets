@@ -13,14 +13,21 @@
  * limitations under the License.
  */
 
-import StartViews_2D from "./startViews_2D.ets"
-import StartViews_3D from "./startViews_3D.ets"
-import Constants from "../common/constant.ets"
+import StartViews_2D from "./startViews_2D.ets";
+import StartViews_3D from "./startViews_3D.ets";
+import Constants from "../common/constant.ets";
+import router from '@system.router';
 
 @Entry
 @Component
 struct Index {
-  @StorageLink('show_startViews') show_startViews: string = Constants.SHOW_START_VIEWS_2D
+  @StorageLink('show_startViews') show_startViews: string = Constants.SHOW_START_VIEWS_2D;
+  private onBackPress(): void{
+    AppStorage.Delete('faceToken');
+    router.push({
+      uri: 'pages/entryView',
+    })
+  }
   build() {
 
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center }) {

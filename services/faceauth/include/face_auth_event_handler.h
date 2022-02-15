@@ -12,10 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#ifndef FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_EVENT_HANDLER_H
-#define FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_EVENT_HANDLER_H
-
+#ifndef FACE_AUTH_EVENT_HANDLER_H
+#define FACE_AUTH_EVENT_HANDLER_H
 #include "event_handler.h"
 #include "face_auth_defines.h"
 
@@ -33,10 +31,15 @@ public:
         return AppExecFwk::EventHandler::SendEvent(AppExecFwk::InnerEvent::Get((uint32_t) innerEventId, object), 0,
             priority);
     }
+    inline bool SendEvent(int32_t innerEventId, Priority priority)
+    {
+        auto info = std::make_unique<int>(0);
+        return AppExecFwk::EventHandler::SendEvent(AppExecFwk::InnerEvent::Get((uint32_t) innerEventId,
+            std::move(info)), 0, priority);
+    }
     void ProcessEvent(const AppExecFwk::InnerEvent::Pointer &event);
 };
 }  // namespace FaceAuth
 }  // namespace UserIAM
 }  // namespace OHOS
-
-#endif  // FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_EVENT_HANDLER_H
+#endif // FACE_AUTH_EVENT_HANDLER_H
