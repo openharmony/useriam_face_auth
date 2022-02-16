@@ -47,7 +47,7 @@ std::shared_ptr<FaceAuthManager> FaceAuthManager::GetInstance()
 
 void CheckSystemAbility()
 {
-    const int CHECK_TIMES = 3;
+    const int CHECK_TIMES = 20;
     const int SLEEP_TIME = 1;
     sptr<ISystemAbilityManager> sam = SystemAbilityManagerClient::GetInstance().GetSystemAbilityManager();
     if (sam == nullptr) {
@@ -384,23 +384,19 @@ FIRetCode FaceAuthManager::OperForAlgorithm(uint64_t scheduleID)
         FACEAUTH_HILOGI(MODULE_SERVICE, "faceAuthCA is null.");
         return FI_RC_INVALID_ARGUMENT;
     }
-    int32_t retCode = 0;
-    std::vector<uint8_t> retCoauthMsg;
-    std::vector<uint8_t> m_msg;
-    std::shared_ptr<AuthResPool::AuthMessage> msgInstance = std::make_shared<AuthResPool::AuthMessage>(m_msg);
-    if (msgInstance == nullptr) {
-        return FI_RC_INVALID_ARGUMENT;
-    }
+
     while (1) {
-        faceAuthCA->GetAlgorithmState(retCode, retCoauthMsg);
-        FACEAUTH_HILOGI(MODULE_SERVICE, "receive new co auth message.");
-        std::shared_ptr<AuthResPool::AuthMessage> msg(msgInstance->FromUint8Array(retCoauthMsg));
-        if (msg != nullptr) {
-            SendData(scheduleID, 0, TYPE_ALL_IN_ONE, TYPE_CO_AUTH, msg);
-        }
+        int32_t retCode = 0;
+        std::vector<uint8_t> retCoAuthMsg;
+        faceAuthCA->GetAlgorithmState(retCode, retCoAuthMsg);
         if (FACE_ALOGRITHM_OPERATION_BREAK == retCode) {
             FACEAUTH_HILOGI(MODULE_SERVICE, "FACE_ALOGRITHM_OPERATION_BREAK.");
             break;
+        }
+        FACEAUTH_HILOGI(MODULE_SERVICE, "receive new co auth message.");
+        std::shared_ptr<AuthResPool::AuthMessage> msg = std::make_shared<AuthResPool::AuthMessage>(retCoAuthMsg);
+        if (msg != nullptr) {
+            SendData(scheduleID, 0, TYPE_ALL_IN_ONE, TYPE_CO_AUTH, msg);
         }
     }
     HandleAlgoResult(scheduleID);
@@ -502,6 +498,7 @@ void FaceAuthManager::Finish(uint64_t scheduleId,
 {
     if (executorMessenger_ != nullptr) {
         executorMessenger_->Finish(scheduleId, srcType, resultCode, finalResult);
+        FACEAUTH_HILOGI(MODULE_SERVICE, "executorMessenger_ finish called.");
     } else {
         FACEAUTH_HILOGI(MODULE_SERVICE, "executorMessenger_ is null.");
     }
