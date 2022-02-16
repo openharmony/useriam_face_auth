@@ -20,7 +20,7 @@ ohos_sa_profile("face_auth_sa_profile") {
   part_name = "faceauth"
 }
 
-ohos_prebuilt_etc("face_auth_service.rc") {
+ohos_prebuilt_etc("face_auth_service.init") {
   if (use_musl) {
     source = "face_auth_service.cfg"
   } else {
