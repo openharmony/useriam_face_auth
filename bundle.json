@@ -35,6 +35,7 @@
       "build": {
         "sub_component": [
           "//base/user_iam/face_auth/services:face_auth_service",
+          "//base/user_iam/face_auth/sa_profile:face_auth_service.init",
           "//base/user_iam/face_auth/sa_profile:face_auth_sa_profile"
         ],
         "inner_kits": [
