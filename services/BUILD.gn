@@ -81,5 +81,5 @@ ohos_shared_library("face_auth_service") {
     "samgr_standard:samgr_proxy",
   ]
   subsystem_name = "useriam"
-  part_name = "face_auth"
+  part_name = "faceauth"
 }
