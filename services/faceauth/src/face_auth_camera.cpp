@@ -96,6 +96,8 @@ int32_t FaceAuthCamera::CreateCamera(sptr<Surface> surface)
     int32_t intResult = PrepareCamera(surface);
     if (intResult != 0) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Prepare Camera Failed");
+        camInput_->Release();
+        camInput_ = nullptr;
         return FA_RET_ERROR;
     }
     FACEAUTH_HILOGI(MODULE_SERVICE, "Create Camera end.");
@@ -187,7 +189,6 @@ void FaceAuthCamera::Stop()
 void FaceAuthCamera::Release()
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCamera::Release Start.");
-    camInput_ = nullptr;
     if (previewOutput_ != nullptr) {
         ((sptr<CameraStandard::PreviewOutput> &) previewOutput_)->Release();
         FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCamera::previewOutput_ Release End.");
@@ -204,6 +205,10 @@ void FaceAuthCamera::Release()
     if (capSession_ != nullptr) {
         capSession_->Release();
         capSession_ = nullptr;
+    }
+    if (camInput_ != nullptr) {
+        camInput_->Release();
+        camInput_ = nullptr;
     }
     if (instance_ != nullptr) {
         instance_.reset();
