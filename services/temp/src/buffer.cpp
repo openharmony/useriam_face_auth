@@ -48,7 +48,7 @@ Buffer *CreateBuffer(const uint32_t size)
         return nullptr;
     }
 
-    Buffer *buffer = new Buffer;
+    Buffer *buffer = (Buffer *)malloc(sizeof(Buffer));
     if (buffer == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Get buffer struct error");
         return nullptr;
@@ -57,48 +57,17 @@ Buffer *CreateBuffer(const uint32_t size)
     buffer->buf = (uint8_t *)malloc(size);
     if (buffer->buf == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Get buffer error");
-        delete buffer;
+        free(buffer);
         return nullptr;
     }
 
     if (memset_s(buffer->buf, size, 0, size) != EOK) {
-        delete buffer->buf;
-        delete buffer;
+        free(buffer->buf);
+        free(buffer);
         return nullptr;
     }
     buffer->maxSize = size;
     buffer->contentSize = 0;
-
-    return buffer;
-}
-
-Buffer *CreateBufferByData(const uint8_t *data, const uint32_t dataSize)
-{
-    if ((data == nullptr) || (dataSize == 0) || (dataSize > MAX_BUFFER_SIZE)) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Bad param size:%u", dataSize);
-        return nullptr;
-    }
-
-    Buffer *buffer = new Buffer;
-    if (buffer == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Get buffer struct error");
-        return nullptr;
-    }
-
-    buffer->buf = new uint8_t;
-    if (buffer->buf == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Get buffer error");
-        delete buffer;
-        return nullptr;
-    }
-
-    if (memcpy_s(buffer->buf, dataSize, data, dataSize) != EOK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Cpy buffer error");
-        DestoryBuffer(buffer);
-        return nullptr;
-    }
-    buffer->maxSize = dataSize;
-    buffer->contentSize = dataSize;
 
     return buffer;
 }
@@ -126,12 +95,12 @@ void DestoryBuffer(Buffer *buffer)
             if (memset_s(buffer->buf, buffer->contentSize, 0, buffer->contentSize) != EOK) {
                 FACEAUTH_HILOGE(MODULE_SERVICE, "DestoryBuffer memset fail!");
             }
-            delete buffer->buf;
+            free(buffer->buf);
             buffer->buf = nullptr;
             buffer->contentSize = 0;
             buffer->maxSize = 0;
         }
-        delete buffer;
+        free(buffer);
     }
 }
 
