@@ -86,12 +86,14 @@ int32_t FaceAuthExecutorCallback::OnEndExecute(uint64_t scheduleId, pAuthAttribu
 
 void FaceAuthExecutorCallback::OnMessengerReady(const sptr<AuthResPool::IExecutorMessenger> &messenger)
 {
+    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
     std::shared_ptr<FaceAuthManager> manager = FaceAuthManager::GetInstance();
-    if (manager != nullptr) {
-        manager->SetExecutorMessenger(messenger);
-    } else {
+    if (manager == nullptr) {
         FACEAUTH_HILOGI(MODULE_SERVICE, "manager instance is null.");
+        return;
     }
+    manager->SetExecutorMessenger(messenger);
+    manager->VerifyAuthInfo();
 }
 
 int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)

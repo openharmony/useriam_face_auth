@@ -18,6 +18,9 @@
 #include "face_auth_log_wrapper.h"
 #include "face_auth_event_handler.h"
 #include "auth_executor_registry.h"
+#include "useridm_client.h"
+#include "useridm_info.h"
+#include "face_auth_get_info_callback.h"
 #include "auth_message.h"
 #include "coauth_info_define.h"
 #include "face_auth_thread_pool.h"
@@ -166,6 +169,23 @@ void FaceAuthManager::RegisterExecutor()
     }
     return;
 }
+
+void FaceAuthManager::VerifyAuthInfo()
+{
+    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    const int32_t ALL_INFO_GET_USER_ID = -1;
+
+    std::shared_ptr<FaceAuthGetInfoCallback> getInfoCallback = std::make_shared<FaceAuthGetInfoCallback>();
+    int32_t ret = UserIDM::UserIDMClient::GetInstance().GetAuthInfo(ALL_INFO_GET_USER_ID, UserIDM::AuthType::FACE,
+        getInfoCallback);
+    if (ret != 0) {
+        FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s get auth info success.", __PRETTY_FUNCTION__);
+    } else {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "%{public}s get auth info failed.", __PRETTY_FUNCTION__);
+    }
+    return;
+}
+
 int32_t FaceAuthManager::Release()
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
