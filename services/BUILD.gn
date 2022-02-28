@@ -47,6 +47,7 @@ ohos_shared_library("face_auth_service") {
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_event.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_event_handler.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_executor_callback.cpp",
+    "//base/user_iam/face_auth/services/faceauth/src/face_auth_get_info_callback.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_manager.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_query_callback.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_req.cpp",
@@ -79,6 +80,7 @@ ohos_shared_library("face_auth_service") {
     "ipc:ipc_core",
     "safwk:system_ability_fwk",
     "samgr_standard:samgr_proxy",
+    "user_idm:useridm_framework",
   ]
   subsystem_name = "useriam"
   part_name = "faceauth"
