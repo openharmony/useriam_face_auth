@@ -31,6 +31,7 @@ public:
     int32_t Init();
     int32_t Release();
     void RegisterExecutor();
+    void VerifyAuthInfo();
     // about authenticate
     int32_t Authenticate(const AuthParam &param);
     void HandleCallAuthenticate(const AuthParam &param);
