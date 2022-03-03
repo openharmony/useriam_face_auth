@@ -48,6 +48,13 @@ typedef struct {
     uint64_t templateId;
     std::vector<uint8_t> coauthMsg; // coauth signed msg
 } AlgorithmResult;
+
+typedef struct FaceCredentialInfo {
+    uint64_t subType;
+    uint32_t remainTimes;
+    uint32_t freezingTime;
+} FaceCredentialInfo;
+
 // temp code start
 void GetAuthResult(int32_t &result);
 // temp code end
@@ -68,6 +75,7 @@ public:
     int32_t DeleteTemplete(uint64_t templateId);
     int32_t VerifyTemplateData(std::vector<uint64_t> templateIdList);
     int32_t GetRemainTimes(uint64_t templateId, int32_t &remainingTimes);
+    int32_t GetFaceInfo(uint64_t templateId, FaceCredentialInfo &faceCredentialInfo);
     int32_t ResetRemainTimes(uint64_t templateId);
     int32_t CancelAlogrithmOperation();
     void SetAlgorithmParam(const AlgorithmParam &param);
