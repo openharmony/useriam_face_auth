@@ -105,7 +105,7 @@ int32_t FaceAuthCA::FinishAlgorithmOperation(AlgorithmResult &retResult)
         FACEAUTH_HILOGE(MODULE_SERVICE, "CreateBuffer failed.");
         return -1;
     }
-    ResultCode result = GenerateRetTlv(RESULT_SUCCESS, param_.scheduleId, FACE_AUTH, param_.templateId, retTlv);
+    ResultCode result = GenerateRetTlv(RESULT_SUCCESS, param_.scheduleId, FACE_2D, param_.templateId, retTlv);
     if (result != RESULT_SUCCESS) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "GenerateRetTlv failed.");
         DestoryBuffer(retTlv);
@@ -135,9 +135,19 @@ int32_t FaceAuthCA::VerifyTemplateData(std::vector<uint64_t> templateIdList)
     return 0;
 }
 
+int32_t FaceAuthCA::GetFaceInfo(uint64_t templateId, FaceCredentialInfo &faceCredentialInfo)
+{
+    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    faceCredentialInfo.subType = FACE_2D;
+    faceCredentialInfo.freezingTime = 0;
+    faceCredentialInfo.remainTimes = MAX_REMAIN_TIMES;
+    return 0;
+}
+
 int32_t FaceAuthCA::GetRemainTimes(uint64_t templateId, int32_t &remainingTimes)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    remainingTimes = MAX_REMAIN_TIMES;
     return 0;
 }
 
@@ -159,23 +169,24 @@ void FaceAuthCA::SetAlgorithmParam(const AlgorithmParam &param)
 // temp code start
 void GetAuthResult(int32_t &result)
 {
-    FILE* pFile = nullptr;
-    pFile = fopen("/data/useriam/auth_result.txt", "r");
-    if (pFile == nullptr) {
+    FILE* file = nullptr;
+    file = fopen("/data/useriam/auth_result.txt", "r");
+    if (file == nullptr) {
         FACEAUTH_HILOGI(MODULE_SERVICE, "open file failed.");
         return;
     }
-    if (fseek(pFile, 0, SEEK_END) != 0) {
+    if (fseek(file, 0, SEEK_END) != 0) {
         FACEAUTH_HILOGI(MODULE_SERVICE, "fseek failed.");
+        fclose(file);
         return;
     }
-    if (ftell(pFile) < 0) {
-        fseek(pFile, 0, SEEK_SET);
+    if (ftell(file) < 0) {
+        fseek(file, 0, SEEK_SET);
         char str[BUFF_MAX_LEN] = {0};
-        fread((void*)str, sizeof(char), BUFF_MAX_LEN-1, pFile);
+        fread((void *)str, sizeof(char), BUFF_MAX_LEN - 1, file);
         result = atoi(str);
     }
-    if (fclose(pFile) != 0) {
+    if (fclose(file) != 0) {
         FACEAUTH_HILOGI(MODULE_SERVICE, "fclose failed.");
     }
 }

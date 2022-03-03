@@ -155,7 +155,7 @@ void FaceAuthManager::RegisterExecutor()
     std::shared_ptr<AuthResPool::AuthExecutor> executorInfo = std::make_shared<AuthResPool::AuthExecutor>();
     // set executor info
     executorInfo->SetPublicKey(pubKey);
-    executorInfo->SetExecutorSecLevel(ESL0);
+    executorInfo->SetExecutorSecLevel(static_cast<ExecutorSecureLevel>(esl));
     executorInfo->SetAuthAbility(authAbility);
     executorInfo->SetAuthType(FACE);
     executorInfo->SetExecutorType(TYPE_ALL_IN_ONE);

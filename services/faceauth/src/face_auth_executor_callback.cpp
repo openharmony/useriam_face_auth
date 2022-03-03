@@ -143,17 +143,49 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
 int32_t FaceAuthExecutorCallback::OnGetProperty(std::shared_ptr<AuthResPool::AuthAttributes> conditions,
                                                 std::shared_ptr<AuthResPool::AuthAttributes> values)
 {
+    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthService::OnGetProperty enter");
+    if (values == nullptr || conditions == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty bad param");
+        return FA_RET_ERROR;
+    }
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA is nullptr.");
         return FA_RET_ERROR;
     }
-    uint64_t templateID = 0;
-    int32_t remainingTimes = 0;
-    conditions->GetUint64Value(AUTH_TEMPLATE_ID, templateID);
-    faceAuthCA->GetRemainTimes(templateID, remainingTimes);
-    values->SetUint64Value(AUTH_REMAIN_TIME, remainingTimes);
 
+    /* set command 0:delete 1:Query credential information */
+    uint32_t command;
+    if (conditions->GetUint32Value(AUTH_PROPERTY_MODE, command) != FA_RET_OK) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty GetUint32Value");
+        return FA_RET_ERROR;
+    }
+    FACEAUTH_HILOGI(MODULE_SERVICE,
+                    "FaceAuthService::OnBeginExecute AUTH_PROPERTY_MODE is %{public}u.", command);
+    if (command == FACE_COMMAND_QUERY_CREDENTIAL) {
+        /* get templateId */
+        uint64_t templateId;
+        if (conditions->GetUint64Value(AUTH_TEMPLATE_ID, templateId) != FA_RET_OK) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty GetUint64Value");
+            return FA_RET_ERROR;
+        }
+        /* Query credential information */
+        FaceCredentialInfo info;
+        faceAuthCA->GetFaceInfo(templateId, info);
+        if (values->SetUint64Value(AUTH_SUBTYPE, info.subType) != FA_RET_OK) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty SetUint64Value");
+            return FA_RET_ERROR;
+        }
+        /* send remainTimes FreezingTime */
+        if (values->SetUint32Value(AUTH_REMAIN_TIME, info.freezingTime)) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty SetUint32ArrayValue");
+            return FA_RET_ERROR;
+        }
+        if (values->SetUint32Value(AUTH_REMAIN_COUNT, info.remainTimes)) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty SetUint32ArrayValue");
+            return FA_RET_ERROR;
+        }
+    }
     return FA_RET_OK;
 }
 } // namespace FaceAuth
