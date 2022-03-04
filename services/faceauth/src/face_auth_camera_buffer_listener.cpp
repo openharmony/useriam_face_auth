@@ -23,12 +23,7 @@ namespace UserIAM {
 namespace FaceAuth {
 int32_t FaceAuthCameraBufferListener::SendCameraImage(OHOS::sptr<OHOS::SurfaceBuffer> buffer, int64_t timestamp)
 {
-    CameraImage image;
-    int ret = 0;
-    ret = memcpy_s(&image, sizeof(image), 0, sizeof(CameraImage));
-    if (ret < 0) {
-        return -1;
-    }
+    CameraImage image = {};
     image.image = static_cast<uint8_t*>(buffer->GetVirAddr());
     image.imageSize = buffer->GetSize();
     BufferHandle *bufferHandle = buffer->GetBufferHandle();
@@ -38,6 +33,7 @@ int32_t FaceAuthCameraBufferListener::SendCameraImage(OHOS::sptr<OHOS::SurfaceBu
     image.timestamp = timestamp;
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA = nullptr.");
         return -1;
     }
     faceAuthCA->TransferImageToAlgorithm(image);

@@ -35,8 +35,6 @@ public:
     virtual void OnStop() override;
     void Start();
 private:
-    static std::mutex mutex_;
-    static std::shared_ptr<FaceAuthService> instance_;
     static std::shared_ptr<FaceAuthManager> manager_;
 };
 } // namespace FaceAuth

@@ -41,31 +41,27 @@ int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vecto
     commandAttrs->GetUint64Value(AUTH_TEMPLATE_ID, templateId);
     switch (command) {
         case FACE_COMMAND_ENROLL: {
-            EnrollParam data;
-            memset_s(&data, sizeof(EnrollParam), 0, sizeof(EnrollParam));
+            EnrollParam data = {};
             data.scheduleID = scheduleId;
             data.templateID = templateId;
-            manager->Enrollment(data);
+            manager->AddEnrollmentRequest(data);
             break;
         }
         case FACE_COMMAND_AUTH: {
-            AuthParam data;
-            memset_s(&data, sizeof(AuthParam), 0, sizeof(AuthParam));
+            AuthParam data = {};
             data.scheduleID = scheduleId;
             data.templateID = templateId;
-            manager->Authenticate(data);
+            manager->AddAuthenticationRequest(data);
             break;
         }
         case FACE_COMMAND_CANCEL_ENROLL: {
-            EnrollParam data;
-            memset_s(&data, sizeof(EnrollParam), 0, sizeof(EnrollParam));
+            EnrollParam data = {};
             data.scheduleID = scheduleId;
             manager->CancelEnrollment(data);
             break;
         }
         case FACE_COMMAND_CANCEL_AUTH: {
-            AuthParam data;
-            memset_s(&data, sizeof(AuthParam), 0, sizeof(AuthParam));
+            AuthParam data = {};
             data.scheduleID = scheduleId;
             manager->CancelAuth(data);
             break;
@@ -121,11 +117,10 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
     bundleName.assign(callerName.begin(), callerName.end());
     switch (command) {
         case FACE_COMMAND_REMOVE: {
-            RemoveParam data;
-            memset_s(&data, sizeof(RemoveParam), 0, sizeof(RemoveParam));
+            RemoveParam data = {};
             data.scheduleID = scheduleID;
             data.templateID = templateID;
-            manager->Remove(data);
+            manager->AddRemoveRequest(data);
             break;
         }
         case FACE_COMMAND_INIT_ALGORITHM:
