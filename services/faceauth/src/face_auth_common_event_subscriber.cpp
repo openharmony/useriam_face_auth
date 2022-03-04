@@ -34,7 +34,7 @@ void FaceAuthCommonEventSubscriber::OnReceiveEvent(const CommonEventData &data)
     FACEAUTH_HILOGI(MODULE_SERVICE, "OnReceiveEvent enter");
     OHOS::EventFwk::Want want = data.GetWant();
     std::string action = want.GetAction();
-    FACEAUTH_HILOGD(MODULE_SERVICE, "Recieved common event:%{public}s", action.c_str());
+    FACEAUTH_HILOGD(MODULE_SERVICE, "Received common event:%{public}s", action.c_str());
     if (action == REGISTER_NOTIFICATION) {
         callback_->Start();
         return;

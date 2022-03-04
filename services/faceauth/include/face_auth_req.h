@@ -33,10 +33,10 @@ public:
     void RemoveAllRequireInfo();
     FaceOperateType GetOperateType(uint32_t eventId);
     uint32_t GetEventId(FaceReqType reqType);
-    bool SetCancelFlag(FaceReqType reqType, int32_t uId);
+    bool SetCancelFlagSuccess(FaceReqType reqType, int32_t uId);
     bool isCanceled(uint32_t eventId, int32_t uId);
     bool FindLocalAuth();
-
+    void PrintReqInfoList();
 private:
     std::map<FaceReqType, FaceInfo> reqInfoList_;
     static std::mutex mutex_;

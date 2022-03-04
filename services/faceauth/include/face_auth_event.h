@@ -27,9 +27,9 @@ public:
     virtual ~FaceAuthEvent();
     static std::shared_ptr<FaceAuthEvent> GetInstance();
     void HandleTask(const AppExecFwk::InnerEvent::Pointer &event);
-    void AuthenticateTask(const AppExecFwk::InnerEvent::Pointer &event);
-    void EnrollTask(const AppExecFwk::InnerEvent::Pointer &event);
-    void RemoveTask(const AppExecFwk::InnerEvent::Pointer &event);
+    void ProcessAuthenticateTask(const AppExecFwk::InnerEvent::Pointer &event);
+    void ProcessEnrollTask(const AppExecFwk::InnerEvent::Pointer &event);
+    void ProcessRemoveTask(const AppExecFwk::InnerEvent::Pointer &event);
     inline void SetEventHandler(const std::shared_ptr<FaceAuthEventHandler> &handler)
     {
         eventHandler_ = handler;
