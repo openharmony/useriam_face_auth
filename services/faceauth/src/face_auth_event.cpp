@@ -14,6 +14,7 @@
  */
 
 #include "face_auth_event.h"
+#include <future>
 #include "face_auth_log_wrapper.h"
 #include "face_auth_defines.h"
 #include "face_auth_event_handler.h"
@@ -55,15 +56,15 @@ void FaceAuthEvent::HandleTask(const AppExecFwk::InnerEvent::Pointer &event)
     FACEAUTH_HILOGI(MODULE_SERVICE, "operateType is %{public}d", operateType);
     switch (operateType) {
         case FACE_OPERATE_TYPE_LOCAL_AUTH: {
-            AuthenticateTask(event);
+            ProcessAuthenticateTask(event);
             break;
         }
         case FACE_OPERATE_TYPE_ENROLL: {
-            EnrollTask(event);
+            ProcessEnrollTask(event);
             break;
         }
         case FACE_OPERATE_TYPE_DEL: {
-            RemoveTask(event);
+            ProcessRemoveTask(event);
             break;
         }
         default: {
@@ -73,7 +74,7 @@ void FaceAuthEvent::HandleTask(const AppExecFwk::InnerEvent::Pointer &event)
     }
     return;
 }
-void FaceAuthEvent::EnrollTask(const AppExecFwk::InnerEvent::Pointer &event)
+void FaceAuthEvent::ProcessEnrollTask(const AppExecFwk::InnerEvent::Pointer &event)
 {
     auto object = event->GetUniqueObject<EnrollParam>();
     EnrollParam info = *object;
@@ -87,10 +88,10 @@ void FaceAuthEvent::EnrollTask(const AppExecFwk::InnerEvent::Pointer &event)
         FaceAuthReq::GetInstance()->RemoveRequireInfo(reqType);
         return;
     }
-    FaceAuthManager::GetInstance()->HandleCallEnroll(info);
+    FaceAuthManager::GetInstance()->DoEnroll(info);
     return;
 }
-void FaceAuthEvent::AuthenticateTask(const AppExecFwk::InnerEvent::Pointer &event)
+void FaceAuthEvent::ProcessAuthenticateTask(const AppExecFwk::InnerEvent::Pointer &event)
 {
     auto object = event->GetUniqueObject<AuthParam>();
     AuthParam info = *object;
@@ -104,14 +105,14 @@ void FaceAuthEvent::AuthenticateTask(const AppExecFwk::InnerEvent::Pointer &even
         FaceAuthReq::GetInstance()->RemoveRequireInfo(reqType);
         return;
     }
-    FaceAuthManager::GetInstance()->HandleCallAuthenticate(info);
+    FaceAuthManager::GetInstance()->DoAuthenticate(info);
     return;
 }
-void FaceAuthEvent::RemoveTask(const AppExecFwk::InnerEvent::Pointer &event)
+void FaceAuthEvent::ProcessRemoveTask(const AppExecFwk::InnerEvent::Pointer &event)
 {
     auto object = event->GetUniqueObject<RemoveParam>();
     RemoveParam info = *object;
-    FaceAuthManager::GetInstance()->HandleCallRemove(info);
+    FaceAuthManager::GetInstance()->DoRemove(info);
     return;
 }
 } // namespace FaceAuth

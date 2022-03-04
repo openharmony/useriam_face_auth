@@ -44,14 +44,9 @@ std::shared_ptr<FaceAuthReq> FaceAuthReq::GetInstance()
 bool FaceAuthReq::IsReqNumReachedMax(FaceOperateType type)
 {
     std::lock_guard<std::mutex> lock_l(mutex_);
-    for (auto iterinfo = reqInfoList_.begin(); iterinfo != reqInfoList_.end(); ++iterinfo) {
-        FACEAUTH_HILOGI(MODULE_SERVICE,
-            "ListInfo:reqId:xxxx%04llu,Type:%{public}d,eventId:%{public}u,uId:%{public}d,isCanceled:%{public}d",
-            iterinfo->first.reqId, iterinfo->first.operateType, iterinfo->second.eventId, iterinfo->second.uId,
-            iterinfo->second.isCanceled);
-    }
+    PrintReqInfoList();
     FACEAUTH_HILOGI(MODULE_SERVICE, "type is %{public}d", type);
-    if (type > FACE_OPERATE_TYPE_MAX || type < FACE_INVALID_OPERATE_TYPE) {
+    if (type > FACE_OPERATE_TYPE_MAX || type <= FACE_INVALID_OPERATE_TYPE) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.type is %{public}d", type);
         return true;
     }
@@ -62,7 +57,7 @@ bool FaceAuthReq::IsReqNumReachedMax(FaceOperateType type)
                 count++;
             }
         }
-        if (count >= CO_AUTH_MAX_NUM) {
+        if (count >= CO_AUTH_MAX_NUM - 1) {
             return true;
         }
     } else {
@@ -80,33 +75,36 @@ bool FaceAuthReq::IsReqNumReachedMax(FaceOperateType type)
 void FaceAuthReq::AddReqInfo(FaceReqType reqType, FaceInfo reqInfo)
 {
     std::lock_guard<std::mutex> lock_l(mutex_);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "reqType.reqId is xxxx%04llu", reqType.reqId);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "reqType.operateType is %{public}d", reqType.operateType);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "reqInfo.eventId is %{public}u", reqInfo.eventId);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "reqInfo.uId is %{public}d", reqInfo.uId);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "reqInfo.isCanceled is %{public}d", reqInfo.isCanceled);
-    if (reqType.operateType < FACE_INVALID_OPERATE_TYPE || reqType.operateType > FACE_OPERATE_TYPE_MAX) {
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reqType.reqId is xxxx%04llu,"
+                                    "reqType.operateType is %{public}d,"
+                                    "reqInfo.eventId is %{public}u,"
+                                    "reqInfo.uId is %{public}d,"
+                                    "reqInfo.isCanceled is %{public}d",
+                    reqType.reqId, reqType.operateType, reqInfo.eventId, reqInfo.uId, reqInfo.isCanceled);
+    if (reqType.operateType <= FACE_INVALID_OPERATE_TYPE || reqType.operateType > FACE_OPERATE_TYPE_MAX) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.reqInfo.operateType is %{public}d", reqType.operateType);
         return;
     }
-    reqInfoList_.insert(std::pair<FaceReqType, FaceInfo>(reqType, reqInfo));
+    auto req2Rm = reqInfoList_.find(reqType);
+    if (req2Rm != reqInfoList_.end()) {
+        FACEAUTH_HILOGI(MODULE_SERVICE, "same key was found.");
+    } else {
+        reqInfoList_.insert(std::pair<FaceReqType, FaceInfo>(reqType, reqInfo));
+    }
     return;
 }
 
 void FaceAuthReq::RemoveRequireInfo(FaceReqType reqType)
 {
     std::lock_guard<std::mutex> lock_l(mutex_);
-    for (auto iter = reqInfoList_.begin(); iter != reqInfoList_.end(); ++iter) {
-        FACEAUTH_HILOGI(MODULE_SERVICE,
-            "Remove before reqId:xxxx%04llu,Type:%{public}d,eventId:%{public}d,uId:%{public}d,isCanceled:%{public}d",
-            iter->first.reqId, iter->first.operateType, iter->second.eventId, iter->second.uId,
-            iter->second.isCanceled);
-    }
-    FACEAUTH_HILOGI(MODULE_SERVICE, "Remove reqType.reqId is xxxx%04llu", reqType.reqId);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "Remove reqType.operateType is %{public}d", reqType.operateType);
-    auto iterrm = reqInfoList_.find(reqType);
-    if (iterrm != reqInfoList_.end()) {
+    PrintReqInfoList();
+    FACEAUTH_HILOGI(MODULE_SERVICE, "Remove reqType.reqId is xxxx%04llu,"
+                                    "Remove reqType.operateType is %{public}d", reqType.reqId, reqType.operateType);
+    auto req2Rm = reqInfoList_.find(reqType);
+    if (req2Rm != reqInfoList_.end()) {
         reqInfoList_.erase(reqType);
+    } else {
+        FACEAUTH_HILOGI(MODULE_SERVICE, "no require info found.");
     }
     return;
 }
@@ -138,11 +136,11 @@ uint32_t FaceAuthReq::GetEventId(FaceReqType reqType)
     if (iter != reqInfoList_.end()) {
         return reqInfoList_[reqType].eventId;
     }
-    FACEAUTH_HILOGI(MODULE_SERVICE, "reqType is not in reqInfoList,reqType.reqId is xxxx%04llu", reqType.reqId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reqType is not in reqInfoList, reqType.reqId is xxxx%04llu", reqType.reqId);
     return 0;
 }
 
-bool FaceAuthReq::SetCancelFlag(FaceReqType reqType, int32_t uId)
+bool FaceAuthReq::SetCancelFlagSuccess(FaceReqType reqType, int32_t uId)
 {
     std::lock_guard<std::mutex> lock_l(mutex_);
     FACEAUTH_HILOGI(MODULE_SERVICE, "reqType.reqId is xxxx%04llu", reqType.reqId);
@@ -154,7 +152,7 @@ bool FaceAuthReq::SetCancelFlag(FaceReqType reqType, int32_t uId)
         return true;
     }
     FACEAUTH_HILOGI(MODULE_SERVICE,
-        "reqType or uId is not in reqInfoList,reqType.reqId is xxxx%04llu,uid is%{public}d", reqType.reqId, uId);
+        "reqType or uId is not in reqInfoList, reqType.reqId is xxxx%04llu, uid is%{public}d", reqType.reqId, uId);
     return false;
 }
 
@@ -168,7 +166,7 @@ bool FaceAuthReq::isCanceled(uint32_t eventId, int32_t uId)
             return iter->second.isCanceled;
         }
     }
-    FACEAUTH_HILOGI(MODULE_SERVICE, "eventId or uId is not in reqInfoList,eventId is %{public}u,uid is%{public}d",
+    FACEAUTH_HILOGI(MODULE_SERVICE, "eventId or uId is not in reqInfoList, eventId is %{public}u, uid is%{public}d",
         eventId, uId);
     return false;
 }
@@ -183,6 +181,16 @@ bool FaceAuthReq::FindLocalAuth()
         }
     }
     return result;
+}
+
+void FaceAuthReq::PrintReqInfoList()
+{
+    for (auto iterinfo = reqInfoList_.begin(); iterinfo != reqInfoList_.end(); ++iterinfo) {
+        FACEAUTH_HILOGI(MODULE_SERVICE,
+            "ListInfo:reqId:xxxx%04llu, Type:%{public}d, eventId:%{public}u, uId:%{public}d, isCanceled:%{public}d",
+            iterinfo->first.reqId, iterinfo->first.operateType, iterinfo->second.eventId, iterinfo->second.uId,
+            iterinfo->second.isCanceled);
+    }
 }
 } // namespace FaceAuth
 } // namespace UserIAM

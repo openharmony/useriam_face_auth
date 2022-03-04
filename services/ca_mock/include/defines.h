@@ -51,7 +51,7 @@ typedef enum AuthSubType {
 } AuthSubType;
 
 #define MAX_REMAIN_TIMES 5
-#define MAX_DULPLICATE_CHECK 100
+#define MAX_DUPLICATE_CHECK 100
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
