@@ -25,7 +25,7 @@ namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 #define FILENAME            (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
-#define FORMATED(fmt, ...)    "[%{public}s] %{public}s# " fmt, FILENAME, __FUNCTION__, ##__VA_ARGS__
+#define FORMATTED(fmt, ...)    "[%{public}s] %{public}s# " fmt, FILENAME, __FUNCTION__, ##__VA_ARGS__
 
 #ifdef FACEAUTH_HILOGF
 #undef FACEAUTH_HILOGF
@@ -66,15 +66,15 @@ static constexpr OHOS::HiviewDFX::HiLogLabel FACE_AUTH_LABEL[FACE_AUTH_MODULE_BU
 };
 
 #define FACEAUTH_HILOGF(module, ...) (void)OHOS::HiviewDFX::HiLog::Fatal(FACE_AUTH_LABEL[module], \
-                                                                         FORMATED(__VA_ARGS__))
+                                                                         FORMATTED(__VA_ARGS__))
 #define FACEAUTH_HILOGE(module, ...) (void)OHOS::HiviewDFX::HiLog::Error(FACE_AUTH_LABEL[module], \
-                                                                         FORMATED(__VA_ARGS__))
+                                                                         FORMATTED(__VA_ARGS__))
 #define FACEAUTH_HILOGW(module, ...) (void)OHOS::HiviewDFX::HiLog::Warn(FACE_AUTH_LABEL[module], \
-                                                                        FORMATED(__VA_ARGS__))
+                                                                        FORMATTED(__VA_ARGS__))
 #define FACEAUTH_HILOGI(module, ...) (void)OHOS::HiviewDFX::HiLog::Info(FACE_AUTH_LABEL[module], \
-                                                                        FORMATED(__VA_ARGS__))
+                                                                        FORMATTED(__VA_ARGS__))
 #define FACEAUTH_HILOGD(module, ...) (void)OHOS::HiviewDFX::HiLog::Debug(FACE_AUTH_LABEL[module], \
-                                                                         FORMATED(__VA_ARGS__))
+                                                                         FORMATTED(__VA_ARGS__))
 }  // namespace FaceAuth
 }  // namespace UserIAM
 }  // namespace OHOS

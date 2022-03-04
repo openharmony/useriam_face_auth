@@ -23,8 +23,6 @@ namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 const std::string REGISTER_NOTIFICATION = "EXECUTOR_REGISTER_NOTIFICATION";
-std::mutex FaceAuthService::mutex_;
-std::shared_ptr<FaceAuthService> FaceAuthService::instance_ = nullptr;
 std::shared_ptr<FaceAuthManager> FaceAuthService::manager_ = nullptr;
 const bool REGISTER_RESULT =
     SystemAbility::MakeAndRegisterAbility(DelayedSingleton<FaceAuthService>::GetInstance().get());
@@ -63,12 +61,12 @@ void FaceAuthService::OnStop()
 }
 void FaceAuthService::Start()
 {
-    int32_t iRet = FA_RET_ERROR;
+    int32_t ret = FA_RET_ERROR;
     manager_ = FaceAuthManager::GetInstance();
     if (manager_ != nullptr) {
-        iRet = manager_->Init();
+        ret = manager_->Init();
     }
-    if (FA_RET_OK == iRet) {
+    if (FA_RET_OK == ret) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Init() result success.");
     } else {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Init() result failed.");

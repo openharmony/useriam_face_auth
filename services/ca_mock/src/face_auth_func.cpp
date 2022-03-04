@@ -89,8 +89,12 @@ static Buffer *GetDataTlvContent(uint32_t result, uint64_t scheduleId, uint64_t 
 ResultCode GenerateRetTlv(uint32_t result, uint64_t scheduleId, uint64_t subType, uint64_t templatedId,
     Buffer *retTlv)
 {
-    if (!IsBufferValid(retTlv) || !IsEd25519KeyPairValid(g_keyPair)) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "param is invalid.");
+    if (!IsBufferValid(retTlv)) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "param(retTlv) is invalid.");
+        return RESULT_BAD_PARAM;
+    }
+    if (!IsEd25519KeyPairValid(g_keyPair)) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "param(g_keyPair) is invalid.");
         return RESULT_BAD_PARAM;
     }
     Buffer *dataContent = GetDataTlvContent(result, scheduleId, subType, templatedId);
@@ -132,19 +136,14 @@ ResultCode DoGetExecutorInfo(std::vector<uint8_t> &vPubKey, uint32_t &esl, uint6
         FACEAUTH_HILOGE(MODULE_SERVICE, "key pair not init!");
         return RESULT_NEED_INIT;
     }
-    uint32_t pubKeyLen = CONST_PUB_KEY_LEN;
-    uint8_t pubKey[CONST_PUB_KEY_LEN];
-    if (GetBufferData(g_keyPair->pubKey, pubKey, &pubKeyLen) != RESULT_SUCCESS) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "GetBufferData fail!");
-        return RESULT_UNKNOWN;
-    }
-    int index = 0;
-    vPubKey.clear();
-    for (index = 0; index < CONST_PUB_KEY_LEN; index++) {
-        vPubKey.push_back(pubKey[index]);
+    Buffer *pubKey = g_keyPair->pubKey;
+    vPubKey.resize(pubKey->contentSize);
+    if (memcpy_s(&vPubKey[0], pubKey->contentSize, pubKey->buf, pubKey->contentSize) != EOK) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "copy public key fail!");
+        return RESULT_GENERAL_ERROR;
     }
     esl = FACE_EXECUTOR_SECURITY_LEVEL;
-    authAbility = FACE_AUTH_AIBNILITY;
+    authAbility = FACE_AUTH_ABILITY;
     return RESULT_SUCCESS;
 }
 } // namespace FaceAuth
