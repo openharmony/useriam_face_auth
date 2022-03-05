@@ -27,14 +27,16 @@ namespace FaceAuth {
 class FaceAuthService : public SystemAbility {
 public:
     DECLEAR_SYSTEM_ABILITY(FaceAuthService);
-    static std::shared_ptr<FaceAuthService> GetInstance();
+    static FaceAuthService *GetInstance();
     FaceAuthService();
     virtual ~FaceAuthService() override;
 public:
     virtual void OnStart() override;
     virtual void OnStop() override;
     void Start();
+    void ReRegister();
 private:
+    static FaceAuthService *instance_;
     static std::shared_ptr<FaceAuthManager> manager_;
 };
 } // namespace FaceAuth
