@@ -42,7 +42,6 @@ ohos_shared_library("face_auth_service") {
     "//base/user_iam/face_auth/services/common/src/constant.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_camera.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_camera_buffer_listener.cpp",
-    "//base/user_iam/face_auth/services/faceauth/src/face_auth_common_event_subscriber.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_event.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_event_handler.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_executor_callback.cpp",
@@ -60,7 +59,6 @@ ohos_shared_library("face_auth_service") {
     "//third_party/openssl:libcrypto_static",
   ]
   external_deps = [
-    "ability_base:want",
     "ability_runtime:app_manager",
     "auth_executor_mgr:coauth_framework",
     "ces_standard:cesfwk_innerkits",
@@ -70,7 +68,7 @@ ohos_shared_library("face_auth_service") {
     "ipc:ipc_core",
     "safwk:system_ability_fwk",
     "samgr_standard:samgr_proxy",
-    "samgr_standard:samgr_proxy",
+    "startup_l2:syspara_watchagent",
     "user_idm:useridm_framework",
     "utils_base:utils",
   ]
