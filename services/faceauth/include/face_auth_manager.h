@@ -47,6 +47,7 @@ public:
     FIRetCode InitAlgorithm(std::string bundleName);
     FIRetCode DoWaitInitAlgorithm(std::future<int32_t> futureobj);
     FIRetCode ReleaseAlgorithm(std::string bundleName);
+    void QueryRegStatus();
     // about messager
     void SetExecutorMessenger(const sptr<AuthResPool::IExecutorMessenger> &messager);
 private:
@@ -61,7 +62,6 @@ private:
 private:
     FaceAuthManager(const FaceAuthManager&)=delete;
     FaceAuthManager& operator=(const FaceAuthManager&)=delete;
-    void QueryRegStatus();
     bool IsAlgorithmInited();
     AlgoResult IsNeedAlgoLoad(std::string bundleName);
     AlgoResult IsNeedAlgoRelease(std::string bundleName);
