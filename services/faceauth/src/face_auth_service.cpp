@@ -48,7 +48,11 @@ FaceAuthService *FaceAuthService::GetInstance()
 static void UserIamBootEventCallback(const char *key, const char *value, void *context)
 {
     FACEAUTH_HILOGD(MODULE_SERVICE, "UserIam is ready");
-    if (strncmp(key, IAM_EVENT_KEY, sizeof(IAM_EVENT_KEY)) || strncmp(value, "true", sizeof("true"))) {
+    if (key == nullptr || value == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "param is null");
+        return;
+    }
+    if (strcmp(key, IAM_EVENT_KEY) || strcmp(value, "true")) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "event is mismatch");
         return;
     }
@@ -96,6 +100,7 @@ void FaceAuthService::ReRegister()
     }
     manager_->QueryRegStatus();
 }
+
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
