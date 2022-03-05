@@ -16,39 +16,58 @@
 #include "face_auth_service.h"
 #include "face_auth_log_wrapper.h"
 #include "face_auth_defines.h"
-#include "common_event_manager.h"
-#include "face_auth_common_event_subscriber.h"
+#include "parameter.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 const std::string REGISTER_NOTIFICATION = "EXECUTOR_REGISTER_NOTIFICATION";
+FaceAuthService *FaceAuthService::instance_ = nullptr;
 std::shared_ptr<FaceAuthManager> FaceAuthService::manager_ = nullptr;
 const bool REGISTER_RESULT =
     SystemAbility::MakeAndRegisterAbility(DelayedSingleton<FaceAuthService>::GetInstance().get());
+static const char IAM_EVENT_KEY[] = "bootevent.useriam.fwkready";
 
 
 FaceAuthService::FaceAuthService()
     : SystemAbility(SUBSYS_USERIAM_SYS_ABILITY_FACEAUTH, false)
-{}
+{
+    instance_ = this;
+}
 
 FaceAuthService::~FaceAuthService()
-{}
+{
+    instance_ = nullptr;
+}
+
+FaceAuthService *FaceAuthService::GetInstance()
+{
+    return FaceAuthService::instance_;
+}
+
+static void UserIamBootEventCallback(const char *key, const char *value, void *context)
+{
+    FACEAUTH_HILOGD(MODULE_SERVICE, "UserIam is ready");
+    if (key == nullptr || value == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "param is null");
+        return;
+    }
+    if (strcmp(key, IAM_EVENT_KEY) || strcmp(value, "true")) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "event is mismatch");
+        return;
+    }
+    FaceAuthService *faceService = FaceAuthService::GetInstance();
+    if (faceService == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "faceService is null");
+        return;
+    }
+    faceService->ReRegister();
+}
 
 void FaceAuthService::OnStart()
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthService Start");
-    EventFwk::MatchingSkills matchingSkills;
-    matchingSkills.AddEvent(REGISTER_NOTIFICATION);
-    EventFwk::CommonEventSubscribeInfo subscriberInfo(matchingSkills);
-    std::shared_ptr<FaceAuthCommonEventSubscriber> subscriberPtr =
-        std::make_shared<FaceAuthCommonEventSubscriber>(subscriberInfo, this);
-    if (subscriberPtr != nullptr) {
-        bool subscribeResult = EventFwk::CommonEventManager::SubscribeCommonEvent(subscriberPtr);
-        if (!subscribeResult) {
-            FACEAUTH_HILOGE(MODULE_SERVICE, "SubscribeCommonEvent failed");
-        }
-    }
+    WatchParameter(IAM_EVENT_KEY, UserIamBootEventCallback, nullptr);
     Start();
 }
 
@@ -71,6 +90,15 @@ void FaceAuthService::Start()
     } else {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Init() result failed.");
     }
+}
+
+void FaceAuthService::ReRegister()
+{
+    if (manager_ == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "manager_ is null.");
+        return;
+    }
+    manager_->QueryRegStatus();
 }
 } // namespace FaceAuth
 } // namespace UserIAM
