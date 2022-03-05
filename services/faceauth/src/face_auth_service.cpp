@@ -96,7 +96,6 @@ void FaceAuthService::ReRegister()
     }
     manager_->QueryRegStatus();
 }
-
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
