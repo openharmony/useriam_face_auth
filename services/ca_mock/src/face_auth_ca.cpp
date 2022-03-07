@@ -482,8 +482,7 @@ int32_t FaceAuthCA::CheckIsCancel(int32_t &authErrorCode, FICode &code, uint64_t
 FIRetCode FaceAuthCA::Cancel(uint64_t reqId)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "isAuthingFlag is %{public}d", isAuthingFlag);
-    if (isAuthingFlag)
-    {
+    if (isAuthingFlag) {
         isCancel_ = true;
         cancelReqId_ = reqId;
         remove(CONFIG_FILENAME);
