@@ -67,6 +67,7 @@ typedef struct faceInfo {
 namespace {
 static const int32_t FA_RET_OK = 0;
 static const int32_t FA_RET_ERROR = -1;
+static const int32_t FA_RET_GENERAL_ERROR = 2;
 static const int32_t IMAGE_STREAM_EXTRA_SIZE = 10;
 static const int32_t RESULT_MAX_SIZE = 10;
 static const int32_t ENROLL_FACE_REC_SIZE = 4;
@@ -95,8 +96,8 @@ static const int32_t EXECUTOR_NOT_REGISTER = 1;
 // command from Co-Auth(OnBeginExecute)
 static const int32_t FACE_COMMAND_ENROLL = 0;
 static const int32_t FACE_COMMAND_AUTH = 1;
-static const int32_t FACE_COMMAND_CANCEL_ENROLL = 2;
-static const int32_t FACE_COMMAND_CANCEL_AUTH = 3;
+static const int32_t FACE_COMMAND_CANCEL_ENROLL = 0;
+static const int32_t FACE_COMMAND_CANCEL_AUTH = 1;
 // command from Co-Auth(OnSetProperty)
 static const int32_t FACE_COMMAND_REMOVE = 0;
 static const int32_t FACE_COMMAND_QUERY_CREDENTIAL = 1;
