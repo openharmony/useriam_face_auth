@@ -54,18 +54,6 @@ int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vecto
             manager->AddAuthenticationRequest(data);
             break;
         }
-        case FACE_COMMAND_CANCEL_ENROLL: {
-            EnrollParam data = {};
-            data.scheduleID = scheduleId;
-            manager->CancelEnrollment(data);
-            break;
-        }
-        case FACE_COMMAND_CANCEL_AUTH: {
-            AuthParam data = {};
-            data.scheduleID = scheduleId;
-            manager->CancelAuth(data);
-            break;
-        }
         default:
             FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %u", command);
             break;
@@ -74,10 +62,41 @@ int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vecto
 }
 int32_t FaceAuthExecutorCallback::OnEndExecute(uint64_t scheduleId, pAuthAttributes consumerAttr)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
-    (void)(scheduleId);
-    (void)(consumerAttr);
-    return FA_RET_OK;
+    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run start.", __PRETTY_FUNCTION__);
+    std::shared_ptr<FaceAuthManager> manager = FaceAuthManager::GetInstance();
+    if (manager == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "face auth manager is nullptr.");
+        return FA_RET_ERROR;
+    }
+    // get command
+    uint32_t command = 0;
+    int32_t ret = FA_RET_OK;
+    consumerAttr->GetUint32Value(AUTH_SCHEDULE_MODE, command);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "command = %{public}u.", command);
+    switch (command) {
+        case FACE_COMMAND_CANCEL_ENROLL: {
+            EnrollParam data = {};
+            data.scheduleID = scheduleId;
+            ret = manager->CancelEnrollment(data);
+            if (ret != FA_RET_OK) {
+                return FA_RET_GENERAL_ERROR;
+            }
+            break;
+        }
+        case FACE_COMMAND_CANCEL_AUTH: {
+            AuthParam data = {};
+            data.scheduleID = scheduleId;
+            ret = manager->CancelAuth(data);
+            if (ret != FA_RET_OK) {
+                return FA_RET_GENERAL_ERROR;
+            }
+            break;
+        }
+        default:
+            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %u", command);
+            break;
+    }
+    return ret;
 }
 
 void FaceAuthExecutorCallback::OnMessengerReady(const sptr<AuthResPool::IExecutorMessenger> &messenger)
