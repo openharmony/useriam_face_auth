@@ -26,6 +26,7 @@ namespace UserIAM {
 namespace FaceAuth {
 static const int32_t CA_RESULT_SUCCESS = 0;
 static const int32_t CA_RESULT_FAILED = -1;
+static const int32_t CA_RESULT_CANCELED = 3;
 static const int32_t BUFF_MAX_LEN = 128;
 static const int32_t CASE_NUM = 100;
 static const int32_t CODE_NUM = 5;
@@ -59,6 +60,7 @@ static const int32_t TEST_ANGLE_ADD_NUM = 4;
 static const int32_t DEFAULT_REMAIN_TIMES = 3;
 static const int32_t SLEEP_TIME = 5000;
 static int32_t faceId_ = 1;
+static bool isAuthingFlag = false;
 std::shared_ptr<FaceAuthCA> FaceAuthCA::faceAuthCA_ = nullptr;
 std::mutex FaceAuthCA::mutex_;
 FaceAuthCA::FaceAuthCA()
@@ -115,6 +117,7 @@ int32_t FaceAuthCA::ReleaseAlgorithm()
 int32_t FaceAuthCA::StartAlgorithmOperation(AlgorithmOperation algorithmOperation, AlgorithmParam param)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    isAuthingFlag = true;
     SetAlgorithmParam(param);
     if (algorithmOperation == Enroll) {
         Prepare(HW_EXEC_TYPE_ENROOL);
@@ -161,9 +164,15 @@ int32_t FaceAuthCA::GetExecutorInfo(std::vector<uint8_t> &pubKey, uint32_t &esl,
 int32_t FaceAuthCA::FinishAlgorithmOperation(AlgorithmResult &retResult)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    isAuthingFlag = false;
+    FACEAUTH_HILOGI(MODULE_SERVICE, "isAuthingFlag = %{public}d.", isAuthingFlag);
     int32_t authResult = 0;
+    if (isCancel_ == true) {
+        authResult = CA_RESULT_CANCELED;
+    } else {
+        GetAuthResult(authResult);
+    }
     isCancel_ = false;
-    GetAuthResult(authResult);
     FACEAUTH_HILOGI(MODULE_SERVICE, "get auth result = %{public}d.", authResult);
     retResult.result = authResult;
     retResult.templateId = param_.templateId;
@@ -247,7 +256,10 @@ int32_t FaceAuthCA::ResetRemainTimes(uint64_t templateId)
 int32_t FaceAuthCA::CancelAlgorithmOperation()
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
-    Cancel(param_.scheduleId);
+    if (Cancel(param_.scheduleId) != FI_RC_OK) {
+        return CA_RESULT_FAILED;
+    }
+
     return CA_RESULT_SUCCESS;
 }
 
@@ -462,7 +474,6 @@ int32_t FaceAuthCA::CheckIsCancel(int32_t &authErrorCode, FICode &code, uint64_t
         }
         authErrorCode = ERRCODE_CANCEL;
         code = CODE_CALLBACK_RESULT;
-        isCancel_ = false;
         std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_TIME));
         return FI_RC_OK;
     }
@@ -470,10 +481,15 @@ int32_t FaceAuthCA::CheckIsCancel(int32_t &authErrorCode, FICode &code, uint64_t
 }
 FIRetCode FaceAuthCA::Cancel(uint64_t reqId)
 {
-    isCancel_ = true;
-    cancelReqId_ = reqId;
-    remove(CONFIG_FILENAME);
-    return FI_RC_OK;
+    FACEAUTH_HILOGI(MODULE_SERVICE, "isAuthingFlag is %{public}d", isAuthingFlag);
+    if (isAuthingFlag)
+    {
+        isCancel_ = true;
+        cancelReqId_ = reqId;
+        remove(CONFIG_FILENAME);
+        return FI_RC_OK;
+    }
+    return FI_RC_ERROR;
 }
 void FaceAuthCA::InitErrorCode()
 {
