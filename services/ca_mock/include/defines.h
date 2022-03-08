@@ -46,10 +46,12 @@ typedef enum AuthType {
 } AuthType;
 
 typedef enum AuthSubType {
-    DEFAULT_TYPE = 0,
+    FACE_2D = 20000,
+    FACE_3D = 20001,
 } AuthSubType;
 
-#define MAX_DULPLICATE_CHECK 100
+#define MAX_REMAIN_TIMES 5
+#define MAX_DUPLICATE_CHECK 100
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS

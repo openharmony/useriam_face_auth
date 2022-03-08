@@ -33,19 +33,21 @@ public:
     void RegisterExecutor();
     void VerifyAuthInfo();
     // about authenticate
-    int32_t Authenticate(const AuthParam &param);
-    void HandleCallAuthenticate(const AuthParam &param);
+    int32_t AddAuthenticationRequest(const AuthParam &param);
+    void DoAuthenticate(const AuthParam &param);
     int32_t CancelAuth(const AuthParam &param);
     // about enroll
-    int32_t Enrollment(const EnrollParam &param);
-    void HandleCallEnroll(const EnrollParam &param);
+    int32_t AddEnrollmentRequest(const EnrollParam &param);
+    void DoEnroll(const EnrollParam &param);
     int32_t CancelEnrollment(const EnrollParam &param);
     // about remove
-    int32_t Remove(const RemoveParam &param);
-    void HandleCallRemove(const RemoveParam &param);
+    int32_t AddRemoveRequest(const RemoveParam &param);
+    void DoRemove(const RemoveParam &param);
     // about algorithm
     FIRetCode InitAlgorithm(std::string bundleName);
+    FIRetCode DoWaitInitAlgorithm(std::future<int32_t> futureobj);
     FIRetCode ReleaseAlgorithm(std::string bundleName);
+    void QueryRegStatus();
     // about messager
     void SetExecutorMessenger(const sptr<AuthResPool::IExecutorMessenger> &messager);
 private:
@@ -60,11 +62,10 @@ private:
 private:
     FaceAuthManager(const FaceAuthManager&)=delete;
     FaceAuthManager& operator=(const FaceAuthManager&)=delete;
-    void QueryRegStatus();
     bool IsAlgorithmInited();
     AlgoResult IsNeedAlgoLoad(std::string bundleName);
     AlgoResult IsNeedAlgoRelease(std::string bundleName);
-    uint32_t GenerateEventId();
+    int32_t GenerateEventId();
     void SendData(uint64_t scheduleId,
                          uint64_t transNum,
                          int32_t srcType,
@@ -77,7 +78,9 @@ private:
     FIRetCode OperForAlgorithm(uint64_t scheduleID);
     void HandleAlgoResult(uint64_t scheduleID);
     int32_t OpenCamera();
-    int32_t GetAuthMessage(uint64_t scheduleID);
+    int32_t WaitAlgorithmProcessDone(uint64_t scheduleID);
+    bool GetRandomNum(int32_t *randomNum);
+    int32_t GetAuthToken(std::unique_ptr<uint8_t[]> &authToken, uint32_t &len);
 };
 } // namespace FaceAuth
 } // namespace UserIAM

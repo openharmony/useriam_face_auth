@@ -59,7 +59,7 @@ typedef struct faceReqType {
     }
 } FaceReqType;
 typedef struct faceInfo {
-    uint32_t eventId = 0;
+    int32_t eventId = -1;
     int32_t uId = 0;
     bool isCanceled = false;
 } FaceInfo;
@@ -67,6 +67,7 @@ typedef struct faceInfo {
 namespace {
 static const int32_t FA_RET_OK = 0;
 static const int32_t FA_RET_ERROR = -1;
+static const int32_t FA_RET_GENERAL_ERROR = 2;
 static const int32_t IMAGE_STREAM_EXTRA_SIZE = 10;
 static const int32_t RESULT_MAX_SIZE = 10;
 static const int32_t ENROLL_FACE_REC_SIZE = 4;
@@ -74,6 +75,7 @@ static const int32_t UNUSED_PARAM_SIZE = 4;
 static const int32_t AUTH_FAIL_MAX_TIMES = 5;
 static const int32_t OPEN_CAMERA_TIME_OUT = 11000000;
 static const int32_t INIT_DYNAMIC_TIME_OUT = 5000000;
+static const int32_t RELEASE_DYNAMIC_TIME_OUT = 5000000;
 static const int32_t GET_RESULT_TIME_OUT = 30000000;
 static const int32_t AUTH_FAIL_WAIT_TIME = 30;
 static const int32_t ALO_GETRESULT_PARAM_LEN = 10;
@@ -94,28 +96,31 @@ static const int32_t EXECUTOR_NOT_REGISTER = 1;
 // command from Co-Auth(OnBeginExecute)
 static const int32_t FACE_COMMAND_ENROLL = 0;
 static const int32_t FACE_COMMAND_AUTH = 1;
-static const int32_t FACE_COMMAND_CANCEL_ENROLL = 2;
-static const int32_t FACE_COMMAND_CANCEL_AUTH = 3;
+static const int32_t FACE_COMMAND_CANCEL_ENROLL = 0;
+static const int32_t FACE_COMMAND_CANCEL_AUTH = 1;
 // command from Co-Auth(OnSetProperty)
 static const int32_t FACE_COMMAND_REMOVE = 0;
 static const int32_t FACE_COMMAND_QUERY_CREDENTIAL = 1;
 static const int32_t FACE_COMMAND_INIT_ALGORITHM = 5;
 static const int32_t FACE_COMMAND_RELEASE_ALGORITHM = 6;
-// alogrithm state from FaceAuth CA
-static const int32_t FACE_ALOGRITHM_OPERATION_CONTINUE = 0;
-static const int32_t FACE_ALOGRITHM_OPERATION_BREAK = 1;
-static const std::string FACE_LOCAL_INIT_ALGO_NAME = "face_auth_local_init";
+// command from Co-Auth(OnGetProperty)
+static const int32_t FACE_COMMAND_GET = 1;
+// algorithm state from FaceAuth CA
+static const int32_t FACE_ALGORITHM_OPERATION_CONTINUE = 0;
+static const int32_t FACE_ALGORITHM_OPERATION_BREAK = 1;
 }
 typedef struct {
     uint64_t scheduleID = 0;
     uint64_t templateID = 0;
     uint64_t callerUID = 0;
+    uint32_t eventID = 0;
 }AuthParam;
 
 typedef struct {
     uint64_t scheduleID = 0;
     uint64_t templateID = 0;
     uint64_t callerUID = 0;
+    uint32_t eventID = 0;
 }EnrollParam;
 
 typedef struct {
@@ -347,11 +352,6 @@ typedef enum {
     AR_NOT_FOUND,
     AR_ADD_AGAIN,
 } AlgoResult;
-
-typedef struct {
-    int32_t resultCode;
-    int32_t param[RESULT_MAX_SIZE];
-} ResultInfo;
 
 typedef enum FIFailReason {
     FI_FAIL_REASON_FACE_NOT_MATCH = 0,
