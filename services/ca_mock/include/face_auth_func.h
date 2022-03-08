@@ -16,9 +16,10 @@
 #ifndef FACE_AUTHTA_FUNC_H
 #define FACE_AUTHTA_FUNC_H
 
+#include <vector>
 #include "defines.h"
 #include "buffer.h"
-#include <vector>
+
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
@@ -29,14 +30,12 @@ namespace FaceAuth {
 #define SIGN_DATA_LEN 64
 #define PIN_RET_TYPE_LEN 8
 #define PIN_RET_DATA_LEN 72
-#define PIN_CAPABILITY_LEVEL 3
-#define FACE_AUTH_CAPABILITY_LEVEL 3
+#define FACE_AUTH_CAPABILITY_LEVEL 2
 #define ED25519_FIX_PUBKEY_BUFFER_SIZE 32
 #define ED25519_FIX_PRIKEY_BUFFER_SIZE 64
-#define PIN_EXECUTOR_SECURITY_LEVEL 2
-#define FACE_EXECUTOR_SECURITY_LEVEL 2
-#define PIN_AUTH_AIBNILITY 7
-#define FACE_AUTH_AIBNILITY 7
+#define FACE_EXECUTOR_SECURITY_LEVEL 1
+#define PIN_AUTH_ABILITY 7
+#define FACE_AUTH_ABILITY 7
 #define RESULT_TLV_LEN 160U
 #define CONST_PUB_KEY_LEN 32U
 

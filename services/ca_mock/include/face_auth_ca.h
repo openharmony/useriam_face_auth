@@ -18,8 +18,12 @@
 #include <stdlib.h>
 #include <memory>
 #include <mutex>
+#include <string>
+#include <vector>
+#include <map>
 #include "face_auth_defines.h"
 #include "face_auth_log_wrapper.h"
+#include "face_auth_defines.h"
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
@@ -29,32 +33,41 @@ typedef enum {
 } AlgorithmOperation;
 
 typedef struct {
-    uint64_t templateId;
-    uint64_t scheduleId;
+    uint64_t templateId = 0;
+    uint64_t scheduleId = 0;
 } AlgorithmParam;
 
 typedef struct {
-    uint8_t *image;
-    uint32_t imageSize;
-    uint32_t width;
-    uint32_t height;
-    uint32_t stride;
-    int64_t timestamp;
+    uint8_t *image = nullptr;
+    uint32_t imageSize = 0;
+    uint32_t width = 0;
+    uint32_t height = 0;
+    uint32_t stride = 0;
+    int64_t timestamp = 0;
 } CameraImage;
 
 typedef struct {
-    int32_t result;
-    int32_t remainTimes;
-    uint64_t templateId;
+    int32_t result = 0;
+    int32_t remainTimes = 0;
+    uint64_t templateId = 0;
     std::vector<uint8_t> coauthMsg; // coauth signed msg
 } AlgorithmResult;
-// temp code start
-void GetAuthResult(int32_t &result);
-// temp code end
+
+typedef struct {
+    int32_t resultCode;
+    int32_t param[RESULT_MAX_SIZE];
+} ResultInfo;
+
+typedef struct FaceCredentialInfo {
+    uint64_t subType;
+    uint32_t remainTimes;
+    uint32_t freezingTime;
+} FaceCredentialInfo;
+
 class FaceAuthCA {
 public:
     static std::shared_ptr<FaceAuthCA> GetInstance();
-    FaceAuthCA()=default;
+    FaceAuthCA();
     ~FaceAuthCA()=default;
     int32_t Init();
     int32_t Close();
@@ -65,16 +78,52 @@ public:
     void GetAlgorithmState(int32_t &retCode, std::vector<uint8_t> &retCoauthMsg);
     int32_t GetExecutorInfo(std::vector<uint8_t> &pubKey, uint32_t &esl, uint64_t &authAbility);
     int32_t FinishAlgorithmOperation(AlgorithmResult &retResult);
-    int32_t DeleteTemplete(uint64_t templateId);
+    int32_t DeleteTemplate(uint64_t templateId);
     int32_t VerifyTemplateData(std::vector<uint64_t> templateIdList);
     int32_t GetRemainTimes(uint64_t templateId, int32_t &remainingTimes);
+    int32_t GetFaceInfo(uint64_t templateId, FaceCredentialInfo &faceCredentialInfo);
     int32_t ResetRemainTimes(uint64_t templateId);
-    int32_t CancelAlogrithmOperation();
+    int32_t CancelAlgorithmOperation();
     void SetAlgorithmParam(const AlgorithmParam &param);
 private:
     static std::shared_ptr<FaceAuthCA> faceAuthCA_;
     static std::mutex mutex_;
+    int32_t resultNum_ = 0;
+    uint64_t cancelReqId_ = 0;
+    bool isReturnFaceId_ = false;
+    bool isInitFail_ = false;
+    bool isCancel_ = false;
+    HWExeType type_;
     AlgorithmParam param_;
+    std::map<int32_t, ResultInfo> resultInfos_;
+    std::map<int32_t, int32_t> errorCode_;
+    std::vector<uint64_t> templateIdList_;
+    std::map<uint64_t, int32_t> remainTimesMap_;
+private:
+    void GetAuthResult(int32_t &result);
+    FIRetCode GetAuthState(int32_t &authErrorCode, FICode &code, uint64_t reqId);
+    FIRetCode GetState(int32_t &resultCode, int32_t (&param)[RESULT_MAX_SIZE]);
+    void ReadFile();
+    int32_t SwitchAuthErrorCode(int32_t param);
+    int32_t CheckIsCancel(int32_t &authErrorCode, FICode &code, uint64_t reqId);
+    FIRetCode Cancel(uint64_t reqId);
+    void InitErrorCode();
+    void CheckFile(std::string s);
+    void GetEnrollAngleResult();
+    void GetEnrollSuccessResult();
+    void GetEnrollHasRegistered();
+    void GetOverMaxFace();
+    void GetCaremaFail();
+    void GetAngleTimeout();
+    void GetResultFail();
+    void GetResultTimeOut();
+    FIRetCode DynamicInit();
+    FIRetCode DynamicRelease();
+    void ReadInitFile();
+    void ReadReleaseFile();
+    void CheckInitFile(std::string s);
+    void CheckReleaseFile(std::string s);
+    FIRetCode Prepare(HWExeType type);
 };
 } // namespace FaceAuth
 } // namespace UserIAM

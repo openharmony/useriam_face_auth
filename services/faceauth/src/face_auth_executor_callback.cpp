@@ -41,33 +41,17 @@ int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vecto
     commandAttrs->GetUint64Value(AUTH_TEMPLATE_ID, templateId);
     switch (command) {
         case FACE_COMMAND_ENROLL: {
-            EnrollParam data;
-            memset_s(&data, sizeof(EnrollParam), 0, sizeof(EnrollParam));
+            EnrollParam data = {};
             data.scheduleID = scheduleId;
             data.templateID = templateId;
-            manager->Enrollment(data);
+            manager->AddEnrollmentRequest(data);
             break;
         }
         case FACE_COMMAND_AUTH: {
-            AuthParam data;
-            memset_s(&data, sizeof(AuthParam), 0, sizeof(AuthParam));
+            AuthParam data = {};
             data.scheduleID = scheduleId;
             data.templateID = templateId;
-            manager->Authenticate(data);
-            break;
-        }
-        case FACE_COMMAND_CANCEL_ENROLL: {
-            EnrollParam data;
-            memset_s(&data, sizeof(EnrollParam), 0, sizeof(EnrollParam));
-            data.scheduleID = scheduleId;
-            manager->CancelEnrollment(data);
-            break;
-        }
-        case FACE_COMMAND_CANCEL_AUTH: {
-            AuthParam data;
-            memset_s(&data, sizeof(AuthParam), 0, sizeof(AuthParam));
-            data.scheduleID = scheduleId;
-            manager->CancelAuth(data);
+            manager->AddAuthenticationRequest(data);
             break;
         }
         default:
@@ -78,10 +62,41 @@ int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vecto
 }
 int32_t FaceAuthExecutorCallback::OnEndExecute(uint64_t scheduleId, pAuthAttributes consumerAttr)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
-    (void)(scheduleId);
-    (void)(consumerAttr);
-    return FA_RET_OK;
+    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run start.", __PRETTY_FUNCTION__);
+    std::shared_ptr<FaceAuthManager> manager = FaceAuthManager::GetInstance();
+    if (manager == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "face auth manager is nullptr.");
+        return FA_RET_ERROR;
+    }
+    // get command
+    uint32_t command = 0;
+    int32_t ret = FA_RET_OK;
+    consumerAttr->GetUint32Value(AUTH_SCHEDULE_MODE, command);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "command = %{public}u.", command);
+    switch (command) {
+        case FACE_COMMAND_CANCEL_ENROLL: {
+            EnrollParam data = {};
+            data.scheduleID = scheduleId;
+            ret = manager->CancelEnrollment(data);
+            if (ret != FA_RET_OK) {
+                return FA_RET_GENERAL_ERROR;
+            }
+            break;
+        }
+        case FACE_COMMAND_CANCEL_AUTH: {
+            AuthParam data = {};
+            data.scheduleID = scheduleId;
+            ret = manager->CancelAuth(data);
+            if (ret != FA_RET_OK) {
+                return FA_RET_GENERAL_ERROR;
+            }
+            break;
+        }
+        default:
+            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %u", command);
+            break;
+    }
+    return ret;
 }
 
 void FaceAuthExecutorCallback::OnMessengerReady(const sptr<AuthResPool::IExecutorMessenger> &messenger)
@@ -121,11 +136,10 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
     bundleName.assign(callerName.begin(), callerName.end());
     switch (command) {
         case FACE_COMMAND_REMOVE: {
-            RemoveParam data;
-            memset_s(&data, sizeof(RemoveParam), 0, sizeof(RemoveParam));
+            RemoveParam data = {};
             data.scheduleID = scheduleID;
             data.templateID = templateID;
-            manager->Remove(data);
+            manager->AddRemoveRequest(data);
             break;
         }
         case FACE_COMMAND_INIT_ALGORITHM:
@@ -143,17 +157,49 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
 int32_t FaceAuthExecutorCallback::OnGetProperty(std::shared_ptr<AuthResPool::AuthAttributes> conditions,
                                                 std::shared_ptr<AuthResPool::AuthAttributes> values)
 {
+    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthService::OnGetProperty enter");
+    if (values == nullptr || conditions == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty bad param");
+        return FA_RET_ERROR;
+    }
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA is nullptr.");
         return FA_RET_ERROR;
     }
-    uint64_t templateID = 0;
-    int32_t remainingTimes = 0;
-    conditions->GetUint64Value(AUTH_TEMPLATE_ID, templateID);
-    faceAuthCA->GetRemainTimes(templateID, remainingTimes);
-    values->SetUint64Value(AUTH_REMAIN_TIME, remainingTimes);
 
+    /* set command 0:delete 1:Query credential information */
+    uint32_t command;
+    if (conditions->GetUint32Value(AUTH_PROPERTY_MODE, command) != FA_RET_OK) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty GetUint32Value");
+        return FA_RET_ERROR;
+    }
+    FACEAUTH_HILOGI(MODULE_SERVICE,
+                    "FaceAuthService::OnBeginExecute AUTH_PROPERTY_MODE is %{public}u.", command);
+    if (command == FACE_COMMAND_QUERY_CREDENTIAL) {
+        /* get templateId */
+        uint64_t templateId;
+        if (conditions->GetUint64Value(AUTH_TEMPLATE_ID, templateId) != FA_RET_OK) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty GetUint64Value");
+            return FA_RET_ERROR;
+        }
+        /* Query credential information */
+        FaceCredentialInfo info;
+        faceAuthCA->GetFaceInfo(templateId, info);
+        if (values->SetUint64Value(AUTH_SUBTYPE, info.subType) != FA_RET_OK) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty SetUint64Value");
+            return FA_RET_ERROR;
+        }
+        /* send remainTimes FreezingTime */
+        if (values->SetUint32Value(AUTH_REMAIN_TIME, info.freezingTime)) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty SetUint32ArrayValue");
+            return FA_RET_ERROR;
+        }
+        if (values->SetUint32Value(AUTH_REMAIN_COUNT, info.remainTimes)) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty SetUint32ArrayValue");
+            return FA_RET_ERROR;
+        }
+    }
     return FA_RET_OK;
 }
 } // namespace FaceAuth
