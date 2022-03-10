@@ -132,6 +132,8 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
     // get caller name
     std::vector<uint8_t> callerName;
     properties->GetUint8ArrayValue(ALGORITHM_INFO, callerName);
+    std::vector<uint64_t> templateIdList;
+    properties->GetUint64ArrayValue(AUTH_TEMPLATE_ID_LIST, templateIdList);
     std::string bundleName = "";
     bundleName.assign(callerName.begin(), callerName.end());
     switch (command) {
@@ -142,6 +144,11 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
             manager->AddRemoveRequest(data);
             break;
         }
+        case FACE_COMMAND_PROPERMODE_UNFREEZE:
+            for (auto templateId : templateIdList) {
+                manager->ResetRemainTimes(templateId);
+            }
+            break;
         case FACE_COMMAND_INIT_ALGORITHM:
             manager->InitAlgorithm(bundleName);
             break;

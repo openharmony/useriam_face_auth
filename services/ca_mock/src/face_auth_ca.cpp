@@ -278,7 +278,7 @@ int32_t FaceAuthCA::GetRemainTimes(uint64_t templateId, int32_t &remainingTimes)
 
 int32_t FaceAuthCA::ResetRemainTimes(uint64_t templateId)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run templateId %{public}llu.", __PRETTY_FUNCTION__, templateId);
     remainTimesMap_[templateId] = DEFAULT_REMAIN_TIMES;
     return CA_RESULT_SUCCESS;
 }
