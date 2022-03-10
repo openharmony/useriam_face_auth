@@ -23,7 +23,7 @@ namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vector<uint8_t> &publicKey,
-                                                 pAuthAttributes commandAttrs)
+    pAuthAttributes commandAttrs)
 {
     (void)(publicKey);
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
@@ -55,7 +55,7 @@ int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vecto
             break;
         }
         default:
-            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %u", command);
+            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %{public}u", command);
             break;
     }
     return FA_RET_OK;
@@ -93,7 +93,7 @@ int32_t FaceAuthExecutorCallback::OnEndExecute(uint64_t scheduleId, pAuthAttribu
             break;
         }
         default:
-            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %u", command);
+            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %{public}u", command);
             break;
     }
     return ret;
@@ -144,10 +144,11 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
             manager->AddRemoveRequest(data);
             break;
         }
+        case FACE_COMMAND_PROPERMODE_FREEZE:
+            manager->FreezeTemplates(templateIdList);
+            break;
         case FACE_COMMAND_PROPERMODE_UNFREEZE:
-            for (auto templateId : templateIdList) {
-                manager->ResetRemainTimes(templateId);
-            }
+            manager->UnfreezeTemplates(templateIdList);
             break;
         case FACE_COMMAND_INIT_ALGORITHM:
             manager->InitAlgorithm(bundleName);
@@ -156,13 +157,13 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
             manager->ReleaseAlgorithm(bundleName);
             break;
         default:
-            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %u", command);
+            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %{public}u", command);
             break;
     }
     return FA_RET_OK;
 }
 int32_t FaceAuthExecutorCallback::OnGetProperty(std::shared_ptr<AuthResPool::AuthAttributes> conditions,
-                                                std::shared_ptr<AuthResPool::AuthAttributes> values)
+    std::shared_ptr<AuthResPool::AuthAttributes> values)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthService::OnGetProperty enter");
     if (values == nullptr || conditions == nullptr) {
@@ -182,7 +183,7 @@ int32_t FaceAuthExecutorCallback::OnGetProperty(std::shared_ptr<AuthResPool::Aut
         return FA_RET_ERROR;
     }
     FACEAUTH_HILOGI(MODULE_SERVICE,
-                    "FaceAuthService::OnBeginExecute AUTH_PROPERTY_MODE is %{public}u.", command);
+        "FaceAuthService::OnBeginExecute AUTH_PROPERTY_MODE is %{public}u.", command);
     if (command == FACE_COMMAND_QUERY_CREDENTIAL) {
         /* get templateId */
         uint64_t templateId;
