@@ -44,7 +44,7 @@ bool CheckBufferWithSize(const Buffer *buffer, const uint32_t size)
 Buffer *CreateBuffer(const uint32_t size)
 {
     if ((size == 0) || (size > MAX_BUFFER_SIZE)) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Bad param size:%zu", size);
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Bad param size:%{public}u", size);
         return nullptr;
     }
 

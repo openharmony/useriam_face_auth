@@ -19,13 +19,16 @@
 #define CONFIG_HILOG
 #ifdef CONFIG_HILOG
 
+#include <inttypes.h>
+#include <string>
+#include <securec.h>
 #include "hilog/log.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-#define FILENAME            (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
-#define FORMATTED(fmt, ...)    "[%{public}s] %{public}s# " fmt, FILENAME, __FUNCTION__, ##__VA_ARGS__
+#define FILENAME (__builtin_strrchr(__FILE__, '/') ? __builtin_strrchr(__FILE__, '/') + 1 : __FILE__)
+#define FORMATTED(fmt, ...) "[%{public}s] %{public}s# " fmt, FILENAME, __FUNCTION__, ##__VA_ARGS__
 
 #ifdef FACEAUTH_HILOGF
 #undef FACEAUTH_HILOGF
@@ -66,15 +69,25 @@ static constexpr OHOS::HiviewDFX::HiLogLabel FACE_AUTH_LABEL[FACE_AUTH_MODULE_BU
 };
 
 #define FACEAUTH_HILOGF(module, ...) (void)OHOS::HiviewDFX::HiLog::Fatal(FACE_AUTH_LABEL[module], \
-                                                                         FORMATTED(__VA_ARGS__))
+    FORMATTED(__VA_ARGS__))
 #define FACEAUTH_HILOGE(module, ...) (void)OHOS::HiviewDFX::HiLog::Error(FACE_AUTH_LABEL[module], \
-                                                                         FORMATTED(__VA_ARGS__))
+    FORMATTED(__VA_ARGS__))
 #define FACEAUTH_HILOGW(module, ...) (void)OHOS::HiviewDFX::HiLog::Warn(FACE_AUTH_LABEL[module], \
-                                                                        FORMATTED(__VA_ARGS__))
+    FORMATTED(__VA_ARGS__))
 #define FACEAUTH_HILOGI(module, ...) (void)OHOS::HiviewDFX::HiLog::Info(FACE_AUTH_LABEL[module], \
-                                                                        FORMATTED(__VA_ARGS__))
+    FORMATTED(__VA_ARGS__))
 #define FACEAUTH_HILOGD(module, ...) (void)OHOS::HiviewDFX::HiLog::Debug(FACE_AUTH_LABEL[module], \
-                                                                         FORMATTED(__VA_ARGS__))
+    FORMATTED(__VA_ARGS__))
+const uint64_t MASK = 0xffff;
+const size_t MASKED_STRING_LEN = 9;
+inline std::string getMaskedString(uint64_t val)
+{
+    char bytes[MASKED_STRING_LEN] = {0};
+    if (snprintf_s(bytes, sizeof(bytes), sizeof(bytes) - 1, "xxxx%04" PRIx64, val & MASK) == 0) {
+        return "(snprintf fail)";
+    }
+    return std::string(bytes);
+}
 }  // namespace FaceAuth
 }  // namespace UserIAM
 }  // namespace OHOS
