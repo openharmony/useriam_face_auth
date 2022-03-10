@@ -726,6 +726,19 @@ FIRetCode FaceAuthManager::DoWaitInitAlgorithm(std::future<int32_t> futureobj)
     return static_cast<FIRetCode>(futureobj.get());
 }
 
+int32_t FaceAuthManager::ResetRemainTimes(uint64_t templateId)
+{
+    std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
+    if (faceAuthCA == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "get FaceAuthCA instance failed.");
+        return FA_RET_ERROR;
+    }
+    if (faceAuthCA->ResetRemainTimes(templateId) != FA_RET_OK) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "resetRemainTimes failed.");
+        return FA_RET_ERROR;
+    }
+    return FA_RET_OK;
+}
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS

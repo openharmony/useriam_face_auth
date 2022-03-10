@@ -50,6 +50,7 @@ public:
     void QueryRegStatus();
     // about messager
     void SetExecutorMessenger(const sptr<AuthResPool::IExecutorMessenger> &messager);
+    int32_t ResetRemainTimes(uint64_t templateId);
 private:
     static std::shared_ptr<FaceAuthManager> manager_;
     static std::mutex mutex_;
