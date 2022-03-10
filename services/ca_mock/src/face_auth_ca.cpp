@@ -25,8 +25,9 @@ namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 static const int32_t CA_RESULT_SUCCESS = 0;
-static const int32_t CA_RESULT_FAILED = -1;
+static const int32_t CA_RESULT_FAILED = 1;
 static const int32_t CA_RESULT_CANCELED = 3;
+static const int32_t CA_RESULT_LOCKED = 9;
 static const int32_t BUFF_MAX_LEN = 128;
 static const int32_t CASE_NUM = 100;
 static const int32_t CODE_NUM = 5;
@@ -57,7 +58,7 @@ static const int32_t PARAM_RANGE = 10;
 static const int32_t TEST_ANGLT_START_NUM = 1000;
 static const int32_t TEST_ANGLE_MAX_NUM = 1013;
 static const int32_t TEST_ANGLE_ADD_NUM = 4;
-static const int32_t DEFAULT_REMAIN_TIMES = 3;
+static const int32_t DEFAULT_REMAIN_TIMES = 5;
 static const int32_t SLEEP_TIME = 5000;
 static int32_t faceId_ = 1;
 static bool isAuthingFlag = false;
@@ -119,14 +120,12 @@ int32_t FaceAuthCA::StartAlgorithmOperation(AlgorithmOperation algorithmOperatio
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
     isAuthingFlag = true;
     SetAlgorithmParam(param);
+    algorithmOperation_ = algorithmOperation;
     if (algorithmOperation == Enroll) {
         Prepare(HW_EXEC_TYPE_ENROOL);
-        templateIdList_.push_back(param.templateId);
-        remainTimesMap_[param.templateId] = DEFAULT_REMAIN_TIMES;
         return CA_RESULT_SUCCESS;
     } else if (algorithmOperation == Auth) {
         Prepare(HW_EXEC_TYPE_UNLOCK);
-        remainTimesMap_[param.templateId] = DEFAULT_REMAIN_TIMES;
         return CA_RESULT_SUCCESS;
     } else {
         return CA_RESULT_FAILED;
@@ -161,31 +160,57 @@ int32_t FaceAuthCA::GetExecutorInfo(std::vector<uint8_t> &pubKey, uint32_t &esl,
     return CA_RESULT_SUCCESS;
 }
 
+int FaceAuthCA::getAlgorithmResult()
+{
+    if (isCancel_ == true) {
+        return CA_RESULT_CANCELED;
+    } else {
+        if (algorithmOperation_ == Auth) {
+            FACEAUTH_HILOGI(MODULE_SERVICE, "face auth, remain times is %{public}d.",
+                remainTimesMap_[param_.templateId]);
+            if (remainTimesMap_[param_.templateId] == 0) {
+                return CA_RESULT_LOCKED;
+            }
+        }
+    }
+    int authResult = 0;
+    GetAuthResult(authResult);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "get authResult %d.", authResult);
+    return authResult;
+}
+
 int32_t FaceAuthCA::FinishAlgorithmOperation(AlgorithmResult &retResult)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
     isAuthingFlag = false;
     FACEAUTH_HILOGI(MODULE_SERVICE, "isAuthingFlag = %{public}d.", isAuthingFlag);
-    int32_t authResult = 0;
-    if (isCancel_ == true) {
-        authResult = CA_RESULT_CANCELED;
+    int32_t authResult = getAlgorithmResult();
+    FACEAUTH_HILOGI(MODULE_SERVICE, "get auth result = %{public}d.", authResult);
+    if (algorithmOperation_ == Enroll) {
+        if (authResult == 0) {
+            templateIdList_.push_back(param_.templateId);
+            remainTimesMap_[param_.templateId] = DEFAULT_REMAIN_TIMES;
+        }
     } else {
-        GetAuthResult(authResult);
+        if (authResult == 0) {
+            remainTimesMap_[param_.templateId] = DEFAULT_REMAIN_TIMES;
+        }
+        if ((authResult == CA_RESULT_FAILED) && (remainTimesMap_[param_.templateId] > 0)) {
+            remainTimesMap_[param_.templateId]--;
+        }
     }
     isCancel_ = false;
-    FACEAUTH_HILOGI(MODULE_SERVICE, "get auth result = %{public}d.", authResult);
+
     retResult.result = authResult;
     retResult.templateId = param_.templateId;
     retResult.remainTimes = remainTimesMap_[param_.templateId];
-    if ((authResult != 0) && (remainTimesMap_[param_.templateId] > 0)) {
-        remainTimesMap_[param_.templateId]--;
-    }
+
     Buffer *retTlv = CreateBuffer(RESULT_TLV_LEN);
     if (retTlv == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "CreateBuffer failed.");
         return CA_RESULT_FAILED;
     }
-    ResultCode result = GenerateRetTlv(RESULT_SUCCESS, param_.scheduleId, FACE_2D, param_.templateId, retTlv);
+    ResultCode result = GenerateRetTlv(authResult, param_.scheduleId, FACE_2D, param_.templateId, retTlv);
     if (result != RESULT_SUCCESS) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "GenerateRetTlv failed.");
         DestoryBuffer(retTlv);
@@ -281,7 +306,7 @@ void FaceAuthCA::GetAuthResult(int32_t &result)
         fclose(file);
         return;
     }
-    if (ftell(file) < 0) {
+    if (ftell(file) > 0) {
         fseek(file, 0, SEEK_SET);
         char str[BUFF_MAX_LEN] = {0};
         fread((void *)str, sizeof(char), BUFF_MAX_LEN - 1, file);
