@@ -441,33 +441,18 @@ FIRetCode FaceAuthManager::OperForAlgorithm(uint64_t scheduleID)
         return FI_RC_INVALID_ARGUMENT;
     }
     int32_t retCode = 0;
-    std::vector<uint8_t> retCoauthMsg;
-    std::vector<uint8_t> msg;
-    std::shared_ptr<AuthResPool::AuthMessage> msgInstance = std::make_shared<AuthResPool::AuthMessage>(msg);
-    if (msgInstance == nullptr) {
-        return FI_RC_INVALID_ARGUMENT;
-    }
-    while (1) {
-        faceAuthCA->GetAlgorithmState(retCode, retCoauthMsg);
-        FACEAUTH_HILOGI(MODULE_SERVICE, "receive new co auth message.");
-        uint32_t len = TOKEN_NUM;
-        std::unique_ptr<u_int8_t[]> token_ptr = std::make_unique<u_int8_t[]>(TOKEN_NUM);
-        GetAuthToken(token_ptr, len);
-        uint8_t token[TOKEN_NUM];
-        if (memcpy_s(token, sizeof(token), token_ptr.get(), len) != EOK) {
-            FACEAUTH_HILOGE(MODULE_SERVICE, "GetAuthToken memcpy fail");
-            return FI_RC_ERROR;
-        }
-        for (size_t i = 0; i < TOKEN_NUM; i++) {
-            retCoauthMsg.push_back(token[i]);
-        }
-        std::shared_ptr<AuthResPool::AuthMessage> msg(msgInstance->FromUint8Array(retCoauthMsg));
-        if (msg != nullptr) {
-            SendData(scheduleID, 0, TYPE_ALL_IN_ONE, TYPE_CO_AUTH, msg);
-        }
-        if (FACE_ALGORITHM_OPERATION_BREAK == retCode) {
+    std::vector<uint8_t> msgBuffer;
+    while (true) {
+        faceAuthCA->GetAlgorithmState(retCode, msgBuffer);
+        FACEAUTH_HILOGI(MODULE_SERVICE, "get algorithm start code %{public}d, msg length %{public}d.",
+            retCode, msgBuffer.size());
+        if (retCode == FACE_ALGORITHM_OPERATION_BREAK) {
             FACEAUTH_HILOGI(MODULE_SERVICE, "FACE_ALGORITHM_OPERATION_BREAK.");
             break;
+        }
+        if (msgBuffer.size() > 0) {
+            std::shared_ptr<AuthResPool::AuthMessage> msg = std::make_shared<AuthResPool::AuthMessage>(msgBuffer);
+            SendData(scheduleID, 0, TYPE_ALL_IN_ONE, TYPE_CO_AUTH, msg);
         }
     }
     HandleAlgoResult(scheduleID);
@@ -740,16 +725,7 @@ FIRetCode FaceAuthManager::DoWaitInitAlgorithm(std::future<int32_t> futureobj)
     }
     return static_cast<FIRetCode>(futureobj.get());
 }
-int32_t FaceAuthManager::GetAuthToken(std::unique_ptr<uint8_t[]> &authToken, uint32_t &len)
-{
-    uint8_t at[] = {'A', 'u', 't', 'h', 'T', 'o', 'k', 'e', 'n', '\0'};
-    if (memcpy_s(authToken.get(), len, at, sizeof(at)) != EOK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "GetAuthToken memcpy fail");
-        return FA_RET_ERROR;
-    }
-    len = sizeof(at);
-    return FA_RET_OK;
-}
+
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
