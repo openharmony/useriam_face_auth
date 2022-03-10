@@ -99,6 +99,7 @@ private:
     std::map<int32_t, int32_t> errorCode_;
     std::vector<uint64_t> templateIdList_;
     std::map<uint64_t, int32_t> remainTimesMap_;
+    AlgorithmOperation algorithmOperation_;
 private:
     void GetAuthResult(int32_t &result);
     FIRetCode GetAuthState(int32_t &authErrorCode, FICode &code, uint64_t reqId);
@@ -124,6 +125,7 @@ private:
     void CheckInitFile(std::string s);
     void CheckReleaseFile(std::string s);
     FIRetCode Prepare(HWExeType type);
+    int getAlgorithmResult();
 };
 } // namespace FaceAuth
 } // namespace UserIAM
