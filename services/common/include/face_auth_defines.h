@@ -101,6 +101,7 @@ static const int32_t FACE_COMMAND_CANCEL_AUTH = 1;
 // command from Co-Auth(OnSetProperty)
 static const int32_t FACE_COMMAND_REMOVE = 0;
 static const int32_t FACE_COMMAND_QUERY_CREDENTIAL = 1;
+static const int32_t FACE_COMMAND_PROPERMODE_UNFREEZE = 4;
 static const int32_t FACE_COMMAND_INIT_ALGORITHM = 5;
 static const int32_t FACE_COMMAND_RELEASE_ALGORITHM = 6;
 // command from Co-Auth(OnGetProperty)
