@@ -80,7 +80,6 @@ private:
     int32_t OpenCamera();
     int32_t WaitAlgorithmProcessDone(uint64_t scheduleID);
     bool GetRandomNum(int32_t *randomNum);
-    int32_t GetAuthToken(std::unique_ptr<uint8_t[]> &authToken, uint32_t &len);
 };
 } // namespace FaceAuth
 } // namespace UserIAM
