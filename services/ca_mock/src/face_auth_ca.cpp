@@ -142,11 +142,16 @@ int32_t FaceAuthCA::TransferImageToAlgorithm(CameraImage images)
 void FaceAuthCA::GetAlgorithmState(int32_t &retCode, std::vector<uint8_t> &retCoauthMsg)
 {
     retCoauthMsg.clear();
-    int32_t authErrorCode = -1;
+    int32_t algorithmState = -1;
     FICode code = CODE_CALLBACK_START;
-    GetAuthState(authErrorCode, code, param_.scheduleId);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "authErrorCode = %{public}d.", authErrorCode);
-    retCoauthMsg.push_back(static_cast<uint8_t>(authErrorCode));
+    GetAuthState(algorithmState, code, param_.scheduleId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "algorithmState = %{public}d.", algorithmState);
+    retCoauthMsg.resize(sizeof(int32_t));
+    if (memcpy_s(&retCoauthMsg[0], retCoauthMsg.size(), &algorithmState, sizeof(int32_t)) != EOK) {
+        FACEAUTH_HILOGI(MODULE_SERVICE, "memcpy_s fail");
+        retCode = 1;
+        return;
+    }
     retCode = 1;
 }
 
