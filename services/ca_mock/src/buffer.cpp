@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -108,19 +108,19 @@ Buffer *CopyBuffer(const Buffer *buffer)
 {
     if (!IsBufferValid(buffer)) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Invalid buffer");
-        return NULL;
+        return nullptr;
     }
 
     Buffer *copyBuffer = CreateBuffer(buffer->maxSize);
-    if (copyBuffer == NULL) {
+    if (copyBuffer == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Invalid buffer");
-        return NULL;
+        return nullptr;
     }
 
     if (memcpy_s(copyBuffer->buf, copyBuffer->maxSize, buffer->buf, buffer->contentSize) != EOK) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Copy buffer fail");
         DestoryBuffer(copyBuffer);
-        return NULL;
+        return nullptr;
     }
     copyBuffer->contentSize = buffer->contentSize;
 
