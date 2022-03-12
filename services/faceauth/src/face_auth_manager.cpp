@@ -181,7 +181,7 @@ void FaceAuthManager::RegisterExecutor()
     // executorCallback_ release
     uint64_t regRet = AuthResPool::AuthExecutorRegistry::GetInstance().Register(executorInfo, executorCallback_);
     if (regRet != 0) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthInitSeq::RegisterExecutor successful.executor id = %{public}llu",
+        FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthInitSeq::RegisterExecutor successful.executor id = %{public}" PRIu64,
             regRet);
     } else {
         FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthInitSeq::RegisterExecutor failed.");
@@ -221,8 +221,8 @@ int32_t FaceAuthManager::Release()
 int32_t FaceAuthManager::AddAuthenticationRequest(const AuthParam &param)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
-    FACEAUTH_HILOGD(MODULE_SERVICE, "[DoAuth]scheduleID = %{public}llu.", param.scheduleID);
-    FACEAUTH_HILOGD(MODULE_SERVICE, "[DoAuth]templateID = %{public}llu.", param.templateID);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoAuth]scheduleID = %{public}" PRIu64 ".", param.scheduleID);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoAuth]templateID = %{public}s.", getMaskedString(param.templateID).c_str());
     // check param
     if (param.templateID < 0) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
@@ -302,8 +302,8 @@ void FaceAuthManager::DoAuthenticate(const AuthParam &param)
 int32_t FaceAuthManager::AddEnrollmentRequest(const EnrollParam &param)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
-    FACEAUTH_HILOGD(MODULE_SERVICE, "[DoEnroll]scheduleID = %{public}llu.", param.scheduleID);
-    FACEAUTH_HILOGD(MODULE_SERVICE, "[DoEnroll]templateID = %{public}llu.", param.templateID);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoEnroll]scheduleID = %{public}" PRIu64 ".", param.scheduleID);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoEnroll]templateID = %{public}s.", getMaskedString(param.templateID).c_str());
     // check param
     if (param.templateID < 0) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
@@ -388,8 +388,8 @@ void FaceAuthManager::DoEnroll(const EnrollParam &param)
 int32_t FaceAuthManager::AddRemoveRequest(const RemoveParam &param)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
-    FACEAUTH_HILOGD(MODULE_SERVICE, "[DoRemove]scheduleID = %{public}llu.", param.scheduleID);
-    FACEAUTH_HILOGD(MODULE_SERVICE, "[DoRemove]templateID = %{public}llu.", param.templateID);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoRemove]scheduleID = %{public}" PRIu64 ".", param.scheduleID);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoRemove]templateID = %{public}s.", getMaskedString(param.templateID).c_str());
     // check param
     if (param.templateID < 0) {
         FACEAUTH_HILOGI(MODULE_SERVICE, "Parameter check error.");
@@ -495,7 +495,8 @@ int32_t FaceAuthManager::CancelAuth(const AuthParam &param)
     int32_t uId = param.callerUID;
     bool isSuccess = FaceAuthReq::GetInstance()->SetCancelFlagSuccess(reqType, uId);
     if (!isSuccess) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "CancelAuth failed, reqId: xxxx%04llu,", reqType.reqId);
+        FACEAUTH_HILOGE(MODULE_SERVICE, "CancelAuth failed, reqId: %{public}s,",
+            getMaskedString(reqType.reqId).c_str());
         result = FA_RET_ERROR;
     } else {
         std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
@@ -522,7 +523,8 @@ int32_t FaceAuthManager::CancelEnrollment(const EnrollParam &param)
     int32_t uId = param.callerUID;
     bool isSuccess = FaceAuthReq::GetInstance()->SetCancelFlagSuccess(reqType, uId);
     if (!isSuccess) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "CancelEnrollment failed, reqId: xxxx%04llu", reqType.reqId);
+        FACEAUTH_HILOGE(MODULE_SERVICE, "CancelEnrollment failed, reqId: %{public}s",
+            getMaskedString(reqType.reqId).c_str());
         result = FA_RET_ERROR;
     } else {
         std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
@@ -544,12 +546,8 @@ void FaceAuthManager::SetExecutorMessenger(const sptr<AuthResPool::IExecutorMess
 {
     executorMessenger_ = messager;
 }
-
-void FaceAuthManager::SendData(uint64_t scheduleId,
-                               uint64_t transNum,
-                               int32_t srcType,
-                               int32_t dstType,
-                               pAuthMessage msg)
+void FaceAuthManager::SendData(uint64_t scheduleId, uint64_t transNum, int32_t srcType, int32_t dstType,
+    pAuthMessage msg)
 {
     if (executorMessenger_ != nullptr) {
         executorMessenger_->SendData(scheduleId, transNum, srcType, dstType, msg);
@@ -558,10 +556,7 @@ void FaceAuthManager::SendData(uint64_t scheduleId,
     }
 }
 
-void FaceAuthManager::Finish(uint64_t scheduleId,
-                             int32_t srcType,
-                             int32_t resultCode,
-                             pAuthAttributes finalResult)
+void FaceAuthManager::Finish(uint64_t scheduleId, int32_t srcType, int32_t resultCode, pAuthAttributes finalResult)
 {
     if (executorMessenger_ != nullptr) {
         executorMessenger_->Finish(scheduleId, srcType, resultCode, finalResult);
@@ -747,18 +742,34 @@ FIRetCode FaceAuthManager::DoWaitInitAlgorithm(std::future<int32_t> futureobj)
     return static_cast<FIRetCode>(futureobj.get());
 }
 
-int32_t FaceAuthManager::ResetRemainTimes(uint64_t templateId)
+void FaceAuthManager::UnfreezeTemplates(std::vector<uint64_t> templateIdList)
 {
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "get FaceAuthCA instance failed.");
-        return FA_RET_ERROR;
+        return;
     }
-    if (faceAuthCA->ResetRemainTimes(templateId) != FA_RET_OK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "resetRemainTimes failed.");
-        return FA_RET_ERROR;
+
+    for (auto templateId : templateIdList) {
+        if (faceAuthCA->ResetRemainTimes(templateId) != FA_RET_OK) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "resetRemainTimes failed.");
+        }
     }
-    return FA_RET_OK;
+}
+
+void FaceAuthManager::FreezeTemplates(std::vector<uint64_t> templateIdList)
+{
+    std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
+    if (faceAuthCA == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "get FaceAuthCA instance failed.");
+        return;
+    }
+
+    for (auto templateId : templateIdList) {
+        if (faceAuthCA->FreezeTemplate(templateId) != FA_RET_OK) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "FreezeTemplate failed.");
+        }
+    }
 }
 } // namespace FaceAuth
 } // namespace UserIAM

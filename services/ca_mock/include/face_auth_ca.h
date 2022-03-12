@@ -83,6 +83,7 @@ public:
     int32_t GetRemainTimes(uint64_t templateId, int32_t &remainingTimes);
     int32_t GetFaceInfo(uint64_t templateId, FaceCredentialInfo &faceCredentialInfo);
     int32_t ResetRemainTimes(uint64_t templateId);
+    int32_t FreezeTemplate(uint64_t templateId);
     int32_t CancelAlgorithmOperation();
     void SetAlgorithmParam(const AlgorithmParam &param);
 private:

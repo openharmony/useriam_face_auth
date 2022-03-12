@@ -19,9 +19,10 @@
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-void FaceAuthGetInfoCallback::OnGetInfo(std::vector<UserIDM::CredentialInfo>& info)
+void FaceAuthGetInfoCallback::OnGetInfo(std::vector<UserIDM::CredentialInfo> &info)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run, credentialInfo length %d.", __PRETTY_FUNCTION__, info.size());
+    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run, credentialInfo length %{public}zu.", __PRETTY_FUNCTION__,
+        info.size());
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA instance is null");

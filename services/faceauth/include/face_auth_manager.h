@@ -50,7 +50,8 @@ public:
     void QueryRegStatus();
     // about messager
     void SetExecutorMessenger(const sptr<AuthResPool::IExecutorMessenger> &messager);
-    int32_t ResetRemainTimes(uint64_t templateId);
+    void UnfreezeTemplates(std::vector<uint64_t> templateIdList);
+    void FreezeTemplates(std::vector<uint64_t> templateIdList);
 private:
     static std::shared_ptr<FaceAuthManager> manager_;
     static std::mutex mutex_;
@@ -62,20 +63,13 @@ private:
     std::map<std::string, int32_t> bundleNameList_;
 private:
     FaceAuthManager(const FaceAuthManager&)=delete;
-    FaceAuthManager& operator=(const FaceAuthManager&)=delete;
+    FaceAuthManager &operator=(const FaceAuthManager&)=delete;
     bool IsAlgorithmInited();
     AlgoResult IsNeedAlgoLoad(std::string bundleName);
     AlgoResult IsNeedAlgoRelease(std::string bundleName);
     int32_t GenerateEventId();
-    void SendData(uint64_t scheduleId,
-                         uint64_t transNum,
-                         int32_t srcType,
-                         int32_t dstType,
-                         pAuthMessage msg);
-    void Finish(uint64_t scheduleId,
-                       int32_t srcType,
-                       int32_t resultCode,
-                       pAuthAttributes finalResult);
+    void SendData(uint64_t scheduleId, uint64_t transNum, int32_t srcType, int32_t dstType, pAuthMessage msg);
+    void Finish(uint64_t scheduleId, int32_t srcType, int32_t resultCode, pAuthAttributes finalResult);
     FIRetCode OperForAlgorithm(uint64_t scheduleID);
     void HandleAlgoResult(uint64_t scheduleID);
     int32_t OpenCamera();
