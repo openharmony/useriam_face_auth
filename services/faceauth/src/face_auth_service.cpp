@@ -86,7 +86,7 @@ void FaceAuthService::Start()
         ret = manager_->Init();
     }
     if (FA_RET_OK == ret) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Init() result success.");
+        FACEAUTH_HILOGI(MODULE_SERVICE, "Init() result success.");
     } else {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Init() result failed.");
     }

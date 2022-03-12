@@ -31,7 +31,7 @@ std::shared_ptr<FaceAuthCamera> FaceAuthCamera::GetInstance()
         std::lock_guard<std::mutex> lock_l(mutex_);
         if (instance_ == nullptr) {
             instance_ = std::make_shared<FaceAuthCamera>();
-            }
+        }
     }
     return instance_;
 }
