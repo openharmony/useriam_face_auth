@@ -127,6 +127,9 @@ void FaceAuthManager::QueryRegStatus()
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
     // get executor info
     std::shared_ptr<AuthResPool::AuthExecutor> executorInfo = std::make_shared<AuthResPool::AuthExecutor>();
+    if (executorInfo == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "executorInfo is nullptr.");
+    }
     std::vector<uint8_t> pubKey;
     uint32_t esl = 0;
     uint64_t authAbility = 0;
