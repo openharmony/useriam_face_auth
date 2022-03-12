@@ -87,7 +87,7 @@ int32_t FaceAuthManager::Init()
         FACEAUTH_HILOGE(MODULE_SERVICE, "Init CA failed.");
         return FA_RET_ERROR;
     }
-    FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthManager::Init Success.");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthManager::Init Success.");
     // check register state
     std::thread checkThread(OHOS::UserIAM::FaceAuth::CheckSystemAbility);
     checkThread.join();
@@ -101,7 +101,7 @@ void CheckSystemAbility()
     const int SLEEP_TIME = 1;
     sptr<ISystemAbilityManager> sam = SystemAbilityManagerClient::GetInstance().GetSystemAbilityManager();
     if (sam == nullptr) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "Failed to get system ability manager");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Failed to get system ability manager");
         return;
     }
     for (int i = 0; i < CHECK_TIMES; i++) {
@@ -119,7 +119,7 @@ void CheckSystemAbility()
             FACEAUTH_HILOGI(MODULE_SERVICE, "end sleep");
         }
     }
-    FACEAUTH_HILOGI(MODULE_SERVICE, "start AUTHEXECUTORMGR ability all failed");
+    FACEAUTH_HILOGE(MODULE_SERVICE, "start AUTHEXECUTORMGR ability all failed");
 }
 
 void FaceAuthManager::QueryRegStatus()
@@ -149,6 +149,7 @@ void FaceAuthManager::QueryRegStatus()
     }
     AuthResPool::AuthExecutorRegistry::GetInstance().QueryStatus(*executorInfo, queryCallback_);
 }
+
 void FaceAuthManager::RegisterExecutor()
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
@@ -217,11 +218,11 @@ int32_t FaceAuthManager::Release()
 int32_t FaceAuthManager::AddAuthenticationRequest(const AuthParam &param)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoAuth]scheduleID = %{public}llu.", param.scheduleID);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoAuth]templateID = %{public}llu.", param.templateID);
+    FACEAUTH_HILOGD(MODULE_SERVICE, "[DoAuth]scheduleID = %{public}llu.", param.scheduleID);
+    FACEAUTH_HILOGD(MODULE_SERVICE, "[DoAuth]templateID = %{public}llu.", param.templateID);
     // check param
     if (param.templateID < 0) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "Parameter check error.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
         return FA_RET_ERROR;
     }
     // check req info list is full
@@ -229,14 +230,14 @@ int32_t FaceAuthManager::AddAuthenticationRequest(const AuthParam &param)
     reqType.reqId = param.scheduleID;
     reqType.operateType = FACE_OPERATE_TYPE_LOCAL_AUTH;
     if (FaceAuthReq::GetInstance()->IsReqNumReachedMax(FACE_OPERATE_TYPE_LOCAL_AUTH)) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "Auth is Max.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Auth is Max.");
         return FA_RET_ERROR;
     }
     // send event
     FaceInfo faceInfo = {};
     faceInfo.eventId = GenerateEventId();
     if (faceInfo.eventId == INVALID_EVENT_ID) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "faceInfo.eventId is invalid.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "faceInfo.eventId is invalid.");
         return FA_RET_ERROR;
     }
     faceInfo.uId = param.callerUID;
@@ -246,18 +247,19 @@ int32_t FaceAuthManager::AddAuthenticationRequest(const AuthParam &param)
     handler_->SendEvent(faceInfo.eventId, std::move(authInfo), priority);
     return FA_RET_OK;
 }
+
 void FaceAuthManager::DoAuthenticate(const AuthParam &param)
 {
     // check param
     if (param.templateID < 0) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "Parameter check error.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
         return;
     }
     this->InitAlgorithm(FACE_LOCAL_INIT_ALGO_NAME);
     // open camera and send image to algorithm
     if (OpenCamera() != FA_RET_OK) {
         // RK3568 no support camera, temporary ignore error
-        FACEAUTH_HILOGI(MODULE_SERVICE, "Ignore open camera fail.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Ignore open camera fail.");
     }
     // start algorithm operation
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
@@ -293,14 +295,15 @@ void FaceAuthManager::DoAuthenticate(const AuthParam &param)
     reqType.operateType = FACE_OPERATE_TYPE_LOCAL_AUTH;
     FaceAuthReq::GetInstance()->RemoveRequireInfo(reqType);
 }
+
 int32_t FaceAuthManager::AddEnrollmentRequest(const EnrollParam &param)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoEnroll]scheduleID = %{public}llu.", param.scheduleID);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoEnroll]templateID = %{public}llu.", param.templateID);
+    FACEAUTH_HILOGD(MODULE_SERVICE, "[DoEnroll]scheduleID = %{public}llu.", param.scheduleID);
+    FACEAUTH_HILOGD(MODULE_SERVICE, "[DoEnroll]templateID = %{public}llu.", param.templateID);
     // check param
     if (param.templateID < 0) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "Parameter check error.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
         return FA_RET_ERROR;
     }
     // check req info list is full
@@ -308,14 +311,14 @@ int32_t FaceAuthManager::AddEnrollmentRequest(const EnrollParam &param)
     reqType.reqId = param.scheduleID;
     reqType.operateType = FACE_OPERATE_TYPE_ENROLL;
     if (FaceAuthReq::GetInstance()->IsReqNumReachedMax(FACE_OPERATE_TYPE_ENROLL)) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "Enroll is Max.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Enroll is Max.");
         return FA_RET_ERROR;
     }
     // send event
     FaceInfo faceInfo = {};
     faceInfo.eventId = GenerateEventId();
     if (faceInfo.eventId == INVALID_EVENT_ID) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "faceInfo.eventId is invalid.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "faceInfo.eventId is invalid.");
         return FA_RET_ERROR;
     }
     faceInfo.uId = param.callerUID;
@@ -325,11 +328,12 @@ int32_t FaceAuthManager::AddEnrollmentRequest(const EnrollParam &param)
     handler_->SendEvent(faceInfo.eventId, std::move(authInfo), priority);
     return FA_RET_OK;
 }
+
 void FaceAuthManager::DoEnroll(const EnrollParam &param)
 {
     // check param
     if (param.templateID < 0) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "Parameter check error.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
         return;
     }
     this->InitAlgorithm(FACE_LOCAL_INIT_ALGO_NAME);
@@ -377,11 +381,12 @@ void FaceAuthManager::DoEnroll(const EnrollParam &param)
     reqType.operateType = FACE_OPERATE_TYPE_ENROLL;
     FaceAuthReq::GetInstance()->RemoveRequireInfo(reqType);
 }
+
 int32_t FaceAuthManager::AddRemoveRequest(const RemoveParam &param)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoRemove]scheduleID = %{public}llu.", param.scheduleID);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoRemove]templateID = %{public}llu.", param.templateID);
+    FACEAUTH_HILOGD(MODULE_SERVICE, "[DoRemove]scheduleID = %{public}llu.", param.scheduleID);
+    FACEAUTH_HILOGD(MODULE_SERVICE, "[DoRemove]templateID = %{public}llu.", param.templateID);
     // check param
     if (param.templateID < 0) {
         FACEAUTH_HILOGI(MODULE_SERVICE, "Parameter check error.");
@@ -392,14 +397,14 @@ int32_t FaceAuthManager::AddRemoveRequest(const RemoveParam &param)
     reqType.reqId = param.scheduleID;
     reqType.operateType = FACE_OPERATE_TYPE_DEL;
     if (FaceAuthReq::GetInstance()->IsReqNumReachedMax(FACE_OPERATE_TYPE_DEL)) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "Remove is Max.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Remove is Max.");
         return FA_RET_ERROR;
     }
     // send event
     FaceInfo faceInfo = {};
     faceInfo.eventId = GenerateEventId();
     if (faceInfo.eventId == INVALID_EVENT_ID) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "faceInfo.eventId is invalid.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "faceInfo.eventId is invalid.");
         return FA_RET_ERROR;
     }
     faceInfo.uId = param.callerUID;
@@ -409,11 +414,12 @@ int32_t FaceAuthManager::AddRemoveRequest(const RemoveParam &param)
     handler_->SendEvent(faceInfo.eventId, std::move(authInfo), priority);
     return FA_RET_OK;
 }
+
 void FaceAuthManager::DoRemove(const RemoveParam &param)
 {
     // check param
     if (param.templateID < 0) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "Parameter check error.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
         return;
     }
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
@@ -433,11 +439,12 @@ void FaceAuthManager::DoRemove(const RemoveParam &param)
     reqType.operateType = FACE_OPERATE_TYPE_DEL;
     FaceAuthReq::GetInstance()->RemoveRequireInfo(reqType);
 }
+
 FIRetCode FaceAuthManager::OperForAlgorithm(uint64_t scheduleID)
 {
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "faceAuthCA is null.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA is null.");
         return FI_RC_INVALID_ARGUMENT;
     }
     int32_t retCode = 0;
@@ -458,6 +465,7 @@ FIRetCode FaceAuthManager::OperForAlgorithm(uint64_t scheduleID)
     HandleAlgoResult(scheduleID);
     return FI_RC_OK;
 }
+
 void FaceAuthManager::HandleAlgoResult(uint64_t scheduleID)
 {
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
@@ -474,6 +482,7 @@ void FaceAuthManager::HandleAlgoResult(uint64_t scheduleID)
     authAttributes->SetUint8ArrayValue(AUTH_RESULT, retResult.coauthMsg);
     Finish(scheduleID, TYPE_ALL_IN_ONE, retResult.result, authAttributes);
 }
+
 int32_t FaceAuthManager::CancelAuth(const AuthParam &param)
 {
     int32_t result = FA_RET_OK;
@@ -532,6 +541,7 @@ void FaceAuthManager::SetExecutorMessenger(const sptr<AuthResPool::IExecutorMess
 {
     executorMessenger_ = messager;
 }
+
 void FaceAuthManager::SendData(uint64_t scheduleId,
                                uint64_t transNum,
                                int32_t srcType,
@@ -576,6 +586,7 @@ FIRetCode FaceAuthManager::InitAlgorithm(std::string bundleName)
     FACEAUTH_HILOGE(MODULE_SERVICE, "Init Fail %{public}d", result);
     return FI_RC_ERROR;
 }
+
 FIRetCode FaceAuthManager::ReleaseAlgorithm(std::string bundleName)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "Release, bundleName:%{public}s", bundleName.c_str());
@@ -595,6 +606,7 @@ FIRetCode FaceAuthManager::ReleaseAlgorithm(std::string bundleName)
     FACEAUTH_HILOGE(MODULE_SERVICE, "Release Fail %{public}d", result);
     return FI_RC_ERROR;
 }
+
 bool FaceAuthManager::IsAlgorithmInited()
 {
     if (bundleNameList_.empty()) {
@@ -604,6 +616,7 @@ bool FaceAuthManager::IsAlgorithmInited()
     FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthAlgoDispatcher IsInited bundleNameList_ is not empty, no need init");
     return false;
 }
+
 AlgoResult FaceAuthManager::IsNeedAlgoLoad(std::string bundleName)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthAlgoDispatcher IsNeedAlgoLoad start");
@@ -641,6 +654,7 @@ AlgoResult FaceAuthManager::IsNeedAlgoRelease(std::string bundleName)
     }
     return result;
 }
+
 int32_t FaceAuthManager::GenerateEventId()
 {
     int32_t randomNum = INVALID_EVENT_ID;
@@ -652,6 +666,7 @@ int32_t FaceAuthManager::GenerateEventId()
     FACEAUTH_HILOGI(MODULE_SERVICE, "GenerateEventId generate eventId %{public}u", eventId);
     return eventId;
 }
+
 int32_t FaceAuthManager::OpenCamera()
 {
     std::promise<int32_t> promiseobj;
@@ -670,6 +685,7 @@ int32_t FaceAuthManager::OpenCamera()
     }
     return FA_RET_OK;
 }
+
 int32_t FaceAuthManager::WaitAlgorithmProcessDone(uint64_t scheduleID)
 {
     std::promise<int32_t> promiseobj;
@@ -690,6 +706,7 @@ int32_t FaceAuthManager::WaitAlgorithmProcessDone(uint64_t scheduleID)
     }
     return FA_RET_OK;
 }
+
 bool FaceAuthManager::GetRandomNum(int32_t *randomNum)
 {
     if (randomNum == nullptr) {
@@ -716,6 +733,7 @@ bool FaceAuthManager::GetRandomNum(int32_t *randomNum)
     BN_free(bn);
     return true;
 }
+
 FIRetCode FaceAuthManager::DoWaitInitAlgorithm(std::future<int32_t> futureobj)
 {
     std::chrono::microseconds span(INIT_DYNAMIC_TIME_OUT);

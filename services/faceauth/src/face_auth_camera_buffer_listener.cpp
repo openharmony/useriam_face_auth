@@ -51,7 +51,7 @@ void FaceAuthCameraBufferListener::OnBufferAvailable()
         SendCameraImage(buffer, timestamp);
         cameraBuffer_->ReleaseBuffer(buffer, -1);
     } else {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "AcquireBuffer failed!");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "AcquireBuffer failed!");
     }
 }
 } // namespace FaceAuth

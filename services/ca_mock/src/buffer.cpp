@@ -44,7 +44,7 @@ bool CheckBufferWithSize(const Buffer *buffer, const uint32_t size)
 Buffer *CreateBuffer(const uint32_t size)
 {
     if ((size == 0) || (size > MAX_BUFFER_SIZE)) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Bad param size:%zu", size);
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Bad param size:%u", size);
         return nullptr;
     }
 
@@ -108,19 +108,19 @@ Buffer *CopyBuffer(const Buffer *buffer)
 {
     if (!IsBufferValid(buffer)) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Invalid buffer");
-        return NULL;
+        return nullptr;
     }
 
     Buffer *copyBuffer = CreateBuffer(buffer->maxSize);
-    if (copyBuffer == NULL) {
+    if (copyBuffer == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Invalid buffer");
-        return NULL;
+        return nullptr;
     }
 
     if (memcpy_s(copyBuffer->buf, copyBuffer->maxSize, buffer->buf, buffer->contentSize) != EOK) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Copy buffer fail");
         DestoryBuffer(copyBuffer);
-        return NULL;
+        return nullptr;
     }
     copyBuffer->contentSize = buffer->contentSize;
 

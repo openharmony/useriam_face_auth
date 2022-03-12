@@ -39,7 +39,7 @@ std::shared_ptr<FaceAuthEvent> FaceAuthEvent::GetInstance()
         std::lock_guard<std::mutex> lock_l(mutex_);
         if (instance_ == nullptr) {
             instance_ = std::make_shared<FaceAuthEvent>();
-            }
+        }
     }
     return instance_;
 }
@@ -68,7 +68,7 @@ void FaceAuthEvent::HandleTask(const AppExecFwk::InnerEvent::Pointer &event)
             break;
         }
         default: {
-            FACEAUTH_HILOGI(MODULE_SERVICE, "operateType is invalid, %{public}d", operateType);
+            FACEAUTH_HILOGE(MODULE_SERVICE, "operateType is invalid, %{public}d", operateType);
             break;
         }
     }
