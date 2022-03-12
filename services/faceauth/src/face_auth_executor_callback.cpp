@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -35,7 +35,7 @@ int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vecto
     // get command
     uint32_t command = 0;
     commandAttrs->GetUint32Value(AUTH_SCHEDULE_MODE, command);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "command = %{public}u.", command);
+    FACEAUTH_HILOGD(MODULE_SERVICE, "command = %{public}u.", command);
     // get templateID
     uint64_t templateId = 0;
     commandAttrs->GetUint64Value(AUTH_TEMPLATE_ID, templateId);
@@ -72,7 +72,7 @@ int32_t FaceAuthExecutorCallback::OnEndExecute(uint64_t scheduleId, pAuthAttribu
     uint32_t command = 0;
     int32_t ret = FA_RET_OK;
     consumerAttr->GetUint32Value(AUTH_SCHEDULE_MODE, command);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "command = %{public}u.", command);
+    FACEAUTH_HILOGD(MODULE_SERVICE, "command = %{public}u.", command);
     switch (command) {
         case FACE_COMMAND_CANCEL_ENROLL: {
             EnrollParam data = {};
@@ -104,7 +104,7 @@ void FaceAuthExecutorCallback::OnMessengerReady(const sptr<AuthResPool::IExecuto
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
     std::shared_ptr<FaceAuthManager> manager = FaceAuthManager::GetInstance();
     if (manager == nullptr) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "manager instance is null.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "manager instance is null.");
         return;
     }
     manager->SetExecutorMessenger(messenger);
@@ -122,7 +122,7 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
     // get command
     uint32_t command = 0;
     properties->GetUint32Value(AUTH_PROPERTY_MODE, command);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "command = %{public}u.", command);
+    FACEAUTH_HILOGD(MODULE_SERVICE, "command = %{public}u.", command);
     // get scheduleID
     uint64_t scheduleID = 0;
     properties->GetUint64Value(AUTH_SESSION_ID, scheduleID);
