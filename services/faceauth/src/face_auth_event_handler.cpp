@@ -29,7 +29,7 @@ FaceAuthEventHandler::~FaceAuthEventHandler()
 
 void FaceAuthEventHandler::RemoveEvent(const uint64_t reqId)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "RemoveEvent: xxxx%04llu.", reqId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "RemoveEvent: %{public}s.", getMaskedString(reqId).c_str());
     EventHandler::RemoveEvent(reqId);
     return;
 }

@@ -23,7 +23,7 @@ namespace UserIAM {
 namespace FaceAuth {
 class FaceAuthGetInfoCallback : public UserIDM::GetInfoCallback {
 public:
-    void OnGetInfo(std::vector<UserIDM::CredentialInfo>& info) override;
+    void OnGetInfo(std::vector<UserIDM::CredentialInfo> &info) override;
     virtual ~FaceAuthGetInfoCallback()=default;
 };
 } // namespace FaceAuth

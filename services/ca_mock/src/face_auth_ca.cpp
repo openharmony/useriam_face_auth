@@ -66,7 +66,7 @@ std::shared_ptr<FaceAuthCA> FaceAuthCA::faceAuthCA_ = nullptr;
 std::mutex FaceAuthCA::mutex_;
 FaceAuthCA::FaceAuthCA()
     : resultNum_(0), cancelReqId_(0), isReturnFaceId_(false), isInitFail_(false),
-      isCancel_(false), type_(HW_EXEC_TYPE_LEARN)
+    isCancel_(false), type_(HW_EXEC_TYPE_LEARN)
 {
     InitErrorCode();
 }
@@ -180,7 +180,7 @@ int FaceAuthCA::getAlgorithmResult()
     }
     int authResult = 0;
     GetAuthResult(authResult);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "get authResult %d.", authResult);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "get authResult %{public}d.", authResult);
     return authResult;
 }
 
@@ -278,8 +278,17 @@ int32_t FaceAuthCA::GetRemainTimes(uint64_t templateId, int32_t &remainingTimes)
 
 int32_t FaceAuthCA::ResetRemainTimes(uint64_t templateId)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run templateId %{public}llu.", __PRETTY_FUNCTION__, templateId);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s reset times templateId %{public}s.", __PRETTY_FUNCTION__,
+        getMaskedString(templateId).c_str());
     remainTimesMap_[templateId] = DEFAULT_REMAIN_TIMES;
+    return CA_RESULT_SUCCESS;
+}
+
+int32_t FaceAuthCA::FreezeTemplate(uint64_t templateId)
+{
+    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s freeze template %{public}s.", __PRETTY_FUNCTION__,
+        getMaskedString(templateId).c_str());
+    remainTimesMap_[templateId] = 0;
     return CA_RESULT_SUCCESS;
 }
 
@@ -300,7 +309,7 @@ void FaceAuthCA::SetAlgorithmParam(const AlgorithmParam &param)
 
 void FaceAuthCA::GetAuthResult(int32_t &result)
 {
-    FILE* file = nullptr;
+    FILE *file = nullptr;
     file = fopen(AUTH_RESULT_FILENAME, "r");
     if (file == nullptr) {
         FACEAUTH_HILOGI(MODULE_SERVICE, "open file failed.");
@@ -367,8 +376,8 @@ FIRetCode FaceAuthCA::GetAuthState(int32_t &authErrorCode, FICode &code, uint64_
     } else {
         code = CODE_CALLBACK_ACQUIRE;
     }
-    FACEAUTH_HILOGI(MODULE_SERVICE, "reqid_ is xxxx%04llu, code_ is %{public}d, errorcode_ is %{public}d", reqId, code,
-        authErrorCode);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reqid_ is %{public}s, code_ is %{public}d, errorcode_ is %{public}d",
+        getMaskedString(reqId).c_str(), code, authErrorCode);
     FACEAUTH_HILOGI(MODULE_SERVICE, "GetAuthState end");
     return result;
 }
@@ -443,7 +452,6 @@ void FaceAuthCA::ReadFile()
             resultInfos_[1].resultCode = FI_FACE_OFFSET_RIGHT;
         }
         FACEAUTH_HILOGI(MODULE_SERVICE, "ReadFile open fail");
-
         return;
     }
     char casenum[CASE_NUM];
@@ -499,8 +507,8 @@ int32_t FaceAuthCA::CheckIsCancel(int32_t &authErrorCode, FICode &code, uint64_t
         if (cancelReqId_ != reqId) {
             isCancel_ = false;
             FACEAUTH_HILOGW(MODULE_SERVICE,
-                "cancelReqId_ and reqId are different. cancelReqId_ is :xxxx%04llu, reqId is :xxxx%04llu", cancelReqId_,
-                reqId);
+                "cancelReqId_ and reqId are different. cancelReqId_ is %{public}s, reqId is %{public}s",
+                getMaskedString(cancelReqId_).c_str(), getMaskedString(reqId).c_str());
         }
         authErrorCode = ERRCODE_CANCEL;
         code = CODE_CALLBACK_RESULT;
