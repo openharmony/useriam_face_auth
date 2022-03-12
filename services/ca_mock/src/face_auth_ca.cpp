@@ -134,7 +134,7 @@ int32_t FaceAuthCA::StartAlgorithmOperation(AlgorithmOperation algorithmOperatio
 
 int32_t FaceAuthCA::TransferImageToAlgorithm(CameraImage images)
 {
-    sleep(1);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "TransferImageToAlgorithm");
     (void)(images);
     return CA_RESULT_SUCCESS;
 }
@@ -187,6 +187,8 @@ int FaceAuthCA::getAlgorithmResult()
 int32_t FaceAuthCA::FinishAlgorithmOperation(AlgorithmResult &retResult)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s wait for image receive", __PRETTY_FUNCTION__);
+    sleep(1);
     isAuthingFlag = false;
     FACEAUTH_HILOGI(MODULE_SERVICE, "isAuthingFlag = %{public}d.", isAuthingFlag);
     int32_t authResult = getAlgorithmResult();

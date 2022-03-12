@@ -14,9 +14,9 @@
  */
 
 #include "face_auth_camera.h"
-#include "output/video_output.h"
 #include "face_auth_log_wrapper.h"
 #include "face_auth_camera_buffer_listener.h"
+#include "output/video_output.h"
 #include "surface.h"
 #include "surface_buffer.h"
 #include "face_auth_defines.h"
@@ -54,6 +54,8 @@ sptr<CameraStandard::CaptureOutput> FaceAuthCamera::CreatePreviewOutput(
         return nullptr;
     }
     previewBuffer->SetDefaultWidthAndHeight(PREVIEW_DEFAULT_WIDTH, PREVIEW_DEFAULT_HEIGHT);
+    previewBuffer->SetUserData(CameraStandard::CameraManager::surfaceFormat,
+                               std::to_string(OHOS_CAMERA_FORMAT_YCRCB_420_SP));
     sptr<FaceAuthCameraBufferListener> listener = new FaceAuthCameraBufferListener();
     if (listener == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "listener is nullptr.");
@@ -65,7 +67,7 @@ sptr<CameraStandard::CaptureOutput> FaceAuthCamera::CreatePreviewOutput(
     return previewOutput;
 }
 
-int32_t FaceAuthCamera::CreateCamera(sptr<Surface> surface)
+int32_t FaceAuthCamera::CreateCamera(sptr<IBufferProducer> producer)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "Create Camera start.");
     sptr<CameraStandard::CameraManager> camManagerObj = OHOS::CameraStandard::CameraManager::GetInstance();
@@ -89,12 +91,16 @@ int32_t FaceAuthCamera::CreateCamera(sptr<Surface> surface)
             }
         }
     }
+    if (camera == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Camera not found");
+        return FA_RET_ERROR;
+    }
     camInput_ = camManagerObj->CreateCameraInput(camera);
     if (camInput_ == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Create Camera Input Failed");
         return FA_RET_ERROR;
     }
-    int32_t intResult = PrepareCamera(surface);
+    int32_t intResult = PrepareCamera(producer);
     if (intResult != 0) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Prepare Camera Failed");
         return FA_RET_ERROR;
@@ -103,11 +109,16 @@ int32_t FaceAuthCamera::CreateCamera(sptr<Surface> surface)
     return FA_RET_OK;
 }
 
-int32_t FaceAuthCamera::PrepareCamera(sptr<Surface> surface)
+int32_t FaceAuthCamera::PrepareCamera(sptr<IBufferProducer> producer)
 {
     int32_t intResult = FA_RET_OK;
     FACEAUTH_HILOGI(MODULE_SERVICE, "Prepare Camera start.");
     sptr<CameraStandard::CameraManager> camManagerObj = CameraStandard::CameraManager::GetInstance();
+    if (camManagerObj == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "camManagerObj is null");
+        return FA_RET_ERROR;
+    }
+
     capSession_ = camManagerObj->CreateCaptureSession();
     if ((capSession_ == nullptr) || (camInput_ == nullptr)) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Create was not Proper!");
@@ -132,7 +143,7 @@ int32_t FaceAuthCamera::PrepareCamera(sptr<Surface> surface)
         return FA_RET_ERROR;
     }
     if (isDisplay_) {
-        if (CreateDisplayPreviewOutput(camManagerObj, surface) != FA_RET_OK) {
+        if (CreateDisplayPreviewOutput(camManagerObj, producer) != FA_RET_OK) {
             FACEAUTH_HILOGE(MODULE_SERVICE, "Switch PreviewOutput Failed!");
             return FA_RET_ERROR;
         }
@@ -146,12 +157,12 @@ int32_t FaceAuthCamera::PrepareCamera(sptr<Surface> surface)
     return FA_RET_OK;
 }
 
-int32_t FaceAuthCamera::OpenCamera(sptr<Surface> surface)
+int32_t FaceAuthCamera::OpenCamera(sptr<IBufferProducer> producer)
 {
-    if (surface != nullptr) {
+    if (producer != nullptr) {
         isDisplay_ = true;
     }
-    if (CreateCamera(surface) != FA_RET_OK) {
+    if (CreateCamera(producer) != FA_RET_OK) {
         return FA_RET_ERROR;
     }
     return Start();
@@ -214,17 +225,19 @@ void FaceAuthCamera::Release()
 }
 
 int32_t FaceAuthCamera::CreateDisplayPreviewOutput(sptr<CameraStandard::CameraManager> &camManagerObj,
-    sptr<Surface> surface)
+    sptr<IBufferProducer> producer)
 {
     int32_t intResult = FA_RET_OK;
-    FACEAUTH_HILOGI(MODULE_SERVICE, "Use UI's surface");
-    disPlayPreviewOutput_ = camManagerObj->CreatePreviewOutput(surface);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "Use UI's producer");
+    disPlayPreviewOutput_ = camManagerObj->CreatePreviewOutput(producer, OHOS_CAMERA_FORMAT_YCRCB_420_SP);
     if (disPlayPreviewOutput_ == nullptr) {
+        isDisplay_ = false;
         FACEAUTH_HILOGE(MODULE_SERVICE, "Failed to create PreviewOutput for UI");
         return FA_RET_ERROR;
     }
     intResult = capSession_->AddOutput(disPlayPreviewOutput_);
     if (intResult != FA_RET_OK) {
+        isDisplay_ = false;
         FACEAUTH_HILOGE(MODULE_SERVICE, "Failed to Add PreviewOutput For UI");
         return FA_RET_ERROR;
     }
