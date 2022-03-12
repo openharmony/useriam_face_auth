@@ -53,13 +53,13 @@ sptr<CameraStandard::CaptureOutput> FaceAuthCamera::CreatePreviewOutput(
     FACEAUTH_HILOGI(MODULE_SERVICE, "CreatePreviewOutput.");
     sptr<Surface> previewBuffer = Surface::CreateSurfaceAsConsumer();
     if (previewBuffer == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "previewBuffer = nullptr.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "previewBuffer is nullptr.");
         return nullptr;
     }
     previewBuffer->SetDefaultWidthAndHeight(PREVIEW_DEFAULT_WIDTH, PREVIEW_DEFAULT_HEIGHT);
     sptr<FaceAuthCameraBufferListener> listener = new FaceAuthCameraBufferListener();
     if (listener == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "listener = nullptr.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "listener is nullptr.");
         return nullptr;
     }
     listener->cameraBuffer_ = previewBuffer;
