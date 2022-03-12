@@ -34,7 +34,7 @@ public:
     int32_t OnSetProperty(pAuthAttributes properties) override;
     void OnMessengerReady(const sptr<AuthResPool::IExecutorMessenger> &messenger) override;
     int32_t OnGetProperty(std::shared_ptr<AuthResPool::AuthAttributes> conditions,
-                          std::shared_ptr<AuthResPool::AuthAttributes> values) override;
+        std::shared_ptr<AuthResPool::AuthAttributes> values) override;
 };
 } // namespace FaceAuth
 } // namespace userIAM

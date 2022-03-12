@@ -37,11 +37,8 @@ std::shared_ptr<FaceAuthCamera> FaceAuthCamera::GetInstance()
 }
 
 FaceAuthCamera::FaceAuthCamera()
-    : camInput_(nullptr),
-      capSession_(nullptr),
-      previewOutput_(nullptr),
-      disPlayPreviewOutput_(nullptr),
-      isDisplay_(false)
+    : camInput_(nullptr), capSession_(nullptr), previewOutput_(nullptr), disPlayPreviewOutput_(nullptr),
+    isDisplay_(false)
 {}
 
 FaceAuthCamera::~FaceAuthCamera()
