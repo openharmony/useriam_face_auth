@@ -18,6 +18,9 @@
 #include "face_auth_executor_callback.h"
 #include "face_auth_event.h"
 #include "face_auth_ca.h"
+#include "output/video_output.h"
+#include "surface.h"
+#include "surface_buffer.h"
 
 namespace OHOS {
 namespace UserIAM {
@@ -72,7 +75,7 @@ private:
     void Finish(uint64_t scheduleId, int32_t srcType, int32_t resultCode, pAuthAttributes finalResult);
     FIRetCode OperForAlgorithm(uint64_t scheduleID);
     void HandleAlgoResult(uint64_t scheduleID);
-    int32_t OpenCamera();
+    int32_t OpenCamera(sptr<IBufferProducer> producer);
     int32_t WaitAlgorithmProcessDone(uint64_t scheduleID);
     bool GetRandomNum(int32_t *randomNum);
 };
