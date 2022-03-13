@@ -253,7 +253,7 @@ void FaceAuthManager::DoAuthenticate(const AuthParam &param)
     }
     this->InitAlgorithm(FACE_LOCAL_INIT_ALGO_NAME);
     // open camera and send image to algorithm
-    if (OpenCamera() != FA_RET_OK) {
+    if (OpenCamera(nullptr) != FA_RET_OK) {
         // RK3568 no support camera, temporary ignore error
         FACEAUTH_HILOGE(MODULE_SERVICE, "Ignore open camera fail.");
     }
@@ -334,7 +334,7 @@ void FaceAuthManager::DoEnroll(const EnrollParam &param)
     }
     this->InitAlgorithm(FACE_LOCAL_INIT_ALGO_NAME);
     // open camera and send image to algorithm
-    if (OpenCamera() != FA_RET_OK) {
+    if (OpenCamera(param.producer) != FA_RET_OK) {
         // RK3568 no support camera, temporary ignore error
         FACEAUTH_HILOGI(MODULE_SERVICE, "Ignore open camera fail.");
     }
@@ -657,13 +657,12 @@ int32_t FaceAuthManager::GenerateEventId()
     FACEAUTH_HILOGI(MODULE_SERVICE, "GenerateEventId generate eventId %{public}u", eventId);
     return eventId;
 }
-
-int32_t FaceAuthManager::OpenCamera()
+int32_t FaceAuthManager::OpenCamera(sptr<IBufferProducer> producer)
 {
     std::promise<int32_t> promiseobj;
     std::future<int32_t> futureobj = promiseobj.get_future();
-    FaceAuthThreadPool::GetInstance()->AddTask([&promiseobj]() {
-        promiseobj.set_value(FaceAuthCamera::GetInstance()->OpenCamera(nullptr));
+    FaceAuthThreadPool::GetInstance()->AddTask([&promiseobj, &producer]() {
+        promiseobj.set_value(FaceAuthCamera::GetInstance()->OpenCamera(producer));
     });
     std::chrono::microseconds span(OPEN_CAMERA_TIME_OUT);
     while (futureobj.wait_for(span) == std::future_status::timeout) {

@@ -23,6 +23,7 @@ namespace UserIAM {
 namespace FaceAuth {
 int32_t FaceAuthCameraBufferListener::SendCameraImage(OHOS::sptr<OHOS::SurfaceBuffer> buffer, int64_t timestamp)
 {
+    FACEAUTH_HILOGI(MODULE_SERVICE, "receive image from camera");
     CameraImage image = {};
     image.image = static_cast<uint8_t*>(buffer->GetVirAddr());
     image.imageSize = buffer->GetSize();
