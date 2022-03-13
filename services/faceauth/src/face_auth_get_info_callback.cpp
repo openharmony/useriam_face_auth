@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,9 +19,10 @@
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-void FaceAuthGetInfoCallback::OnGetInfo(std::vector<UserIDM::CredentialInfo>& info)
+void FaceAuthGetInfoCallback::OnGetInfo(std::vector<UserIDM::CredentialInfo> &info)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run, credentialInfo length %d.", __PRETTY_FUNCTION__, info.size());
+    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run, credentialInfo length %{public}zu.", __PRETTY_FUNCTION__,
+        info.size());
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA instance is null");
