@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,7 +23,7 @@ namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vector<uint8_t> &publicKey,
-                                                 pAuthAttributes commandAttrs)
+    pAuthAttributes commandAttrs)
 {
     (void)(publicKey);
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
@@ -35,7 +35,7 @@ int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vecto
     // get command
     uint32_t command = 0;
     commandAttrs->GetUint32Value(AUTH_SCHEDULE_MODE, command);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "command = %{public}u.", command);
+    FACEAUTH_HILOGD(MODULE_SERVICE, "command = %{public}u.", command);
     // get templateID
     uint64_t templateId = 0;
     commandAttrs->GetUint64Value(AUTH_TEMPLATE_ID, templateId);
@@ -55,7 +55,7 @@ int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vecto
             break;
         }
         default:
-            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %u", command);
+            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %{public}u", command);
             break;
     }
     return FA_RET_OK;
@@ -72,7 +72,7 @@ int32_t FaceAuthExecutorCallback::OnEndExecute(uint64_t scheduleId, pAuthAttribu
     uint32_t command = 0;
     int32_t ret = FA_RET_OK;
     consumerAttr->GetUint32Value(AUTH_SCHEDULE_MODE, command);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "command = %{public}u.", command);
+    FACEAUTH_HILOGD(MODULE_SERVICE, "command = %{public}u.", command);
     switch (command) {
         case FACE_COMMAND_CANCEL_ENROLL: {
             EnrollParam data = {};
@@ -93,7 +93,7 @@ int32_t FaceAuthExecutorCallback::OnEndExecute(uint64_t scheduleId, pAuthAttribu
             break;
         }
         default:
-            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %u", command);
+            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %{public}u", command);
             break;
     }
     return ret;
@@ -104,7 +104,7 @@ void FaceAuthExecutorCallback::OnMessengerReady(const sptr<AuthResPool::IExecuto
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
     std::shared_ptr<FaceAuthManager> manager = FaceAuthManager::GetInstance();
     if (manager == nullptr) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "manager instance is null.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "manager instance is null.");
         return;
     }
     manager->SetExecutorMessenger(messenger);
@@ -122,7 +122,7 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
     // get command
     uint32_t command = 0;
     properties->GetUint32Value(AUTH_PROPERTY_MODE, command);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "command = %{public}u.", command);
+    FACEAUTH_HILOGD(MODULE_SERVICE, "command = %{public}u.", command);
     // get scheduleID
     uint64_t scheduleID = 0;
     properties->GetUint64Value(AUTH_SESSION_ID, scheduleID);
@@ -132,6 +132,8 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
     // get caller name
     std::vector<uint8_t> callerName;
     properties->GetUint8ArrayValue(ALGORITHM_INFO, callerName);
+    std::vector<uint64_t> templateIdList;
+    properties->GetUint64ArrayValue(AUTH_TEMPLATE_ID_LIST, templateIdList);
     std::string bundleName = "";
     bundleName.assign(callerName.begin(), callerName.end());
     switch (command) {
@@ -142,6 +144,12 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
             manager->AddRemoveRequest(data);
             break;
         }
+        case FACE_COMMAND_PROPERMODE_FREEZE:
+            manager->FreezeTemplates(templateIdList);
+            break;
+        case FACE_COMMAND_PROPERMODE_UNFREEZE:
+            manager->UnfreezeTemplates(templateIdList);
+            break;
         case FACE_COMMAND_INIT_ALGORITHM:
             manager->InitAlgorithm(bundleName);
             break;
@@ -149,13 +157,13 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
             manager->ReleaseAlgorithm(bundleName);
             break;
         default:
-            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %u", command);
+            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %{public}u", command);
             break;
     }
     return FA_RET_OK;
 }
 int32_t FaceAuthExecutorCallback::OnGetProperty(std::shared_ptr<AuthResPool::AuthAttributes> conditions,
-                                                std::shared_ptr<AuthResPool::AuthAttributes> values)
+    std::shared_ptr<AuthResPool::AuthAttributes> values)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthService::OnGetProperty enter");
     if (values == nullptr || conditions == nullptr) {
@@ -175,7 +183,7 @@ int32_t FaceAuthExecutorCallback::OnGetProperty(std::shared_ptr<AuthResPool::Aut
         return FA_RET_ERROR;
     }
     FACEAUTH_HILOGI(MODULE_SERVICE,
-                    "FaceAuthService::OnBeginExecute AUTH_PROPERTY_MODE is %{public}u.", command);
+        "FaceAuthService::OnBeginExecute AUTH_PROPERTY_MODE is %{public}u.", command);
     if (command == FACE_COMMAND_QUERY_CREDENTIAL) {
         /* get templateId */
         uint64_t templateId;

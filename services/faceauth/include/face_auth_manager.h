@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -50,6 +50,8 @@ public:
     void QueryRegStatus();
     // about messager
     void SetExecutorMessenger(const sptr<AuthResPool::IExecutorMessenger> &messager);
+    void UnfreezeTemplates(std::vector<uint64_t> templateIdList);
+    void FreezeTemplates(std::vector<uint64_t> templateIdList);
 private:
     static std::shared_ptr<FaceAuthManager> manager_;
     static std::mutex mutex_;
@@ -61,26 +63,18 @@ private:
     std::map<std::string, int32_t> bundleNameList_;
 private:
     FaceAuthManager(const FaceAuthManager&)=delete;
-    FaceAuthManager& operator=(const FaceAuthManager&)=delete;
+    FaceAuthManager &operator=(const FaceAuthManager&)=delete;
     bool IsAlgorithmInited();
     AlgoResult IsNeedAlgoLoad(std::string bundleName);
     AlgoResult IsNeedAlgoRelease(std::string bundleName);
     int32_t GenerateEventId();
-    void SendData(uint64_t scheduleId,
-                         uint64_t transNum,
-                         int32_t srcType,
-                         int32_t dstType,
-                         pAuthMessage msg);
-    void Finish(uint64_t scheduleId,
-                       int32_t srcType,
-                       int32_t resultCode,
-                       pAuthAttributes finalResult);
+    void SendData(uint64_t scheduleId, uint64_t transNum, int32_t srcType, int32_t dstType, pAuthMessage msg);
+    void Finish(uint64_t scheduleId, int32_t srcType, int32_t resultCode, pAuthAttributes finalResult);
     FIRetCode OperForAlgorithm(uint64_t scheduleID);
     void HandleAlgoResult(uint64_t scheduleID);
     int32_t OpenCamera();
     int32_t WaitAlgorithmProcessDone(uint64_t scheduleID);
     bool GetRandomNum(int32_t *randomNum);
-    int32_t GetAuthToken(std::unique_ptr<uint8_t[]> &authToken, uint32_t &len);
 };
 } // namespace FaceAuth
 } // namespace UserIAM

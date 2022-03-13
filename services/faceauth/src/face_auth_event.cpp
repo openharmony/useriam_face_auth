@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -39,7 +39,7 @@ std::shared_ptr<FaceAuthEvent> FaceAuthEvent::GetInstance()
         std::lock_guard<std::mutex> lock_l(mutex_);
         if (instance_ == nullptr) {
             instance_ = std::make_shared<FaceAuthEvent>();
-            }
+        }
     }
     return instance_;
 }
@@ -68,7 +68,7 @@ void FaceAuthEvent::HandleTask(const AppExecFwk::InnerEvent::Pointer &event)
             break;
         }
         default: {
-            FACEAUTH_HILOGI(MODULE_SERVICE, "operateType is invalid, %{public}d", operateType);
+            FACEAUTH_HILOGE(MODULE_SERVICE, "operateType is invalid, %{public}d", operateType);
             break;
         }
     }

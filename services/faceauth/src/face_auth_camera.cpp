@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -31,17 +31,14 @@ std::shared_ptr<FaceAuthCamera> FaceAuthCamera::GetInstance()
         std::lock_guard<std::mutex> lock_l(mutex_);
         if (instance_ == nullptr) {
             instance_ = std::make_shared<FaceAuthCamera>();
-            }
+        }
     }
     return instance_;
 }
 
 FaceAuthCamera::FaceAuthCamera()
-    : camInput_(nullptr),
-      capSession_(nullptr),
-      previewOutput_(nullptr),
-      disPlayPreviewOutput_(nullptr),
-      isDisplay_(false)
+    : camInput_(nullptr), capSession_(nullptr), previewOutput_(nullptr), disPlayPreviewOutput_(nullptr),
+    isDisplay_(false)
 {}
 
 FaceAuthCamera::~FaceAuthCamera()
@@ -53,13 +50,13 @@ sptr<CameraStandard::CaptureOutput> FaceAuthCamera::CreatePreviewOutput(
     FACEAUTH_HILOGI(MODULE_SERVICE, "CreatePreviewOutput.");
     sptr<Surface> previewBuffer = Surface::CreateSurfaceAsConsumer();
     if (previewBuffer == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "previewBuffer = nullptr.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "previewBuffer is nullptr.");
         return nullptr;
     }
     previewBuffer->SetDefaultWidthAndHeight(PREVIEW_DEFAULT_WIDTH, PREVIEW_DEFAULT_HEIGHT);
     sptr<FaceAuthCameraBufferListener> listener = new FaceAuthCameraBufferListener();
     if (listener == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "listener = nullptr.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "listener is nullptr.");
         return nullptr;
     }
     listener->cameraBuffer_ = previewBuffer;

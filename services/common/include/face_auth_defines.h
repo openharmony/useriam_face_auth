@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -101,6 +101,8 @@ static const int32_t FACE_COMMAND_CANCEL_AUTH = 1;
 // command from Co-Auth(OnSetProperty)
 static const int32_t FACE_COMMAND_REMOVE = 0;
 static const int32_t FACE_COMMAND_QUERY_CREDENTIAL = 1;
+static const int32_t FACE_COMMAND_PROPERMODE_FREEZE = 3;
+static const int32_t FACE_COMMAND_PROPERMODE_UNFREEZE = 4;
 static const int32_t FACE_COMMAND_INIT_ALGORITHM = 5;
 static const int32_t FACE_COMMAND_RELEASE_ALGORITHM = 6;
 // command from Co-Auth(OnGetProperty)
