@@ -27,6 +27,9 @@
 #include <chrono>
 #include <future>
 #include <thread>
+#include "output/video_output.h"
+#include "surface.h"
+#include "surface_buffer.h"
 
 namespace OHOS {
 namespace UserIAM {
@@ -123,6 +126,7 @@ typedef struct {
     uint64_t templateID = 0;
     uint64_t callerUID = 0;
     uint32_t eventID = 0;
+    sptr<IBufferProducer> producer = nullptr;
 }EnrollParam;
 
 typedef struct {
