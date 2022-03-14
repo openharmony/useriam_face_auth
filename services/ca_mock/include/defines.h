@@ -15,6 +15,7 @@
 
 #ifndef COMMON_DEFINES_H
 #define COMMON_DEFINES_H
+
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
