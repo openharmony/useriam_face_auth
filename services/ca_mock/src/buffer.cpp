@@ -16,6 +16,7 @@
 #include "buffer.h"
 #include "securec.h"
 #include "face_auth_log_wrapper.h"
+
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {

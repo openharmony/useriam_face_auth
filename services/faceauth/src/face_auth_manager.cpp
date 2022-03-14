@@ -12,6 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #include "face_auth_manager.h"
 #include <openssl/bn.h>
 #include <cstdlib>

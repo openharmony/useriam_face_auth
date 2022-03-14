@@ -15,6 +15,7 @@
 
 #ifndef FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_THREAD_POOL_H
 #define FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_THREAD_POOL_H
+
 #include <mutex>
 #include "nocopyable.h"
 #include "thread_pool.h"

@@ -19,6 +19,7 @@
 #include "stdbool.h"
 #include "stdint.h"
 #include "defines.h"
+
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
