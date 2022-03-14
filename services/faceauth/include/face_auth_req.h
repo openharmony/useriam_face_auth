@@ -15,6 +15,7 @@
 
 #ifndef FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_REQ_H
 #define FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_REQ_H
+
 #include <map>
 #include <mutex>
 #include "face_auth_defines.h"

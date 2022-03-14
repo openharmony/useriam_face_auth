@@ -15,6 +15,7 @@
 
 #ifndef FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_SERVICE_H
 #define FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_SERVICE_H
+
 #include <mutex>
 #include "system_ability.h"
 #include "system_ability_definition.h"

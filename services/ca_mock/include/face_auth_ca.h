@@ -12,8 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef FACE_AUTH_CA_H
 #define FACE_AUTH_CA_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory>
@@ -24,6 +26,7 @@
 #include "face_auth_defines.h"
 #include "face_auth_log_wrapper.h"
 #include "face_auth_defines.h"
+
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
