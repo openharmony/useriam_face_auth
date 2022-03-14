@@ -29,7 +29,7 @@ public:
     static std::shared_ptr<FaceAuthCamera> GetInstance();
     FaceAuthCamera();
     virtual ~FaceAuthCamera();
-    int32_t OpenCamera(sptr<Surface> surface);
+    int32_t OpenCamera(sptr<IBufferProducer> producer);
     void CloseCamera();
     void SetZoomRatio(float zoom);
     void SetFlashMode(camera_flash_mode_enum_t flash);
@@ -37,10 +37,10 @@ public:
     void SetExposureMode(camera_ae_mode_t exposure);
 
 private:
-    int32_t CreateCamera(sptr<Surface> surface);
-    int32_t PrepareCamera(sptr<Surface> surface);
+    int32_t CreateCamera(sptr<IBufferProducer> producer);
+    int32_t PrepareCamera(sptr<IBufferProducer> producer);
     int32_t CreateDisplayPreviewOutput(sptr<CameraStandard::CameraManager> &camManagerObj,
-        sptr<Surface> surface);
+        sptr<IBufferProducer> producer);
     int32_t Start();
     void Stop();
     void Release();
