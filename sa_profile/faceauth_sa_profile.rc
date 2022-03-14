@@ -12,11 +12,11 @@
 # limitations under the License.
 
 on late-fs
-    start face_service
+    start faceauth
 
-service face_service /system/bin/sa_main /system/profile/face_service.xml
-    class face_service
+service faceauth /system/bin/sa_main /system/profile/faceauth.xml
+    class faceauth
     priority -20
     user system
     group system
-    seclabel u:r:face_service:s0
+    seclabel u:r:faceauth:s0
