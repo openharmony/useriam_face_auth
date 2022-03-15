@@ -12,8 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef FACE_AUTH_QUERY_CALLBACK_H
 #define FACE_AUTH_QUERY_CALLBACK_H
+
 #include "face_auth_defines.h"
 #include "query_callback.h"
 

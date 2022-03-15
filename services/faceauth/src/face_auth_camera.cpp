@@ -20,6 +20,7 @@
 #include "surface.h"
 #include "surface_buffer.h"
 #include "face_auth_defines.h"
+
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
