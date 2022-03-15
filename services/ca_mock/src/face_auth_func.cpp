@@ -76,7 +76,7 @@ static Buffer *GetDataTlvContent(uint32_t result, uint64_t scheduleId, uint64_t 
     uint32_t acl = FACE_AUTH_CAPABILITY_LEVEL;
     if (WriteTlv(AUTH_RESULT_CODE, sizeof(result), (const uint8_t *)&result, ret) != RESULT_SUCCESS ||
         WriteTlv(AUTH_TEMPLATE_ID, sizeof(templatedId), (const uint8_t *)&templatedId, ret) != RESULT_SUCCESS ||
-        WriteTlv(AUTH_SESSION_ID, sizeof(scheduleId), (const uint8_t *)&scheduleId, ret) != RESULT_SUCCESS ||
+        WriteTlv(AUTH_SCHEDULE_ID, sizeof(scheduleId), (const uint8_t *)&scheduleId, ret) != RESULT_SUCCESS ||
         WriteTlv(AUTH_SUBTYPE, sizeof(subType), (const uint8_t *)&subType, ret) != RESULT_SUCCESS ||
         WriteTlv(AUTH_CAPABILITY_LEVEL, sizeof(acl), (const uint8_t *)&acl, ret) != RESULT_SUCCESS) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "write tlv fail.");
@@ -110,7 +110,7 @@ ResultCode GenerateRetTlv(uint32_t result, uint64_t scheduleId, uint64_t subType
     }
     uint32_t rootLen = TAG_AND_LEN_BYTE + dataContent->contentSize + TAG_AND_LEN_BYTE + ED25519_FIX_SIGN_BUFFER_SIZE;
     if (WriteTlvHead(AUTH_ROOT, rootLen, retTlv) != RESULT_SUCCESS ||
-        WriteTlv(AUTH_EXECUTOR_DATA, dataContent->contentSize, dataContent->buf, retTlv) != RESULT_SUCCESS ||
+        WriteTlv(AUTH_DATA, dataContent->contentSize, dataContent->buf, retTlv) != RESULT_SUCCESS ||
         WriteTlv(AUTH_SIGNATURE, signContent->contentSize, signContent->buf, retTlv) != RESULT_SUCCESS) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "write tlv fail.");
         DestoryBuffer(dataContent);

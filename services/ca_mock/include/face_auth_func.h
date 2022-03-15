@@ -19,6 +19,7 @@
 #include <vector>
 #include "defines.h"
 #include "buffer.h"
+#include "coauth_info_define.h"
 
 namespace OHOS {
 namespace UserIAM {
@@ -38,48 +39,6 @@ namespace FaceAuth {
 #define FACE_AUTH_ABILITY 7
 #define RESULT_TLV_LEN 160U
 #define CONST_PUB_KEY_LEN 32U
-
-typedef enum {
-    /**
-     * Root tag
-     */
-    AUTH_ROOT = 1000000,
-
-    /**
-     * Result code
-     */
-    AUTH_RESULT_CODE = 1000001,
-
-    /**
-     * Tag of signature data in TLV
-     */
-    AUTH_SIGNATURE = 1000002,
-
-    /**
-     * Tag of templateId data in TLV
-     */
-    AUTH_TEMPLATE_ID = 1000004,
-
-    /**
-     * Session id, required when decode in C
-     */
-    AUTH_SESSION_ID = 1000008,
-
-    /**
-     * Tag of executor's data
-     */
-    AUTH_EXECUTOR_DATA = 1000013,
-
-    /**
-     * Tag of auth subType
-     */
-    AUTH_SUBTYPE = 1000014,
-
-    /**
-     * Tag of capability level
-     */
-    AUTH_CAPABILITY_LEVEL = 1000015
-} AuthAttributeType;
 
 ResultCode GenerateRetTlv(uint32_t result, uint64_t scheduleId, uint64_t subType, uint64_t templatedId, Buffer *retTlv);
 ResultCode GenerateKeyPair();
