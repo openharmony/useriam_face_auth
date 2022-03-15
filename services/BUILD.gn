@@ -14,7 +14,7 @@
 import("//base/user_iam/face_auth/useriam.gni")
 import("//build/ohos.gni")
 
-ohos_shared_library("face_auth_service") {
+ohos_shared_library("faceauthservice") {
   include_dirs = [
     "//foundation/multimedia/camera_standard/interfaces/inner_api/native/camera/include",
     "//base/user_iam/face_auth/services/faceauth/include",
@@ -71,5 +71,5 @@ ohos_shared_library("face_auth_service") {
     "utils_base:utils",
   ]
   subsystem_name = "useriam"
-  part_name = "faceauth"
+  part_name = "face_auth"
 }
