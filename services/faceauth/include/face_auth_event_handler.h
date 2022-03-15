@@ -12,8 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef FACE_AUTH_EVENT_HANDLER_H
 #define FACE_AUTH_EVENT_HANDLER_H
+
 #include "event_handler.h"
 #include "face_auth_defines.h"
 

@@ -12,6 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #include "face_auth_manager.h"
 #include "face_auth_log_wrapper.h"
 #include "coauth_info_define.h"
