@@ -32,7 +32,7 @@ const uint32_t SHA512_DIGEST_SIZE = 64;
 
 static KeyPair *CreateEd25519KeyPair(void)
 {
-    KeyPair *keyPair = new(std::nothrow) KeyPair;
+    KeyPair *keyPair = new (std::nothrow) KeyPair;
     if (keyPair == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "keyPair is nullptr");
         return nullptr;

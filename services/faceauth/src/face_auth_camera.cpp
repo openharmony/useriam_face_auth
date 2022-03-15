@@ -57,7 +57,7 @@ sptr<CameraStandard::CaptureOutput> FaceAuthCamera::CreatePreviewOutput(
     previewBuffer->SetDefaultWidthAndHeight(PREVIEW_DEFAULT_WIDTH, PREVIEW_DEFAULT_HEIGHT);
     previewBuffer->SetUserData(CameraStandard::CameraManager::surfaceFormat,
                                std::to_string(OHOS_CAMERA_FORMAT_YCRCB_420_SP));
-    sptr<FaceAuthCameraBufferListener> listener = new(std::nothrow) FaceAuthCameraBufferListener();
+    sptr<FaceAuthCameraBufferListener> listener = new (std::nothrow) FaceAuthCameraBufferListener();
     if (listener == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "listener is nullptr.");
         return nullptr;
