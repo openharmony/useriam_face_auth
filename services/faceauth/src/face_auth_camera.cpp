@@ -178,6 +178,7 @@ void FaceAuthCamera::CloseCamera()
 
 int32_t FaceAuthCamera::Start()
 {
+    std::lock_guard<std::mutex> lock_l(mutex_);
     FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCamera::Start.");
     int32_t intResult = capSession_->Start();
     if (intResult != FA_RET_OK) {
@@ -189,6 +190,7 @@ int32_t FaceAuthCamera::Start()
 
 void FaceAuthCamera::Stop()
 {
+    std::lock_guard<std::mutex> lock_l(mutex_);
     FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCamera::Stop.");
     if (capSession_ != nullptr) {
         capSession_->Stop();
@@ -199,6 +201,7 @@ void FaceAuthCamera::Stop()
 
 void FaceAuthCamera::Release()
 {
+    std::lock_guard<std::mutex> lock_l(mutex_);
     FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCamera::Release Start.");
     camInput_ = nullptr;
     if (previewOutput_ != nullptr) {
