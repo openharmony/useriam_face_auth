@@ -38,11 +38,11 @@ public:
     void RegisterExecutor();
     void VerifyAuthInfo();
     // about authenticate
-    int32_t AddAuthenticationRequest(const AuthParam &param);
+    ResultCodeForCoAuth AddAuthenticationRequest(const AuthParam &param);
     void DoAuthenticate(const AuthParam &param);
     int32_t CancelAuth(const AuthParam &param);
     // about enroll
-    int32_t AddEnrollmentRequest(const EnrollParam &param);
+    ResultCodeForCoAuth AddEnrollmentRequest(const EnrollParam &param);
     void DoEnroll(const EnrollParam &param);
     int32_t CancelEnrollment(const EnrollParam &param);
     // about remove

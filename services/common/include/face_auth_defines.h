@@ -45,13 +45,6 @@ typedef enum {
     FACE_OPERATE_TYPE_MAX,
 } FaceOperateType;
 
-typedef enum {
-    SUPPORTED = 0,
-    AUTH_TYPE_NOT_SUPPORT,
-    SECURE_LEVEL_NOT_SUPPORT,
-    DISTRIBUTED_AUTH_NOT_SUPPORT,
-    NOT_ENROLLED,
-} AvailabilityCode;
 typedef struct faceReqType {
     uint64_t reqId = 0;
     FaceOperateType operateType = FACE_INVALID_OPERATE_TYPE;
@@ -383,6 +376,63 @@ typedef enum FaceErrorCode {
     FACE_SUCCESS_NO_NEED_UPGRADE = 15,
     FACE_ENROLL_HAS_REGISTERED = 16, /* For car only */
 } FaceErrorCode;
+
+typedef enum ResultCodeForCoAuth {
+    /**
+     * Indicates that authentication is success or ability is supported.
+     */
+    SUCCESS = 0,
+
+    /**
+     * Indicates the authenticator fails to identify user.
+     */
+    FAIL = 1,
+
+    /**
+     * Indicates other errors.
+     */
+    GENERAL_ERROR = 2,
+
+    /**
+     * Indicates that authentication has been canceled.
+     */
+    CANCELED = 3,
+
+    /**
+     * Indicates that authentication has timed out.
+     */
+    TIMEOUT = 4,
+
+    /**
+     * Indicates that this authentication type is not supported.
+     */
+    TYPE_NOT_SUPPORT = 5,
+
+    /**
+     * Indicates that the authentication trust level is not supported.
+     */
+    TRUST_LEVEL_NOT_SUPPORT = 6,
+
+    /**
+     * Indicates that the authentication task is busy. Wait for a few seconds and try again.
+     */
+    BUSY = 7,
+
+    /**
+     * Indicates incorrect parameters.
+     */
+    INVALID_PARAMETERS = 8,
+
+    /**
+     * Indicates that the authenticator is locked.
+     */
+    LOCKED = 9,
+
+    /**
+     * Indicates that the user has not enrolled the authenticator.
+     */
+    NOT_ENROLLED = 10
+} ResultCodeForCoAuth;
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
