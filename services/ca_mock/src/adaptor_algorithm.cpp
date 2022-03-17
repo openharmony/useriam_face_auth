@@ -32,9 +32,9 @@ const uint32_t SHA512_DIGEST_SIZE = 64;
 
 static KeyPair *CreateEd25519KeyPair(void)
 {
-    KeyPair *keyPair = new KeyPair;
+    KeyPair *keyPair = new (std::nothrow) KeyPair;
     if (keyPair == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "no memory for key pair");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "keyPair is nullptr");
         return nullptr;
     }
     keyPair->pubKey = CreateBuffer(ED25519_FIX_PUBKEY_BUFFER_SIZE);
