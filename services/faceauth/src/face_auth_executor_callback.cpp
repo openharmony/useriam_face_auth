@@ -126,7 +126,7 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
     FACEAUTH_HILOGD(MODULE_SERVICE, "command = %{public}u.", command);
     // get scheduleID
     uint64_t scheduleID = 0;
-    properties->GetUint64Value(AUTH_SESSION_ID, scheduleID);
+    properties->GetUint64Value(AUTH_SCHEDULE_ID, scheduleID);
     // get templateID
     uint64_t templateID = 0;
     properties->GetUint64Value(AUTH_TEMPLATE_ID, templateID);

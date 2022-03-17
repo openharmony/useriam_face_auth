@@ -13,10 +13,10 @@
      limitations under the License.
 -->
 <info>
-    <process>face_service</process>
+    <process>faceauth</process>
     <systemability>
         <name>942</name>
-        <libpath>libface_auth_service.z.so</libpath>
+        <libpath>libfaceauthservice.z.so</libpath>
         <run-on-create>true</run-on-create>
         <distributed>false</distributed>
         <dump-level>1</dump-level>
