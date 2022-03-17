@@ -212,7 +212,7 @@ int32_t FaceAuthManager::Release()
     return FA_RET_OK;
 }
 
-int32_t FaceAuthManager::AddAuthenticationRequest(const AuthParam &param)
+ResultCodeForCoAuth FaceAuthManager::AddAuthenticationRequest(const AuthParam &param)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
     FACEAUTH_HILOGI(MODULE_SERVICE, "[DoAuth]scheduleID = %{public}" PRIu64 ".", param.scheduleID);
@@ -220,7 +220,7 @@ int32_t FaceAuthManager::AddAuthenticationRequest(const AuthParam &param)
     // check param
     if (param.templateID < 0) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
-        return FA_RET_ERROR;
+        return ResultCodeForCoAuth::INVALID_PARAMETERS;
     }
     // check req info list is full
     FaceReqType reqType = {};
@@ -228,21 +228,21 @@ int32_t FaceAuthManager::AddAuthenticationRequest(const AuthParam &param)
     reqType.operateType = FACE_OPERATE_TYPE_LOCAL_AUTH;
     if (FaceAuthReq::GetInstance()->IsReqNumReachedMax(FACE_OPERATE_TYPE_LOCAL_AUTH)) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Auth is Max.");
-        return FA_RET_ERROR;
+        return ResultCodeForCoAuth::BUSY;
     }
     // send event
     FaceInfo faceInfo = {};
     faceInfo.eventId = GenerateEventId();
     if (faceInfo.eventId == INVALID_EVENT_ID) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "faceInfo.eventId is invalid.");
-        return FA_RET_ERROR;
+        return ResultCodeForCoAuth::GENERAL_ERROR;
     }
     faceInfo.uId = param.callerUID;
     FaceAuthReq::GetInstance()->AddReqInfo(reqType, faceInfo);
     FaceAuthEventHandler::Priority priority = FaceAuthEventHandler::Priority::LOW;
     auto authInfo = std::make_unique<AuthParam>(param);
     handler_->SendEvent(faceInfo.eventId, std::move(authInfo), priority);
-    return FA_RET_OK;
+    return ResultCodeForCoAuth::SUCCESS;
 }
 
 void FaceAuthManager::DoAuthenticate(const AuthParam &param)
@@ -293,7 +293,7 @@ void FaceAuthManager::DoAuthenticate(const AuthParam &param)
     FaceAuthReq::GetInstance()->RemoveRequireInfo(reqType);
 }
 
-int32_t FaceAuthManager::AddEnrollmentRequest(const EnrollParam &param)
+ResultCodeForCoAuth FaceAuthManager::AddEnrollmentRequest(const EnrollParam &param)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
     FACEAUTH_HILOGI(MODULE_SERVICE, "[DoEnroll]scheduleID = %{public}" PRIu64 ".", param.scheduleID);
@@ -301,7 +301,7 @@ int32_t FaceAuthManager::AddEnrollmentRequest(const EnrollParam &param)
     // check param
     if (param.templateID < 0) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
-        return FA_RET_ERROR;
+        return ResultCodeForCoAuth::INVALID_PARAMETERS;
     }
     // check req info list is full
     FaceReqType reqType = {};
@@ -309,21 +309,21 @@ int32_t FaceAuthManager::AddEnrollmentRequest(const EnrollParam &param)
     reqType.operateType = FACE_OPERATE_TYPE_ENROLL;
     if (FaceAuthReq::GetInstance()->IsReqNumReachedMax(FACE_OPERATE_TYPE_ENROLL)) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Enroll is Max.");
-        return FA_RET_ERROR;
+        return ResultCodeForCoAuth::BUSY;
     }
     // send event
     FaceInfo faceInfo = {};
     faceInfo.eventId = GenerateEventId();
     if (faceInfo.eventId == INVALID_EVENT_ID) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "faceInfo.eventId is invalid.");
-        return FA_RET_ERROR;
+        return ResultCodeForCoAuth::GENERAL_ERROR;
     }
     faceInfo.uId = param.callerUID;
     FaceAuthReq::GetInstance()->AddReqInfo(reqType, faceInfo);
     FaceAuthEventHandler::Priority priority = FaceAuthEventHandler::Priority::HIGH;
     auto authInfo = std::make_unique<EnrollParam>(param);
     handler_->SendEvent(faceInfo.eventId, std::move(authInfo), priority);
-    return FA_RET_OK;
+    return ResultCodeForCoAuth::SUCCESS;
 }
 
 void FaceAuthManager::DoEnroll(const EnrollParam &param)
