@@ -40,26 +40,27 @@ int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vecto
     // get templateID
     uint64_t templateId = 0;
     commandAttrs->GetUint64Value(AUTH_TEMPLATE_ID, templateId);
+    ResultCodeForCoAuth ret = ResultCodeForCoAuth::GENERAL_ERROR;
     switch (command) {
         case FACE_COMMAND_ENROLL: {
             EnrollParam data = {};
             data.scheduleID = scheduleId;
             data.templateID = templateId;
-            manager->AddEnrollmentRequest(data);
+            ret = manager->AddEnrollmentRequest(data);
             break;
         }
         case FACE_COMMAND_AUTH: {
             AuthParam data = {};
             data.scheduleID = scheduleId;
             data.templateID = templateId;
-            manager->AddAuthenticationRequest(data);
+            ret = manager->AddAuthenticationRequest(data);
             break;
         }
         default:
             FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %{public}u", command);
             break;
     }
-    return FA_RET_OK;
+    return static_cast<int32_t>(ret);
 }
 int32_t FaceAuthExecutorCallback::OnEndExecute(uint64_t scheduleId, pAuthAttributes consumerAttr)
 {
