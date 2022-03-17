@@ -28,9 +28,9 @@ int32_t FaceAuthCameraBufferListener::SendCameraImage(OHOS::sptr<OHOS::SurfaceBu
     image.image = static_cast<uint8_t*>(buffer->GetVirAddr());
     image.imageSize = buffer->GetSize();
     BufferHandle *bufferHandle = buffer->GetBufferHandle();
-    image.width = bufferHandle->width;
-    image.height = bufferHandle->height;
-    image.stride = bufferHandle->stride;
+    image.width = static_cast<uint32_t>(bufferHandle->width);
+    image.height = static_cast<uint32_t>(bufferHandle->height);
+    image.stride = static_cast<uint32_t>(bufferHandle->stride);
     image.timestamp = timestamp;
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
