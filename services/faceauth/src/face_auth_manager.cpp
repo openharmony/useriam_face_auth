@@ -217,11 +217,6 @@ ResultCodeForCoAuth FaceAuthManager::AddAuthenticationRequest(const AuthParam &p
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
     FACEAUTH_HILOGI(MODULE_SERVICE, "[DoAuth]scheduleID = %{public}" PRIu64 ".", param.scheduleID);
     FACEAUTH_HILOGI(MODULE_SERVICE, "[DoAuth]templateID = %{public}s.", getMaskedString(param.templateID).c_str());
-    // check param
-    if (param.templateID < 0) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
-        return ResultCodeForCoAuth::INVALID_PARAMETERS;
-    }
     // check req info list is full
     FaceReqType reqType = {};
     reqType.reqId = param.scheduleID;
@@ -247,11 +242,6 @@ ResultCodeForCoAuth FaceAuthManager::AddAuthenticationRequest(const AuthParam &p
 
 void FaceAuthManager::DoAuthenticate(const AuthParam &param)
 {
-    // check param
-    if (param.templateID < 0) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
-        return;
-    }
     this->InitAlgorithm(FACE_LOCAL_INIT_ALGO_NAME);
     // open camera and send image to algorithm
     if (OpenCamera(nullptr) != FA_RET_OK) {
@@ -298,11 +288,6 @@ ResultCodeForCoAuth FaceAuthManager::AddEnrollmentRequest(const EnrollParam &par
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
     FACEAUTH_HILOGI(MODULE_SERVICE, "[DoEnroll]scheduleID = %{public}" PRIu64 ".", param.scheduleID);
     FACEAUTH_HILOGI(MODULE_SERVICE, "[DoEnroll]templateID = %{public}s.", getMaskedString(param.templateID).c_str());
-    // check param
-    if (param.templateID < 0) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
-        return ResultCodeForCoAuth::INVALID_PARAMETERS;
-    }
     // check req info list is full
     FaceReqType reqType = {};
     reqType.reqId = param.scheduleID;
@@ -328,11 +313,6 @@ ResultCodeForCoAuth FaceAuthManager::AddEnrollmentRequest(const EnrollParam &par
 
 void FaceAuthManager::DoEnroll(const EnrollParam &param)
 {
-    // check param
-    if (param.templateID < 0) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
-        return;
-    }
     this->InitAlgorithm(FACE_LOCAL_INIT_ALGO_NAME);
     // open camera and send image to algorithm
     if (OpenCamera(param.producer) != FA_RET_OK) {
@@ -384,11 +364,6 @@ int32_t FaceAuthManager::AddRemoveRequest(const RemoveParam &param)
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
     FACEAUTH_HILOGI(MODULE_SERVICE, "[DoRemove]scheduleID = %{public}" PRIu64 ".", param.scheduleID);
     FACEAUTH_HILOGI(MODULE_SERVICE, "[DoRemove]templateID = %{public}s.", getMaskedString(param.templateID).c_str());
-    // check param
-    if (param.templateID < 0) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "Parameter check error.");
-        return FA_RET_ERROR;
-    }
     // check req info list is full
     FaceReqType reqType = {};
     reqType.reqId = param.scheduleID;
@@ -414,11 +389,6 @@ int32_t FaceAuthManager::AddRemoveRequest(const RemoveParam &param)
 
 void FaceAuthManager::DoRemove(const RemoveParam &param)
 {
-    // check param
-    if (param.templateID < 0) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Parameter check error.");
-        return;
-    }
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA instance is null.");
