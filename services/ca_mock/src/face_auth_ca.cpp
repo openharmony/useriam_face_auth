@@ -267,7 +267,7 @@ int32_t FaceAuthCA::GetFaceInfo(uint64_t templateId, FaceCredentialInfo &faceCre
     FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
     faceCredentialInfo.subType = FACE_2D;
     faceCredentialInfo.freezingTime = 0;
-    faceCredentialInfo.remainTimes = remainTimesMap_[templateId];
+    faceCredentialInfo.remainTimes = static_cast<uint32_t>(remainTimesMap_[templateId]);
     return 0;
 }
 
