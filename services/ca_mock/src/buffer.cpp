@@ -51,18 +51,19 @@ Buffer *CreateBuffer(const uint32_t size)
 
     Buffer *buffer = (Buffer *)malloc(sizeof(Buffer));
     if (buffer == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Get buffer struct error");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "malloc buffer fail");
         return nullptr;
     }
 
     buffer->buf = (uint8_t *)malloc(size);
     if (buffer->buf == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Get buffer error");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "malloc buffer content fail");
         free(buffer);
         return nullptr;
     }
 
     if (memset_s(buffer->buf, size, 0, size) != EOK) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "clear buffer content fail");
         free(buffer->buf);
         free(buffer);
         return nullptr;
@@ -94,7 +95,7 @@ void DestoryBuffer(Buffer *buffer)
     if (buffer != nullptr) {
         if (buffer->buf != nullptr) {
             if (memset_s(buffer->buf, buffer->contentSize, 0, buffer->contentSize) != EOK) {
-                FACEAUTH_HILOGE(MODULE_SERVICE, "DestoryBuffer memset fail!");
+                FACEAUTH_HILOGE(MODULE_SERVICE, "memset fail");
             }
             free(buffer->buf);
             buffer->buf = nullptr;
@@ -114,12 +115,12 @@ Buffer *CopyBuffer(const Buffer *buffer)
 
     Buffer *copyBuffer = CreateBuffer(buffer->maxSize);
     if (copyBuffer == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Invalid buffer");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "create buffer fail");
         return nullptr;
     }
 
     if (memcpy_s(copyBuffer->buf, copyBuffer->maxSize, buffer->buf, buffer->contentSize) != EOK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Copy buffer fail");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Copy buffer content fail");
         DestoryBuffer(copyBuffer);
         return nullptr;
     }

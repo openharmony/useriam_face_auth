@@ -13,27 +13,23 @@
  * limitations under the License.
  */
 
-#include "face_auth_get_info_callback.h"
-#include "face_auth_log_wrapper.h"
-#include "face_auth_ca.h"
+#ifndef FACEAUTH_SERVICES_RETURN_CALLBACK_H
+#define FACEAUTH_SERVICES_RETURN_CALLBACK_H
+
+#include <functional>
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-void FaceAuthGetInfoCallback::OnGetInfo(std::vector<UserIDM::CredentialInfo> &info)
-{
-    FACEAUTH_HILOGI(MODULE_SERVICE, "credentialInfo length %{public}zu", info.size());
-    std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
-    if (faceAuthCA == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA is null");
-        return;
-    }
-    std::vector<uint64_t> templateIdList;
-    for (auto infoItem : info) {
-        templateIdList.push_back(infoItem.templateId);
-    }
-    faceAuthCA->VerifyTemplateData(templateIdList);
+class ReturnCallback {
+public:
+    ReturnCallback(std::function<void(void)> callback);
+    ~ReturnCallback();
+private:
+    std::function<void(void)> callback;
 };
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
+
+#endif // FACEAUTH_SERVICES_RETURN_CALLBACK_H

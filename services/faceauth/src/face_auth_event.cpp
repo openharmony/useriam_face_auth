@@ -47,11 +47,11 @@ std::shared_ptr<FaceAuthEvent> FaceAuthEvent::GetInstance()
 void FaceAuthEvent::HandleTask(const AppExecFwk::InnerEvent::Pointer &event)
 {
     if (event == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthEvent::HandleTask event is nullptr");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "event is nullptr");
         return;
     }
     uint32_t event_id = event->GetInnerEventId();
-    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthEvent::HandleTask inner event id obtained: %{public}u.", event_id);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "inner event id obtained: %{public}u", event_id);
     FaceOperateType operateType = FaceAuthReq::GetInstance()->GetOperateType(event_id);
     FACEAUTH_HILOGI(MODULE_SERVICE, "operateType is %{public}d", operateType);
     switch (operateType) {
