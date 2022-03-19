@@ -48,20 +48,16 @@ FaceAuthCamera::~FaceAuthCamera()
 sptr<CameraStandard::CaptureOutput> FaceAuthCamera::CreatePreviewOutput(
     sptr<CameraStandard::CameraManager> &camManagerObj)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "CreatePreviewOutput.");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     sptr<Surface> previewBuffer = Surface::CreateSurfaceAsConsumer();
     if (previewBuffer == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "previewBuffer is nullptr.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "previewBuffer is nullptr");
         return nullptr;
     }
     previewBuffer->SetDefaultWidthAndHeight(PREVIEW_DEFAULT_WIDTH, PREVIEW_DEFAULT_HEIGHT);
     previewBuffer->SetUserData(CameraStandard::CameraManager::surfaceFormat,
                                std::to_string(OHOS_CAMERA_FORMAT_YCRCB_420_SP));
     sptr<FaceAuthCameraBufferListener> listener = new FaceAuthCameraBufferListener();
-    if (listener == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "listener is nullptr.");
-        return nullptr;
-    }
     listener->cameraBuffer_ = previewBuffer;
     previewBuffer->RegisterConsumerListener((sptr<IBufferConsumerListener> &) listener);
     sptr<CameraStandard::CaptureOutput> previewOutput = camManagerObj->CreatePreviewOutput(previewBuffer);
@@ -70,18 +66,17 @@ sptr<CameraStandard::CaptureOutput> FaceAuthCamera::CreatePreviewOutput(
 
 int32_t FaceAuthCamera::CreateCamera(sptr<IBufferProducer> producer)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "Create Camera start.");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     sptr<CameraStandard::CameraManager> camManagerObj = OHOS::CameraStandard::CameraManager::GetInstance();
-
     if (camManagerObj == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Get Camera Manager Failed");
         return FA_RET_ERROR;
     }
     std::vector<sptr<CameraStandard::CameraInfo>> cameraObjList;
     cameraObjList = camManagerObj->GetCameras();
-    FACEAUTH_HILOGI(MODULE_SERVICE, "GetCameras:%{public}d", cameraObjList.size());
+    FACEAUTH_HILOGI(MODULE_SERVICE, "camera list length is %{public}zu", cameraObjList.size());
     if (cameraObjList.empty()) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Get Cameras Failed");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "camera list is empty");
         return FA_RET_ERROR;
     }
     sptr<CameraStandard::CameraInfo> camera = nullptr;
@@ -93,7 +88,7 @@ int32_t FaceAuthCamera::CreateCamera(sptr<IBufferProducer> producer)
         }
     }
     if (camera == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Camera not found");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "front facing camera is not found");
         return FA_RET_ERROR;
     }
     camInput_ = camManagerObj->CreateCameraInput(camera);
@@ -106,14 +101,14 @@ int32_t FaceAuthCamera::CreateCamera(sptr<IBufferProducer> producer)
         FACEAUTH_HILOGE(MODULE_SERVICE, "Prepare Camera Failed");
         return FA_RET_ERROR;
     }
-    FACEAUTH_HILOGI(MODULE_SERVICE, "Create Camera end.");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "end");
     return FA_RET_OK;
 }
 
 int32_t FaceAuthCamera::PrepareCamera(sptr<IBufferProducer> producer)
 {
     int32_t intResult = FA_RET_OK;
-    FACEAUTH_HILOGI(MODULE_SERVICE, "Prepare Camera start.");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     sptr<CameraStandard::CameraManager> camManagerObj = CameraStandard::CameraManager::GetInstance();
     if (camManagerObj == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "camManagerObj is null");
@@ -122,17 +117,16 @@ int32_t FaceAuthCamera::PrepareCamera(sptr<IBufferProducer> producer)
 
     capSession_ = camManagerObj->CreateCaptureSession();
     if ((capSession_ == nullptr) || (camInput_ == nullptr)) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Create was not Proper!");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "create capture session failed");
         return FA_RET_ERROR;
     }
     capSession_->BeginConfig();
 
     intResult = capSession_->AddInput(camInput_);
     if (intResult != FA_RET_OK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "AddInput Failed!");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "AddInput Failed");
         return FA_RET_ERROR;
     }
-    FACEAUTH_HILOGI(MODULE_SERVICE, "CreatePreviewOutput");
     previewOutput_ = CreatePreviewOutput(camManagerObj);
     if (previewOutput_ == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Failed to create PreviewOutput");
@@ -145,7 +139,7 @@ int32_t FaceAuthCamera::PrepareCamera(sptr<IBufferProducer> producer)
     }
     if (isDisplay_) {
         if (CreateDisplayPreviewOutput(camManagerObj, producer) != FA_RET_OK) {
-            FACEAUTH_HILOGE(MODULE_SERVICE, "Switch PreviewOutput Failed!");
+            FACEAUTH_HILOGE(MODULE_SERVICE, "Failed to create display preview output");
             return FA_RET_ERROR;
         }
     }
@@ -154,7 +148,7 @@ int32_t FaceAuthCamera::PrepareCamera(sptr<IBufferProducer> producer)
         FACEAUTH_HILOGE(MODULE_SERVICE, "Failed to Commit config");
         return FA_RET_ERROR;
     }
-    FACEAUTH_HILOGI(MODULE_SERVICE, "Prepare Camera end.");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "end");
     return FA_RET_OK;
 }
 
@@ -178,10 +172,10 @@ void FaceAuthCamera::CloseCamera()
 
 int32_t FaceAuthCamera::Start()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCamera::Start.");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     int32_t intResult = capSession_->Start();
     if (intResult != FA_RET_OK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Camera::Start Capture Session Failed");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Start capture session failed");
         return FA_RET_ERROR;
     }
     return FA_RET_OK;
@@ -189,27 +183,28 @@ int32_t FaceAuthCamera::Start()
 
 void FaceAuthCamera::Stop()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCamera::Stop.");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     if (capSession_ != nullptr) {
         capSession_->Stop();
     }
-    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCamera::Stop End.");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "end");
     return;
 }
 
 void FaceAuthCamera::Release()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCamera::Release Start.");
-    camInput_ = nullptr;
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
+    if (camInput_ != nullptr) {
+        camInput_->Release();
+        camInput_ = nullptr;
+    }
     if (previewOutput_ != nullptr) {
         ((sptr<CameraStandard::PreviewOutput> &) previewOutput_)->Release();
-        FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCamera::previewOutput_ Release End.");
         previewOutput_ = nullptr;
     }
     if (isDisplay_) {
         if (disPlayPreviewOutput_ != nullptr) {
             ((sptr<CameraStandard::PreviewOutput> &) disPlayPreviewOutput_)->Release();
-            FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCamera::switchPreviewOutput_ Release End.");
             disPlayPreviewOutput_ = nullptr;
         }
         isDisplay_ = false;
@@ -221,7 +216,7 @@ void FaceAuthCamera::Release()
     if (instance_ != nullptr) {
         instance_.reset();
     }
-    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCamera::Release End.");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "end");
     return;
 }
 
@@ -252,7 +247,7 @@ void FaceAuthCamera::SetZoomRatio(float zoom)
         ((sptr<CameraStandard::CameraInput> &) camInput_)->SetZoomRatio(zoom);
         ((sptr<CameraStandard::CameraInput> &) camInput_)->UnlockForControl();
     } else {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "camInput is null, failed to set zoom ratio.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "camInput is null, failed to set zoom ratio");
     }
     return;
 }
@@ -264,7 +259,7 @@ void FaceAuthCamera::SetFlashMode(camera_flash_mode_enum_t flash)
         ((sptr<CameraStandard::CameraInput> &) camInput_)->SetFlashMode(flash);
         ((sptr<CameraStandard::CameraInput> &) camInput_)->UnlockForControl();
     } else {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "camInput is null, failed to set flash mode.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "camInput is null, failed to set flash mode");
     }
     return;
 }
@@ -276,7 +271,7 @@ void FaceAuthCamera::SetFocusMode(camera_af_mode_t focus)
         ((sptr<CameraStandard::CameraInput> &) camInput_)->SetFocusMode(focus);
         ((sptr<CameraStandard::CameraInput> &) camInput_)->UnlockForControl();
     } else {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "camInput is null, failed to set focus mode.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "camInput is null, failed to set focus mode");
     }
     return;
 }
@@ -288,7 +283,7 @@ void FaceAuthCamera::SetExposureMode(camera_ae_mode_t exposure)
         ((sptr<CameraStandard::CameraInput> &) camInput_)->SetExposureMode(exposure);
         ((sptr<CameraStandard::CameraInput> &) camInput_)->UnlockForControl();
     } else {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "camInput is null, failed to set exposure mode.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "camInput is null, failed to set exposure mode");
     }
     return;
 }

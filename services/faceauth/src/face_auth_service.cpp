@@ -86,16 +86,16 @@ void FaceAuthService::Start()
         ret = manager_->Init();
     }
     if (FA_RET_OK == ret) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "Init() result success.");
+        FACEAUTH_HILOGI(MODULE_SERVICE, "Init result success");
     } else {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "Init() result failed.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "Init result failed");
     }
 }
 
 void FaceAuthService::ReRegister()
 {
     if (manager_ == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "manager_ is null.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "manager_ is null");
         return;
     }
     manager_->QueryRegStatus();

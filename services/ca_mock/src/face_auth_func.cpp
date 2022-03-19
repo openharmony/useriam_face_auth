@@ -29,7 +29,7 @@ ResultCode GenerateKeyPair()
     DestoryKeyPair(g_keyPair);
     g_keyPair = GenerateEd25519KeyPair();
     if (g_keyPair == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "GenerateEd25519Keypair fail!");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "GenerateEd25519Keypair fail");
         return RESULT_GENERAL_ERROR;
     }
     FACEAUTH_HILOGI(MODULE_SERVICE, "GenerateKeyPair success");
@@ -40,12 +40,12 @@ static ResultCode WriteTlvHead(const AuthAttributeType type, const uint32_t leng
 {
     int32_t tempType = type;
     if (memcpy_s(buf->buf + buf->contentSize, buf->maxSize - buf->contentSize, &tempType, sizeof(tempType)) != EOK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "copy type fail.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "copy type fail");
         return RESULT_BAD_COPY;
     }
     buf->contentSize += sizeof(tempType);
     if (memcpy_s(buf->buf + buf->contentSize, buf->maxSize - buf->contentSize, &length, sizeof(length)) != EOK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "copy length fail.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "copy length fail");
         return RESULT_BAD_COPY;
     }
     buf->contentSize += sizeof(length);
@@ -55,11 +55,11 @@ static ResultCode WriteTlvHead(const AuthAttributeType type, const uint32_t leng
 static ResultCode WriteTlv(const AuthAttributeType type, const uint32_t length, const uint8_t *value, Buffer *buf)
 {
     if (WriteTlvHead(type, length, buf) != RESULT_SUCCESS) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "copy head fail.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "write tlv head fail");
         return RESULT_BAD_COPY;
     }
     if (memcpy_s(buf->buf + buf->contentSize, buf->maxSize - buf->contentSize, value, length) != EOK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "copy value fail.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "copy buffer content fail");
         return RESULT_BAD_COPY;
     }
     buf->contentSize += length;
@@ -70,7 +70,7 @@ static Buffer *GetDataTlvContent(uint32_t result, uint64_t scheduleId, uint64_t 
 {
     Buffer *ret = CreateBuffer(MAX_TLV_LEN);
     if (!IsBufferValid(ret)) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "no memory.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "create buffer fail");
         return nullptr;
     }
     uint32_t acl = FACE_AUTH_CAPABILITY_LEVEL;
@@ -79,7 +79,7 @@ static Buffer *GetDataTlvContent(uint32_t result, uint64_t scheduleId, uint64_t 
         WriteTlv(AUTH_SCHEDULE_ID, sizeof(scheduleId), (const uint8_t *)&scheduleId, ret) != RESULT_SUCCESS ||
         WriteTlv(AUTH_SUBTYPE, sizeof(subType), (const uint8_t *)&subType, ret) != RESULT_SUCCESS ||
         WriteTlv(AUTH_CAPABILITY_LEVEL, sizeof(acl), (const uint8_t *)&acl, ret) != RESULT_SUCCESS) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "write tlv fail.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "write tlv fail");
         DestoryBuffer(ret);
         return nullptr;
     }
@@ -90,21 +90,21 @@ ResultCode GenerateRetTlv(uint32_t result, uint64_t scheduleId, uint64_t subType
     Buffer *retTlv)
 {
     if (!IsBufferValid(retTlv)) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "param(retTlv) is invalid.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "param(retTlv) is invalid");
         return RESULT_BAD_PARAM;
     }
     if (!IsEd25519KeyPairValid(g_keyPair)) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "param(g_keyPair) is invalid.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "param(g_keyPair) is invalid");
         return RESULT_BAD_PARAM;
     }
     Buffer *dataContent = GetDataTlvContent(result, scheduleId, subType, templatedId);
     if (!IsBufferValid(dataContent)) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "get data content fail.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "get data content fail");
         return RESULT_BAD_COPY;
     }
     Buffer *signContent = nullptr;
     if (Ed25519Sign(g_keyPair, dataContent, &signContent) != RESULT_SUCCESS) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "sign data fail.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "sign data fail");
         DestoryBuffer(dataContent);
         return RESULT_GENERAL_ERROR;
     }
@@ -112,7 +112,7 @@ ResultCode GenerateRetTlv(uint32_t result, uint64_t scheduleId, uint64_t subType
     if (WriteTlvHead(AUTH_ROOT, rootLen, retTlv) != RESULT_SUCCESS ||
         WriteTlv(AUTH_DATA, dataContent->contentSize, dataContent->buf, retTlv) != RESULT_SUCCESS ||
         WriteTlv(AUTH_SIGNATURE, signContent->contentSize, signContent->buf, retTlv) != RESULT_SUCCESS) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "write tlv fail.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "write tlv fail");
         DestoryBuffer(dataContent);
         DestoryBuffer(signContent);
         return RESULT_BAD_COPY;
@@ -125,7 +125,7 @@ ResultCode SetResultTlv(Buffer *retTlv, std::vector<uint8_t> &resultTlv)
 {
     resultTlv.resize(retTlv->contentSize);
     if (memcpy_s(&resultTlv[0], retTlv->contentSize, retTlv->buf, retTlv->contentSize) != EOK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "copy retTlv to resultTlv fail!");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "copy retTlv to resultTlv fail");
         return RESULT_GENERAL_ERROR;
     }
     return RESULT_SUCCESS;
@@ -133,13 +133,13 @@ ResultCode SetResultTlv(Buffer *retTlv, std::vector<uint8_t> &resultTlv)
 ResultCode DoGetExecutorInfo(std::vector<uint8_t> &vPubKey, uint32_t &esl, uint64_t &authAbility)
 {
     if (!IsEd25519KeyPairValid(g_keyPair)) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "key pair not init!");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "key pair is not initted");
         return RESULT_NEED_INIT;
     }
     Buffer *pubKey = g_keyPair->pubKey;
     vPubKey.resize(pubKey->contentSize);
     if (memcpy_s(&vPubKey[0], pubKey->contentSize, pubKey->buf, pubKey->contentSize) != EOK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "copy public key fail!");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "copy public key fail");
         return RESULT_GENERAL_ERROR;
     }
     esl = FACE_EXECUTOR_SECURITY_LEVEL;

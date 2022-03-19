@@ -88,7 +88,7 @@ void FaceAuthReq::AddReqInfo(FaceReqType reqType, FaceInfo reqInfo)
     }
     auto req2Rm = reqInfoList_.find(reqType);
     if (req2Rm != reqInfoList_.end()) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "same key was found.");
+        FACEAUTH_HILOGI(MODULE_SERVICE, "same key was found");
     } else {
         reqInfoList_.insert(std::pair<FaceReqType, FaceInfo>(reqType, reqInfo));
     }
@@ -107,7 +107,7 @@ void FaceAuthReq::RemoveRequireInfo(FaceReqType reqType)
     if (req2Rm != reqInfoList_.end()) {
         reqInfoList_.erase(reqType);
     } else {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "no require info found.");
+        FACEAUTH_HILOGI(MODULE_SERVICE, "no require info found");
     }
     return;
 }

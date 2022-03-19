@@ -40,6 +40,7 @@ ohos_shared_library("faceauthservice") {
     "//base/user_iam/face_auth/services/ca_mock/src/face_auth_ca.cpp",
     "//base/user_iam/face_auth/services/ca_mock/src/face_auth_func.cpp",
     "//base/user_iam/face_auth/services/common/src/constant.cpp",
+    "//base/user_iam/face_auth/services/common/src/return_callback.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_camera.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_camera_buffer_listener.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_event.cpp",
