@@ -24,8 +24,8 @@ namespace UserIAM {
 namespace FaceAuth {
 void FaceAuthQueryCallback::OnResult(uint32_t resultCode)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "resultCode = %{public}u.", resultCode);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "resultCode = %{public}u", resultCode);
     std::shared_ptr<FaceAuthManager> manager = FaceAuthManager::GetInstance();
     if (manager != nullptr) {
         if (resultCode != EXECUTOR_REGISTER) {
