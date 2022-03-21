@@ -30,7 +30,7 @@ FaceAuthEventHandler::~FaceAuthEventHandler()
 
 void FaceAuthEventHandler::RemoveEvent(const uint64_t reqId)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "RemoveEvent: %{public}s.", getMaskedString(reqId).c_str());
+    FACEAUTH_HILOGI(MODULE_SERVICE, "remove event %{public}s", getMaskedString(reqId).c_str());
     EventHandler::RemoveEvent(reqId);
     return;
 }
@@ -38,7 +38,7 @@ void FaceAuthEventHandler::RemoveEvent(const uint64_t reqId)
 void FaceAuthEventHandler::ProcessEvent(const AppExecFwk::InnerEvent::Pointer &event)
 {
     if (event == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthEventHandler::ProcessEvent event is nullptr");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "event is nullptr");
         return;
     }
     FaceAuthEvent::GetInstance()->HandleTask(event);
