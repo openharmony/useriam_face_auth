@@ -26,7 +26,7 @@ public:
     ReturnCallback(std::function<void(void)> callback);
     ~ReturnCallback();
 private:
-    std::function<void(void)> callback;
+    std::function<void(void)> callback_;
 };
 } // namespace FaceAuth
 } // namespace UserIAM

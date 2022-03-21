@@ -20,12 +20,12 @@ namespace UserIAM {
 namespace FaceAuth {
 ReturnCallback::ReturnCallback(std::function<void(void)> callback)
 {
-    this->callback = callback;
+    this->callback_ = callback;
 }
 
 ReturnCallback::~ReturnCallback()
 {
-    this->callback();
+    this->callback_();
 }
 } // namespace FaceAuth
 } // namespace UserIAM
