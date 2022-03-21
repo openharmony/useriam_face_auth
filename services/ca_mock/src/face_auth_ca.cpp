@@ -61,7 +61,7 @@ static const int32_t TEST_ANGLE_ADD_NUM = 4;
 static const int32_t DEFAULT_REMAIN_TIMES = 5;
 static const int32_t SLEEP_TIME = 5000;
 static int32_t faceId_ = 1;
-static bool isAuthingFlag = false;
+static bool isRunningFlag = false;
 std::shared_ptr<FaceAuthCA> FaceAuthCA::faceAuthCA_ = nullptr;
 std::mutex FaceAuthCA::mutex_;
 FaceAuthCA::FaceAuthCA()
@@ -84,20 +84,20 @@ std::shared_ptr<FaceAuthCA> FaceAuthCA::GetInstance()
 
 int32_t FaceAuthCA::Init()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     GenerateKeyPair();
     return CA_RESULT_SUCCESS;
 }
 
 int32_t FaceAuthCA::Close()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     return CA_RESULT_SUCCESS;
 }
 
 int32_t FaceAuthCA::LoadAlgorithm()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     if (DynamicInit() == FI_RC_OK) {
         return CA_RESULT_SUCCESS;
     } else {
@@ -107,7 +107,7 @@ int32_t FaceAuthCA::LoadAlgorithm()
 
 int32_t FaceAuthCA::ReleaseAlgorithm()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     if (DynamicRelease() == FI_RC_OK) {
         return CA_RESULT_SUCCESS;
     } else {
@@ -117,8 +117,8 @@ int32_t FaceAuthCA::ReleaseAlgorithm()
 
 int32_t FaceAuthCA::StartAlgorithmOperation(AlgorithmOperation algorithmOperation, AlgorithmParam param)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
-    isAuthingFlag = true;
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
+    isRunningFlag = true;
     SetAlgorithmParam(param);
     algorithmOperation_ = algorithmOperation;
     if (algorithmOperation == Enroll) {
@@ -134,7 +134,7 @@ int32_t FaceAuthCA::StartAlgorithmOperation(AlgorithmOperation algorithmOperatio
 
 int32_t FaceAuthCA::TransferImageToAlgorithm(CameraImage images)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "TransferImageToAlgorithm");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     (void)(images);
     return CA_RESULT_SUCCESS;
 }
@@ -145,7 +145,7 @@ void FaceAuthCA::GetAlgorithmState(int32_t &retCode, std::vector<uint8_t> &retCo
     int32_t algorithmState = -1;
     FICode code = CODE_CALLBACK_START;
     GetAuthState(algorithmState, code, param_.scheduleId);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "algorithmState = %{public}d.", algorithmState);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "algorithmState = %{public}d", algorithmState);
     retCoauthMsg.resize(sizeof(int32_t));
     if (memcpy_s(&retCoauthMsg[0], retCoauthMsg.size(), &algorithmState, sizeof(int32_t)) != EOK) {
         FACEAUTH_HILOGI(MODULE_SERVICE, "memcpy_s fail");
@@ -157,9 +157,9 @@ void FaceAuthCA::GetAlgorithmState(int32_t &retCode, std::vector<uint8_t> &retCo
 
 int32_t FaceAuthCA::GetExecutorInfo(std::vector<uint8_t> &pubKey, uint32_t &esl, uint64_t &authAbility)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     if (DoGetExecutorInfo(pubKey, esl, authAbility) != RESULT_SUCCESS) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "DoGetExecutorInfo failed.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "DoGetExecutorInfo failed");
         return CA_RESULT_FAILED;
     }
     return CA_RESULT_SUCCESS;
@@ -168,31 +168,33 @@ int32_t FaceAuthCA::GetExecutorInfo(std::vector<uint8_t> &pubKey, uint32_t &esl,
 int FaceAuthCA::getAlgorithmResult()
 {
     if (isCancel_ == true) {
+        FACEAUTH_HILOGI(MODULE_SERVICE, "operation has been canceled");
         return CA_RESULT_CANCELED;
     } else {
         if (algorithmOperation_ == Auth) {
-            FACEAUTH_HILOGI(MODULE_SERVICE, "face auth, remain times is %{public}d.",
+            FACEAUTH_HILOGI(MODULE_SERVICE, "face auth remain times is %{public}d",
                 remainTimesMap_[param_.templateId]);
             if (remainTimesMap_[param_.templateId] == 0) {
+                FACEAUTH_HILOGI(MODULE_SERVICE, "operation has been locked");
                 return CA_RESULT_LOCKED;
             }
         }
     }
     int authResult = 0;
     GetAuthResult(authResult);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "get authResult %{public}d.", authResult);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "get authResult %{public}d", authResult);
     return authResult;
 }
 
 int32_t FaceAuthCA::FinishAlgorithmOperation(AlgorithmResult &retResult)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s wait for image receive", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
+    // wait for 1s for cancel and image receive
     sleep(1);
-    isAuthingFlag = false;
-    FACEAUTH_HILOGI(MODULE_SERVICE, "isAuthingFlag = %{public}d.", isAuthingFlag);
+    isRunningFlag = false;
+    FACEAUTH_HILOGI(MODULE_SERVICE, "set isRunningFlag to false");
     int32_t authResult = getAlgorithmResult();
-    FACEAUTH_HILOGI(MODULE_SERVICE, "get auth result = %{public}d.", authResult);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "get auth result = %{public}d", authResult);
     if (algorithmOperation_ == Enroll) {
         if (authResult == 0) {
             templateIdList_.push_back(param_.templateId);
@@ -214,18 +216,18 @@ int32_t FaceAuthCA::FinishAlgorithmOperation(AlgorithmResult &retResult)
 
     Buffer *retTlv = CreateBuffer(RESULT_TLV_LEN);
     if (retTlv == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "CreateBuffer failed.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "CreateBuffer failed");
         return CA_RESULT_FAILED;
     }
     ResultCode result = GenerateRetTlv(authResult, param_.scheduleId, FACE_2D, param_.templateId, retTlv);
     if (result != RESULT_SUCCESS) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "GenerateRetTlv failed.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "GenerateRetTlv failed");
         DestoryBuffer(retTlv);
         return CA_RESULT_FAILED;
     }
     result = SetResultTlv(retTlv, retResult.coauthMsg);
     if (result != RESULT_SUCCESS) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "SetResultTlv failed.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "SetResultTlv failed");
         DestoryBuffer(retTlv);
         return CA_RESULT_FAILED;
     }
@@ -235,7 +237,7 @@ int32_t FaceAuthCA::FinishAlgorithmOperation(AlgorithmResult &retResult)
 
 int32_t FaceAuthCA::DeleteTemplate(uint64_t templateId)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     std::vector<uint64_t>::const_iterator iter;
     for (iter = templateIdList_.cbegin(); iter != templateIdList_.cend(); ++iter) {
         if (*iter == templateId) {
@@ -243,7 +245,7 @@ int32_t FaceAuthCA::DeleteTemplate(uint64_t templateId)
         }
     }
     if (iter == templateIdList_.cend()) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "%{public}s template to delete not found.", __PRETTY_FUNCTION__);
+        FACEAUTH_HILOGE(MODULE_SERVICE, "template id not found");
         return CA_RESULT_FAILED;
     }
     templateIdList_.erase(iter);
@@ -253,7 +255,7 @@ int32_t FaceAuthCA::DeleteTemplate(uint64_t templateId)
 
 int32_t FaceAuthCA::VerifyTemplateData(std::vector<uint64_t> templateIdList)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     templateIdList_.assign(templateIdList.begin(), templateIdList.end());
     remainTimesMap_.clear();
     for (uint32_t index = 0; index < templateIdList_.size(); index++) {
@@ -264,23 +266,23 @@ int32_t FaceAuthCA::VerifyTemplateData(std::vector<uint64_t> templateIdList)
 
 int32_t FaceAuthCA::GetFaceInfo(uint64_t templateId, FaceCredentialInfo &faceCredentialInfo)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     faceCredentialInfo.subType = FACE_2D;
     faceCredentialInfo.freezingTime = 0;
-    faceCredentialInfo.remainTimes = remainTimesMap_[templateId];
+    faceCredentialInfo.remainTimes = static_cast<uint32_t>(remainTimesMap_[templateId]);
     return 0;
 }
 
 int32_t FaceAuthCA::GetRemainTimes(uint64_t templateId, int32_t &remainingTimes)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     remainingTimes = remainTimesMap_[templateId];
     return CA_RESULT_SUCCESS;
 }
 
 int32_t FaceAuthCA::ResetRemainTimes(uint64_t templateId)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s reset times templateId %{public}s.", __PRETTY_FUNCTION__,
+    FACEAUTH_HILOGI(MODULE_SERVICE, "reset templateId %{public}s remain times",
         getMaskedString(templateId).c_str());
     remainTimesMap_[templateId] = DEFAULT_REMAIN_TIMES;
     return CA_RESULT_SUCCESS;
@@ -288,7 +290,7 @@ int32_t FaceAuthCA::ResetRemainTimes(uint64_t templateId)
 
 int32_t FaceAuthCA::FreezeTemplate(uint64_t templateId)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s freeze template %{public}s.", __PRETTY_FUNCTION__,
+    FACEAUTH_HILOGI(MODULE_SERVICE, "freeze template %{public}s",
         getMaskedString(templateId).c_str());
     remainTimesMap_[templateId] = 0;
     return CA_RESULT_SUCCESS;
@@ -296,7 +298,7 @@ int32_t FaceAuthCA::FreezeTemplate(uint64_t templateId)
 
 int32_t FaceAuthCA::CancelAlgorithmOperation()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     if (Cancel(param_.scheduleId) != FI_RC_OK) {
         return CA_RESULT_FAILED;
     }
@@ -314,11 +316,11 @@ void FaceAuthCA::GetAuthResult(int32_t &result)
     FILE *file = nullptr;
     file = fopen(AUTH_RESULT_FILENAME, "r");
     if (file == nullptr) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "open file failed.");
+        FACEAUTH_HILOGI(MODULE_SERVICE, "open file failed");
         return;
     }
     if (fseek(file, 0, SEEK_END) != 0) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "fseek failed.");
+        FACEAUTH_HILOGI(MODULE_SERVICE, "fseek failed");
         fclose(file);
         return;
     }
@@ -329,12 +331,12 @@ void FaceAuthCA::GetAuthResult(int32_t &result)
         result = atoi(str);
     }
     if (fclose(file) != 0) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "fclose failed.");
+        FACEAUTH_HILOGI(MODULE_SERVICE, "fclose failed");
     }
 }
 FIRetCode FaceAuthCA::GetAuthState(int32_t &authErrorCode, FICode &code, uint64_t reqId)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "GetAuthState start");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     int32_t resultCode = 0;
     int32_t params[ALO_GETRESULT_PARAM_LEN] = {0};
     if (!CheckIsCancel(authErrorCode, code, reqId)) {
@@ -380,7 +382,7 @@ FIRetCode FaceAuthCA::GetAuthState(int32_t &authErrorCode, FICode &code, uint64_
     }
     FACEAUTH_HILOGI(MODULE_SERVICE, "reqid_ is %{public}s, code_ is %{public}d, errorcode_ is %{public}d",
         getMaskedString(reqId).c_str(), code, authErrorCode);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "GetAuthState end");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "end");
     return result;
 }
 
@@ -521,8 +523,8 @@ int32_t FaceAuthCA::CheckIsCancel(int32_t &authErrorCode, FICode &code, uint64_t
 }
 FIRetCode FaceAuthCA::Cancel(uint64_t reqId)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "isAuthingFlag is %{public}d", isAuthingFlag);
-    if (isAuthingFlag) {
+    FACEAUTH_HILOGI(MODULE_SERVICE, "isRunningFlag is %{public}d", isRunningFlag);
+    if (isRunningFlag) {
         isCancel_ = true;
         cancelReqId_ = reqId;
         remove(CONFIG_FILENAME);
@@ -599,7 +601,7 @@ void FaceAuthCA::CheckFile(std::string s)
 }
 void FaceAuthCA::GetEnrollAngleResult()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "GetEnrollAngleResult start");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     resultInfos_.clear();
     int mapNum = 0;
     ResultInfo info;
@@ -740,7 +742,7 @@ void FaceAuthCA::GetResultTimeOut()
 }
 FIRetCode FaceAuthCA::DynamicInit()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "DynamicInit");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     ReadInitFile();
     FACEAUTH_HILOGI(MODULE_SERVICE, "DynamicInit isInitFail_ is %{public}d", isInitFail_);
     if (isInitFail_) {
@@ -753,7 +755,7 @@ FIRetCode FaceAuthCA::DynamicInit()
 
 FIRetCode FaceAuthCA::DynamicRelease()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "DynamicRelease");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     ReadReleaseFile();
     FACEAUTH_HILOGI(MODULE_SERVICE, "DynamicInit isInitFail_ is %{public}d", isInitFail_);
     if (isInitFail_) {
@@ -765,7 +767,7 @@ FIRetCode FaceAuthCA::DynamicRelease()
 }
 void FaceAuthCA::ReadInitFile()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "ReadInitFile start");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     std::ifstream mystream(INIT_FILENAME);
     if (!mystream.is_open()) {
         FACEAUTH_HILOGI(MODULE_SERVICE, "ReadInitFile open fail");
@@ -782,7 +784,7 @@ void FaceAuthCA::ReadInitFile()
 
 void FaceAuthCA::ReadReleaseFile()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "ReadReleaseFile start");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     std::ifstream mystream(RELEASE_FILENAME);
     if (!mystream.is_open()) {
         FACEAUTH_HILOGI(MODULE_SERVICE, "ReadReleaseFile open fail");
@@ -831,12 +833,12 @@ FIRetCode FaceAuthCA::Prepare(HWExeType type)
 {
     std::mutex mt;
     std::lock_guard<std::mutex> lock_l(mt);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthAlgoImpl::Prepare");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     type_ = type;
     resultNum_ = 0;
     resultInfos_.clear();
     FACEAUTH_HILOGI(MODULE_SERVICE, "resultInfos_.size is %{public}d", resultInfos_.size());
-    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthAlgoImpl::Prepare type is %{public}d", type_);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "Prepare type is %{public}d", type_);
     return FIRetCode::FI_RC_OK;
 }
 } // namespace FaceAuth

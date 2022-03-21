@@ -34,7 +34,7 @@ int32_t FaceAuthCameraBufferListener::SendCameraImage(OHOS::sptr<OHOS::SurfaceBu
     image.timestamp = timestamp;
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA = nullptr.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA is nullptr");
         return -1;
     }
     faceAuthCA->TransferImageToAlgorithm(image);
@@ -52,7 +52,7 @@ void FaceAuthCameraBufferListener::OnBufferAvailable()
         SendCameraImage(buffer, timestamp);
         cameraBuffer_->ReleaseBuffer(buffer, -1);
     } else {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "AcquireBuffer failed!");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "AcquireBuffer failed");
     }
 }
 } // namespace FaceAuth

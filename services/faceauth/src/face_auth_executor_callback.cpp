@@ -27,17 +27,15 @@ int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vecto
     pAuthAttributes commandAttrs)
 {
     (void)(publicKey);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     std::shared_ptr<FaceAuthManager> manager = FaceAuthManager::GetInstance();
     if (manager == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "face auth manager is nullptr.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "face auth manager is nullptr");
         return FA_RET_ERROR;
     }
-    // get command
     uint32_t command = 0;
     commandAttrs->GetUint32Value(AUTH_SCHEDULE_MODE, command);
-    FACEAUTH_HILOGD(MODULE_SERVICE, "command = %{public}u.", command);
-    // get templateID
+    FACEAUTH_HILOGD(MODULE_SERVICE, "command = %{public}u", command);
     uint64_t templateId = 0;
     commandAttrs->GetUint64Value(AUTH_TEMPLATE_ID, templateId);
     ResultCodeForCoAuth ret = ResultCodeForCoAuth::GENERAL_ERROR;
@@ -57,24 +55,23 @@ int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vecto
             break;
         }
         default:
-            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %{public}u", command);
+            FACEAUTH_HILOGE(MODULE_SERVICE, "Command id %{public}u is not supported", command);
             break;
     }
     return static_cast<int32_t>(ret);
 }
 int32_t FaceAuthExecutorCallback::OnEndExecute(uint64_t scheduleId, pAuthAttributes consumerAttr)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run start.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     std::shared_ptr<FaceAuthManager> manager = FaceAuthManager::GetInstance();
     if (manager == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "face auth manager is nullptr.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "face auth manager is nullptr");
         return FA_RET_ERROR;
     }
-    // get command
     uint32_t command = 0;
     int32_t ret = FA_RET_OK;
     consumerAttr->GetUint32Value(AUTH_SCHEDULE_MODE, command);
-    FACEAUTH_HILOGD(MODULE_SERVICE, "command = %{public}u.", command);
+    FACEAUTH_HILOGD(MODULE_SERVICE, "command = %{public}u", command);
     switch (command) {
         case FACE_COMMAND_CANCEL_ENROLL: {
             EnrollParam data = {};
@@ -95,7 +92,7 @@ int32_t FaceAuthExecutorCallback::OnEndExecute(uint64_t scheduleId, pAuthAttribu
             break;
         }
         default:
-            FACEAUTH_HILOGI(MODULE_SERVICE, "other command.command = %{public}u", command);
+            FACEAUTH_HILOGE(MODULE_SERVICE, "Command id %{public}u is not supported", command);
             break;
     }
     return ret;
@@ -103,10 +100,10 @@ int32_t FaceAuthExecutorCallback::OnEndExecute(uint64_t scheduleId, pAuthAttribu
 
 void FaceAuthExecutorCallback::OnMessengerReady(const sptr<AuthResPool::IExecutorMessenger> &messenger)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     std::shared_ptr<FaceAuthManager> manager = FaceAuthManager::GetInstance();
     if (manager == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "manager instance is null.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "manager instance is null");
         return;
     }
     manager->SetExecutorMessenger(messenger);
@@ -115,23 +112,19 @@ void FaceAuthExecutorCallback::OnMessengerReady(const sptr<AuthResPool::IExecuto
 
 int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "%{public}s run.", __PRETTY_FUNCTION__);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     std::shared_ptr<FaceAuthManager> manager = FaceAuthManager::GetInstance();
     if (manager == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "face auth manager is nullptr.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "face auth manager is nullptr");
         return FA_RET_ERROR;
     }
-    // get command
     uint32_t command = 0;
     properties->GetUint32Value(AUTH_PROPERTY_MODE, command);
-    FACEAUTH_HILOGD(MODULE_SERVICE, "command = %{public}u.", command);
-    // get scheduleID
+    FACEAUTH_HILOGD(MODULE_SERVICE, "command = %{public}u", command);
     uint64_t scheduleID = 0;
     properties->GetUint64Value(AUTH_SCHEDULE_ID, scheduleID);
-    // get templateID
     uint64_t templateID = 0;
     properties->GetUint64Value(AUTH_TEMPLATE_ID, templateID);
-    // get caller name
     std::vector<uint8_t> callerName;
     properties->GetUint8ArrayValue(ALGORITHM_INFO, callerName);
     std::vector<uint64_t> templateIdList;
@@ -167,25 +160,24 @@ int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
 int32_t FaceAuthExecutorCallback::OnGetProperty(std::shared_ptr<AuthResPool::AuthAttributes> conditions,
     std::shared_ptr<AuthResPool::AuthAttributes> values)
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthService::OnGetProperty enter");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "start");
     if (values == nullptr || conditions == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty bad param");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "bad param");
         return FA_RET_ERROR;
     }
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA is nullptr.");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA is nullptr");
         return FA_RET_ERROR;
     }
 
     /* set command 0:delete 1:Query credential information */
     uint32_t command;
     if (conditions->GetUint32Value(AUTH_PROPERTY_MODE, command) != FA_RET_OK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthService::OnGetProperty GetUint32Value");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "GetUint32Value fail");
         return FA_RET_ERROR;
     }
-    FACEAUTH_HILOGI(MODULE_SERVICE,
-        "FaceAuthService::OnBeginExecute AUTH_PROPERTY_MODE is %{public}u.", command);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "command is %{public}u", command);
     if (command == FACE_COMMAND_QUERY_CREDENTIAL) {
         /* get templateId */
         uint64_t templateId;
