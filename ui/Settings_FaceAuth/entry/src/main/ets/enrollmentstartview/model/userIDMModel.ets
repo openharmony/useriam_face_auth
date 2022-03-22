@@ -14,7 +14,6 @@
  */
 
 import Log from '../utils/log.ets'
-import CommonController from '../controller/commonController.ets'
 import account_osAccount from '@ohos.account.osAccount';
 
 class UserIDMModel {
@@ -39,11 +38,7 @@ class UserIDMModel {
   }
 
   async getChallenge() {
-    return new Promise<Uint8Array>((resolve)=> {
-      this.userIdentityManager.openSession((data) => {
-        resolve(data)
-      })
-    })
+    return await this.userIdentityManager.openSession()
   }
 
   uin8Array2String(inArray: Uint8Array): string {
