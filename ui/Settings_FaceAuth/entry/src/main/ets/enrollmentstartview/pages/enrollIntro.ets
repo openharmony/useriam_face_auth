@@ -18,7 +18,6 @@ import BackComponent from '../component/backComponent.ets'
 import Log from '../utils/log.ets'
 import CommonController from '../controller/commonController.ets'
 import Constants from '../config/constant.ets'
-import Config from '../config/config.ets'
 
 @Entry
 @Component

@@ -14,9 +14,7 @@
  */
 
 import Log from '../utils/log.ets'
-import UserAuthModel from '../model/userAuthModel.ets'
 import UserIDMModel from '../model/userIDMModel.ets'
-import router from '@system.router';
 import CommonController from '../controller/commonController.ets'
 
 class FaceConfigController {
