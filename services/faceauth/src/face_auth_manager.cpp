@@ -270,7 +270,7 @@ void FaceAuthManager::DoAuthenticate(const AuthParam &param)
         return;
     }
     // wait authentication process done
-    ret = WaitAlgorithmProcessDone(param.scheduleID);
+    ret = WaitAlgorithmProcessDone(param.scheduleID, FACE_OPERATE_TYPE_LOCAL_AUTH);
     if (ret != FA_RET_OK) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "authentication process result is %{public}d", ret);
         return;
@@ -342,7 +342,7 @@ void FaceAuthManager::DoEnroll(const EnrollParam &param)
         return;
     }
     // wait enroll process done
-    ret = WaitAlgorithmProcessDone(param.scheduleID);
+    ret = WaitAlgorithmProcessDone(param.scheduleID, FACE_OPERATE_TYPE_ENROLL);
     if (ret != FA_RET_OK) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "authentication process result is %{public}d", ret);
         return;
@@ -396,7 +396,7 @@ void FaceAuthManager::DoRemove(const RemoveParam &param)
     }
 }
 
-FIRetCode FaceAuthManager::OperForAlgorithm(uint64_t scheduleID)
+FIRetCode FaceAuthManager::OperForAlgorithm(uint64_t scheduleID, FaceOperateType type)
 {
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
@@ -418,11 +418,11 @@ FIRetCode FaceAuthManager::OperForAlgorithm(uint64_t scheduleID)
             SendData(scheduleID, 0, TYPE_ALL_IN_ONE, TYPE_CO_AUTH, msg);
         }
     }
-    HandleAlgoResult(scheduleID);
+    HandleAlgoResult(scheduleID, type);
     return FI_RC_OK;
 }
 
-void FaceAuthManager::HandleAlgoResult(uint64_t scheduleID)
+void FaceAuthManager::HandleAlgoResult(uint64_t scheduleID, FaceOperateType type)
 {
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
@@ -435,6 +435,10 @@ void FaceAuthManager::HandleAlgoResult(uint64_t scheduleID)
     pAuthAttributes authAttributes = std::make_shared<AuthResPool::AuthAttributes>();
     authAttributes->SetUint32Value(AUTH_RESULT_CODE, 0);
     authAttributes->SetUint8ArrayValue(AUTH_RESULT, retResult.coauthMsg);
+    FaceReqType reqType = {};
+    reqType.reqId = scheduleID;
+    reqType.operateType = type;
+    FaceAuthReq::GetInstance()->RemoveRequireInfo(reqType);
     Finish(scheduleID, TYPE_ALL_IN_ONE, retResult.result, authAttributes);
 }
 
@@ -635,24 +639,25 @@ int32_t FaceAuthManager::OpenCamera(sptr<IBufferProducer> producer)
     return FA_RET_OK;
 }
 
-int32_t FaceAuthManager::WaitAlgorithmProcessDone(uint64_t scheduleID)
+int32_t FaceAuthManager::WaitAlgorithmProcessDone(uint64_t scheduleID, FaceOperateType type)
 {
     std::promise<int32_t> promiseobj;
     std::future<int32_t> futureobj = promiseobj.get_future();
     FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCurTaskNum is %{public}d",
         FaceAuthThreadPool::GetInstance()->GetCurTaskNum());
-    FaceAuthThreadPool::GetInstance()->AddTask([&promiseobj, this, &scheduleID]() {
-        promiseobj.set_value(OperForAlgorithm(scheduleID));
+    FaceAuthThreadPool::GetInstance()->AddTask([&promiseobj, this, &scheduleID, &type]() {
+        promiseobj.set_value(OperForAlgorithm(scheduleID, type));
     });
     std::chrono::microseconds span(GET_RESULT_TIME_OUT);
     while (futureobj.wait_for(span) == std::future_status::timeout) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "GetAuthResult TimeOut");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "GetAuthResult TimeOut");
         return FA_RET_ERROR;
     }
     if (futureobj.get() != FI_RC_OK) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "GetAuthResult Fail");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "GetAuthResult Fail");
         return FA_RET_ERROR;
     }
+    FACEAUTH_HILOGI(MODULE_SERVICE, "GetAuthResult Success");
     return FA_RET_OK;
 }
 
