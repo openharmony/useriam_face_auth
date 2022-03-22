@@ -1,0 +1,18 @@
+{
+  "color": [
+    {
+      "name": "font_color",
+      "value": "#99000000"
+    },
+    {
+      "name": "startView_color",
+      "value": "#00A6F9"
+    },
+    {
+      "name": "newBtn_color",
+      "value": "#efefef"
+    }
+
+
+  ]
+}
