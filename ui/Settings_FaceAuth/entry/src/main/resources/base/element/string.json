@@ -1,0 +1,28 @@
+{
+  "string": [
+    {
+      "name": "entry_MainAbility",
+      "value": "entry_MainAbility"
+    },
+    {
+      "name": "description_mainability",
+      "value": "eTS_Empty Ability"
+    },
+    {
+      "name": "description_intro",
+      "value": "eTS_Empty Ability"
+    },
+    {
+      "name": "entry_intro",
+      "value": "entry_intro"
+    },
+    {
+      "name": "description_enrollmentstartview",
+      "value": "eTS_Empty Ability"
+    },
+    {
+      "name": "entry_enrollmentstartview",
+      "value": "entry_enrollmentstartview"
+    }
+  ]
+}
