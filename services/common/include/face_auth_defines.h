@@ -165,31 +165,6 @@ typedef enum HWExeType {
     HW_EXEC_TYPE_LEARN,
 } HWExeType;
 
-typedef struct CameraImageStream {
-    int32_t secureType; /* 0: normal 1: secure */
-    int32_t streamType;
-    int64_t timestamp;
-    uint32_t width;
-    uint32_t height;
-    int32_t format;
-    union data {
-        int32_t sharedFd;
-        void *image;
-        int32_t bufferIndex;
-    } data;
-    int32_t offset;
-    uint32_t size;
-    int32_t irStatus;
-    int32_t envLux;
-    uint32_t stride;
-    int32_t dotTemperature;
-    int32_t irSensorTemperature;
-    uint32_t distance;
-    int32_t isExposureValid; /* AE status: 0 invalid, 1 valid */
-    int32_t bufferType;      /* 0 dynamic memory, 1 static memory, 2 remote image */
-    int32_t extra[IMAGE_STREAM_EXTRA_SIZE];
-} CameraImageStream;
-
 typedef enum FIResultCode {
     FI_NONE = 0,
     FI_FACE_INFO,
