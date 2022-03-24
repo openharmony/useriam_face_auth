@@ -121,6 +121,7 @@ ResultCode GenerateRetTlv(uint32_t result, uint64_t scheduleId, uint64_t subType
     DestoryBuffer(signContent);
     return RESULT_SUCCESS;
 }
+
 ResultCode SetResultTlv(Buffer *retTlv, std::vector<uint8_t> &resultTlv)
 {
     resultTlv.resize(retTlv->contentSize);
@@ -130,6 +131,7 @@ ResultCode SetResultTlv(Buffer *retTlv, std::vector<uint8_t> &resultTlv)
     }
     return RESULT_SUCCESS;
 }
+
 ResultCode DoGetExecutorInfo(std::vector<uint8_t> &vPubKey, uint32_t &esl, uint64_t &authAbility)
 {
     if (!IsEd25519KeyPairValid(g_keyPair)) {
