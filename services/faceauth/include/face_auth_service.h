@@ -36,6 +36,7 @@ public:
     virtual void OnStop() override;
     void Start();
     void ReRegister();
+
 private:
     static FaceAuthService *instance_;
     static std::shared_ptr<FaceAuthManager> manager_;

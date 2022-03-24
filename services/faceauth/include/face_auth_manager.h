@@ -31,8 +31,8 @@ class FaceAuthSequence;
 class FaceAuthManager {
 public:
     static std::shared_ptr<FaceAuthManager> GetInstance();
-    ~FaceAuthManager()=default;
-    FaceAuthManager()=default;
+    ~FaceAuthManager() = default;
+    FaceAuthManager() = default;
     int32_t Init();
     int32_t Release();
     void RegisterExecutor();
@@ -57,6 +57,7 @@ public:
     void SetExecutorMessenger(const sptr<AuthResPool::IExecutorMessenger> &messager);
     void UnfreezeTemplates(std::vector<uint64_t> templateIdList);
     void FreezeTemplates(std::vector<uint64_t> templateIdList);
+
 private:
     static std::shared_ptr<FaceAuthManager> manager_;
     static std::mutex mutex_;
@@ -66,9 +67,10 @@ private:
     static std::shared_ptr<AuthResPool::QueryCallback> queryCallback_;
     static std::shared_ptr<FaceAuthExecutorCallback> executorCallback_;
     std::map<std::string, int32_t> bundleNameList_;
+
 private:
-    FaceAuthManager(const FaceAuthManager&)=delete;
-    FaceAuthManager &operator=(const FaceAuthManager&)=delete;
+    FaceAuthManager(const FaceAuthManager&) = delete;
+    FaceAuthManager &operator=(const FaceAuthManager&) = delete;
     bool IsAlgorithmInited();
     AlgoResult IsNeedAlgoLoad(std::string bundleName);
     AlgoResult IsNeedAlgoRelease(std::string bundleName);

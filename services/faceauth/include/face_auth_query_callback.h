@@ -24,8 +24,8 @@ namespace UserIAM {
 namespace FaceAuth {
 class FaceAuthQueryCallback : public AuthResPool::QueryCallback {
 public:
-    FaceAuthQueryCallback()=default;
-    virtual ~FaceAuthQueryCallback()=default;
+    FaceAuthQueryCallback() = default;
+    virtual ~FaceAuthQueryCallback() = default;
     void OnResult(uint32_t resultCode) override;
 };
 } // namespace FaceAuth

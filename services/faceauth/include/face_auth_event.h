@@ -36,6 +36,7 @@ public:
     {
         eventHandler_ = handler;
     }
+
 private:
     static std::mutex mutex_;
     static std::shared_ptr<FaceAuthEvent> instance_;

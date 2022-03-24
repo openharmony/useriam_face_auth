@@ -71,7 +71,7 @@ class FaceAuthCA {
 public:
     static std::shared_ptr<FaceAuthCA> GetInstance();
     FaceAuthCA();
-    ~FaceAuthCA()=default;
+    ~FaceAuthCA() = default;
     int32_t Init();
     int32_t Close();
     int32_t LoadAlgorithm();
@@ -89,6 +89,7 @@ public:
     int32_t FreezeTemplate(uint64_t templateId);
     int32_t CancelAlgorithmOperation();
     void SetAlgorithmParam(const AlgorithmParam &param);
+
 private:
     static std::shared_ptr<FaceAuthCA> faceAuthCA_;
     static std::mutex mutex_;
@@ -104,6 +105,7 @@ private:
     std::vector<uint64_t> templateIdList_;
     std::map<uint64_t, int32_t> remainTimesMap_;
     AlgorithmOperation algorithmOperation_;
+
 private:
     void GetAuthResult(int32_t &result);
     FIRetCode GetAuthState(int32_t &authErrorCode, FICode &code, uint64_t reqId);
