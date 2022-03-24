@@ -49,13 +49,13 @@ Buffer *CreateBuffer(const uint32_t size)
         return nullptr;
     }
 
-    Buffer *buffer = (Buffer *)malloc(sizeof(Buffer));
+    Buffer *buffer = static_cast<Buffer *>(malloc(sizeof(Buffer)));
     if (buffer == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "malloc buffer fail");
         return nullptr;
     }
 
-    buffer->buf = (uint8_t *)malloc(size);
+    buffer->buf = static_cast<uint8_t *>(malloc(size));
     if (buffer->buf == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "malloc buffer content fail");
         free(buffer);

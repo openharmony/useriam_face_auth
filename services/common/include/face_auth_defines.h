@@ -114,7 +114,7 @@ typedef struct {
     uint64_t templateID = 0;
     uint64_t callerUID = 0;
     uint32_t eventID = 0;
-}AuthParam;
+} AuthParam;
 
 typedef struct {
     uint64_t scheduleID = 0;
@@ -122,13 +122,13 @@ typedef struct {
     uint64_t callerUID = 0;
     uint32_t eventID = 0;
     sptr<IBufferProducer> producer = nullptr;
-}EnrollParam;
+} EnrollParam;
 
 typedef struct {
     uint64_t scheduleID = 0;
     uint64_t templateID = 0;
     uint64_t callerUID = 0;
-}RemoveParam;
+} RemoveParam;
 
 typedef struct callBackParam {
     uint64_t reqId = 0;
