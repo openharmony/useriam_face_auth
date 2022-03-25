@@ -24,7 +24,7 @@ namespace UserIAM {
 namespace FaceAuth {
 class FaceAuthEventHandler : public AppExecFwk::EventHandler {
 public:
-    FaceAuthEventHandler(const std::shared_ptr<AppExecFwk::EventRunner> &runner);
+    explicit FaceAuthEventHandler(const std::shared_ptr<AppExecFwk::EventRunner> &runner);
     virtual ~FaceAuthEventHandler();
     void RemoveEvent(const uint64_t reqId);
     template <typename T>
