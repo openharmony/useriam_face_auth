@@ -38,6 +38,7 @@ public:
     bool isCanceled(uint32_t eventId, int32_t uId);
     bool FindLocalAuth();
     void PrintReqInfoList();
+
 private:
     std::map<FaceReqType, FaceInfo> reqInfoList_;
     static std::mutex mutex_;

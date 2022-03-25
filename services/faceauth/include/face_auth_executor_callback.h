@@ -29,8 +29,8 @@ using pAuthMessage = std::shared_ptr<AuthResPool::AuthMessage>;
 
 class FaceAuthExecutorCallback : public AuthResPool::ExecutorCallback {
 public:
-    FaceAuthExecutorCallback()=default;
-    virtual ~FaceAuthExecutorCallback()=default;
+    FaceAuthExecutorCallback() = default;
+    virtual ~FaceAuthExecutorCallback() = default;
     int32_t OnBeginExecute(uint64_t scheduleId, std::vector<uint8_t> &publicKey, pAuthAttributes commandAttrs) override;
     int32_t OnEndExecute(uint64_t scheduleId, pAuthAttributes consumerAttr) override;
     int32_t OnSetProperty(pAuthAttributes properties) override;
