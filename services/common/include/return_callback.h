@@ -23,8 +23,9 @@ namespace UserIAM {
 namespace FaceAuth {
 class ReturnCallback {
 public:
-    ReturnCallback(std::function<void(void)> callback);
+    explicit ReturnCallback(std::function<void(void)> callback);
     ~ReturnCallback();
+
 private:
     std::function<void(void)> callback_;
 };

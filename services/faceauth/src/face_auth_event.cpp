@@ -74,6 +74,7 @@ void FaceAuthEvent::HandleTask(const AppExecFwk::InnerEvent::Pointer &event)
     }
     return;
 }
+
 void FaceAuthEvent::ProcessEnrollTask(const AppExecFwk::InnerEvent::Pointer &event)
 {
     auto object = event->GetUniqueObject<EnrollParam>();
@@ -91,6 +92,7 @@ void FaceAuthEvent::ProcessEnrollTask(const AppExecFwk::InnerEvent::Pointer &eve
     FaceAuthManager::GetInstance()->DoEnroll(info);
     return;
 }
+
 void FaceAuthEvent::ProcessAuthenticateTask(const AppExecFwk::InnerEvent::Pointer &event)
 {
     auto object = event->GetUniqueObject<AuthParam>();
@@ -108,6 +110,7 @@ void FaceAuthEvent::ProcessAuthenticateTask(const AppExecFwk::InnerEvent::Pointe
     FaceAuthManager::GetInstance()->DoAuthenticate(info);
     return;
 }
+
 void FaceAuthEvent::ProcessRemoveTask(const AppExecFwk::InnerEvent::Pointer &event)
 {
     auto object = event->GetUniqueObject<RemoveParam>();
