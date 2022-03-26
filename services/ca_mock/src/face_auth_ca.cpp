@@ -55,7 +55,7 @@ static const char *FACEID_FILENAME("/data/useriam/faceId.dat");
 static const char *AUTH_RESULT_FILENAME("/data/useriam/auth_result.dat");
 static const int32_t SLEEP_LONG_NUM = 2000;
 static const int32_t PARAM_RANGE = 10;
-static const int32_t TEST_ANGLT_START_NUM = 1000;
+static const int32_t TEST_ANGLE_START_NUM = 1000;
 static const int32_t TEST_ANGLE_MAX_NUM = 1013;
 static const int32_t TEST_ANGLE_ADD_NUM = 4;
 static const int32_t DEFAULT_REMAIN_TIMES = 5;
@@ -610,7 +610,7 @@ void FaceAuthCA::GetEnrollAngleResult()
         info.param[j] = 0;
     }
     resultInfos_.insert(std::pair<int32_t, ResultInfo>(mapNum, info));
-    for (int32_t i = TEST_ANGLT_START_NUM; i < TEST_ANGLE_MAX_NUM; i += TEST_ANGLE_ADD_NUM) {
+    for (int32_t i = TEST_ANGLE_START_NUM; i < TEST_ANGLE_MAX_NUM; i += TEST_ANGLE_ADD_NUM) {
         info.resultCode = i;
         for (int32_t j = 0; j < PARAM_RANGE; j++) {
             info.param[j] = 0;
