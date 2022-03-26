@@ -15,7 +15,6 @@
 
 import Log from '../utils/log.ets'
 import router from '@system.router';
-import Config from '../config/config.ets'
 import CommonController from '../controller/commonController.ets'
 import UserIDMModel from '../model/userIDMModel.ets'
 
