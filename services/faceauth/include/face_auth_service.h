@@ -30,10 +30,10 @@ public:
     DECLEAR_SYSTEM_ABILITY(FaceAuthService);
     static FaceAuthService *GetInstance();
     FaceAuthService();
-    virtual ~FaceAuthService() override;
+    ~FaceAuthService() override;
 public:
-    virtual void OnStart() override;
-    virtual void OnStop() override;
+    void OnStart() override;
+    void OnStop() override;
     void Start();
     void ReRegister();
 
