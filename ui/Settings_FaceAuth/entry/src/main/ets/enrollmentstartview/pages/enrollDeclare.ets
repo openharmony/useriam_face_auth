@@ -35,61 +35,61 @@ export default struct EnrollDeclare {
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start)
               .margin({ top: Constants.DECLARE_TITLE_MARGIN_TOP, bottom: Constants.DECLARE_TITLE_MARGIN_BOTTOM })
-            Text(this.pattern == "2D" ? $r("app.string.face_recognize_annouce_message_01") : $r("app.string.face_3drecognize_annouce_message_01"))
+            Text(this.pattern == "2D" ? $r("app.string.face_recognize_announce_message_01") : $r("app.string.face_3drecognize_announce_message_01"))
               .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start)
               .margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM})
               .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-            Text($r("app.string.face_recognize_annouce_message_02"))
+            Text($r("app.string.face_recognize_announce_message_02"))
               .fontSize(Constants.DECLARE_SECONDARY_TITLE_FONT_SIZE)
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start)
               .margin({ top: Constants.DECLARE_TITLE_MARGIN_TOP, bottom: Constants.DECLARE_TITLE_MARGIN_BOTTOM })
-            Text($r("app.string.face_recognize_annouce_message_03"))
+            Text($r("app.string.face_recognize_announce_message_03"))
               .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
               .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-            Text($r("app.string.face_recognize_annouce_message_04"))
+            Text($r("app.string.face_recognize_announce_message_04"))
               .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
               .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-            Text($r("app.string.face_recognize_annouce_message_05"))
+            Text($r("app.string.face_recognize_announce_message_05"))
               .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
               .width(Constants.DECLARE_MAX_WIDTH)
               .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
               .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-            Text($r("app.string.face_recognize_annouce_message_06"))
+            Text($r("app.string.face_recognize_announce_message_06"))
               .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
               .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-            Text($r("app.string.face_recognize_annouce_message_07"))
+            Text($r("app.string.face_recognize_announce_message_07"))
               .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
               .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-            Text($r("app.string.face_recognize_annouce_message_08"))
+            Text($r("app.string.face_recognize_announce_message_08"))
               .fontSize(Constants.DECLARE_SECONDARY_TITLE_FONT_SIZE)
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start).margin({ top: Constants.DECLARE_TITLE_MARGIN_TOP, bottom: Constants.DECLARE_TITLE_MARGIN_BOTTOM })
 
-            Text($r("app.string.face_recognize_annouce_message_09"))
+            Text($r("app.string.face_recognize_announce_message_09"))
               .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
               .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
             if (this.pattern == "2D") {
-              Text($r("app.string.face_annouce_tip1_item2_3d"))
+              Text($r("app.string.face_announce_tip1_item2_3d"))
                 .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
                 .width(Constants.DECLARE_MAX_WIDTH)
                 .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
                 .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
               Text() {
                 Span(Constants.DECLARE_TITLE_3).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                Span($r("app.string.face_recognize_annouce_message_10")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
+                Span($r("app.string.face_recognize_announce_message_10")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
               }
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
@@ -97,7 +97,7 @@ export default struct EnrollDeclare {
 
               Text() {
                 Span(Constants.DECLARE_TITLE_4).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                Span($r("app.string.face_recognize_annouce_message_11")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
+                Span($r("app.string.face_recognize_announce_message_11")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
               }
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
@@ -105,7 +105,7 @@ export default struct EnrollDeclare {
 
               Text() {
                 Span(Constants.DECLARE_TITLE_5).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                Span($r("app.string.face_recognize_annouce_message_12")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
+                Span($r("app.string.face_recognize_announce_message_12")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
               }
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
@@ -113,7 +113,7 @@ export default struct EnrollDeclare {
             } else if (this.pattern == "3D") {
               Text() {
                 Span(Constants.DECLARE_TITLE_2).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                Span($r("app.string.face_recognize_annouce_message_10")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
+                Span($r("app.string.face_recognize_announce_message_10")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
               }
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
@@ -121,7 +121,7 @@ export default struct EnrollDeclare {
 
               Text() {
                 Span(Constants.DECLARE_TITLE_3).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                Span($r("app.string.face_recognize_annouce_message_11")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
+                Span($r("app.string.face_recognize_announce_message_11")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
               }
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
@@ -129,7 +129,7 @@ export default struct EnrollDeclare {
 
               Text() {
                 Span(Constants.DECLARE_TITLE_4).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                Span($r("app.string.face_recognize_annouce_message_12")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
+                Span($r("app.string.face_recognize_announce_message_12")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
               }
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
@@ -137,7 +137,7 @@ export default struct EnrollDeclare {
             }
 
 
-            Text($r("app.string.face_recognize_annouce_message_13"))
+            Text($r("app.string.face_recognize_announce_message_13"))
               .fontSize(Constants.DECLARE_SECONDARY_TITLE_FONT_SIZE)
               .width(Constants.DECLARE_MAX_WIDTH)
               .textAlign(TextAlign.Start)
@@ -145,15 +145,15 @@ export default struct EnrollDeclare {
 
 
             Text() {
-              Span($r("app.string.face_recognize_annouce_message_14_1"))
+              Span($r("app.string.face_recognize_announce_message_14_1"))
                 .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              Span($r("app.string.face_recognize_annouce_message_14_3"))
+              Span($r("app.string.face_recognize_announce_message_14_3"))
                 .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
                 .fontWeight(FontWeight.Bold)
                 .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              Span($r("app.string.face_recognize_annouce_message_14_2"))
+              Span($r("app.string.face_recognize_announce_message_14_2"))
                 .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              Span($r("app.string.face_recognize_annouce_message_14_3"))
+              Span($r("app.string.face_recognize_announce_message_14_3"))
                 .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
                 .fontWeight(FontWeight.Bold)
 
@@ -164,10 +164,10 @@ export default struct EnrollDeclare {
             .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
 
             Text() {
-              Span($r("app.string.face_recognize_annouce_message_15_1")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              Span($r("app.string.face_recognize_annouce_message_14_3")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
+              Span($r("app.string.face_recognize_announce_message_15_1")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
+              Span($r("app.string.face_recognize_announce_message_14_3")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
                 .fontWeight(FontWeight.Bold)
-              Span($r("app.string.face_recognize_annouce_message_15_2")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
+              Span($r("app.string.face_recognize_announce_message_15_2")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
             }
             .width(Constants.DECLARE_MAX_WIDTH)
             .textAlign(TextAlign.Start)
