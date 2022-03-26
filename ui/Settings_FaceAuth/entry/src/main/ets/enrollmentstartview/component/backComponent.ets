@@ -15,7 +15,6 @@
 
 import Log from '../utils/log.ets'
 import commonControler from '../controller/commonController.ets'
-import Constants from '../config/constant.ets'
 
 @Preview
 @Component

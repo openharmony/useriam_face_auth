@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import router from '@system.router';
 import BackComponent from '../component/backComponent.ets'
 import Log from '../utils/log.ets'
 import CommonController from '../controller/commonController.ets'
