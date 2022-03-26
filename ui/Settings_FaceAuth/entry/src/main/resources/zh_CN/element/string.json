@@ -328,79 +328,79 @@
       "value": "功能介绍"
     },
     {
-      "name": "face_recognize_annouce_message_01",
+      "name": "face_recognize_announce_message_01",
       "value": "人脸识别是一种基于人的脸部特征信息进行身份识别的生物识别技术。它通过手机前置摄像头捕捉人脸面部数据，进而快速完成面部特征比对和身份认证。可用于解锁屏幕、访问应用锁等场景。"
     },
     {
-      "name": "face_recognize_annouce_message_02",
+      "name": "face_recognize_announce_message_02",
       "value": "录入面部数据时，需注意以下事项："
     },
     {
-      "name": "face_recognize_annouce_message_03",
+      "name": "face_recognize_announce_message_03",
       "value": "1.确保摄像头清洁；"
     },
     {
-      "name": "face_recognize_annouce_message_04",
+      "name": "face_recognize_announce_message_04",
       "value": "2.在光线充足的环境下录入，但需避免强光直射；"
     },
     {
-      "name": "face_recognize_annouce_message_05",
+      "name": "face_recognize_announce_message_05",
       "value": "3.勿用衣帽、头发、墨镜、口罩、浓妆等遮挡面部；"
     },
     {
-      "name": "face_recognize_annouce_message_06",
+      "name": "face_recognize_announce_message_06",
       "value": "4.确保面部正面完整清晰地出现在提示框内，不要闭眼、大幅度仰头或低头"
     },
     {
-      "name": "face_recognize_annouce_message_07",
+      "name": "face_recognize_announce_message_07",
       "value": "5.避免其他人出现在录入画面中。"
     },
     {
-      "name": "face_recognize_annouce_message_08",
+      "name": "face_recognize_announce_message_08",
       "value": "任何技术都存在一定局限和风险，使用人脸识别时，需注意以下事项："
     },
     {
-      "name": "face_recognize_annouce_message_09",
+      "name": "face_recognize_announce_message_09",
       "value": "1.在暗光、强光、逆光或角度过大等场景下，人脸识别的成功率会有所降低；"
     },
     {
-      "name": "face_annouce_tip1_item2_3d",
+      "name": "face_announce_tip1_item2_3d",
       "value": "2.人脸识别的安全性低于图案密码、数字密码、混合密码。；"
     },
     {
-      "name": "face_recognize_annouce_message_10",
+      "name": "face_recognize_announce_message_10",
       "value": "您的设备可能会被容貌、外形与您相近的人或物品解锁；"
     },
     {
-      "name": "face_recognize_annouce_message_11",
+      "name": "face_recognize_announce_message_11",
       "value": "请勿将设备随意交给他人使用，避免人脸识别功能被恶意利用；"
     },
     {
-      "name": "face_recognize_annouce_message_12",
+      "name": "face_recognize_announce_message_12",
       "value": "除以上事项外，您还需注意其他可能影响人脸识别功能正常使用的情况。"
     },
     {
-      "name": "face_recognize_annouce_message_13",
+      "name": "face_recognize_announce_message_13",
       "value": "隐私声明"
     },
     {
-      "name": "face_recognize_annouce_message_14_1",
+      "name": "face_recognize_announce_message_14_1",
       "value": "您的"
     },
     {
-      "name": "face_recognize_annouce_message_14_2",
+      "name": "face_recognize_announce_message_14_2",
       "value": "将受到严格保护。该数据仅加密保存于本设备的安全隔离区域，华为不会进行备份，其他应用也无法访问或备份。例如，您使用人脸识别进行应用内认证时，应用仅能收到认证是否成功的通知，而无法访问、备份或录入"
     },
     {
-      "name": "face_recognize_annouce_message_14_3",
+      "name": "face_recognize_announce_message_14_3",
       "value": "面部数据。"
     },
     {
-      "name": "face_recognize_annouce_message_15_1",
+      "name": "face_recognize_announce_message_15_1",
       "value": "您拥有人脸识别的自主控制权，可灵活控制人脸识别的使用及适用范围。例如，您不想使用人脸识别访问应用锁，在“设置”中将其关闭即可，此时人脸识别仍可用于其他操作，但不可用于进入应用锁。您还可彻底删除"
     },
     {
-      "name": "face_recognize_annouce_message_15_2",
+      "name": "face_recognize_announce_message_15_2",
       "value": "删除后本设备将不再保存这些数据。"
     },
     {
@@ -408,7 +408,7 @@
       "value": "关于3D人脸识别的声明"
     },
     {
-      "name": "face_3drecognize_annouce_message_01",
+      "name": "face_3drecognize_announce_message_01",
       "value": "3D人脸识别是新一代人脸识别技术。它通过深度感应技术，捕捉更丰富的面部数据，实现三维立体防伪识别。在暗光、逆光、无光等环境下，也可用于解锁屏幕，访问应用锁、保密柜及支付，其安全性、准确率和环境适应性较传统人脸识别技术大幅提升。"
     }
 

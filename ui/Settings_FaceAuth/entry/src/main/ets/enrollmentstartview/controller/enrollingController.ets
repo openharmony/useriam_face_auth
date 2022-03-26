@@ -58,13 +58,13 @@ class EnrollingController {
   }
 
   async onAcquire(result: number) {
-    Log.info(this.TAG, 'onAcuquire+ result: ' + result)
+    Log.info(this.TAG, 'onAcquire+ result: ' + result)
     if (result === 25) {
-      Log.info(this.TAG, 'onAcuquire face detected+')
+      Log.info(this.TAG, 'onAcquire face detected+')
       this.faceDetected()
-      Log.info(this.TAG, 'onAcuquire face detected-')
+      Log.info(this.TAG, 'onAcquire face detected-')
     }
-    Log.info(this.TAG, 'onAcuquire-')
+    Log.info(this.TAG, 'onAcquire-')
   }
 
   async faceDetected() {
