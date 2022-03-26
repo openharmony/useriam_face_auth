@@ -21,87 +21,87 @@
       "value": "Feature description"
     },
     {
-      "name": "face_recognize_annouce_message_01",
+      "name": "face_recognize_announce_message_01",
       "value": "Face Recognition is a biometric identification technology that allows your phone to recognize the features of your face. It uses the front camera to capture facial data, and then compares it to pre-stored data to quickly verify your identity. You can use this feature to unlock your device, open locked apps, and more."
     },
     {
-      "name": "face_recognize_annouce_message_02",
+      "name": "face_recognize_announce_message_02",
       "value": "Please note the following when setting up this feature:"
     },
     {
-      "name": "face_recognize_annouce_message_03",
+      "name": "face_recognize_announce_message_03",
       "value": "1.Make sure that the camera lens is clean."
     },
     {
-      "name": "face_recognize_annouce_message_04",
+      "name": "face_recognize_announce_message_04",
       "value": "2.Scan your face in a well-lit environment, avoiding direct sunlight.；"
     },
     {
-      "name": "face_recognize_annouce_message_05",
+      "name": "face_recognize_announce_message_05",
       "value": "3.Avoid covering your face with items of clothing, hair, sunglasses, masks, or thick makeup."
     },
     {
-      "name": "face_recognize_annouce_message_06",
+      "name": "face_recognize_announce_message_06",
       "value": "4.Make sure your face is completely displayed in the frame. Look straight at the camera, and avoid raising and lowering your head or closing your eyes."
     },
     {
-      "name": "face_recognize_annouce_message_07",
+      "name": "face_recognize_announce_message_07",
       "value": "5.Make sure that no one else appears in the frame."
     },
     {
-      "name": "face_recognize_annouce_message_08",
+      "name": "face_recognize_announce_message_08",
       "value": "Please note the following when using Face Recognition:"
     },
     {
-      "name": "face_recognize_annouce_message_09",
+      "name": "face_recognize_announce_message_09",
       "value": "1.Face Recognition may not work as well in dim, very bright, or backlit environments, or if the angle between your face and the camera is too great."
     },
     {
-      "name": "face_annouce_tip1_item2_3d",
+      "name": "face_announce_tip1_item2_3d",
       "value": "2.Face Recognition is less secure than other unlock methods such as Pattern, PIN, and Password."
     },
     {
-      "name": "face_recognize_annouce_message_10",
+      "name": "face_recognize_announce_message_10",
       "value": "There is a small chance that your device may be unlocked by people that closely resemble you or by objects that represent close depictions of your likeness."
     },
     {
-      "name": "face_recognize_annouce_message_11",
+      "name": "face_recognize_announce_message_11",
       "value": "To prevent Face Recognition from being used without your consent, please exercise caution before allowing other people to use your device."
     },
     {
-      "name": "face_recognize_annouce_message_12",
+      "name": "face_recognize_announce_message_12",
       "value": "The functionality of Face Recognition may also be affected in scenarios other than those described above."
     },
     {
-      "name": "face_recognize_annouce_message_13",
+      "name": "face_recognize_announce_message_13",
       "value": "Privacy Statement"
     },
     {
-      "name": "face_recognize_annouce_message_14_1",
+      "name": "face_recognize_announce_message_14_1",
       "value": "Your"
     },
     {
-      "name": "face_recognize_annouce_message_14_2",
+      "name": "face_recognize_announce_message_14_2",
       "value": "is rigorously protected. This data is encrypted and stored in an isolated zone on your device, where it will not be copied by Huawei, and cannot be copied or accessed by any app. When you use Face Recognition in an app, the app is only informed whether or not verification is successful, and cannot access your actual"
     },
     {
-      "name": "face_recognize_annouce_message_14_3",
+      "name": "face_recognize_announce_message_14_3",
       "value": "facial data"
     },
     {
-      "name": "face_recognize_annouce_message_15_1",
+      "name": "face_recognize_announce_message_15_1",
       "value": "As the owner of your"
     },
     {
-      "name": "face_recognize_annouce_message_15_2",
+      "name": "face_recognize_announce_message_15_2",
       "value": ", you are entitled to decide how you use the Face Recognition feature. For example, if you don't want to use Face Recognition to access App Lock, you can disable this feature in Settings. You can also choose to permanently delete your。"
     },
     {
-      "name": "face_recognize_annouce_message_15_3",
+      "name": "face_recognize_announce_message_15_3",
       "value": "facial data"
     },
     {
-      "name": "face_recognize_annouce_message_15_4",
+      "name": "face_recognize_announce_message_15_4",
       "value": "from your device."
     },
     {
@@ -109,7 +109,7 @@
       "value": "Statement About 3D Face Recognition"
     },
     {
-      "name": "face_3drecognize_annouce_message_01",
+      "name": "face_3drecognize_announce_message_01",
       "value": "3D Face Recognition uses depth-sensing technology to create a sophisticated, three-dimensional model of your face, which can be used to verify your identity. This lets you securely unlock your device, confirm payments, and access features such as App Lock and Safe by simply looking at the screen. 3D Face Recognition is more secure and robust than 2D face recognition technologies, and can even be used in the dark."
     }
   ,

@@ -14,7 +14,7 @@
  */
 
 import Log from '../utils/log.ets'
-import commonControler from '../controller/commonController.ets'
+import commonController from '../controller/commonController.ets'
 import Constants from '../config/constant.ets'
 
 @Preview
@@ -38,7 +38,7 @@ export default struct BackComponent {
         .backgroundColor(this.isTouch? "#E3E3E3": "#00000000")
         .onClick(() => {
           Log.info(this.TAG, 'back image onClick +')
-          commonControler.routeBack()
+          commonController.routeBack()
           Log.info(this.TAG, 'back image onClick -')
         })
         .margin({
