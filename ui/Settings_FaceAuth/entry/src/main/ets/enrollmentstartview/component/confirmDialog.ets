@@ -14,9 +14,7 @@
  */
 
 import Log from '../utils/log.ets'
-import Constants from '../config/constant.ets'
 import DefaultConstants from '../config/defaultConstant.ets'
-import UserIDMModel from '../model/userIDMModel.ets'
 
 @CustomDialog
 export default struct ConfirmDialog {

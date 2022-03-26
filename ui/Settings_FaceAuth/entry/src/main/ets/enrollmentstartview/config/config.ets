@@ -14,7 +14,6 @@
  */
 
 import Log from '../utils/log.ets'
-import deviceInfo from '@ohos.deviceInfo'
 import display from '@ohos.display';
 
 class Config {
