@@ -18,16 +18,6 @@
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-const std::string Constant::FACE_ONLY = "FACE_ONLY";
-const std::string Constant::ALL = "ALL";
-const std::string Constant::APP_PERMISSION_TYPE = "app";
-const std::string Constant::LEVEL_1 = "S1";
-const std::string Constant::LEVEL_2 = "S2";
-const std::string Constant::LEVEL_3 = "S3";
-const std::string Constant::LEVEL_4 = "S4";
-const std::string Constant::ACCESS_PERMISSION_NAME = "ohos.permission.ACCESS_BIOMETRIC";
-const std::string Constant::ENROLL_PERMISSION_NAME = "ohos.permission.ENROLL_BIOMETRIC";
-
 const std::map<std::string, int32_t> Constant::TIP_CODE_MAP = {
     std::map<std::string, int32_t>::value_type("1+-1", -1),  // code 1, errorCode -1, means tipCode NO_SUPPORT(-1)
     std::map<std::string, int32_t>::value_type("1+0", 0),    // code 1, errorCode 0, means tipCode SUCCESS(0)
