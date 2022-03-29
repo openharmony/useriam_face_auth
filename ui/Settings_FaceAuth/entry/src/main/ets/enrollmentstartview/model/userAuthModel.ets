@@ -21,6 +21,7 @@ class UserAuthModel {
   private TAG: string = "UserAuthModel"
   private pinAuthManger : any
   private userAuthManager : any
+  const CMD_SET_SURFACE_ID = 100
 
   constructor() {
     Log.info(this.TAG, "constructor+")
@@ -46,7 +47,7 @@ class UserAuthModel {
           if ((result == 0) && extraInfo.token && (Object.keys(extraInfo.token).length > 0) ) {
             resolve(extraInfo.token);
             Log.info(this.TAG, 'authPin success');
-            setTimeout(()=>{CommonController.terminateAbility()}, 2 * 60 * 1000)
+            setTimeout(()=>{CommonController.terminateAbility()}, 10 * 60 * 1000)
           } else {
             Log.error(this.TAG, 'authPin fail');
             throw 1
@@ -56,6 +57,19 @@ class UserAuthModel {
     })
     Log.info(this.TAG, "auth Pin-")
     return ret
+  }
+
+  async setSurfaceId(surfaceIdString: string) : Promise<number> {
+    Log.info(this.TAG, 'set surface id ' + surfaceIdString;
+    return this.userAuthManager.setProperty({
+      authType: account_osAccount.AuthType.FACE,
+      key:CMD_SET_SURFACE_ID,
+      setInfo: CommonController.string2Uint8Array(surfaceIdString);
+    })
+  }
+
+  async clearSurfaceId() : Promise<number> {
+    return this.setSurfaceId("0")
   }
 }
 

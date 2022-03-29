@@ -15,6 +15,7 @@
 
 import Log from '../utils/log.ets'
 import account_osAccount from '@ohos.account.osAccount';
+import CommonController from '../controller/commonController.ets'
 
 class UserIDMModel {
   private TAG: string = "UserIDMModel"
@@ -41,42 +42,28 @@ class UserIDMModel {
     return await this.userIdentityManager.openSession()
   }
 
-  uin8Array2String(inArray: Uint8Array): string {
-    return JSON.stringify(inArray)
-  }
-
-  string2Uint8Array(inString: string): Uint8Array {
-    let buffer = []
-    let parsed:object = JSON.parse(inString)
-    for (const key in Object.keys(parsed)) {
-      buffer.push(parsed[key])
-    }
-    let token = new Uint8Array(buffer)
-    return token
-  }
-
   setToken(token: Uint8Array) {
-    let tokenStr = this.uin8Array2String(token);
+    let tokenStr = CommonController.uin8Array2JsonString(token);
     AppStorage.SetOrCreate<string>("UserIDM_Token", tokenStr)
     Log.info(this.TAG, "setToken ok " + JSON.stringify(token))
   }
 
   getToken() : Uint8Array {
     var tokenStr = AppStorage.Get<string>("UserIDM_Token")
-    let token =  this.string2Uint8Array(tokenStr)
+    let token =  CommonController.jsonString2Uint8Array(tokenStr)
     Log.info(this.TAG, "getToken ok " + JSON.stringify(token))
     return token
   }
 
   setCredentialId(credId: Uint8Array) {
-    let credIdStr = this.uin8Array2String(credId);
+    let credIdStr = CommonController.uin8Array2JsonString(credId);
     AppStorage.SetOrCreate<string>("UserIDM_CredId", credIdStr)
     Log.info(this.TAG, "setCredentialId ok " + JSON.stringify(credId))
   }
 
   getCredentialId() : Uint8Array {
     var credIdStr = AppStorage.Get<string>("UserIDM_CredId")
-    let credId = this.string2Uint8Array(credIdStr)
+    let credId = CommonController.jsonString2Uint8Array(credIdStr)
     Log.info(this.TAG, "getCredentialId ok " + JSON.stringify(credId))
     return credId
   }
@@ -117,6 +104,9 @@ class UserIDMModel {
           }
           Log.info(this.TAG, "enrollFace onResult-")
           resolve(result)
+        },
+        onAcquireInfo(module, number, extraInfo) {
+          this.onAcquireCallback(number)
         }
       })
     })

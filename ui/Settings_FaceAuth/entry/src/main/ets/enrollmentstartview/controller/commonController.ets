@@ -87,6 +87,28 @@ class CommonController {
     AppStorage.SetOrCreate('stackShelterHeightEnd', "146%"); // 166 * 0.88
     AppStorage.SetOrCreate('stackRingHeightPercentage', "94%");
   }
+
+  uin8Array2JsonString(inArray: Uint8Array): string {
+    return JSON.stringify(inArray)
+  }
+
+  jsonString2Uint8Array(inString: string): Uint8Array {
+    let buffer = []
+    let parsed:object = JSON.parse(inString)
+    for (const key in Object.keys(parsed)) {
+      buffer.push(parsed[key])
+    }
+    return new Uint8Array(buffer)
+  }
+
+  string2Uint8Array(inString: string): Uint8Array {
+    let buffer = []
+    for (let i = 0; i < inString.length; i++) {
+      buffer.push(inString.charCodeAt(i))
+    }
+    buffer.push(0)
+    return new Uint8Array(buffer)
+  }
 }
 
 let commonController = new CommonController();

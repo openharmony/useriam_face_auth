@@ -13,28 +13,36 @@
  * limitations under the License.
  */
 
-#ifndef FACE_AUTH_THREAD_POOL_H
-#define FACE_AUTH_THREAD_POOL_H
+#ifndef FACE_AUTH_CLIENT_H
+#define FACE_AUTH_CLIENT_H
 
-#include <mutex>
+#include <list>
 #include "nocopyable.h"
-#include "thread_pool.h"
+#include "singleton.h"
+#include "iface_auth.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-class FaceAuthThreadPool : public ThreadPool {
+class FaceAuthClient : public IRemoteObject::DeathRecipient {
+    DECLARE_DELAYED_SINGLETON(FaceAuthClient);
+    DISALLOW_COPY_AND_MOVE(FaceAuthClient);
+
 public:
-    FaceAuthThreadPool();
-    virtual ~FaceAuthThreadPool();
-    static std::shared_ptr<FaceAuthThreadPool> GetInstance();
+    void ResetFaceAuthProxy();
+    static std::shared_ptr<FaceAuthClient> GetInstance();
+    int32_t SetBufferProducer(sptr<IBufferProducer> &producer);
+    virtual void OnRemoteDied(const wptr<IRemoteObject> &remote);
 
 private:
+    sptr<IFaceAuth> GetFaceAuthProxy();
     static std::mutex mutex_;
-    static std::shared_ptr<FaceAuthThreadPool> instance_;
+    static std::shared_ptr<FaceAuthClient> instance_;
+    sptr<IFaceAuth> faceAuthProxy_;
+    sptr<IRemoteObject::DeathRecipient> recipient_;
 };
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
 
-#endif // FACE_AUTH_THREAD_POOL_H
+#endif // FACE_AUTH_CLIENT_H

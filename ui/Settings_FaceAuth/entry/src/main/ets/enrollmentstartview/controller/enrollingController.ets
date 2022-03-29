@@ -17,9 +17,11 @@ import Log from '../utils/log.ets'
 import router from '@system.router';
 import CommonController from '../controller/commonController.ets'
 import UserIDMModel from '../model/userIDMModel.ets'
+import UserAuthModel from '../model/UserAuthModel.ets'
 
 class EnrollingController {
   private TAG: string = "EnrollingController:"
+  private enrolling: boolean = false
 
   constructor() {
     Log.info(this.TAG, 'constructor+')
@@ -41,10 +43,26 @@ class EnrollingController {
     AppStorage.Set('stackVideoBlurRadius', 0);
 
     AppStorage.Set('enrollStatus', $r('app.string.enrolling'));
+    this.startEnroll()
+    Log.info(this.TAG, 'init-')
+  }
 
+  async startEnroll() {
+    Log.info(this.TAG, 'startEnroll+')
+    if (AppStorage.Get('xComponentSurfaceId') === "") {
+      Log.info(this.TAG, 'surface id is not set, skip start enroll')
+      return
+    }
+    if (this.enrolling) {
+      Log.info(this.TAG, 'face is enrolling, skip start enroll')
+      return
+    }
+    var setResult = await UserAuthModel.setSurfaceId(AppStorage.Get('xComponentSurfaceId'))
+    Log.info(this.TAG, 'setSurfaceId result is ' + setResult)
     UserIDMModel.setOnAcquireCallback(this.onAcquire.bind(this))
     UserIDMModel.enrollFace().then(this.processResult.bind(this))
-    Log.info(this.TAG, 'init-')
+    this.enrolling = true
+    Log.info(this.TAG, 'startEnroll-')
   }
 
   async processResult(result : number) {
@@ -55,6 +73,7 @@ class EnrollingController {
     } else {
       await this.enrollFail()
     }
+    this.enrolling = false
   }
 
   async onAcquire(result: number) {
@@ -128,6 +147,10 @@ class EnrollingController {
     AppStorage.Set('stackProgressValue', 0);
 
     Log.info(this.TAG, 'enrollFail-')
+  }
+
+  async clear() {
+    UserAuthModel.clearSurfaceId()
   }
 }
 
