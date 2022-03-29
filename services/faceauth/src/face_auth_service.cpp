@@ -14,35 +14,40 @@
  */
 
 #include "face_auth_service.h"
+#include "parameter.h"
+#include "singleton.h"
 #include "face_auth_log_wrapper.h"
 #include "face_auth_defines.h"
-#include "parameter.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 const std::string REGISTER_NOTIFICATION = "EXECUTOR_REGISTER_NOTIFICATION";
-FaceAuthService *FaceAuthService::instance_ = nullptr;
+std::shared_ptr<FaceAuthService> FaceAuthService::instance_ = nullptr;
 std::shared_ptr<FaceAuthManager> FaceAuthService::manager_ = nullptr;
+std::mutex FaceAuthService::mutex_;
 const bool REGISTER_RESULT =
     SystemAbility::MakeAndRegisterAbility(DelayedSingleton<FaceAuthService>::GetInstance().get());
 static const char IAM_EVENT_KEY[] = "bootevent.useriam.fwkready";
 
-
 FaceAuthService::FaceAuthService()
-    : SystemAbility(SUBSYS_USERIAM_SYS_ABILITY_FACEAUTH, false)
+    : SystemAbility(SUBSYS_USERIAM_SYS_ABILITY_FACEAUTH, true)
 {
-    instance_ = this;
 }
 
 FaceAuthService::~FaceAuthService()
 {
-    instance_ = nullptr;
 }
 
-FaceAuthService *FaceAuthService::GetInstance()
+std::shared_ptr<FaceAuthService> FaceAuthService::GetInstance()
 {
-    return FaceAuthService::instance_;
+    if (instance_ == nullptr) {
+        std::lock_guard<std::mutex> lock_l(mutex_);
+        if (instance_ == nullptr) {
+            instance_ = std::make_shared<FaceAuthService>();
+        }
+    }
+    return instance_;
 }
 
 static void UserIamBootEventCallback(const char *key, const char *value, void *context)
@@ -56,7 +61,7 @@ static void UserIamBootEventCallback(const char *key, const char *value, void *c
         FACEAUTH_HILOGE(MODULE_SERVICE, "event is mismatch");
         return;
     }
-    FaceAuthService *faceService = FaceAuthService::GetInstance();
+    auto faceService = FaceAuthService::GetInstance();
     if (faceService == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "faceService is null");
         return;
@@ -66,8 +71,14 @@ static void UserIamBootEventCallback(const char *key, const char *value, void *c
 
 void FaceAuthService::OnStart()
 {
-    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthService Start");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "Start");
     WatchParameter(IAM_EVENT_KEY, UserIamBootEventCallback, nullptr);
+
+    if (!Publish(this)) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "failed to publish the service.");
+        return;
+    }
+    FACEAUTH_HILOGI(MODULE_SERVICE, "publish service ok");
     Start();
 }
 
@@ -99,6 +110,16 @@ void FaceAuthService::ReRegister()
         return;
     }
     manager_->QueryRegStatus();
+}
+
+int32_t FaceAuthService::SetBufferProducer(sptr<IBufferProducer> &producer)
+{
+    if (manager_ == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "manager_ is null");
+        return FA_RET_ERROR;
+    }
+    manager_->SetBufferProducer(producer);
+    return FA_RET_OK;
 }
 } // namespace FaceAuth
 } // namespace UserIAM

@@ -13,25 +13,17 @@
  * limitations under the License.
  */
 
-#ifndef FACE_AUTH_CAMERA_BUFFER_LISTENER_H
-#define FACE_AUTH_CAMERA_BUFFER_LISTENER_H
-
-#include "surface.h"
-#include "surface_buffer.h"
-#include "input/camera_input.h"
-#include "input/camera_manager.h"
+#include "face_auth_innerkit.h"
+#include "face_auth_client.h"
+#include "face_auth_log_wrapper.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-class FaceAuthCameraBufferListener : public IBufferConsumerListener {
-public:
-    int32_t SendCameraImage(sptr<SurfaceBuffer> buffer, int64_t timestamp);
-    void OnBufferAvailable() override;
-    sptr<Surface> cameraBuffer_;
-};
+int32_t FaceAuthInnerKit::SetBufferProducer(sptr<IBufferProducer> producer)
+{
+    return DelayedSingleton<FaceAuthClient>::GetInstance()->SetBufferProducer(producer);
+}
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
-
-#endif // FACE_AUTH_CAMERA_BUFFER_LISTENER_H

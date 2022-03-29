@@ -57,7 +57,8 @@ public:
     void SetExecutorMessenger(const sptr<AuthResPool::IExecutorMessenger> &messager);
     void UnfreezeTemplates(std::vector<uint64_t> templateIdList);
     void FreezeTemplates(std::vector<uint64_t> templateIdList);
-
+    void SetBufferProducer(sptr<IBufferProducer> &producer);
+    sptr<IBufferProducer> GetBufferProducer();
 private:
     static std::shared_ptr<FaceAuthManager> manager_;
     static std::mutex mutex_;
@@ -67,8 +68,7 @@ private:
     static std::shared_ptr<AuthResPool::QueryCallback> queryCallback_;
     static std::shared_ptr<FaceAuthExecutorCallback> executorCallback_;
     std::map<std::string, int32_t> bundleNameList_;
-
-private:
+    sptr<IBufferProducer> producer_;
     FaceAuthManager(const FaceAuthManager&) = delete;
     FaceAuthManager &operator=(const FaceAuthManager&) = delete;
     bool IsAlgorithmInited();

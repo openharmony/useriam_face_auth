@@ -11,22 +11,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//base/user_iam/face_auth/useriam.gni")
 import("//build/ohos.gni")
+import("//foundation/aafwk/standard/feature.gni")
+
+group("faceauthservice_group") {
+  deps = []
+  if (ability_runtime_graphics) {
+    deps += [ ":faceauthservice" ]
+  }
+}
 
 ohos_shared_library("faceauthservice") {
   include_dirs = [
-    "//foundation/multimedia/camera_standard/interfaces/inner_api/native/camera/include",
     "//base/user_iam/face_auth/services/faceauth/include",
-    "//base/user_iam/face_auth/services/common/include",
-    "//base/user_iam/face_auth/services/temp/include",
-    "//base/user_iam/face_auth/services/common/log/include",
+    "//base/user_iam/face_auth/common/include",
     "//base/user_iam/face_auth/services/ca_mock/include",
-    "//base/user_iam/auth_executor_mgr/interfaces/innerkits/include",
-    "//base/user_iam/auth_executor_mgr/services/include",
-    "//base/user_iam/auth_executor_mgr/frameworks/kitsimpl/include",
-    "//base/user_iam/auth_executor_mgr/utils/native/include",
-    "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler/include",
+    "//base/user_iam/face_auth/interfaces/innerkits/faceauth/include",
+    "//foundation/multimedia/camera_standard/interfaces/inner_api/native/camera/include",
     "//foundation/multimedia/camera_standard/interfaces/innerkits/native/camera/include",
     "//foundation/multimedia/camera_standard/frameworks/native/metadata/include",
     "//foundation/multimedia/camera_standard/services/camera_service/binder/base/include",
@@ -35,12 +36,11 @@ ohos_shared_library("faceauthservice") {
   ]
 
   sources = [
+    "//base/user_iam/face_auth/common/src/return_callback.cpp",
     "//base/user_iam/face_auth/services/ca_mock/src/adaptor_algorithm.cpp",
     "//base/user_iam/face_auth/services/ca_mock/src/buffer.cpp",
     "//base/user_iam/face_auth/services/ca_mock/src/face_auth_ca.cpp",
     "//base/user_iam/face_auth/services/ca_mock/src/face_auth_func.cpp",
-    "//base/user_iam/face_auth/services/common/src/constant.cpp",
-    "//base/user_iam/face_auth/services/common/src/return_callback.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_camera.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_camera_buffer_listener.cpp",
     "//base/user_iam/face_auth/services/faceauth/src/face_auth_event.cpp",
@@ -55,6 +55,7 @@ ohos_shared_library("faceauthservice") {
   ]
 
   deps = [
+    "//base/user_iam/face_auth/interfaces/innerkits/faceauth:faceauth_framework",
     "//foundation/multimedia/camera_standard/frameworks/native/camera:camera_framework",
     "//foundation/multimedia/camera_standard/frameworks/native/metadata:metadata",
     "//third_party/openssl:libcrypto_static",
@@ -62,7 +63,6 @@ ohos_shared_library("faceauthservice") {
   external_deps = [
     "auth_executor_mgr:coauth_framework",
     "eventhandler:libeventhandler",
-    "graphic_standard:surface",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
     "safwk:system_ability_fwk",
@@ -71,6 +71,10 @@ ohos_shared_library("faceauthservice") {
     "user_idm:useridm_framework",
     "utils_base:utils",
   ]
+
+  if (ability_runtime_graphics) {
+    external_deps += [ "graphic_standard:surface" ]
+  }
   subsystem_name = "useriam"
   part_name = "face_auth"
 }

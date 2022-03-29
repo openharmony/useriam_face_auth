@@ -53,7 +53,8 @@ namespace FaceAuth {
 
 enum FaceAuthSubModule {
     MODULE_SERVICE = 0,
-    FACE_AUTH_MODULE_BUTT
+    MODULE_FRAMEWORK = 1,
+    MODULE_MAX
 };
 
 
@@ -61,11 +62,13 @@ static constexpr unsigned int BASE_FACE_AUTH_DOMAIN_ID = 0xD002422;
 
 enum FaceAuthDomainId {
     FACE_AUTH_SERVICE_DOMAIN = BASE_FACE_AUTH_DOMAIN_ID + MODULE_SERVICE,
-    FACE_AUTH_SERVICE_DOMAIN_MAX
+    FACE_AUTH_FRAMEWORK_DOMAIN = BASE_FACE_AUTH_DOMAIN_ID + MODULE_FRAMEWORK,
+    FACE_AUTH_DOMAIN_ID_MAX
 };
 
-static constexpr OHOS::HiviewDFX::HiLogLabel FACE_AUTH_LABEL[FACE_AUTH_MODULE_BUTT] = {
+static constexpr OHOS::HiviewDFX::HiLogLabel FACE_AUTH_LABEL[MODULE_MAX] = {
     {LOG_CORE, FACE_AUTH_SERVICE_DOMAIN, "FaceAuthService"},
+    {LOG_CORE, FACE_AUTH_FRAMEWORK_DOMAIN, "FaceAuthFramework"},
 };
 
 #define FACEAUTH_HILOGF(module, ...) (void)OHOS::HiviewDFX::HiLog::Fatal(FACE_AUTH_LABEL[module], \
@@ -87,6 +90,14 @@ inline std::string getMaskedString(uint64_t val)
         return "(snprintf fail)";
     }
     return std::string(bytes);
+}
+
+inline std::string getPointerNullString(void *p)
+{
+    if (p == nullptr) {
+        return "null";
+    }
+    return "non-null";
 }
 }  // namespace FaceAuth
 }  // namespace UserIAM
