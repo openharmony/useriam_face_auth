@@ -26,7 +26,7 @@ int32_t FaceAuthCameraBufferListener::SendCameraImage(OHOS::sptr<OHOS::SurfaceBu
     FACEAUTH_HILOGI(MODULE_SERVICE, "receive image from camera");
     if (buffer == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "buffer is nullptr");
-        return -1;        
+        return -1;
     }
     CameraImage image = {};
     image.image = static_cast<uint8_t*>(buffer->GetVirAddr());

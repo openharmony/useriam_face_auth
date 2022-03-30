@@ -240,7 +240,7 @@ int32_t HmacSha256(const Buffer *hmacKey, const Buffer *data, Buffer **hmac)
 {
     if (hmac == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "hmac is nullptr");
-        return RESULT_BAD_PARAM;        
+        return RESULT_BAD_PARAM;
     }
     const EVP_MD *alg = EVP_sha256();
     if (alg == nullptr) {
@@ -265,7 +265,7 @@ int32_t HmacSha512(const Buffer *hmacKey, const Buffer *data, Buffer **hmac)
 {
     if (hmac == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "hmac is nullptr");
-        return RESULT_BAD_PARAM;        
+        return RESULT_BAD_PARAM;
     }
     const EVP_MD *alg = EVP_sha512();
     if (alg == nullptr) {
