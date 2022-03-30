@@ -173,6 +173,10 @@ void FaceAuthCamera::CloseCamera()
 int32_t FaceAuthCamera::Start()
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "start");
+    if (capSession_ == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "capSession_ is nullptr");
+        return FA_RET_ERROR;
+    }
     int32_t intResult = capSession_->Start();
     if (intResult != FA_RET_OK) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Start capture session failed");
