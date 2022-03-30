@@ -22,16 +22,16 @@
       "ram": "16000KB",
       "deps": {
         "components": [
-            "ability_base",
-            "ability_runtime",
-            "hiviewdfx_hilog_native",
-            "ipc",
-            "aafwk_standard",
-            "safwk",
-            "samgr_standard"
+          "ability_base",
+          "ability_runtime",
+          "hiviewdfx_hilog_native",
+          "ipc",
+          "aafwk_standard",
+          "safwk",
+          "samgr_standard"
         ],
         "third_party": [
-	    "openssl"
+          "openssl"
         ]
       },
       "build": {
@@ -40,10 +40,8 @@
           "//base/user_iam/face_auth/sa_profile:faceauth_sa_profile.init",
           "//base/user_iam/face_auth/sa_profile:faceauth_sa_profile"
         ],
-        "inner_kits": [
-        ],
-        "test": [
-        ]
+        "inner_kits": [],
+        "test": []
       }
     }
   }
