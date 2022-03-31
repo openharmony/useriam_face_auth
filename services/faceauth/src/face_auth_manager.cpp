@@ -92,14 +92,14 @@ int32_t FaceAuthManager::Init()
 
 void CheckSystemAbility()
 {
-    const int CHECK_TIMES = 3;
-    const int SLEEP_TIME = 1;
+    const int checkTimes = 3;
+    const int sleepTime = 1;
     sptr<ISystemAbilityManager> sam = SystemAbilityManagerClient::GetInstance().GetSystemAbilityManager();
     if (sam == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Failed to get system ability manager");
         return;
     }
-    for (int i = 0; i < CHECK_TIMES; i++) {
+    for (int i = 0; i < checkTimes; i++) {
         bool isExist = false;
         sam->CheckSystemAbility(SUBSYS_USERIAM_SYS_ABILITY_AUTHEXECUTORMGR, isExist);
         if (!isExist) {
@@ -108,9 +108,9 @@ void CheckSystemAbility()
             FACEAUTH_HILOGI(MODULE_SERVICE, "AUTHEXECUTORMGR is exist, start AUTHEXECUTORMGR ability success");
             return;
         }
-        if (i < CHECK_TIMES - 1) {
+        if (i < checkTimes - 1) {
             FACEAUTH_HILOGI(MODULE_SERVICE, "begin sleep");
-            sleep(SLEEP_TIME);
+            sleep(sleepTime);
             FACEAUTH_HILOGI(MODULE_SERVICE, "end sleep");
         }
     }
@@ -444,7 +444,6 @@ void FaceAuthManager::HandleAlgoResult(uint64_t scheduleID, FaceOperateType type
 
 int32_t FaceAuthManager::CancelAuth(const AuthParam &param)
 {
-    int32_t result = FA_RET_OK;
     FaceReqType reqType = {};
     reqType.reqId = param.scheduleID;
     reqType.operateType = FACE_OPERATE_TYPE_LOCAL_AUTH;
@@ -453,26 +452,24 @@ int32_t FaceAuthManager::CancelAuth(const AuthParam &param)
     if (!isSuccess) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "CancelAuth failed, reqId: %{public}s,",
             getMaskedString(reqType.reqId).c_str());
-        result = FA_RET_ERROR;
+        return FA_RET_ERROR;
+    }
+    std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
+    if (faceAuthCA == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthCA instance is null");
+        return FA_RET_ERROR;
+    }
+    int32_t result = faceAuthCA->CancelAlgorithmOperation();
+    if (result == FA_RET_OK) {
+        FACEAUTH_HILOGI(MODULE_SERVICE, "CancelAlgorithmOperation success");
     } else {
-        std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
-        if (faceAuthCA == nullptr) {
-            FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthCA instance is null");
-            return result;
-        }
-        result = faceAuthCA->CancelAlgorithmOperation();
-        if (result == FA_RET_OK) {
-            FACEAUTH_HILOGI(MODULE_SERVICE, "CancelAlgorithmOperation success");
-        } else {
-            FACEAUTH_HILOGE(MODULE_SERVICE, "CancelAlgorithmOperation failed");
-        }
+        FACEAUTH_HILOGE(MODULE_SERVICE, "CancelAlgorithmOperation failed");
     }
     return result;
 }
 
 int32_t FaceAuthManager::CancelEnrollment(const EnrollParam &param)
 {
-    int32_t result = FA_RET_OK;
     FaceReqType reqType = {};
     reqType.reqId = param.scheduleID;
     reqType.operateType = FACE_OPERATE_TYPE_ENROLL;
@@ -481,19 +478,18 @@ int32_t FaceAuthManager::CancelEnrollment(const EnrollParam &param)
     if (!isSuccess) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "CancelEnrollment failed, reqId: %{public}s",
             getMaskedString(reqType.reqId).c_str());
-        result = FA_RET_ERROR;
+        return FA_RET_ERROR;
+    }
+    std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
+    if (faceAuthCA == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthCA instance is null");
+        return FA_RET_ERROR;
+    }
+    int32_t result = faceAuthCA->CancelAlgorithmOperation();
+    if (result == FA_RET_OK) {
+        FACEAUTH_HILOGI(MODULE_SERVICE, "CancelAlgorithmOperation success");
     } else {
-        std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
-        if (faceAuthCA == nullptr) {
-            FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthCA instance is null");
-            return result;
-        }
-        result = faceAuthCA->CancelAlgorithmOperation();
-        if (result == FA_RET_OK) {
-            FACEAUTH_HILOGI(MODULE_SERVICE, "CancelAlgorithmOperation success");
-        } else {
-            FACEAUTH_HILOGE(MODULE_SERVICE, "CancelAlgorithmOperation failed");
-        }
+        FACEAUTH_HILOGE(MODULE_SERVICE, "CancelAlgorithmOperation failed");
     }
     return result;
 }
@@ -564,10 +560,10 @@ FIRetCode FaceAuthManager::ReleaseAlgorithm(std::string bundleName)
 bool FaceAuthManager::IsAlgorithmInited()
 {
     if (bundleNameList_.empty()) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "algorithem is initted");
+        FACEAUTH_HILOGI(MODULE_SERVICE, "algorithm is initted");
         return true;
     }
-    FACEAUTH_HILOGI(MODULE_SERVICE, "algorithem is not initted");
+    FACEAUTH_HILOGI(MODULE_SERVICE, "algorithm is not initted");
     return false;
 }
 

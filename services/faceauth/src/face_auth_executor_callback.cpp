@@ -113,6 +113,10 @@ void FaceAuthExecutorCallback::OnMessengerReady(const sptr<AuthResPool::IExecuto
 int32_t FaceAuthExecutorCallback::OnSetProperty(pAuthAttributes properties)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "start");
+    if (properties == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "properties is nullptr");
+        return FA_RET_ERROR;
+    }
     std::shared_ptr<FaceAuthManager> manager = FaceAuthManager::GetInstance();
     if (manager == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "face auth manager is nullptr");

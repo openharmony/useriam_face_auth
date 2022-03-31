@@ -24,6 +24,10 @@ namespace FaceAuth {
 int32_t FaceAuthCameraBufferListener::SendCameraImage(OHOS::sptr<OHOS::SurfaceBuffer> buffer, int64_t timestamp)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "receive image from camera");
+    if (buffer == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "buffer is nullptr");
+        return -1;
+    }
     CameraImage image = {};
     image.image = static_cast<uint8_t*>(buffer->GetVirAddr());
     image.imageSize = buffer->GetSize();
@@ -43,6 +47,10 @@ int32_t FaceAuthCameraBufferListener::SendCameraImage(OHOS::sptr<OHOS::SurfaceBu
 
 void FaceAuthCameraBufferListener::OnBufferAvailable()
 {
+    if (cameraBuffer_ == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "cameraBuffer_ is nullptr");
+        return;
+    }
     int32_t flushFence = 0;
     int64_t timestamp = 0;
     OHOS::Rect damage;
