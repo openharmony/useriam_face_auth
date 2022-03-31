@@ -83,7 +83,7 @@ const size_t MASKED_STRING_LEN = 9;
 inline std::string getMaskedString(uint64_t val)
 {
     char bytes[MASKED_STRING_LEN] = {0};
-    if (snprintf_s(bytes, sizeof(bytes), sizeof(bytes) - 1, "xxxx%04" PRIx64, val & MASK) == 0) {
+    if (snprintf_s(bytes, sizeof(bytes), sizeof(bytes) - 1, "0xXXXX%04" PRIx64, val & MASK) == 0) {
         return "(snprintf fail)";
     }
     return std::string(bytes);

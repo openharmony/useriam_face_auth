@@ -168,8 +168,8 @@ void FaceAuthManager::RegisterExecutor()
     executorCallback_ = std::make_shared<FaceAuthExecutorCallback>();
     uint64_t regRet = AuthResPool::AuthExecutorRegistry::GetInstance().Register(executorInfo, executorCallback_);
     if (regRet != 0) {
-        FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthInitSeq::RegisterExecutor successful.executor id = %{public}" PRIu64,
-            regRet);
+        FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthInitSeq::RegisterExecutor successful.executor id = %{public}s",
+            getMaskedString(regRet).c_str());
     } else {
         FACEAUTH_HILOGE(MODULE_SERVICE, "FaceAuthInitSeq::RegisterExecutor failed");
     }
@@ -208,7 +208,7 @@ int32_t FaceAuthManager::Release()
 ResultCodeForCoAuth FaceAuthManager::AddAuthenticationRequest(const AuthParam &param)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "start");
-    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoAuth]scheduleID = %{public}" PRIu64 "", param.scheduleID);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoAuth]scheduleID = %{public}s", getMaskedString(param.scheduleID).c_str());
     FACEAUTH_HILOGI(MODULE_SERVICE, "[DoAuth]templateID = %{public}s", getMaskedString(param.templateID).c_str());
     FaceReqType reqType = {};
     reqType.reqId = param.scheduleID;
@@ -280,7 +280,7 @@ void FaceAuthManager::DoAuthenticate(const AuthParam &param)
 ResultCodeForCoAuth FaceAuthManager::AddEnrollmentRequest(const EnrollParam &param)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "start");
-    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoEnroll]scheduleID = %{public}" PRIu64 "", param.scheduleID);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoEnroll]scheduleID = %{public}s", getMaskedString(param.scheduleID).c_str());
     FACEAUTH_HILOGI(MODULE_SERVICE, "[DoEnroll]templateID = %{public}s", getMaskedString(param.templateID).c_str());
     FaceReqType reqType = {};
     reqType.reqId = param.scheduleID;
@@ -352,7 +352,7 @@ void FaceAuthManager::DoEnroll(const EnrollParam &param)
 int32_t FaceAuthManager::AddRemoveRequest(const RemoveParam &param)
 {
     FACEAUTH_HILOGI(MODULE_SERVICE, "start");
-    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoRemove]scheduleID = %{public}" PRIu64 "", param.scheduleID);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "[DoRemove]scheduleID = %{public}s", getMaskedString(param.scheduleID).c_str());
     FACEAUTH_HILOGI(MODULE_SERVICE, "[DoRemove]templateID = %{public}s", getMaskedString(param.templateID).c_str());
     FaceReqType reqType = {};
     reqType.reqId = param.scheduleID;
