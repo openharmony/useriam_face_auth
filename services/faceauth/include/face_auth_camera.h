@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_CAMERA_H
-#define FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_CAMERA_H
+#ifndef FACE_AUTH_CAMERA_H
+#define FACE_AUTH_CAMERA_H
 
 #include <mutex>
 #include "input/camera_input.h"
@@ -58,4 +58,4 @@ private:
 } // namespace UserIAM
 } // namespace OHOS
 
-#endif // FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_CAMERA_H
+#endif // FACE_AUTH_CAMERA_H

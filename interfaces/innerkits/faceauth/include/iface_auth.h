@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2022 Huawei Device Co., Ltd.
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License") = 0;
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -13,29 +13,34 @@
  * limitations under the License.
  */
 
-#ifndef CONSTANT_H
-#define CONSTANT_H
-
-#include <algorithm>
-#include <string>
-#include <map>
+#ifndef IFACE_AUTH_H
+#define IFACE_AUTH_H
+#include <list>
+#include <vector>
+#include "face_auth_defines.h"
+#include "iremote_broker.h"
+#include "iremote_object.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-class Constant {
+class IFaceAuth : public IRemoteBroker {
 public:
-    /**
-     * Code and errorCode translate into tipCode.
-     */
-    const static std::map<std::string, int32_t> TIP_CODE_MAP;
+    DECLARE_INTERFACE_DESCRIPTOR(u"ohos.faceauth.IFaceAuth");
 
     /**
-     * Code and errorCode translate into tipInfo.
+     * @brief Set buffer producer for enroll preview.
+     *
+     * @return 0 success, others failure.
      */
-    const static std::map<std::string, std::string> TIP_INFO_MAP;
+    virtual int32_t SetBufferProducer(sptr<IBufferProducer> &producer) = 0;
+
+    enum {
+        FACE_AUTH_SET_BUFFER_PRODUCER = 1,
+    };
 };
 }  // namespace FaceAuth
 }  // namespace UserIAM
 }  // namespace OHOS
-#endif  // PERMISSION_BASE_SERVICE_H
+
+#endif  // IFACE_AUTH_H

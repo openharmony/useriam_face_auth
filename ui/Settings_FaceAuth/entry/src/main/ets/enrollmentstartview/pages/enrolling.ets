@@ -23,6 +23,7 @@ import EnrollingController from '../controller/enrollingController.ets'
 @Component
 struct Enrolling {
   private TAG: string = "Enrolling:"
+  private xComponentController = new XComponentController()
   @StorageLink('enrollStatus') enrollStatus: string = ""
   @StorageLink('stackVideoVisibility') stackVideoVisibility: Visibility = Visibility.Visible
   @StorageLink('stackVideoBlurRadius') stackVideoBlurRadius: number = 0
@@ -37,11 +38,18 @@ struct Enrolling {
   @StorageLink('enrollImageHeight') enrollImageHeight: number = 0
   @StorageLink('enrollImageWidth') enrollImageWidth: number = 0
   @StorageLink('stackRingHeightPercentage') stackRingHeightPercentage: string = ""
+  @StorageLink('xComponentSurfaceId') xComponentSurfaceId : string = ""
 
   aboutToAppear() {
     Log.info(this.TAG, "aboutToAppear+")
     EnrollingController.init()
     Log.info(this.TAG, "aboutToAppear-")
+  }
+
+  aboutToDisappear() {
+    Log.info(this.TAG, "aboutToDisappear+")
+    EnrollingController.clear()
+    Log.info(this.TAG, "aboutToDisappear-")
   }
 
   build() {
@@ -54,12 +62,22 @@ struct Enrolling {
             bottom: "20"
           })
         Stack() {
-          // to be replace by XComp
-          Rect()
+          XComponent({
+            id: "faceEnrollPreview",
+            type: "surface",
+            controller: this.xComponentController
+          })
             .visibility(this.stackVideoVisibility)
-            .blur(this.stackVideoBlurRadius)
-            .height("500%")
-            .width("500%")
+            .height('720px')
+            .width('720px')
+            .markAnchor({ x: '50%', y: '50%'})
+            .position({ x: '50%', y: '50%'})
+            .onLoad(()=>{
+              Log.info(this.TAG, "onLoad+")
+              this.xComponentSurfaceId = this.xComponentController.getXComponentSurfaceId()
+              EnrollingController.startEnroll()
+              Log.info(this.TAG, "onLoad-")
+            })
           Image($r('app.media.shelter'))
             .objectFit(ImageFit.Contain)
             .height(this.stackShelterHeight)

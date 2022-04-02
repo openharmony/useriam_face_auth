@@ -44,6 +44,7 @@ int32_t FaceAuthExecutorCallback::OnBeginExecute(uint64_t scheduleId, std::vecto
             EnrollParam data = {};
             data.scheduleID = scheduleId;
             data.templateID = templateId;
+            data.producer = manager->GetBufferProducer();
             ret = manager->AddEnrollmentRequest(data);
             break;
         }

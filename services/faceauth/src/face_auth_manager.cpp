@@ -723,6 +723,18 @@ void FaceAuthManager::FreezeTemplates(std::vector<uint64_t> templateIdList)
         }
     }
 }
+
+void FaceAuthManager::SetBufferProducer(sptr<IBufferProducer> &producer)
+{
+    this->producer_ = producer;
+    FACEAUTH_HILOGI(MODULE_SERVICE, "set buffer producer %{public}s", getPointerNullString(this->producer_).c_str());
+}
+
+sptr<IBufferProducer> FaceAuthManager::GetBufferProducer()
+{
+    FACEAUTH_HILOGI(MODULE_SERVICE, "get buffer producer %{public}s", getPointerNullString(this->producer_).c_str());
+    return this->producer_;
+}
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
