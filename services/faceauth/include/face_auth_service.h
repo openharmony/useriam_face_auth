@@ -13,24 +13,25 @@
  * limitations under the License.
  */
 
-#ifndef FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_SERVICE_H
-#define FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_SERVICE_H
+#ifndef FACE_AUTH_SERVICE_H
+#define FACE_AUTH_SERVICE_H
 
 #include <mutex>
 #include "system_ability.h"
 #include "system_ability_definition.h"
-#include "singleton.h"
 #include "face_auth_manager.h"
+#include "face_auth_stub.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-class FaceAuthService : public SystemAbility {
+class FaceAuthService : public SystemAbility, public FaceAuthStub {
 public:
     DECLEAR_SYSTEM_ABILITY(FaceAuthService);
-    static FaceAuthService *GetInstance();
+    static std::shared_ptr<FaceAuthService> GetInstance();
     FaceAuthService();
-    ~FaceAuthService() override;
+    virtual ~FaceAuthService() override;
+    virtual int32_t SetBufferProducer(sptr<IBufferProducer> &producer) override;
 public:
     void OnStart() override;
     void OnStop() override;
@@ -38,11 +39,13 @@ public:
     void ReRegister();
 
 private:
-    static FaceAuthService *instance_;
+    static std::mutex mutex_;
+    static std::shared_ptr<FaceAuthService> instance_;
     static std::shared_ptr<FaceAuthManager> manager_;
+    DISALLOW_COPY_AND_MOVE(FaceAuthService);
 };
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
 
-#endif // FACEAUTH_SERVICES_INCLUDE_FACE_AUTH_SERVICE_H
+#endif // FACE_AUTH_SERVICE_H

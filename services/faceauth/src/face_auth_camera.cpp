@@ -80,7 +80,7 @@ int32_t FaceAuthCamera::CreateCamera(sptr<IBufferProducer> producer)
         return FA_RET_ERROR;
     }
     sptr<CameraStandard::CameraInfo> camera = nullptr;
-    if (cameraObjList.size() > 1) {
+    if (cameraObjList.size() > 0) {
         for (unsigned int i = 0; i < cameraObjList.size(); i++) {
             if (cameraObjList[i]->GetPosition() == OHOS_CAMERA_POSITION_FRONT) {
                 camera = cameraObjList[i];
@@ -137,11 +137,13 @@ int32_t FaceAuthCamera::PrepareCamera(sptr<IBufferProducer> producer)
         FACEAUTH_HILOGE(MODULE_SERVICE, "Failed to Add Preview Output");
         return FA_RET_ERROR;
     }
+
     if (isDisplay_) {
         if (CreateDisplayPreviewOutput(camManagerObj, producer) != FA_RET_OK) {
             FACEAUTH_HILOGE(MODULE_SERVICE, "Failed to create display preview output");
             return FA_RET_ERROR;
         }
+        FACEAUTH_HILOGE(MODULE_SERVICE, "CreateDisplayPreviewOutput ok");
     }
     intResult = capSession_->CommitConfig();
     if (intResult != FA_RET_OK) {

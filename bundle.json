@@ -36,11 +36,22 @@
       },
       "build": {
         "sub_component": [
-          "//base/user_iam/face_auth/services:faceauthservice",
+          "//base/user_iam/face_auth/services:faceauthservice_group",
           "//base/user_iam/face_auth/sa_profile:faceauth_sa_profile.init",
           "//base/user_iam/face_auth/sa_profile:faceauth_sa_profile"
         ],
-        "inner_kits": [],
+        "inner_kits": [
+          {
+            "type": "so",
+            "name": "//base/user_iam/face_auth/interfaces/innerkits/faceauth:faceauth_framework_group",
+            "header": {
+              "header_files": [
+                "face_auth_innerkit.h"
+              ],
+              "header_base": "//base/user_iam/face_auth/interfaces/innerkits/faceauth/include"
+            }
+          }
+        ],
         "test": []
       }
     }

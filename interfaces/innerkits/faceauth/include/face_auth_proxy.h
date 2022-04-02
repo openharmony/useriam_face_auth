@@ -13,25 +13,28 @@
  * limitations under the License.
  */
 
-#ifndef FACE_AUTH_CAMERA_BUFFER_LISTENER_H
-#define FACE_AUTH_CAMERA_BUFFER_LISTENER_H
+#ifndef FACE_AUTH_PROXY_H
+#define FACE_AUTH_PROXY_H
 
-#include "surface.h"
-#include "surface_buffer.h"
-#include "input/camera_input.h"
-#include "input/camera_manager.h"
+#include <list>
+#include "iface_auth.h"
+#include "iremote_proxy.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-class FaceAuthCameraBufferListener : public IBufferConsumerListener {
+class FaceAuthProxy : public IRemoteProxy<IFaceAuth> {
 public:
-    int32_t SendCameraImage(sptr<SurfaceBuffer> buffer, int64_t timestamp);
-    void OnBufferAvailable() override;
-    sptr<Surface> cameraBuffer_;
-};
-} // namespace FaceAuth
-} // namespace UserIAM
-} // namespace OHOS
+    explicit FaceAuthProxy(const sptr<IRemoteObject> &object);
+    virtual ~FaceAuthProxy() override;
+    virtual int32_t SetBufferProducer(sptr<IBufferProducer> &producer) override;
 
-#endif // FACE_AUTH_CAMERA_BUFFER_LISTENER_H
+private:
+    bool SendRequest(uint32_t code, MessageParcel &data, MessageParcel &reply);
+    static inline BrokerDelegator<FaceAuthProxy> delegator_;
+};
+}  // namespace FaceAuth
+}  // namespace UserIAM
+}  // namespace OHOS
+
+#endif  // FACE_AUTH_PROXY_H

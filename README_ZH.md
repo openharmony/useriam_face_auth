@@ -30,7 +30,6 @@
 ├── figures                  # README使用的图片
 ├── sa_profile               # Service Ability 配置文件
 ├── services                 # Service Ability 服务实现
-├── useriam.gni              # 构建配置
 └── ui                       # 人脸录入界面
 ```
 
