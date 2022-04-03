@@ -95,14 +95,14 @@ struct EnrollIntro {
               bottom: "24"
             })
           }
-        }.width("100%").height("100%")
+        }.width("100%").height("100%").flexShrink(1)
         .constraintSize({
           maxWidth: '720'
         })
         .onAreaChange((_, newArea) => {
           Log.info(this.TAG, "new non app bar area :" + JSON.stringify(newArea))
           CommonController.setNonAppBarDisplaySize(Number(newArea.width), Number(newArea.height))
-          Log.info(this.TAG, "non app ba aboutToAppear- w: " + newArea.width + " h: " + newArea.height)
+          Log.info(this.TAG, "non app bar area w: " + newArea.width + " h: " + newArea.height)
         })
       }
       .width('100%')
@@ -110,7 +110,7 @@ struct EnrollIntro {
       .onAreaChange((_, newArea) => {
         Log.info(this.TAG, "new display area :" + JSON.stringify(newArea))
         CommonController.setDisplaySize(Number(newArea.width), Number(newArea.height))
-        Log.info(this.TAG, "aboutToAppear- w: " + newArea.width + " h: " + newArea.height)
+        Log.info(this.TAG, "total area w: " + newArea.width + " h: " + newArea.height)
       })
   }
 

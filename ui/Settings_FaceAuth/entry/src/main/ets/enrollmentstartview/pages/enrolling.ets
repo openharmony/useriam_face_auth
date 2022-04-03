@@ -46,10 +46,10 @@ struct Enrolling {
     Log.info(this.TAG, "aboutToAppear-")
   }
 
-  aboutToDisappear() {
-    Log.info(this.TAG, "aboutToDisappear+")
+  onPageHide() {
+    Log.info(this.TAG, "onPageHide+")
     EnrollingController.clear()
-    Log.info(this.TAG, "aboutToDisappear-")
+    Log.info(this.TAG, "onPageHide-")
   }
 
   build() {

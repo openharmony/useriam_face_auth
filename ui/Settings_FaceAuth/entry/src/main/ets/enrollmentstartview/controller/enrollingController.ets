@@ -150,7 +150,9 @@ class EnrollingController {
   }
 
   async clear() {
-    UserAuthModel.clearSurfaceId()
+    Log.info(this.TAG, 'clear+')
+    await UserAuthModel.clearSurfaceId()
+    Log.info(this.TAG, 'clear-')
   }
 }
 
