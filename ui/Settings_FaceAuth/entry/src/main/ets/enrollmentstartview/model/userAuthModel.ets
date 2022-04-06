@@ -18,9 +18,9 @@ import CommonController from '../controller/commonController.ets'
 import account_osAccount from '@ohos.account.osAccount';
 
 class UserAuthModel {
-  private TAG: string = "UserAuthModel"
-  private pinAuthManger : any
-  private userAuthManager : any
+  protected TAG: string = "UserAuthModel"
+  protected pinAuthManger : any
+  protected userAuthManager : any
   const CMD_SET_SURFACE_ID = 100
 
   constructor() {
@@ -60,16 +60,18 @@ class UserAuthModel {
   }
 
   async setSurfaceId(surfaceIdString: string) : Promise<number> {
-    Log.info(this.TAG, 'set surface id ' + surfaceIdString;
+    Log.info(this.TAG, 'set surface id ' + surfaceIdString);
     return this.userAuthManager.setProperty({
       authType: account_osAccount.AuthType.FACE,
-      key:CMD_SET_SURFACE_ID,
+      key:this.CMD_SET_SURFACE_ID,
       setInfo: CommonController.string2Uint8Array(surfaceIdString);
     })
   }
 
-  async clearSurfaceId() : Promise<number> {
-    return this.setSurfaceId("0")
+  async clearSurfaceId() {
+    Log.info(this.TAG, 'clearSurfaceId+');
+    this.setSurfaceId("0")
+    Log.info(this.TAG, 'clearSurfaceId-');
   }
 }
 

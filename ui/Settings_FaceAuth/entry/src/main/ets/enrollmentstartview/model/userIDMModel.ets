@@ -18,13 +18,13 @@ import account_osAccount from '@ohos.account.osAccount';
 import CommonController from '../controller/commonController.ets'
 
 class UserIDMModel {
-  private TAG: string = "UserIDMModel"
-  private userIdentityManager: any
-  private challenge: Uint8Array
-  private token: Uint8Array
-  private credentialId: Uint8Array
-  private faceNumber: number = 0
-  private onAcquireCallback : (number)=>{}
+  readonly TAG: string = "UserIDMModel"
+  protected userIdentityManager: any
+  protected challenge: Uint8Array
+  protected token: Uint8Array
+  protected credentialId: Uint8Array
+  protected faceNumber: number = 0
+  protected onAcquireCallback : (number)=>{}
 
   constructor() {
     Log.info(this.TAG, "constructor+")
@@ -38,7 +38,7 @@ class UserIDMModel {
     Log.info(this.TAG, "destroy-")
   }
 
-  async getChallenge() {
+  async getChallenge() : Promise<Uint8Array> {
     return await this.userIdentityManager.openSession()
   }
 
@@ -86,10 +86,10 @@ class UserIDMModel {
     this.onAcquireCallback = onAcquireCallback
   }
 
-  async enrollFace() {
+  async enrollFace() : Promise<number> {
     Log.info(this.TAG, "enrollFace+")
     let localToken = this.getToken()
-    return new Promise<Uint8Array>((resolve)=> {
+    return new Promise<number>((resolve)=> {
       this.userIdentityManager.addCredential({
         credType: 2,
         credSubType: 10000,
@@ -112,7 +112,7 @@ class UserIDMModel {
     })
   }
 
-  async deleteFace() {
+  async deleteFace() : Promise<number> {
     Log.info(this.TAG, "deleteFace+")
     if (this.credentialId === null) {
       Log.info(this.TAG, "no credential to delete")
@@ -121,7 +121,7 @@ class UserIDMModel {
 
     let localToken = this.getToken()
     let credId = this.getCredentialId()
-    return new Promise<Uint8Array>((resolve)=> {
+    return new Promise<number>((resolve)=> {
       this.userIdentityManager.delCred(credId, localToken), {
           onResult: (result, extraInfo) => {
               Log.info(this.TAG, 'FaceEnroll face.delete onResult result = ' + result);
