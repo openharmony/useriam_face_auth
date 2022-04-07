@@ -639,7 +639,7 @@ int32_t FaceAuthManager::WaitAlgorithmProcessDone(uint64_t scheduleID, FaceOpera
 {
     std::promise<int32_t> promiseobj;
     std::future<int32_t> futureobj = promiseobj.get_future();
-    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCurTaskNum is %{public}d",
+    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCurTaskNum is %{public}zu",
         FaceAuthThreadPool::GetInstance()->GetCurTaskNum());
     FaceAuthThreadPool::GetInstance()->AddTask([&promiseobj, this, &scheduleID, &type]() {
         promiseobj.set_value(OperForAlgorithm(scheduleID, type));
