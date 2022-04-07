@@ -390,10 +390,10 @@ FIRetCode FaceAuthCA::GetState(int32_t &resultCode, int32_t (&param)[RESULT_MAX_
 {
     ReadFile();
     FACEAUTH_HILOGI(MODULE_SERVICE, "resultNum_ is %{public}d", resultNum_);
-    FACEAUTH_HILOGI(MODULE_SERVICE, "resultInfos_.size() is %{public}d", resultInfos_.size());
+    FACEAUTH_HILOGI(MODULE_SERVICE, "resultInfos_.size() is %{public}zu", resultInfos_.size());
     if (resultNum_ < (int)resultInfos_.size()) {
         resultCode = resultInfos_[resultNum_].resultCode;
-        FACEAUTH_HILOGI(MODULE_SERVICE, "memcpy length is %{public}d", sizeof(int32_t) * RESULT_MAX_SIZE);
+        FACEAUTH_HILOGI(MODULE_SERVICE, "memcpy length is %{public}zu", sizeof(int32_t) * RESULT_MAX_SIZE);
         if (memcpy_s(param, sizeof(param), resultInfos_[resultNum_].param,
             sizeof(resultInfos_[resultNum_].param)) != EOK) {
             FACEAUTH_HILOGE(MODULE_SERVICE, "memcpy_s fail");
@@ -837,7 +837,7 @@ FIRetCode FaceAuthCA::Prepare(HWExeType type)
     type_ = type;
     resultNum_ = 0;
     resultInfos_.clear();
-    FACEAUTH_HILOGI(MODULE_SERVICE, "resultInfos_.size is %{public}d", resultInfos_.size());
+    FACEAUTH_HILOGI(MODULE_SERVICE, "resultInfos_.size is %{public}zu", resultInfos_.size());
     FACEAUTH_HILOGI(MODULE_SERVICE, "Prepare type is %{public}d", type_);
     return FIRetCode::FI_RC_OK;
 }
