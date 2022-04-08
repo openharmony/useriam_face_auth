@@ -82,7 +82,8 @@ int32_t FaceAuthCamera::CreateCamera(sptr<IBufferProducer> producer)
     sptr<CameraStandard::CameraInfo> camera = nullptr;
     if (cameraObjList.size() > 0) {
         for (unsigned int i = 0; i < cameraObjList.size(); i++) {
-            if (cameraObjList[i]->GetPosition() == OHOS_CAMERA_POSITION_FRONT) {
+            if (cameraObjList[i]->GetPosition() == OHOS_CAMERA_POSITION_FRONT &&
+                cameraObjList[i]->GetConnectionType() == OHOS_CAMERA_CONNECTION_TYPE_BUILTIN) {
                 camera = cameraObjList[i];
             }
         }
