@@ -468,11 +468,11 @@ void FaceAuthCA::ReadFile()
     char str[RESULT_CODE];
     int32_t num = atoi(buffer);
     for (int32_t i = 0; i < num; i++) {
-        mystream >> str;
+        mystream.getline(str, RESULT_CODE);
         resultInfos_[i].resultCode = atoi(str);
         FACEAUTH_HILOGI(MODULE_SERVICE, "authErrorCode is %{public}d", resultInfos_[i].resultCode);
         for (int32_t j = 0; j < PARAM_NUM; j++) {
-            mystream >> str;
+            mystream.getline(str, RESULT_CODE);
             resultInfos_[i].param[j] = atoi(str);
         }
     }
