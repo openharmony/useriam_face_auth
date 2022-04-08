@@ -214,9 +214,9 @@ int32_t FaceAuthCA::FinishAlgorithmOperation(AlgorithmResult &retResult)
     retResult.templateId = param_.templateId;
     retResult.remainTimes = remainTimesMap_[param_.templateId];
 
-    Buffer *retTlv = CreateBuffer(RESULT_TLV_LEN);
+    Buffer *retTlv = CreateBufferBySize(RESULT_TLV_LEN);
     if (retTlv == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "CreateBuffer failed");
+        FACEAUTH_HILOGE(MODULE_SERVICE, "CreateBufferBySize failed");
         return CA_RESULT_FAILED;
     }
     ResultCode result = GenerateRetTlv(authResult, param_.scheduleId, FACE_2D, param_.templateId, retTlv);
