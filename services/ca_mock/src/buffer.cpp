@@ -42,7 +42,7 @@ bool CheckBufferWithSize(const Buffer *buffer, const uint32_t size)
     return true;
 }
 
-Buffer *CreateBuffer(const uint32_t size)
+Buffer *CreateBufferBySize(const uint32_t size)
 {
     if ((size == 0) || (size > MAX_BUFFER_SIZE)) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Bad param size:%{public}u", size);
@@ -113,7 +113,7 @@ Buffer *CopyBuffer(const Buffer *buffer)
         return nullptr;
     }
 
-    Buffer *copyBuffer = CreateBuffer(buffer->maxSize);
+    Buffer *copyBuffer = CreateBufferBySize(buffer->maxSize);
     if (copyBuffer == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "create buffer fail");
         return nullptr;
