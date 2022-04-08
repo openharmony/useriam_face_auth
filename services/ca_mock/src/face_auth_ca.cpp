@@ -18,6 +18,7 @@
 #include <fstream>
 #include <cstring>
 #include "securec.h"
+#include "adaptor_algorithm.h"
 #include "defines.h"
 #include "face_auth_func.h"
 
@@ -306,9 +307,35 @@ int32_t FaceAuthCA::CancelAlgorithmOperation()
     return CA_RESULT_SUCCESS;
 }
 
+uint64_t FaceAuthCA::GetNewTemplateId()
+{
+    const int MAX_TRY = 10;
+    for (int i = 0; i < MAX_TRY; i++) {
+        uint64_t templateId = 0;
+        int ret = SecureRandom(reinterpret_cast<uint8_t*>(&templateId), sizeof(templateId));
+        if ((ret != CA_RESULT_SUCCESS) || (templateId == 0)) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "generated secure random fail");
+            continue;
+        }
+        if (remainTimesMap_.count(templateId) > 0) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "duplicate template id");
+            continue;
+        }
+        return templateId;
+    }
+    return 0;
+}
+
 void FaceAuthCA::SetAlgorithmParam(const AlgorithmParam &param)
 {
     param_ = param;
+    if (param_.templateId == 0) {
+        FACEAUTH_HILOGI(MODULE_SERVICE, "template id is 0, generate new templateId");
+        param_.templateId = GetNewTemplateId();
+        if (param_.templateId == 0) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "get new template id failed");
+        }
+    }
 }
 
 void FaceAuthCA::GetAuthResult(int32_t &result)

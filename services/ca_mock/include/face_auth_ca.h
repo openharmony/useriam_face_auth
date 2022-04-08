@@ -132,6 +132,7 @@ private:
     void CheckReleaseFile(std::string s);
     FIRetCode Prepare(HWExeType type);
     int getAlgorithmResult();
+    uint64_t GetNewTemplateId();
 };
 } // namespace FaceAuth
 } // namespace UserIAM
