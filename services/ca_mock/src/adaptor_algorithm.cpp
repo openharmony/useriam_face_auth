@@ -33,13 +33,13 @@ const uint32_t SHA512_DIGEST_SIZE = 64;
 static KeyPair *CreateEd25519KeyPair(void)
 {
     KeyPair *keyPair = new KeyPair;
-    keyPair->pubKey = CreateBuffer(ED25519_FIX_PUBKEY_BUFFER_SIZE);
+    keyPair->pubKey = CreateBufferBySize(ED25519_FIX_PUBKEY_BUFFER_SIZE);
     if (keyPair->pubKey == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "no memory for public key");
         delete keyPair;
         return nullptr;
     }
-    keyPair->priKey = CreateBuffer(ED25519_FIX_PRIKEY_BUFFER_SIZE);
+    keyPair->priKey = CreateBufferBySize(ED25519_FIX_PRIKEY_BUFFER_SIZE);
     if (keyPair->priKey == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "no memory for private key");
         DestoryBuffer(keyPair->pubKey);
@@ -157,7 +157,7 @@ int32_t Ed25519Sign(const KeyPair *keyPair, const Buffer *data, Buffer **sign)
         EVP_MD_CTX_free(ctx);
         return ret;
     }
-    *sign = CreateBuffer(ED25519_FIX_SIGN_BUFFER_SIZE);
+    *sign = CreateBufferBySize(ED25519_FIX_SIGN_BUFFER_SIZE);
     if (!IsBufferValid(*sign)) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "create buffer fail");
         EVP_PKEY_free(key);
@@ -247,7 +247,7 @@ int32_t HmacSha256(const Buffer *hmacKey, const Buffer *data, Buffer **hmac)
         FACEAUTH_HILOGE(MODULE_SERVICE, "get algorithm fail");
         return RESULT_GENERAL_ERROR;
     }
-    *hmac = CreateBuffer(SHA256_DIGEST_SIZE);
+    *hmac = CreateBufferBySize(SHA256_DIGEST_SIZE);
     if (*hmac == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "create buffer fail");
         return RESULT_NO_MEMORY;
@@ -272,7 +272,7 @@ int32_t HmacSha512(const Buffer *hmacKey, const Buffer *data, Buffer **hmac)
         FACEAUTH_HILOGE(MODULE_SERVICE, "get EVP_MD fail");
         return RESULT_GENERAL_ERROR;
     }
-    *hmac = CreateBuffer(SHA512_DIGEST_SIZE);
+    *hmac = CreateBufferBySize(SHA512_DIGEST_SIZE);
     if (*hmac == nullptr) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "create buffer fail");
         return RESULT_NO_MEMORY;
