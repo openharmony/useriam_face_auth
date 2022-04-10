@@ -79,7 +79,8 @@ class CommonController {
     if (Config.getDeviceType() != 'tablet') {
       return;
     }
-    var sideLength = Math.min(displayWidth, displayHeight / 2) * 0.8
+    var sideLength = Math.round(Math.min(displayWidth, displayHeight / 2) * 0.8)
+    Log.info(this.TAG, 'sideLength ' + sideLength)
     AppStorage.SetOrCreate('enrollImageHeight', sideLength);
     AppStorage.SetOrCreate('enrollImageWidth', sideLength);
     AppStorage.SetOrCreate('stackShelterHeightBegin',

@@ -82,7 +82,7 @@ static constexpr OHOS::HiviewDFX::HiLogLabel FACE_AUTH_LABEL[MODULE_MAX] = {
 #define FACEAUTH_HILOGD(module, ...) (void)OHOS::HiviewDFX::HiLog::Debug(FACE_AUTH_LABEL[module], \
     FORMATTED(__VA_ARGS__))
 const uint64_t MASK = 0xffff;
-const size_t MASKED_STRING_LEN = 9;
+const size_t MASKED_STRING_LEN = 11;
 inline std::string getMaskedString(uint64_t val)
 {
     char bytes[MASKED_STRING_LEN] = {0};
