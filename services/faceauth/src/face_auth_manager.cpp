@@ -260,21 +260,19 @@ void FaceAuthManager::DoAuthenticate(const AuthParam &param)
         FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA instance is null");
         return;
     }
-    AlgorithmOperation algorithmOperation = Auth;
-    AlgorithmParam algorithmParam;
-    algorithmParam.scheduleId = param.scheduleID;
-    algorithmParam.templateId = param.templateID;
-    int32_t ret = faceAuthCA->StartAlgorithmOperation(algorithmOperation, algorithmParam);
+    int32_t ret = faceAuthCA->StartAlgorithmOperation(Auth, AlgorithmParam {
+        .templateId = param.templateID,
+        .scheduleId = param.scheduleID
+    });
     if (ret != FA_RET_OK) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "StartAlgorithmOperation failed");
         return;
     }
-    // wait authentication process done
-    ret = WaitAlgorithmProcessDone(param.scheduleID, FACE_OPERATE_TYPE_LOCAL_AUTH);
+    ret = DoAlgorithmOperation(param.scheduleID);
     if (ret != FA_RET_OK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "authentication process result is %{public}d", ret);
-        return;
+        FACEAUTH_HILOGE(MODULE_SERVICE, "DoAlgorithmOperation failed");
     }
+    HandleAlgorithmResult(param.scheduleID, FACE_OPERATE_TYPE_LOCAL_AUTH);
 }
 
 ResultCodeForCoAuth FaceAuthManager::AddEnrollmentRequest(const EnrollParam &param)
@@ -332,21 +330,19 @@ void FaceAuthManager::DoEnroll(const EnrollParam &param)
         FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA instance is null");
         return;
     }
-    AlgorithmOperation algorithmOperation = Enroll;
-    AlgorithmParam algorithmParam;
-    algorithmParam.scheduleId = param.scheduleID;
-    algorithmParam.templateId = param.templateID;
-    int32_t ret = faceAuthCA->StartAlgorithmOperation(algorithmOperation, algorithmParam);
+    int32_t ret = faceAuthCA->StartAlgorithmOperation(Enroll, AlgorithmParam {
+        .templateId = param.templateID,
+        .scheduleId = param.scheduleID
+    });
     if (ret != FA_RET_OK) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "StartAlgorithmOperation failed");
         return;
     }
-    // wait enroll process done
-    ret = WaitAlgorithmProcessDone(param.scheduleID, FACE_OPERATE_TYPE_ENROLL);
+    ret = DoAlgorithmOperation(param.scheduleID);
     if (ret != FA_RET_OK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "authentication process result is %{public}d", ret);
-        return;
+        FACEAUTH_HILOGE(MODULE_SERVICE, "DoAlgorithmOperation failed");
     }
+    HandleAlgorithmResult(param.scheduleID, FACE_OPERATE_TYPE_ENROLL);
 }
 
 int32_t FaceAuthManager::AddRemoveRequest(const RemoveParam &param)
@@ -396,33 +392,7 @@ void FaceAuthManager::DoRemove(const RemoveParam &param)
     }
 }
 
-FIRetCode FaceAuthManager::OperForAlgorithm(uint64_t scheduleID, FaceOperateType type)
-{
-    std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
-    if (faceAuthCA == nullptr) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA is null");
-        return FI_RC_INVALID_ARGUMENT;
-    }
-    int32_t retCode = 0;
-    std::vector<uint8_t> msgBuffer;
-    while (true) {
-        faceAuthCA->GetAlgorithmState(retCode, msgBuffer);
-        FACEAUTH_HILOGI(MODULE_SERVICE, "get algorithm start code %{public}d, msg length %{public}zu",
-            retCode, msgBuffer.size());
-        if (retCode == FACE_ALGORITHM_OPERATION_BREAK) {
-            FACEAUTH_HILOGI(MODULE_SERVICE, "FACE_ALGORITHM_OPERATION_BREAK");
-            break;
-        }
-        if (msgBuffer.size() > 0) {
-            std::shared_ptr<AuthResPool::AuthMessage> msg = std::make_shared<AuthResPool::AuthMessage>(msgBuffer);
-            SendData(scheduleID, 0, TYPE_ALL_IN_ONE, TYPE_CO_AUTH, msg);
-        }
-    }
-    HandleAlgoResult(scheduleID, type);
-    return FI_RC_OK;
-}
-
-void FaceAuthManager::HandleAlgoResult(uint64_t scheduleID, FaceOperateType type)
+void FaceAuthManager::HandleAlgorithmResult(const uint64_t &scheduleID, const FaceOperateType &type)
 {
     std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
     if (faceAuthCA == nullptr) {
@@ -522,16 +492,17 @@ FIRetCode FaceAuthManager::InitAlgorithm(std::string bundleName)
     FACEAUTH_HILOGI(MODULE_SERVICE, "Init, bundleName:%{public}s", bundleName.c_str());
     AlgoResult result = IsNeedAlgoLoad(bundleName);
     if (result == AR_EMPTY) {
-        std::promise<int32_t> promiseobj;
-        std::future<int32_t> futureobj = promiseobj.get_future();
-        FaceAuthThreadPool::GetInstance()->AddTask(
-            [&promiseobj]() { promiseobj.set_value(FaceAuthCA::GetInstance()->LoadAlgorithm()); });
+        auto promiseObj = std::make_shared<std::promise<int32_t>>();
+        auto futureObj = promiseObj->get_future();
+        FaceAuthThreadPool::GetInstance()->AddTask([promiseObj]() {
+            promiseObj->set_value(FaceAuthCA::GetInstance()->LoadAlgorithm());
+        });
         std::chrono::microseconds span(INIT_DYNAMIC_TIME_OUT);
-        while (futureobj.wait_for(span) == std::future_status::timeout) {
+        if (futureObj.wait_for(span) == std::future_status::timeout) {
             FACEAUTH_HILOGI(MODULE_SERVICE, "LoadAlgorithm TimeOut");
             return FI_RC_ERROR;
         }
-        return static_cast<FIRetCode>(futureobj.get());
+        return static_cast<FIRetCode>(futureObj.get());
     }
     FACEAUTH_HILOGE(MODULE_SERVICE, "Init Fail %{public}d", result);
     return FI_RC_ERROR;
@@ -542,16 +513,17 @@ FIRetCode FaceAuthManager::ReleaseAlgorithm(std::string bundleName)
     FACEAUTH_HILOGI(MODULE_SERVICE, "Release, bundleName:%{public}s", bundleName.c_str());
     AlgoResult result = IsNeedAlgoRelease(bundleName);
     if (result == AR_EMPTY) {
-        std::promise<int32_t> promiseobj;
-        std::future<int32_t> futureobj = promiseobj.get_future();
-        FaceAuthThreadPool::GetInstance()->AddTask(
-            [&promiseobj]() { promiseobj.set_value(FaceAuthCA::GetInstance()->ReleaseAlgorithm()); });
+        auto promiseObj = std::make_shared<std::promise<int32_t>>();
+        auto futureObj = promiseObj->get_future();
+        FaceAuthThreadPool::GetInstance()->AddTask([promiseObj]() {
+            promiseObj->set_value(FaceAuthCA::GetInstance()->ReleaseAlgorithm());
+        });
         std::chrono::microseconds span(RELEASE_DYNAMIC_TIME_OUT);
-        while (futureobj.wait_for(span) == std::future_status::timeout) {
+        if (futureObj.wait_for(span) == std::future_status::timeout) {
             FACEAUTH_HILOGI(MODULE_SERVICE, "ReleaseAlgorithm TimeOut");
             return FI_RC_ERROR;
         }
-        return static_cast<FIRetCode>(futureobj.get());
+        return static_cast<FIRetCode>(futureObj.get());
     }
     FACEAUTH_HILOGE(MODULE_SERVICE, "Release Fail %{public}d", result);
     return FI_RC_ERROR;
@@ -618,43 +590,73 @@ int32_t FaceAuthManager::GenerateEventId()
 }
 int32_t FaceAuthManager::OpenCamera(sptr<IBufferProducer> producer)
 {
-    std::promise<int32_t> promiseobj;
-    std::future<int32_t> futureobj = promiseobj.get_future();
-    FaceAuthThreadPool::GetInstance()->AddTask([&promiseobj, &producer]() {
-        promiseobj.set_value(FaceAuthCamera::GetInstance()->OpenCamera(producer));
+    auto promiseObj = std::make_shared<std::promise<int32_t>>();
+    auto futureObj = promiseObj->get_future();
+    FaceAuthThreadPool::GetInstance()->AddTask([promiseObj, producer]() {
+        promiseObj->set_value(FaceAuthCamera::GetInstance()->OpenCamera(producer));
     });
     std::chrono::microseconds span(OPEN_CAMERA_TIME_OUT);
-    while (futureobj.wait_for(span) == std::future_status::timeout) {
+    if (futureObj.wait_for(span) == std::future_status::timeout) {
         FACEAUTH_HILOGI(MODULE_SERVICE, "Open Camera TimeOut");
         return FA_RET_ERROR;
     }
-    if (futureobj.get() == FA_RET_ERROR) {
+    if (futureObj.get() == FA_RET_ERROR) {
         FACEAUTH_HILOGE(MODULE_SERVICE, "Open Camera Fail");
         return FA_RET_ERROR;
     }
     return FA_RET_OK;
 }
 
-int32_t FaceAuthManager::WaitAlgorithmProcessDone(uint64_t scheduleID, FaceOperateType type)
+std::pair<int32_t, std::vector<uint8_t>> FaceAuthManager::GetAlgorithmState(const int &requestId)
 {
-    std::promise<int32_t> promiseobj;
-    std::future<int32_t> futureobj = promiseobj.get_future();
-    FACEAUTH_HILOGI(MODULE_SERVICE, "FaceAuthCurTaskNum is %{public}zu",
-        FaceAuthThreadPool::GetInstance()->GetCurTaskNum());
-    FaceAuthThreadPool::GetInstance()->AddTask([&promiseobj, this, &scheduleID, &type]() {
-        promiseobj.set_value(OperForAlgorithm(scheduleID, type));
-    });
-    std::chrono::microseconds span(GET_RESULT_TIME_OUT);
-    while (futureobj.wait_for(span) == std::future_status::timeout) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "GetAuthResult TimeOut");
-        return FA_RET_ERROR;
+    int retCode = FACE_ALGORITHM_OPERATION_BREAK;
+    std::vector<uint8_t> retMsg;
+    std::shared_ptr<FaceAuthCA> faceAuthCA = FaceAuthCA::GetInstance();
+    if (faceAuthCA == nullptr) {
+        FACEAUTH_HILOGE(MODULE_SERVICE, "faceAuthCA is null");
+        return std::make_pair(FACE_ALGORITHM_OPERATION_BREAK, retMsg);
     }
-    if (futureobj.get() != FI_RC_OK) {
-        FACEAUTH_HILOGE(MODULE_SERVICE, "GetAuthResult Fail");
-        return FA_RET_ERROR;
+    FACEAUTH_HILOGI(MODULE_SERVICE, "requestId %{public}d: start wait for algorithm state", requestId);
+    faceAuthCA->GetAlgorithmState(retCode, retMsg);
+    FACEAUTH_HILOGI(MODULE_SERVICE, "requestId %{public}d: algorithm state obtained code %{public}d "
+        "msg length %{public}zu",
+        requestId, retCode, retMsg.size());
+    return std::make_pair(retCode, retMsg);
+}
+
+FIRetCode FaceAuthManager::DoAlgorithmOperation(const uint64_t &scheduleID)
+{
+    const std::chrono::seconds GET_RESULT_TIME_LIMIT(GET_RESULT_TIME_LIMIT_IN_SEC);
+    using RetPair = std::pair<int32_t, std::vector<uint8_t>>;
+    int requestId = 0;
+    std::chrono::steady_clock::time_point begin_time = std::chrono::steady_clock::now();
+    while (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - begin_time)
+        < GET_RESULT_TIME_LIMIT) {
+        auto promiseObj = std::make_shared<std::promise<RetPair>>();
+        auto futureObj = promiseObj->get_future();
+        FaceAuthThreadPool::GetInstance()->AddTask([promiseObj, requestId]() {
+            promiseObj->set_value(FaceAuthManager::GetInstance()->GetAlgorithmState(requestId));
+        });
+        if (futureObj.wait_for(GET_RESULT_TIME_LIMIT) == std::future_status::timeout) {
+            FACEAUTH_HILOGE(MODULE_SERVICE, "GetAlgorithmState timeOut");
+            return FI_RC_ERROR;
+        }
+        auto ret = futureObj.get();
+        int32_t retCode = ret.first;
+        if (retCode == FACE_ALGORITHM_OPERATION_BREAK) {
+            FACEAUTH_HILOGI(MODULE_SERVICE, "GetAlgorithmState break");
+            return FI_RC_OK;
+        }
+
+        if (ret.second.size() > 0) {
+            std::shared_ptr<AuthResPool::AuthMessage> msg = std::make_shared<AuthResPool::AuthMessage>(
+                ret.second);
+            SendData(scheduleID, 0, TYPE_ALL_IN_ONE, TYPE_CO_AUTH, msg);
+        }
+        requestId++;
     }
-    FACEAUTH_HILOGI(MODULE_SERVICE, "GetAuthResult Success");
-    return FA_RET_OK;
+    FACEAUTH_HILOGE(MODULE_SERVICE, "timeout");
+    return FI_RC_ERROR;
 }
 
 bool FaceAuthManager::GetRandomNum(int32_t *randomNum)
@@ -684,14 +686,14 @@ bool FaceAuthManager::GetRandomNum(int32_t *randomNum)
     return true;
 }
 
-FIRetCode FaceAuthManager::DoWaitInitAlgorithm(std::future<int32_t> futureobj)
+FIRetCode FaceAuthManager::DoWaitInitAlgorithm(std::future<int32_t> futureObj)
 {
     std::chrono::microseconds span(INIT_DYNAMIC_TIME_OUT);
-    while (futureobj.wait_for(span) == std::future_status::timeout) {
+    if (futureObj.wait_for(span) == std::future_status::timeout) {
         FACEAUTH_HILOGI(MODULE_SERVICE, "LoadAlgorithm TimeOut");
         return FI_RC_ERROR;
     }
-    return static_cast<FIRetCode>(futureobj.get());
+    return static_cast<FIRetCode>(futureObj.get());
 }
 
 void FaceAuthManager::UnfreezeTemplates(std::vector<uint64_t> templateIdList)
