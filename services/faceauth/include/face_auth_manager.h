@@ -77,11 +77,11 @@ private:
     int32_t GenerateEventId();
     void SendData(uint64_t scheduleId, uint64_t transNum, int32_t srcType, int32_t dstType, pAuthMessage msg);
     void Finish(uint64_t scheduleId, int32_t srcType, int32_t resultCode, pAuthAttributes finalResult);
-    FIRetCode OperForAlgorithm(uint64_t scheduleID, FaceOperateType type);
-    void HandleAlgoResult(uint64_t scheduleID, FaceOperateType type);
+    void HandleAlgorithmResult(const uint64_t &scheduleID, const FaceOperateType &type);
     int32_t OpenCamera(sptr<IBufferProducer> producer);
-    int32_t WaitAlgorithmProcessDone(uint64_t scheduleID, FaceOperateType type);
     bool GetRandomNum(int32_t *randomNum);
+    std::pair<int32_t, std::vector<uint8_t>> GetAlgorithmState(const int &requestId);
+    FIRetCode DoAlgorithmOperation(const uint64_t &scheduleID);
 };
 } // namespace FaceAuth
 } // namespace UserIAM
