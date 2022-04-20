@@ -61,7 +61,7 @@ ohos_shared_library("faceauthservice") {
     "//third_party/openssl:libcrypto_static",
   ]
   external_deps = [
-    "auth_executor_mgr:coauth_framework",
+    "user_auth:coauth_framework",
     "eventhandler:libeventhandler",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
