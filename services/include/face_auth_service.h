@@ -12,37 +12,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #ifndef FACE_AUTH_SERVICE_H
 #define FACE_AUTH_SERVICE_H
 
-#include <mutex>
-#include "system_ability.h"
-#include "system_ability_definition.h"
-#include "face_auth_manager.h"
 #include "face_auth_stub.h"
+
+#include <cstdint>
+#include <mutex>
+
+#include "nocopyable.h"
+#include "system_ability.h"
+#include "surface.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-class FaceAuthService : public SystemAbility, public FaceAuthStub {
-public:
+class FaceAuthService : public SystemAbility, public FaceAuthStub, public NoCopyable {
     DECLEAR_SYSTEM_ABILITY(FaceAuthService);
-    static std::shared_ptr<FaceAuthService> GetInstance();
-    FaceAuthService();
-    virtual ~FaceAuthService() override;
-    virtual int32_t SetBufferProducer(sptr<IBufferProducer> &producer) override;
+
 public:
+    FaceAuthService();
+    virtual ~FaceAuthService() = default;
+    static std::shared_ptr<FaceAuthService> GetInstance();
+
     void OnStart() override;
     void OnStop() override;
-    void Start();
-    void ReRegister();
+    int32_t SetBufferProducer(sptr<IBufferProducer> &producer) override;
+
+    sptr<IBufferProducer> GetBufferProducer();
 
 private:
+    void StartDriverManager();
+
     static std::mutex mutex_;
     static std::shared_ptr<FaceAuthService> instance_;
-    static std::shared_ptr<FaceAuthManager> manager_;
-    DISALLOW_COPY_AND_MOVE(FaceAuthService);
+    sptr<IBufferProducer> bufferProducer_;
 };
 } // namespace FaceAuth
 } // namespace UserIAM
