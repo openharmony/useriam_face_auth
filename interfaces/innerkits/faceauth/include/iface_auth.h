@@ -20,6 +20,7 @@
 #include "face_auth_defines.h"
 #include "iremote_broker.h"
 #include "iremote_object.h"
+#include "surface.h"
 
 namespace OHOS {
 namespace UserIAM {
