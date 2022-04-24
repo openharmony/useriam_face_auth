@@ -23,7 +23,7 @@ ohos_prebuilt_etc("faceauth_sa_profile.init") {
   if (use_musl) {
     source = "faceauth_sa_profile.cfg"
   } else {
-    source = "faceauth_sys.cfg"
+    source = "faceauth_bionic.cfg"
   }
   relative_install_dir = "init"
   subsystem_name = "useriam"
