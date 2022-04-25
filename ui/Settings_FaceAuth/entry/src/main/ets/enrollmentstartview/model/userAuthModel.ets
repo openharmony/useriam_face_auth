@@ -21,7 +21,7 @@ class UserAuthModel {
   protected TAG: string = "UserAuthModel"
   protected pinAuthManger : any
   protected userAuthManager : any
-  const CMD_SET_SURFACE_ID = 100
+  private CMD_SET_SURFACE_ID = 100
 
   constructor() {
     Log.info(this.TAG, "constructor+")
@@ -39,7 +39,7 @@ class UserAuthModel {
       }
     });
 
-    var ret = new Promise<Uint8Array>((resolve)=> {
+    let ret = new Promise<Uint8Array>((resolve)=> {
       this.userAuthManager.auth(challenge, 1, 10000, {
         onResult: (result, extraInfo) => {
           Log.info(this.TAG, 'authPin onResult: ' + result + ' extraInfo: ' + JSON.stringify(extraInfo));

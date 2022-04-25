@@ -13,11 +13,12 @@
  * limitations under the License.
  */
 
+import Constants from '../config/constant.ets'
 import Log from '../utils/log.ets'
 import router from '@system.router';
 import CommonController from '../controller/commonController.ets'
 import UserIDMModel from '../model/userIDMModel.ets'
-import UserAuthModel from '../model/UserAuthModel.ets'
+import UserAuthModel from '../model/userAuthModel.ets'
 
 class EnrollingController {
   private TAG: string = "EnrollingController:"
@@ -39,7 +40,8 @@ class EnrollingController {
 
     AppStorage.Set('stackProgressValue', 0);
     AppStorage.Set('stackShelterHeight', AppStorage.Get('stackShelterHeightBegin'));
-    AppStorage.Set('enrollTip', '');
+    AppStorage.Set('enrollTip',  $r('app.string.face_intro'));
+    AppStorage.Set('enrollTipSize', Constants.ohos_id_text_size_subtitle1);
     AppStorage.Set('stackVideoBlurRadius', 0);
 
     AppStorage.Set('enrollStatus', $r('app.string.enrolling'));
@@ -57,7 +59,7 @@ class EnrollingController {
       Log.info(this.TAG, 'face is enrolling, skip start enroll')
       return
     }
-    var setResult = await UserAuthModel.setSurfaceId(AppStorage.Get('xComponentSurfaceId'))
+    let setResult = await UserAuthModel.setSurfaceId(AppStorage.Get('xComponentSurfaceId'))
     Log.info(this.TAG, 'setSurfaceId result is ' + setResult)
     UserIDMModel.setOnAcquireCallback(this.onAcquire.bind(this))
     UserIDMModel.enrollFace().then(this.processResult.bind(this))
@@ -111,7 +113,9 @@ class EnrollingController {
 
     for (let i=0; i <= 100; i+=1) {
       await CommonController.sleepMS(30)
+      AppStorage.Set('stackProgressVisibility', Visibility.Hidden);
       AppStorage.Set('stackProgressValue', i);
+      AppStorage.Set('stackProgressVisibility', Visibility.Visible);
     }
 
     Log.info(this.TAG, 'enrollProcessing-')
@@ -143,6 +147,7 @@ class EnrollingController {
 
     AppStorage.Set('enrollStatus', $r('app.string.enrolling_fail'));
     AppStorage.Set('enrollTip', $r('app.string.enroll_info_fail'))
+    AppStorage.Set('enrollTipSize', Constants.ohos_id_text_size_body1);
     AppStorage.Set('stackVideoBlurRadius', 30);
     AppStorage.Set('stackProgressValue', 0);
 

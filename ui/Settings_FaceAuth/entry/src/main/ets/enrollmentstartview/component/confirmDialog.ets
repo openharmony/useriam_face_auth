@@ -12,34 +12,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import Constants from '../config/constant.ets'
 import Log from '../utils/log.ets'
-import DefaultConstants from '../config/defaultConstant.ets'
 
 @CustomDialog
 export default struct ConfirmDialog {
   private TAG: string = "ConfirmDialog:"
   private controller: CustomDialogController;
-  @Prop title: string
-  @Prop content: string
-  @Prop confirmText: string
-  @Prop cancelText: string
+  private title: string | Resource
+  private content: string | Resource
+  private confirmText: string | Resource
+  private cancelText: string | Resource
   private confirmOperation: ()=>{}
+  @StorageLink('POP_TYPE_WIDTH') POP_TYPE_WIDTH: number = 0
 
   build() {
     Column() {
-      Text(this.title)
-        .fontSize(DefaultConstants.OVERSIZE_FONT_SIZE)
-        .margin({ bottom: DefaultConstants.PADDING_20 })
+      Flex({ alignItems: ItemAlign.Center }) {
+        Text(this.title)
+          .fontColor(Constants.ohos_id_color_text_primary)
+          .fontSize(Constants.ohos_id_text_size_dialog_title)
+          .fontWeight(FontWeight.Medium)
+      }
+        .height("64vp")
+        .margin({
+          left: "32vp",
+          right: "32vp",
+        })
       Text(this.content)
-        .fontSize(DefaultConstants.LARGE_FONT_SIZE)
-        .margin({ bottom: DefaultConstants.PADDING_16 })
-        .margin({ left: -DefaultConstants.PADDING_10, bottom: DefaultConstants.PADDING_20 })
-
+        .fontColor(Constants.ohos_id_color_text_primary)
+        .fontSize(Constants.ohos_id_text_size_body1)
+        .margin({
+          left: "32vp",
+          right: "32vp",
+          bottom: "8vp"
+        })
       Flex({ justifyContent: FlexAlign.SpaceEvenly, alignItems: ItemAlign.Center }) {
         Text(this.cancelText)
-          .fontColor($r('app.color.startView_color'))
-          .fontSize(DefaultConstants.LARGE_FONT_SIZE)
+          .fontColor(Constants.ohos_id_color_control_highlight)
+          .fontSize(Constants.ohos_id_text_button1)
+          .fontWeight(FontWeight.Medium)
+          .flexGrow(1)
           .onClick(() => {
             Log.info(this.TAG, "click cancel+")
             this.controller.close()
@@ -47,12 +60,15 @@ export default struct ConfirmDialog {
           })
         Divider()
           .vertical(true)
-          .strokeWidth(DefaultConstants.DIVIDER)
-          .color(DefaultConstants.DARK_GREY_BACKGROUND_COLOR)
-          .height(DefaultConstants.PADDING_30)
+          .strokeWidth('2vp')
+          .color(Constants.ohos_id_color_list_separator)
+          .height('24dp')
+          .margin({ left: "4vp" , right: "4vp"})
         Text(this.confirmText)
-          .fontColor(Color.Red)
-          .fontSize(DefaultConstants.LARGE_FONT_SIZE)
+          .fontColor(Constants.ohos_id_color_warning)
+          .fontSize(Constants.ohos_id_text_button1)
+          .fontWeight(FontWeight.Medium)
+          .flexGrow(1)
           .onClick(() => {
             Log.info(this.TAG, "click confirm+")
             this.confirmOperation()
@@ -60,16 +76,15 @@ export default struct ConfirmDialog {
             this.controller.close()
           })
       }
+      .height("40vp")
+      .margin({
+        left: "16vp",
+        right: "16vp",
+        bottom : "16vp"
+      })
     }
-    .width(DefaultConstants.TOTAL_WIDTH)
-    .borderRadius(DefaultConstants.BORDER_RADIUS)
-    .backgroundColor(DefaultConstants.WHITE_BACKGROUND_COLOR)
+    .borderRadius('24vp')
+    .backgroundColor(Constants.ohos_id_color_dialog_bg)
     .alignItems(HorizontalAlign.Start)
-    .padding({
-      bottom: DefaultConstants.PADDING_30,
-      top: DefaultConstants.PADDING_20,
-      left: DefaultConstants.PADDING_30,
-      right: DefaultConstants.PADDING_30
-    })
   }
 }
