@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import Constants from '../config/constant.ets'
 import Log from '../utils/log.ets'
 import commonController from '../controller/commonController.ets'
 
@@ -20,9 +21,10 @@ import commonController from '../controller/commonController.ets'
 @Component
 export default struct BackComponent {
   private prevTag: string
-  private title: string = ""
+  private title: string | Resource = ""
   private TAG : string = "BackComponent"
   @State isTouch: boolean = false
+  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
 
   aboutToAppear() {
     this.TAG = this.prevTag + "BackComp:"
@@ -31,21 +33,23 @@ export default struct BackComponent {
   build() {
     Row() {
       Image($r('app.media.back_op'))
-        .height('50')
-        .width('50')
-        .borderRadius(15)
-        .backgroundColor(this.isTouch? "#E3E3E3": "#00000000")
+        .height('24vp')
+        .width('24vp')
+        .backgroundColor(this.isTouch ? Constants.ohos_id_color_click_effect : "#00000000")
         .onClick(() => {
           Log.info(this.TAG, 'back image onClick +')
           commonController.routeBack()
           Log.info(this.TAG, 'back image onClick -')
         })
         .margin({
-          left: 15,
-          top: 5,
-          bottom: 5
+          top: '16vp',
+          bottom: '16vp',
+          left: '24vp',
+          right: '16vp',
         })
+        .responseRegion({ x: '-12vp', y: '-16vp', width: '48vp', height: '56vp' })
         .onTouch((event: TouchEvent) => {
+          Log.info(this.TAG, 'touch event')
           if (event.type === TouchType.Down) {
             this.isTouch = true;
           }
@@ -54,15 +58,15 @@ export default struct BackComponent {
           }
         })
       Text(this.title)
-        .fontSize(24)
+        .fontColor(Constants.ohos_id_color_titlebar_text)
+        .fontSize(Constants.ohos_id_text_size_headline8)
         .fontWeight(FontWeight.Bold)
-        .width('90%')
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
-        .margin({ left: 15, right: 15 });
-    }.width('100%')
-    .height(70)
-    .width("100%")
+        .margin({ right: '16vp' })
+    }
+    .height('56vp')
+    .width(this.CONTENT_TYPE_WIDTH)
     .alignItems(VerticalAlign.Center)
     .align(Alignment.Start);
   }

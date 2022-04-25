@@ -35,13 +35,13 @@ class EntryViewController {
       let token = await UserAuthModel.authPin(challenge)
       Log.info(this.TAG, "authPin result " + JSON.stringify(token))
       if (token == null) {
-         Log.info(this.TAG, "authPin fail ")
+         Log.error(this.TAG, "authPin fail ")
          throw 1
       }
       UserIDMModel.setToken(token)
       Log.info(this.TAG, "set token ok")
     } catch(err) {
-      Log.info(this.TAG, "exception " + JSON.stringify(err))
+      Log.error(this.TAG, "exception " + JSON.stringify(err))
       Log.info(this.TAG, "doPINAuth -")
       throw 1
     }

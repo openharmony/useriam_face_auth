@@ -49,7 +49,7 @@ class UserIDMModel {
   }
 
   getToken() : Uint8Array {
-    var tokenStr = AppStorage.Get<string>("UserIDM_Token")
+    let tokenStr = AppStorage.Get<string>("UserIDM_Token")
     let token =  CommonController.jsonString2Uint8Array(tokenStr)
     Log.info(this.TAG, "getToken ok " + JSON.stringify(token))
     return token
@@ -62,7 +62,7 @@ class UserIDMModel {
   }
 
   getCredentialId() : Uint8Array {
-    var credIdStr = AppStorage.Get<string>("UserIDM_CredId")
+    let credIdStr = AppStorage.Get<string>("UserIDM_CredId")
     let credId = CommonController.jsonString2Uint8Array(credIdStr)
     Log.info(this.TAG, "getCredentialId ok " + JSON.stringify(credId))
     return credId
@@ -117,7 +117,7 @@ class UserIDMModel {
   async deleteFace() : Promise<number> {
     Log.info(this.TAG, "deleteFace+")
     if (this.credentialId === null) {
-      Log.info(this.TAG, "no credential to delete")
+      Log.error(this.TAG, "no credential to delete")
       return 0
     }
 

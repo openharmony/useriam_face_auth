@@ -15,9 +15,9 @@
 
 import BackComponent from '../component/backComponent.ets'
 import Log from '../utils/log.ets'
-import Constants from '../config/constant.ets'
 import EntryViewController from '../controller/entryViewController.ets'
 import CommonController from '../controller/commonController.ets'
+import Constants from '../config/constant.ets'
 
 @Entry
 @Component
@@ -29,30 +29,43 @@ struct Index {
     Column() {
       BackComponent({ prevTag: this.TAG })
       Text("临时认证界面")
-        .fontSize(Constants.TITLE_FONT_SIZE)
+        .fontColor(Constants.ohos_id_color_text_primary)
+        .fontSize(Constants.ohos_id_text_size_headline7)
         .fontWeight(FontWeight.Bold)
       Text("请将PIN码设置为123456后，点击认证按钮")
-        .fontSize(Constants.FONT_SIZE)
+        .fontColor(Constants.ohos_id_color_text_primary)
+        .fontSize(Constants.ohos_id_text_size_subtitle1)
+        .fontWeight(FontWeight.Medium)
+        .margin({
+          top: "12",
+          bottom: "24"
+        })
       Button({ type: ButtonType.Capsule, stateEffect: true }){
-        Text('认证').fontSize(Constants.BUTTON_FONT_SIZE).fontColor(0xffffff).fontSize(Constants.TITLE_FONT_SIZE)
+        Text('认证')
+          .fontColor(Constants.ohos_id_color_foreground_inverse)
+          .fontSize(Constants.ohos_id_text_button1)
+          .fontWeight(FontWeight.Medium)
       }
-      .backgroundColor($r('app.color.startView_color'))
+      .backgroundColor(Constants.ohos_id_color_control_actived)
       .onClick(()=>{
         EntryViewController.doPINAuth()
           .catch(()=>{this.resultString = "认证失败，请将密码设置为123456后重试"})
       })
-      .width(Constants.BUTTON_WIDTH)
-      .height(Constants.BUTTON_HEIGHT)
-      .margin({
-        top: "24",
-        bottom: "24"
-      })
+      .width('30%')
       Text(this.resultString)
-        .fontSize(Constants.FONT_SIZE)
-        .fontWeight(FontWeight.Bold)
-    }.alignItems(HorizontalAlign.Center)
+      .fontColor(Constants.ohos_id_color_text_primary)
+      .fontSize(Constants.ohos_id_text_size_subtitle1)
+      .fontWeight(FontWeight.Medium)
+    }
+    .alignItems(HorizontalAlign.Center)
     .width("100%")
     .height("100%")
+    .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
+    .onAreaChange((_, newArea) => {
+      Log.info(this.TAG, "new display area :" + JSON.stringify(newArea))
+      CommonController.setDisplaySize(Number(newArea.width), Number(newArea.height))
+      Log.info(this.TAG, "total area w: " + newArea.width + " h: " + newArea.height)
+    })
   }
 
   onBackPress(): boolean {
