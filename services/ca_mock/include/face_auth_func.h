@@ -19,7 +19,7 @@
 #include <vector>
 #include "defines.h"
 #include "buffer.h"
-#include "coauth_info_define.h"
+#include "co_auth_info_define.h"
 
 namespace OHOS {
 namespace UserIAM {
