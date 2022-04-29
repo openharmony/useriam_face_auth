@@ -15,7 +15,7 @@
 
 #include "face_auth_manager.h"
 #include "face_auth_log_wrapper.h"
-#include "coauth_info_define.h"
+#include "co_auth_info_define.h"
 #include "face_auth_ca.h"
 #include "face_auth_query_callback.h"
 

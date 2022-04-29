@@ -28,7 +28,7 @@
 #include "useridm_info.h"
 #include "face_auth_get_info_callback.h"
 #include "auth_message.h"
-#include "coauth_info_define.h"
+#include "co_auth_info_define.h"
 #include "face_auth_thread_pool.h"
 #include "face_auth_req.h"
 #include "face_auth_camera.h"
