@@ -12,7 +12,7 @@
 # limitations under the License.
 
 import("//build/ohos.gni")
-import("//foundation/aafwk/standard/feature.gni")
+import("//foundation/aafwk/standard/aafwk.gni")
 
 group("faceauth_framework_group") {
   deps = []
