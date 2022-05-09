@@ -13,22 +13,30 @@
  * limitations under the License.
  */
 
-#ifndef FACE_AUTH_QUERY_CALLBACK_H
-#define FACE_AUTH_QUERY_CALLBACK_H
+#ifndef FACE_AUTH_DRIVER_HDI
+#define FACE_AUTH_DRIVER_HDI
 
-#include "face_auth_defines.h"
-#include "query_callback.h"
+#include <iauth_driver_hdi.h>
+#include <vector>
+
+#include "iauth_executor_hdi.h"
+#include "iremote_broker.h"
+#include "nocopyable.h"
+#include "v1_0/face_auth_interface_proxy.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-class FaceAuthQueryCallback : public AuthResPool::QueryCallback {
+namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
+class FaceAuthDriverHdi : public UserAuth::IAuthDriverHdi, public NoCopyable {
 public:
-    FaceAuthQueryCallback() = default;
-    virtual ~FaceAuthQueryCallback() = default;
-    void OnResult(uint32_t resultCode) override;
+    FaceAuthDriverHdi() = default;
+    virtual ~FaceAuthDriverHdi() = default;
+
+    void GetExecutorList(std::vector<std::shared_ptr<UserAuth::IAuthExecutorHdi>> &executorList);
 };
 } // namespace FaceAuth
-} // namespace userIAM
+} // namespace UserIAM
 } // namespace OHOS
-#endif // FACE_AUTH_QUERY_CALLBACK_H
+
+#endif // FACE_AUTH_DRIVER_HDI

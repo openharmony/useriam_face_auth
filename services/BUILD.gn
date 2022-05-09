@@ -22,55 +22,35 @@ group("faceauthservice_group") {
 }
 
 ohos_shared_library("faceauthservice") {
-  include_dirs = [
-    "//base/user_iam/face_auth/services/faceauth/include",
-    "//base/user_iam/face_auth/common/include",
-    "//base/user_iam/face_auth/services/ca_mock/include",
-    "//base/user_iam/face_auth/interfaces/innerkits/faceauth/include",
-    "//foundation/multimedia/camera_standard/interfaces/inner_api/native/camera/include",
-    "//foundation/multimedia/camera_standard/interfaces/innerkits/native/camera/include",
-    "//drivers/peripheral/camera/interfaces/metadata/include",
-    "//foundation/multimedia/camera_standard/services/camera_service/binder/base/include",
-    "//foundation/multimedia/camera_standard/services/camera_service/binder/client/include",
-    "//foundation/multimedia/camera_standard/services/camera_service/binder/server/include",
-  ]
-
   sources = [
-    "//base/user_iam/face_auth/common/src/return_callback.cpp",
-    "//base/user_iam/face_auth/services/ca_mock/src/adaptor_algorithm.cpp",
-    "//base/user_iam/face_auth/services/ca_mock/src/buffer.cpp",
-    "//base/user_iam/face_auth/services/ca_mock/src/face_auth_ca.cpp",
-    "//base/user_iam/face_auth/services/ca_mock/src/face_auth_func.cpp",
-    "//base/user_iam/face_auth/services/faceauth/src/face_auth_camera.cpp",
-    "//base/user_iam/face_auth/services/faceauth/src/face_auth_camera_buffer_listener.cpp",
-    "//base/user_iam/face_auth/services/faceauth/src/face_auth_event.cpp",
-    "//base/user_iam/face_auth/services/faceauth/src/face_auth_event_handler.cpp",
-    "//base/user_iam/face_auth/services/faceauth/src/face_auth_executor_callback.cpp",
-    "//base/user_iam/face_auth/services/faceauth/src/face_auth_get_info_callback.cpp",
-    "//base/user_iam/face_auth/services/faceauth/src/face_auth_manager.cpp",
-    "//base/user_iam/face_auth/services/faceauth/src/face_auth_query_callback.cpp",
-    "//base/user_iam/face_auth/services/faceauth/src/face_auth_req.cpp",
-    "//base/user_iam/face_auth/services/faceauth/src/face_auth_service.cpp",
-    "//base/user_iam/face_auth/services/faceauth/src/face_auth_thread_pool.cpp",
+    "src/face_auth_driver_hdi.cpp",
+    "src/face_auth_executor_callback_hdi.cpp",
+    "src/face_auth_executor_hdi.cpp",
+    "src/face_auth_service.cpp",
+  ]
+  include_dirs = [
+    "include",
+    "../common/include",
+    "//base/user_iam/user_auth/interfaces/inner_api/include/userauth/",
+    "//base/user_iam/user_auth/common/logs",
+    "//base/user_iam/user_auth/common/utils",
   ]
 
   deps = [
     "//base/user_iam/face_auth/interfaces/innerkits/faceauth:faceauth_framework",
-    "//drivers/peripheral/camera/interfaces/metadata:metadata",
-    "//foundation/multimedia/camera_standard/frameworks/native/camera:camera_framework",
-    "//third_party/openssl:libcrypto_static",
+    "//base/user_iam/user_auth/common/executors:userauth_executors",
+    "//drivers/interface/face_auth/v1_0:libfaceauth_proxy_1.0",
+    "//drivers/interface/face_auth/v1_0:libfaceauth_stub_1.0",
   ]
   external_deps = [
-    "eventhandler:libeventhandler",
+    "device_driver_framework:libhdf_utils",
     "hiviewdfx_hilog_native:libhilog",
-    "ipc:ipc_core",
     "safwk:system_ability_fwk",
     "samgr_standard:samgr_proxy",
-    "startup_l2:syspara_watchagent",
     "user_auth:coauth_framework",
-    "user_auth:useridm_framework",
     "utils_base:utils",
   ]
+  remove_configs = [ "//build/config/compiler:no_exceptions" ]
 
   if (ability_runtime_graphics) {
     external_deps += [ "graphic_standard:surface" ]
