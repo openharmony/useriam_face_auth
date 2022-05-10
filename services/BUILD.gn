@@ -26,9 +26,9 @@ ohos_shared_library("faceauthservice") {
     "//base/user_iam/auth_executor_mgr/services/include",
     "//base/user_iam/auth_executor_mgr/frameworks/kitsimpl/include",
     "//base/user_iam/auth_executor_mgr/utils/native/include",
+    "//drivers/peripheral/camera/interfaces/metadata/include",
     "//foundation/appexecfwk/standard/interfaces/innerkits/libeventhandler/include",
     "//foundation/multimedia/camera_standard/interfaces/innerkits/native/camera/include",
-    "//foundation/multimedia/camera_standard/frameworks/native/metadata/include",
     "//foundation/multimedia/camera_standard/services/camera_service/binder/base/include",
     "//foundation/multimedia/camera_standard/services/camera_service/binder/client/include",
     "//foundation/multimedia/camera_standard/services/camera_service/binder/server/include",
@@ -55,8 +55,8 @@ ohos_shared_library("faceauthservice") {
   ]
 
   deps = [
+    "//drivers/peripheral/camera/interfaces/metadata:metadata",
     "//foundation/multimedia/camera_standard/frameworks/native/camera:camera_framework",
-    "//foundation/multimedia/camera_standard/frameworks/native/metadata:metadata",
     "//third_party/openssl:libcrypto_static",
   ]
   external_deps = [
