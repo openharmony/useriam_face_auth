@@ -170,7 +170,7 @@ UserIAM::ResultCode FaceAuthExecutorHdi::SendCommand(UserAuth::AuthPropertyMode 
 UserIAM::ResultCode FaceAuthExecutorHdi::MoveHdiExecutorInfo(FaceHdi::ExecutorInfo &in, UserIAM::ExecutorInfo &out)
 {
     out.executorId = static_cast<int32_t>(in.sensorId);
-    out.executorType = in.executorType;
+    out.executorType = static_cast<int32_t>(in.executorType);
     int32_t ret = ConvertExecutorRole(in.executorRole, out.role);
     if (ret != UserIAM::ResultCode::SUCCESS) {
         IAM_LOGE("executorProxy is null");
