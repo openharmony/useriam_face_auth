@@ -81,16 +81,6 @@ static constexpr OHOS::HiviewDFX::HiLogLabel FACE_AUTH_LABEL[MODULE_MAX] = {
     FORMATTED(__VA_ARGS__))
 #define FACEAUTH_HILOGD(module, ...) (void)OHOS::HiviewDFX::HiLog::Debug(FACE_AUTH_LABEL[module], \
     FORMATTED(__VA_ARGS__))
-const uint64_t MASK = 0xffff;
-const size_t MASKED_STRING_LEN = 11;
-inline std::string getMaskedString(uint64_t val)
-{
-    char bytes[MASKED_STRING_LEN] = {0};
-    if (snprintf_s(bytes, sizeof(bytes), sizeof(bytes) - 1, "0xXXXX%04" PRIx64, val & MASK) == 0) {
-        return "(snprintf fail)";
-    }
-    return std::string(bytes);
-}
 
 inline std::string getPointerNullString(void *p)
 {
