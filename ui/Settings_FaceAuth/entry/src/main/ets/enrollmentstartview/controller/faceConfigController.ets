@@ -34,14 +34,13 @@ class FaceConfigController {
         CommonController.routeBack()
         Log.info(this.TAG, "deleteFace routerBack-")
       } else {
-        Log.info(this.TAG, "deleteFace fail")
+        Log.error(this.TAG, "deleteFace fail")
       }
     }).catch(()=>{
-      Log.info(this.TAG, "deleteFace exception")
+      Log.error(this.TAG, "deleteFace exception")
       CommonController.routeBack()
     })
     setTimeout(()=>{CommonController.routeBack()}, 500)
-
     Log.info(this.TAG, "deleteFace-")
   }
 }

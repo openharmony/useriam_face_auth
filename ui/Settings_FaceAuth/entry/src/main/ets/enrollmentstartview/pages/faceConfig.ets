@@ -18,12 +18,35 @@ import Log from '../utils/log.ets'
 import CommonController from '../controller/commonController.ets'
 import FaceConfigController from '../controller/faceConfigController.ets'
 import ConfirmDialog from '../component/confirmDialog.ets'
+import router from '@system.router';
+import Constants from '../config/constant.ets'
+
+@Extend(Span) function configSetSpanFormat() {
+  .fontColor(Constants.ohos_id_color_text_secondary)
+  .fontSize(Constants.ohos_id_text_size_caption1)
+  .fontWeight(FontWeight.Regular)
+}
+
+@Extend(Span) function configSetLinkFormat() {
+  .fontColor(Constants.ohos_id_color_text_hyperlink)
+  .fontSize(Constants.ohos_id_text_size_caption1)
+  .fontWeight(FontWeight.Medium)
+}
+
+@Extend(Text) function configDeleteData() {
+  .fontColor(Constants.ohos_id_color_warning)
+  .fontSize(Constants.ohos_id_text_size_body1)
+  .fontWeight(FontWeight.Medium)
+}
 
 @Entry
 @Component
 struct FaceConfig {
   @State TAG: string = "FaceConfig:"
   @State touched: boolean = false
+  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
+  @StorageLink('CARD_TYPE_WIDTH') CARD_TYPE_WIDTH: number = 0
+
   private deleteFaceDialogController: CustomDialogController = new CustomDialogController({
     builder: ConfirmDialog({
       title: $r('app.string.delete_record_title'),
@@ -32,7 +55,11 @@ struct FaceConfig {
       cancelText: $r('app.string.face_record_cancel'),
       confirmOperation: this.deleteFace.bind(this)
     }),
-    alignment: CommonController.getDialogAlignment()
+    alignment: CommonController.getDialogAlignment(),
+    offset: {
+      dx : "0vp",
+      dy : CommonController.getDialogYOffset()
+    }
   })
 
   deleteFace() {
@@ -43,34 +70,64 @@ struct FaceConfig {
 
   build() {
     Column() {
-      BackComponent({ prevTag: this.TAG, title: $r('app.string.face_checker') })
-      Flex({ justifyContent: FlexAlign.SpaceBetween, alignItems:ItemAlign.Center }) {
-        Row() {
-          Text($r('app.string.delete_record_title'))
-            .fontSize(22)
-            .fontColor(Color.Red)
-            .margin({left:24, top:8, bottom:8, right:0})
-            .textAlign(TextAlign.Start);
+      Column() {
+        BackComponent({ prevTag: this.TAG, title: $r('app.string.face_checker') })
+        Flex({ justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center }) {
+          Row() {
+            Text($r('app.string.delete_record_title'))
+              .configDeleteData()
+              .margin({ left: '24vp', right: '24vp', top: '12vp', bottom: '12vp' })
+              .textAlign(TextAlign.Start);
+          }
         }
+        .backgroundColor(this.touched ? "#D8D8D8" : "#FFFFFF")
+        .height('56vp')
+        .margin({
+          top: '8vp',
+          bottom: '8vp'
+        })
+        .borderRadius('24vp')
+        .onClick(() => {
+          this.deleteFaceDialogController.open()
+        })
+        .onTouch((event: TouchEvent) => {
+          if (event.type === TouchType.Down) {
+            this.touched = true;
+          }
+          if (event.type === TouchType.Up) {
+            this.touched = false;
+          }
+        });
+        Column() {
+          Text() {
+            Span($r('app.string.face_3dguide_info_2'))
+            .configSetSpanFormat()
+            Span($r('app.string.face_guide_2d_announce_link'))
+            .configSetLinkFormat()
+            .onClick(() => {
+              router.push({ uri: 'pages/enrollDeclare' })
+            })
+            Span($r('app.string.period'))
+            .configSetSpanFormat()
+          }
+          .textAlign(TextAlign.Start)
+        }
+        .margin({
+          left: '24vp',
+          right: '24vp'
+        })
       }
-      .backgroundColor(this.touched? "#D8D8D8":"#FFFFFF")
-      .height(56)
-      .margin({left:24, right:24, top:16})
-      .borderRadius(24)
-      .onClick(()=>{
-        this.deleteFaceDialogController.open()
-      })
-      .onTouch((event: TouchEvent) => {
-        if (event.type === TouchType.Down) {
-          this.touched = true;
-        }
-        if (event.type === TouchType.Up) {
-          this.touched = false;
-        }
-      });
-    }.width("100%")
+      .alignItems(HorizontalAlign.Start)
+      .width(this.CONTENT_TYPE_WIDTH)
+    }
+    .width("100%")
     .height("100%")
-    .backgroundColor("#E3E3E3");
+    .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
+    .onAreaChange((_, newArea) => {
+      Log.info(this.TAG, "new display area :" + JSON.stringify(newArea))
+      CommonController.setDisplaySize(Number(newArea.width), Number(newArea.height))
+      Log.info(this.TAG, "total area w: " + newArea.width + " h: " + newArea.height)
+    })
   }
 
   onBackPress(): boolean {
