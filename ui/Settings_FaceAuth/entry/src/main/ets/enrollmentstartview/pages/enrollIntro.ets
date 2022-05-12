@@ -19,12 +19,38 @@ import Log from '../utils/log.ets'
 import CommonController from '../controller/commonController.ets'
 import Constants from '../config/constant.ets'
 
+@Extend(Text) function introSetTitleFormat() {
+  .fontColor(Constants.ohos_id_color_text_primary)
+  .fontSize(Constants.ohos_id_text_size_headline7)
+  .fontWeight(FontWeight.Bold)
+}
+
+@Extend(Text) function introSetSubtitleFormat() {
+  .fontColor(Constants.ohos_id_color_text_primary)
+  .fontSize(Constants.ohos_id_text_size_subtitle1)
+  .fontWeight(FontWeight.Medium)
+}
+
+@Extend(Span) function introSetSpanFormat() {
+  .fontColor(Constants.ohos_id_color_text_secondary)
+  .fontSize(Constants.ohos_id_text_size_body2)
+  .fontWeight(FontWeight.Regular)
+}
+
+@Extend(Span) function introSetLinkFormat() {
+  .fontColor(Constants.ohos_id_color_text_hyperlink)
+  .fontSize(Constants.ohos_id_text_size_body2)
+  .fontWeight(FontWeight.Medium)
+}
+
 @Entry
 @Component
 struct EnrollIntro {
   @State TAG: string = "EnrollIntro:"
   @StorageLink('enrollImageHeight') enrollImageHeight: number = 0
   @StorageLink('enrollImageWidth') enrollImageWidth: number = 0
+  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
+  @StorageLink('BUTTON_TYPE_WIDTH') BUTTON_TYPE_WIDTH: number = 0
 
   build() {
       Column() {
@@ -35,70 +61,71 @@ struct EnrollIntro {
             Scroll() {
               Column() {
                 Text($r('app.string.face_checker'))
-                  .fontSize(Constants.TITLE_FONT_SIZE)
-                  .fontWeight(FontWeight.Bold)
+                  .introSetTitleFormat()
                   .margin({
-                    bottom: "20"
+                    top : "12vp",
+                    bottom: "24vp"
                   })
                 Image($r('app.media.startImage_2D'))
                   .objectFit(ImageFit.Contain)
-                  .width("1000%")
+                  .width(this.enrollImageWidth)
                   .height(this.enrollImageHeight)
+                  .margin({
+                    bottom: "24vp"
+                  })
                 Column() {
                   Text($r('app.string.enroll_face_guide_title'))
-                    .fontSize(Constants.SMALL_TITLE_FONT_SIZE)
-                    .fontWeight(Constants.FONT_WEIGHT)
-                    .textAlign(TextAlign.Center)
-
-                  Text($r('app.string.face_guide_2d_way'))
-                    .fontSize(Constants.FONT_SIZE)
-                    .fontColor($r('app.color.font_color'))
-                    .textAlign(TextAlign.Center)
-                    .margin({ top: Constants.CONTENT1_MARGIN })
-
+                    .introSetSubtitleFormat()
+                    .margin({
+                      bottom: "8vp"
+                    })
                   Text() {
+                    Span($r('app.string.face_guide_2d_way'))
+                    .introSetSpanFormat()
                     Span($r('app.string.face_guide_2d_announce'))
-                      .fontColor($r('app.color.font_color'))
-                      .textCase(TextCase.UpperCase)
-                      .fontSize(Constants.FONT_SIZE)
+                    .introSetSpanFormat()
                     Span($r('app.string.face_guide_2d_announce_link'))
-                      .textCase(TextCase.UpperCase)
-                      .fontSize(Constants.FONT_SIZE)
-                      .fontColor($r('app.color.startView_color'))
-                      .onClick(() => {
-                        router.push({ uri: 'pages/enrollDeclare' })
-                      })
+                    .introSetLinkFormat()
+                    .onClick(() => {
+                      router.push({ uri: 'pages/enrollDeclare' })
+                    })
+                    Span($r('app.string.period'))
+                    .introSetSpanFormat()
                   }
-                    .margin({ top: Constants.CONTENT2_MARGIN })
                     .textAlign(TextAlign.Center)
                 }
-                  .width(Constants.ENROLL_INFO_WIDTH)
-                  .margin({
-                    top: Constants.IMAGE_MARGIN,
-                  })
               }
-            }.scrollable(ScrollDirection.Vertical).scrollBarColor(Color.Gray).scrollBarWidth(30)
-          }.width('100%').flexGrow(1)
-
-          Flex({ justifyContent: FlexAlign.Center }) {
-            Button({ type: ButtonType.Capsule, stateEffect: true }) {
-              Text($r('app.string.face_recognitin_guide')).fontSize(Constants.BUTTON_FONT_SIZE).fontColor(0xffffff)
             }
-            .backgroundColor($r('app.color.startView_color'))
-            .width(Constants.BUTTON_WIDTH)
-            .height(Constants.BUTTON_HEIGHT)
+            .scrollBarColor(Constants.ohos_id_color_foreground_60_transparency)
+            .scrollBarWidth('5vp')
+            .margin({ right: "12vp" })
+          }
+            .width(this.CONTENT_TYPE_WIDTH)
+            .flexGrow(1)
+
+          Column() {
+            Button({ type: ButtonType.Capsule, stateEffect: true }) {
+              Text($r('app.string.face_recognition_guide'))
+                .fontSize(Constants.ohos_id_text_button1)
+                .fontColor(Constants.ohos_id_color_foreground_inverse)
+                .fontWeight(FontWeight.Medium)
+            }
+            .backgroundColor(Constants.ohos_id_color_control_actived)
+            .width(this.BUTTON_TYPE_WIDTH)
+            .height('40vp')
             .onClick(() => {
               router.replace({ uri: 'pages/enrolling' })
             })
             .margin({
-              top: "24",
-              bottom: "24"
+              top: "16vp",
+              bottom: "24vp"
             })
           }
-        }.width("100%").height("100%").flexShrink(1)
-        .constraintSize({
-          maxWidth: '720'
-        })
+            .width(this.CONTENT_TYPE_WIDTH)
+        }
+        .width("100%")
+        .height("100%")
+        .flexShrink(1)
         .onAreaChange((_, newArea) => {
           Log.info(this.TAG, "new non app bar area :" + JSON.stringify(newArea))
           CommonController.setNonAppBarDisplaySize(Number(newArea.width), Number(newArea.height))
@@ -107,6 +134,7 @@ struct EnrollIntro {
       }
       .width('100%')
       .height('100%')
+      .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
       .onAreaChange((_, newArea) => {
         Log.info(this.TAG, "new display area :" + JSON.stringify(newArea))
         CommonController.setDisplaySize(Number(newArea.width), Number(newArea.height))

@@ -18,169 +18,114 @@ import BackComponent from '../component/backComponent.ets'
 import Log from '../utils/log.ets'
 import CommonController from '../controller/commonController.ets'
 
+@Extend(Text) function setTitleFormat() {
+  .fontColor(Constants.ohos_id_color_text_primary)
+  .fontSize(Constants.ohos_id_text_size_body1)
+  .fontWeight(FontWeight.Medium)
+}
+
+@Extend(Text) function setContentFormat() {
+  .fontColor(Constants.ohos_id_color_text_primary)
+  .fontSize(Constants.ohos_id_text_size_body1)
+  .fontWeight(FontWeight.Regular)
+}
+
+@Extend(Span) function setSpanFormat() {
+  .fontColor(Constants.ohos_id_color_text_primary)
+  .fontSize(Constants.ohos_id_text_size_body1)
+  .fontWeight(FontWeight.Regular)
+}
+
 @Entry
 @Component
 export default struct EnrollDeclare {
   private pattern: string = "2D";
   private TAG: string = "EnrollDeclare:"
+  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
 
   build() {
-    Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Center }) {
-      BackComponent({ prevTag:this.TAG, title: $r('app.string.face_guide_2d_announce_link' )})
-      Scroll() {
-        Column() {
+    Column() {
+      BackComponent({ prevTag: this.TAG, title: $r('app.string.face_guide_2d_announce_link') })
+
+      Column() {
+        Scroll() {
           Column() {
-            Text($r("app.string.face_feature_desc"))
-              .fontSize(Constants.DECLARE_SECONDARY_TITLE_FONT_SIZE)
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start)
-              .margin({ top: Constants.DECLARE_TITLE_MARGIN_TOP, bottom: Constants.DECLARE_TITLE_MARGIN_BOTTOM })
-            Text(this.pattern == "2D" ? $r("app.string.face_recognize_announce_message_01") : $r("app.string.face_3drecognize_announce_message_01"))
-              .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start)
-              .margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM})
-              .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-            Text($r("app.string.face_recognize_announce_message_02"))
-              .fontSize(Constants.DECLARE_SECONDARY_TITLE_FONT_SIZE)
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start)
-              .margin({ top: Constants.DECLARE_TITLE_MARGIN_TOP, bottom: Constants.DECLARE_TITLE_MARGIN_BOTTOM })
-            Text($r("app.string.face_recognize_announce_message_03"))
-              .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-              .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-            Text($r("app.string.face_recognize_announce_message_04"))
-              .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-              .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-            Text($r("app.string.face_recognize_announce_message_05"))
-              .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-              .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-            Text($r("app.string.face_recognize_announce_message_06"))
-              .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-              .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-            Text($r("app.string.face_recognize_announce_message_07"))
-              .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-              .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-            Text($r("app.string.face_recognize_announce_message_08"))
-              .fontSize(Constants.DECLARE_SECONDARY_TITLE_FONT_SIZE)
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start).margin({ top: Constants.DECLARE_TITLE_MARGIN_TOP, bottom: Constants.DECLARE_TITLE_MARGIN_BOTTOM })
-
-            Text($r("app.string.face_recognize_announce_message_09"))
-              .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-              .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-            if (this.pattern == "2D") {
-              Text($r("app.string.face_announce_tip1_item2_3d"))
-                .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                .width(Constants.DECLARE_MAX_WIDTH)
-                .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-                .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-              Text() {
-                Span(Constants.DECLARE_TITLE_3).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                Span($r("app.string.face_recognize_announce_message_10")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
+            Column() {
+              Column() {
+                Text($r("app.string.face_feature_desc"))
+                  .setTitleFormat()
+                  .margin({ bottom: '16vp' })
+                Text($r("app.string.face_recognize_announce_message_01"))
+                  .setContentFormat()
+                  .margin({ bottom: '24vp' })
+                Text($r("app.string.face_recognize_announce_message_02"))
+                  .setTitleFormat()
+                  .margin({ bottom: '16vp' })
+                Text($r("app.string.face_recognize_announce_message_03"))
+                  .setContentFormat()
+                  .margin({ bottom: '8vp' })
+                Text($r("app.string.face_recognize_announce_message_04"))
+                  .setContentFormat()
+                  .margin({ bottom: '8vp' })
+                Text($r("app.string.face_recognize_announce_message_05"))
+                  .setContentFormat()
+                  .margin({ bottom: '8vp' })
+                Text($r("app.string.face_recognize_announce_message_06"))
+                  .setContentFormat()
+                  .margin({ bottom: '8vp' })
+                Text($r("app.string.face_recognize_announce_message_07"))
+                  .setContentFormat()
+                  .margin({ bottom: '24vp' })
+                Text($r("app.string.face_recognize_announce_message_08"))
+                  .setTitleFormat()
+                  .margin({ bottom: '16vp' })
+                Text($r("app.string.face_recognize_announce_message_09"))
+                  .setContentFormat()
+                  .margin({ bottom: '8vp' })
+                Text($r("app.string.face_announce_tip1_item2_3d"))
+                  .setContentFormat()
+                  .margin({ bottom: '8vp' })
+                Text($r("app.string.face_recognize_announce_message_10"))
+                  .setContentFormat()
+                  .margin({ bottom: '8vp' })
+                Text($r("app.string.face_recognize_announce_message_11"))
+                  .setContentFormat()
+                  .margin({ bottom: '8vp' })
+                Text($r("app.string.face_recognize_announce_message_12"))
+                  .setContentFormat()
+                  .margin({ bottom: '24vp' })
+                Text($r("app.string.face_recognize_announce_message_13"))
+                  .setTitleFormat()
+                  .margin({ bottom: '16vp' })
+                Text() {
+                  Span($r("app.string.face_recognize_announce_message_14_1"))
+                    .setSpanFormat()
+                  Span($r("app.string.face_recognize_announce_message_14_3"))
+                    .setSpanFormat()
+                    .fontWeight(FontWeight.Bold)
+                  Span($r("app.string.face_recognize_announce_message_14_2"))
+                    .setSpanFormat()
+                }
               }
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-              .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-
-              Text() {
-                Span(Constants.DECLARE_TITLE_4).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                Span($r("app.string.face_recognize_announce_message_11")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              }
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-              .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-
-              Text() {
-                Span(Constants.DECLARE_TITLE_5).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                Span($r("app.string.face_recognize_announce_message_12")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              }
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-              .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-            } else if (this.pattern == "3D") {
-              Text() {
-                Span(Constants.DECLARE_TITLE_2).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                Span($r("app.string.face_recognize_announce_message_10")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              }
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-              .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-
-              Text() {
-                Span(Constants.DECLARE_TITLE_3).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                Span($r("app.string.face_recognize_announce_message_11")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              }
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-              .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-
-              Text() {
-                Span(Constants.DECLARE_TITLE_4).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                Span($r("app.string.face_recognize_announce_message_12")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              }
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start).margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-              .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
+              .alignItems(HorizontalAlign.Start)
+              .margin({ left: "24vp", right: '24vp' })
             }
-
-
-            Text($r("app.string.face_recognize_announce_message_13"))
-              .fontSize(Constants.DECLARE_SECONDARY_TITLE_FONT_SIZE)
-              .width(Constants.DECLARE_MAX_WIDTH)
-              .textAlign(TextAlign.Start)
-              .margin({ top: Constants.DECLARE_TITLE_MARGIN_TOP, bottom: Constants.DECLARE_TITLE_MARGIN_BOTTOM })
-
-
-            Text() {
-              Span($r("app.string.face_recognize_announce_message_14_1"))
-                .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              Span($r("app.string.face_recognize_announce_message_14_3"))
-                .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                .fontWeight(FontWeight.Bold)
-                .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              Span($r("app.string.face_recognize_announce_message_14_2"))
-                .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              Span($r("app.string.face_recognize_announce_message_14_3"))
-                .fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                .fontWeight(FontWeight.Bold)
-
-            }
-            .width(Constants.DECLARE_MAX_WIDTH)
-            .textAlign(TextAlign.Start)
-            .margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-            .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-
-            Text() {
-              Span($r("app.string.face_recognize_announce_message_15_1")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-              Span($r("app.string.face_recognize_announce_message_14_3")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-                .fontWeight(FontWeight.Bold)
-              Span($r("app.string.face_recognize_announce_message_15_2")).fontSize(Constants.DECLARE_TEXT_FONT_SIZE)
-            }
-            .width(Constants.DECLARE_MAX_WIDTH)
-            .textAlign(TextAlign.Start)
-            .margin({ bottom: Constants.DECLARE_ITEM_MARGIN_BOTTOM })
-            .lineHeight(Constants.DECLARE_TEXT_LINE_HEIGHT)
-          }.width(Constants.DECLARE_WIDTH)
-
+            .width(this.CONTENT_TYPE_WIDTH)
+          }
+          .margin({ top: "24vp" })
+          .width("100%")
         }
+        .scrollBarColor(Constants.ohos_id_color_foreground_60_transparency)
+        .scrollBarWidth('5vp')
+        .margin({ right: "12vp", bottom: "24vp" })
       }
-      .scrollBarWidth(Constants.DECLARE_SCROLL_BAR_WIDTH)
+      .width("100%")
+      .height('100%')
+      .flexShrink(1)
     }
-    .backgroundColor(Constants.DECLARE_BACKGROUND_COLOR)
-    .width(Constants.DECLARE_MAX_WIDTH)
+    .width('100%')
+    .height('100%')
+    .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
   }
 
   onBackPress(): boolean {
