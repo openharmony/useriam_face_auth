@@ -27,7 +27,11 @@
 ```
 //base/user_iam/face_auth
 ├── bundle.json              # 组件描述文件
+├── common                   # 组件公共文件
 ├── figures                  # README使用的图片
+├── frameworks               # 框架代码
+├── interfaces               # 对外接口存放目录
+│   └── inner_api            # 对内部子系统暴露的头文件，供系统服务使用
 ├── sa_profile               # Service Ability 配置文件
 ├── services                 # Service Ability 服务实现
 └── ui                       # 人脸录入界面实现

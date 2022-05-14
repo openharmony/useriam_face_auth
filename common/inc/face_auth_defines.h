@@ -21,12 +21,6 @@ namespace UserIAM {
 namespace FaceAuth {
 #include <cstdint>
 
-// constant
-namespace {
-static const int32_t FA_RET_OK = 0;
-static const int32_t FA_RET_ERROR = -1;
-} // namespace
-
 enum FaceAuthRet {
     FACEAUTH_SUCCESS = 0,
     FACEAUTH_ERROR = 1,

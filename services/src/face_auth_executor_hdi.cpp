@@ -15,9 +15,10 @@
 
 #include "face_auth_executor_hdi.h"
 
+#include "hdf_base.h"
+
 #include "face_auth_defines.h"
 #include "face_auth_executor_callback_hdi.h"
-#include "hdf_base.h"
 #include "iam_check.h"
 #include "iam_logger.h"
 
@@ -35,12 +36,12 @@ UserIAM::ResultCode FaceAuthExecutorHdi::GetExecutorInfo(UserIAM::ExecutorInfo &
     int32_t status = executorProxy_->GetExecutorInfo(localInfo);
     UserIAM::ResultCode result = ConvertResultCode(status);
     if (result != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("GetExecutorInfo fail ret=%{public}d", result);
+        IAM_LOGE("GetExecutorInfo fail result %{public}d", result);
         return result;
     }
-    int32_t ret = MoveHdiExecutorInfo(localInfo, info);
-    if (ret != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("MoveHdiExecutorInfo fail ret=%{public}d", ret);
+    result = MoveHdiExecutorInfo(localInfo, info);
+    if (result != UserIAM::ResultCode::SUCCESS) {
+        IAM_LOGE("MoveHdiExecutorInfo fail result %{public}d", result);
         return UserIAM::ResultCode::GENERAL_ERROR;
     }
     return UserIAM::ResultCode::SUCCESS;
@@ -53,12 +54,12 @@ UserIAM::ResultCode FaceAuthExecutorHdi::GetTemplateInfo(uint64_t templateId, Us
     int32_t status = executorProxy_->GetTemplateInfo(templateId, localInfo);
     UserIAM::ResultCode result = ConvertResultCode(status);
     if (result != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("GetTemplateInfo fail ret=%{public}d", result);
+        IAM_LOGE("GetTemplateInfo fail result %{public}d", result);
         return result;
     }
-    int32_t ret = MoveHdiTemplateInfo(localInfo, info);
-    if (ret != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("MoveHdiTemplateInfo fail ret=%{public}d", ret);
+    result = MoveHdiTemplateInfo(localInfo, info);
+    if (result != UserIAM::ResultCode::SUCCESS) {
+        IAM_LOGE("MoveHdiTemplateInfo fail result %{public}d", result);
         return UserIAM::ResultCode::GENERAL_ERROR;
     }
     return UserIAM::ResultCode::SUCCESS;
@@ -71,7 +72,7 @@ UserIAM::ResultCode FaceAuthExecutorHdi::OnRegisterFinish(const std::vector<uint
     int32_t status = executorProxy_->OnRegisterFinish(templateIdList, frameworkPublicKey, extraInfo);
     UserIAM::ResultCode result = ConvertResultCode(status);
     if (result != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("OnRegisterFinish fail ret=%{public}d", status);
+        IAM_LOGE("OnRegisterFinish fail result %{public}d", status);
         return result;
     }
     return UserIAM::ResultCode::SUCCESS;
@@ -86,7 +87,7 @@ UserIAM::ResultCode FaceAuthExecutorHdi::Enroll(uint64_t scheduleId, uint64_t ca
     int32_t status = executorProxy_->Enroll(scheduleId, extraInfo, callback);
     UserIAM::ResultCode result = ConvertResultCode(status);
     if (result != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("Enroll fail ret=%{public}d", result);
+        IAM_LOGE("Enroll fail result %{public}d", result);
         return result;
     }
     return UserIAM::ResultCode::SUCCESS;
@@ -102,7 +103,7 @@ UserIAM::ResultCode FaceAuthExecutorHdi::Authenticate(uint64_t scheduleId, uint6
     int32_t status = executorProxy_->Authenticate(scheduleId, templateIdList, extraInfo, callback);
     UserIAM::ResultCode result = ConvertResultCode(status);
     if (result != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("Authenticate fail ret=%{public}d", result);
+        IAM_LOGE("Authenticate fail result %{public}d", result);
         return result;
     }
     return UserIAM::ResultCode::SUCCESS;
@@ -117,7 +118,7 @@ UserIAM::ResultCode FaceAuthExecutorHdi::Identify(uint64_t scheduleId, uint64_t 
     int32_t status = executorProxy_->Identify(scheduleId, extraInfo, callback);
     UserIAM::ResultCode result = ConvertResultCode(status);
     if (result != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("Identify fail ret=%{public}d", result);
+        IAM_LOGE("Identify fail result %{public}d", result);
         return result;
     }
     return UserIAM::ResultCode::SUCCESS;
@@ -129,7 +130,7 @@ UserIAM::ResultCode FaceAuthExecutorHdi::Delete(const std::vector<uint64_t> &tem
     int32_t status = executorProxy_->Delete(templateIdList);
     UserIAM::ResultCode result = ConvertResultCode(status);
     if (result != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("Delete fail ret=%{public}d", result);
+        IAM_LOGE("Delete fail result %{public}d", result);
         return result;
     }
     return UserIAM::ResultCode::SUCCESS;
@@ -141,7 +142,7 @@ UserIAM::ResultCode FaceAuthExecutorHdi::Cancel(uint64_t scheduleId)
     int32_t status = executorProxy_->Cancel(scheduleId);
     UserIAM::ResultCode result = ConvertResultCode(status);
     if (result != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("Cancel fail ret=%{public}d", result);
+        IAM_LOGE("Cancel fail result %{public}d", result);
         return result;
     }
     return UserIAM::ResultCode::SUCCESS;
@@ -152,16 +153,16 @@ UserIAM::ResultCode FaceAuthExecutorHdi::SendCommand(UserAuth::AuthPropertyMode 
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, UserIAM::ResultCode::GENERAL_ERROR);
     FaceHdi::CommandId hdiCommandId;
-    int32_t ret = ConvertCommandId(commandId, hdiCommandId);
-    if (ret != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("ConvertCommandId fail ret=%{public}d", ret);
+    UserIAM::ResultCode result = ConvertCommandId(commandId, hdiCommandId);
+    if (result != UserIAM::ResultCode::SUCCESS) {
+        IAM_LOGE("ConvertCommandId fail result %{public}d", result);
         return UserIAM::ResultCode::GENERAL_ERROR;
     }
     int32_t status = executorProxy_->SendCommand(hdiCommandId, extraInfo,
         sptr<FaceHdi::IExecutorCallback>(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj)));
-    UserIAM::ResultCode result = ConvertResultCode(status);
+    result = ConvertResultCode(status);
     if (status != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("SendCommand fail ret=%{public}d", status);
+        IAM_LOGE("SendCommand fail result %{public}d", status);
         return result;
     }
     return UserIAM::ResultCode::SUCCESS;
@@ -171,19 +172,19 @@ UserIAM::ResultCode FaceAuthExecutorHdi::MoveHdiExecutorInfo(FaceHdi::ExecutorIn
 {
     out.executorId = static_cast<int32_t>(in.sensorId);
     out.executorType = static_cast<int32_t>(in.executorType);
-    int32_t ret = ConvertExecutorRole(in.executorRole, out.role);
-    if (ret != UserIAM::ResultCode::SUCCESS) {
+    UserIAM::ResultCode result = ConvertExecutorRole(in.executorRole, out.role);
+    if (result != UserIAM::ResultCode::SUCCESS) {
         IAM_LOGE("executorProxy is null");
         return UserIAM::ResultCode::GENERAL_ERROR;
     }
-    ret = ConvertAuthType(in.authType, out.authType);
-    if (ret != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("ConvertAuthType fail ret=%{public}d", ret);
+    result = ConvertAuthType(in.authType, out.authType);
+    if (result != UserIAM::ResultCode::SUCCESS) {
+        IAM_LOGE("ConvertAuthType fail result %{public}d", result);
         return UserIAM::ResultCode::GENERAL_ERROR;
     }
-    ret = ConvertExecutorSecureLevel(in.esl, out.esl);
-    if (ret != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("ConvertExecutorSecureLevel fail ret=%{public}d", ret);
+    result = ConvertExecutorSecureLevel(in.esl, out.esl);
+    if (result != UserIAM::ResultCode::SUCCESS) {
+        IAM_LOGE("ConvertExecutorSecureLevel fail result %{public}d", result);
         return UserIAM::ResultCode::GENERAL_ERROR;
     }
     in.publicKey.swap(out.publicKey);
@@ -210,11 +211,12 @@ UserIAM::ResultCode FaceAuthExecutorHdi::ConvertCommandId(const UserAuth::AuthPr
     static const std::map<UserAuth::AuthPropertyMode, FaceHdi::CommandId> data = {
         {UserAuth::AuthPropertyMode::PROPERMODE_FREEZE, FaceHdi::CommandId::LOCK_TEMPLATE},
         {UserAuth::AuthPropertyMode::PROPERMODE_UNFREEZE, FaceHdi::CommandId::UNLOCK_TEMPLATE}};
-    if (data.count(in) == 0) {
+    auto iter = data.find(in);
+    if (iter == data.end()) {
         IAM_LOGE("command id %{public}d is invalid", in);
         return UserIAM::ResultCode::GENERAL_ERROR;
     }
-    out = data.at(in);
+    out = iter->second;
     IAM_LOGI("covert command id %{public}d to idl command is %{public}d", in, out);
     return UserIAM::ResultCode::SUCCESS;
 }
@@ -224,11 +226,12 @@ UserIAM::ResultCode FaceAuthExecutorHdi::ConvertAuthType(const FaceHdi::AuthType
     static const std::map<FaceHdi::AuthType, UserIAM::AuthType> data = {
         {FaceHdi::FACE, UserIAM::AuthType::FACE},
     };
-    if (data.count(in) == 0) {
+    auto iter = data.find(in);
+    if (iter == data.end()) {
         IAM_LOGE("authType %{public}d is invalid", in);
         return UserIAM::ResultCode::GENERAL_ERROR;
     }
-    out = data.at(in);
+    out = iter->second;
     return UserIAM::ResultCode::SUCCESS;
 }
 
@@ -239,11 +242,12 @@ UserIAM::ResultCode FaceAuthExecutorHdi::ConvertExecutorRole(const FaceHdi::Exec
         {FaceHdi::ExecutorRole::VERIFIER, UserIAM::ExecutorRole::VERIFIER},
         {FaceHdi::ExecutorRole::ALL_IN_ONE, UserIAM::ExecutorRole::ALL_IN_ONE},
     };
-    if (data.count(in) == 0) {
+    auto iter = data.find(in);
+    if (iter == data.end()) {
         IAM_LOGE("executorRole %{public}d is invalid", in);
         return UserIAM::ResultCode::GENERAL_ERROR;
     }
-    out = data.at(in);
+    out = iter->second;
     return UserIAM::ResultCode::SUCCESS;
 }
 
@@ -256,11 +260,12 @@ UserIAM::ResultCode FaceAuthExecutorHdi::ConvertExecutorSecureLevel(
         {FaceHdi::ExecutorSecureLevel::ESL2, UserIAM::ExecutorSecureLevel::ESL2},
         {FaceHdi::ExecutorSecureLevel::ESL3, UserIAM::ExecutorSecureLevel::ESL3},
     };
-    if (data.count(in) == 0) {
+    auto iter = data.find(in);
+    if (iter == data.end()) {
         IAM_LOGE("executorSecureLevel %{public}d is invalid", in);
         return UserIAM::ResultCode::GENERAL_ERROR;
     }
-    out = data.at(in);
+    out = iter->second;
     return UserIAM::ResultCode::SUCCESS;
 }
 
@@ -276,10 +281,11 @@ UserIAM::ResultCode FaceAuthExecutorHdi::ConvertResultCode(const int32_t in)
     };
 
     UserIAM::ResultCode out;
-    if (data.count(hdfIn) == 0) {
+    auto iter = data.find(hdfIn);
+    if (iter == data.end()) {
         out = UserIAM::ResultCode::GENERAL_ERROR;
     } else {
-        out = data.at(hdfIn);
+        out = iter->second;
     }
     IAM_LOGE("covert hdi result code %{public}d to framework result code %{public}d", in, out);
     return out;

@@ -14,19 +14,16 @@
  */
 
 #include "face_auth_proxy.h"
-#include "face_auth_log_wrapper.h"
+
+#include "iam_logger.h"
+
+#define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_SDK
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 FaceAuthProxy::FaceAuthProxy(const sptr<IRemoteObject> &object) : IRemoteProxy<IFaceAuth>(object)
 {
-    FACEAUTH_HILOGI(MODULE_FRAMEWORK, "start");
-}
-
-FaceAuthProxy::~FaceAuthProxy()
-{
-    FACEAUTH_HILOGI(MODULE_FRAMEWORK, "start");
 }
 
 int32_t FaceAuthProxy::SetBufferProducer(sptr<IBufferProducer> &bufferProducer)
@@ -34,37 +31,37 @@ int32_t FaceAuthProxy::SetBufferProducer(sptr<IBufferProducer> &bufferProducer)
     MessageParcel data;
     MessageParcel reply;
     if (!data.WriteInterfaceToken(FaceAuthProxy::GetDescriptor())) {
-        FACEAUTH_HILOGE(MODULE_FRAMEWORK, "write descriptor failed");
-        return FA_RET_ERROR;
+        IAM_LOGE("write descriptor failed");
+        return FACEAUTH_ERROR;
     }
     if (bufferProducer != nullptr) {
         if (!data.WriteRemoteObject(bufferProducer->AsObject())) {
-            FACEAUTH_HILOGE(MODULE_FRAMEWORK, "failed to WriteRemoteObject(bufferProducer).");
-            return FA_RET_ERROR;
+            IAM_LOGE("failed to WriteRemoteObject(bufferProducer).");
+            return FACEAUTH_ERROR;
         }
     }
     bool ret = SendRequest(FACE_AUTH_SET_BUFFER_PRODUCER, data, reply);
     if (!ret) {
-        FACEAUTH_HILOGE(MODULE_FRAMEWORK, "failed to send request.");
-        return FA_RET_ERROR;
+        IAM_LOGE("failed to send request.");
+        return FACEAUTH_ERROR;
     }
     int32_t result = reply.ReadInt32();
-    FACEAUTH_HILOGI(MODULE_FRAMEWORK, "result = %{public}d", result);
+    IAM_LOGI("result = %{public}d", result);
     return result;
 }
 
 bool FaceAuthProxy::SendRequest(uint32_t code, MessageParcel &data, MessageParcel &reply)
 {
-    FACEAUTH_HILOGI(MODULE_FRAMEWORK, "start");
+    IAM_LOGI("start");
     sptr<IRemoteObject> remote = Remote();
     if (remote == nullptr) {
-        FACEAUTH_HILOGE(MODULE_FRAMEWORK, "failed to get remote.");
+        IAM_LOGE("failed to get remote.");
         return false;
     }
     MessageOption option(MessageOption::TF_SYNC);
     int32_t result = remote->SendRequest(code, data, reply, option);
     if (result != OHOS::NO_ERROR) {
-        FACEAUTH_HILOGE(MODULE_FRAMEWORK, "failed to SendRequest.result = %{public}d", result);
+        IAM_LOGE("failed to SendRequest.result = %{public}d", result);
         return false;
     }
     return true;

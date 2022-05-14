@@ -22,33 +22,31 @@
       "ram": "16000KB",
       "deps": {
         "components": [
-          "ability_base",
-          "ability_runtime",
-          "hiviewdfx_hilog_native",
-          "ipc",
           "aafwk_standard",
-          "safwk",
-          "samgr_standard"
-        ],
-        "third_party": [
-          "openssl"
+          "faceauth_device_driver_interface:libfaceauth_proxy_1.0",
+          "hiviewdfx_hilog_native:libhilog",
+          "ipc:ipc_core",
+          "safwk:system_ability_fwk",
+          "samgr_standard:samgr_proxy",
+          "user_auth:coauth_framework",
+          "utils_base:utils"
         ]
       },
       "build": {
         "sub_component": [
-          "//base/user_iam/face_auth/services:faceauthservice_group",
+          "//base/user_iam/face_auth/services:faceauthservice",
           "//base/user_iam/face_auth/sa_profile:faceauth_sa_profile.init",
           "//base/user_iam/face_auth/sa_profile:faceauth_sa_profile"
         ],
         "inner_kits": [
           {
             "type": "so",
-            "name": "//base/user_iam/face_auth/interfaces/innerkits/faceauth:faceauth_framework_group",
+            "name": "//base/user_iam/face_auth/frameworks/face_auth:faceauth_framework",
             "header": {
               "header_files": [
                 "face_auth_innerkit.h"
               ],
-              "header_base": "//base/user_iam/face_auth/interfaces/innerkits/faceauth/include"
+              "header_base": "//base/user_iam/face_auth/interfaces/inner_api/face_auth/"
             }
           }
         ],
