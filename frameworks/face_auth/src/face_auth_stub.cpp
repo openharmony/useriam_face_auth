@@ -14,21 +14,22 @@
  */
 
 #include "face_auth_stub.h"
+
 #include "securec.h"
-#include "face_auth_log_wrapper.h"
+
+#include "iam_check.h"
+#include "iam_logger.h"
+#include "iam_para2str.h"
+
+#define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_SDK
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 FaceAuthStub::FaceAuthStub()
 {
-    FACEAUTH_HILOGI(MODULE_FRAMEWORK, "start");
+    IAM_LOGI("start");
     RegisterKeyToHandle();
-}
-
-FaceAuthStub::~FaceAuthStub()
-{
-    FACEAUTH_HILOGI(MODULE_FRAMEWORK, "start");
 }
 
 void FaceAuthStub::RegisterKeyToHandle()
@@ -40,36 +41,32 @@ int32_t FaceAuthStub::FaceAuthSetBufferProducer(MessageParcel &data, MessageParc
 {
     sptr<IBufferProducer> buffer = nullptr;
     sptr<IRemoteObject> remoteObj = data.ReadRemoteObject();
-    FACEAUTH_HILOGI(MODULE_FRAMEWORK, "read remote object %{public}s",
-        getPointerNullString(remoteObj).c_str());
-    if (remoteObj != nullptr) {
-        buffer = iface_cast<OHOS::IBufferProducer>(remoteObj);
-    }
+    IAM_LOGI("read remote object %{public}s", Common::GetPointerNullStateString(remoteObj).c_str());
+    buffer = iface_cast<OHOS::IBufferProducer>(remoteObj);
     int32_t ret = SetBufferProducer(buffer);
-    FACEAUTH_HILOGI(MODULE_FRAMEWORK, "SetBufferProducer ret %{public}d", ret);
+    IAM_LOGI("SetBufferProducer ret %{public}d", ret);
     if (!reply.WriteInt32(ret)) {
-        FACEAUTH_HILOGE(MODULE_FRAMEWORK, "failed to WriteInt32(ret)");
-        return FA_RET_OK;
+        IAM_LOGE("failed to WriteInt32(ret)");
+        return FACEAUTH_ERROR;
     }
-    return FA_RET_OK;
+    return FACEAUTH_SUCCESS;
 }
 
 int32_t FaceAuthStub::OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
 {
-    FACEAUTH_HILOGI(MODULE_FRAMEWORK, "start");
+    IAM_LOGI("start");
     if (data.ReadInterfaceToken() != FaceAuthStub::GetDescriptor()) {
-        FACEAUTH_HILOGE(MODULE_FRAMEWORK, "descriptor is not matched");
-        return FA_RET_ERROR;
+        IAM_LOGE("descriptor is not matched");
+        return FACEAUTH_ERROR;
     }
     auto itFunc = keyToHandle_.find(code);
-    if (itFunc != keyToHandle_.end()) {
-        auto requestFunc = itFunc->second;
-        if (requestFunc != nullptr) {
-            return (this->*requestFunc)(data, reply);
-        }
+    if (itFunc == keyToHandle_.end()) {
+        IAM_LOGE("key not match, send to IPCObjectStub on default");
+        return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
     }
-    FACEAUTH_HILOGI(MODULE_FRAMEWORK, "AbilitySchedulerStub::OnRemoteRequest, default case, ignore.");
-    return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+    auto requestFunc = itFunc->second;
+    IF_FALSE_LOGE_AND_RETURN_VAL(requestFunc != nullptr, FACEAUTH_ERROR);
+    return (this->*requestFunc)(data, reply);
 }
 } // namespace FaceAuth
 } // namespace UserIAM

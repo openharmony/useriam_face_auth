@@ -17,11 +17,12 @@
 #define FACE_AUTH_EXECUTOR_CALLBACK_HDI
 
 #include <cstdint>
-#include <hdf_base.h>
+
+#include "hdf_base.h"
+#include "nocopyable.h"
 
 #include "iexecute_callback.h"
 #include "iexecutor_messenger.h"
-#include "nocopyable.h"
 #include "v1_0/executor_callback_stub.h"
 
 namespace OHOS {
@@ -31,7 +32,7 @@ namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
 class FaceAuthExecutorCallbackHdi : public FaceHdi::IExecutorCallback, public NoCopyable {
 public:
     explicit FaceAuthExecutorCallbackHdi(std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback);
-    virtual ~FaceAuthExecutorCallbackHdi() = default;
+    ~FaceAuthExecutorCallbackHdi() override = default;
 
     // FaceHdi::IExecutorCallback
     int32_t OnResult(int32_t result, const std::vector<uint8_t> &extraInfo) override;

@@ -13,28 +13,31 @@
  * limitations under the License.
  */
 
-#ifndef FACE_AUTH_PROXY_H
-#define FACE_AUTH_PROXY_H
+#ifndef FACE_AUTH_DRIVER_HDI
+#define FACE_AUTH_DRIVER_HDI
 
-#include <list>
-#include "iface_auth.h"
-#include "iremote_proxy.h"
+#include <vector>
+
+#include "nocopyable.h"
+
+#include "iauth_driver_hdi.h"
+#include "iauth_executor_hdi.h"
+#include "iremote_broker.h"
+#include "v1_0/face_auth_interface_proxy.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-class FaceAuthProxy : public IRemoteProxy<IFaceAuth> {
+namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
+class FaceAuthDriverHdi : public UserAuth::IAuthDriverHdi, public NoCopyable {
 public:
-    explicit FaceAuthProxy(const sptr<IRemoteObject> &object);
-    virtual ~FaceAuthProxy() override;
-    virtual int32_t SetBufferProducer(sptr<IBufferProducer> &producer) override;
+    FaceAuthDriverHdi() = default;
+    ~FaceAuthDriverHdi() override = default;
 
-private:
-    bool SendRequest(uint32_t code, MessageParcel &data, MessageParcel &reply);
-    static inline BrokerDelegator<FaceAuthProxy> delegator_;
+    void GetExecutorList(std::vector<std::shared_ptr<UserAuth::IAuthExecutorHdi>> &executorList) override;
 };
-}  // namespace FaceAuth
-}  // namespace UserIAM
-}  // namespace OHOS
+} // namespace FaceAuth
+} // namespace UserIAM
+} // namespace OHOS
 
-#endif  // FACE_AUTH_PROXY_H
+#endif // FACE_AUTH_DRIVER_HDI
