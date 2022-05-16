@@ -5,8 +5,8 @@
       "value": "face auth enrollment start view"
     },
     {
-      "name": "entry_enrollmentstartview",
-      "value": "face auth enrollment start view"
+      "name": "mainability_description",
+      "value": "Setting_FaceAuth Feature Ability"
     }
   ]
 }
