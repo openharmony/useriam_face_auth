@@ -13,17 +13,31 @@
  * limitations under the License.
  */
 
-#include "face_auth_innerkit.h"
-#include "face_auth_client.h"
-#include "face_auth_log_wrapper.h"
+#ifndef FACE_AUTH_PROXY_H
+#define FACE_AUTH_PROXY_H
+
+#include <list>
+
+#include "iremote_proxy.h"
+#include "nocopyable.h"
+
+#include "iface_auth.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-int32_t FaceAuthInnerKit::SetBufferProducer(sptr<IBufferProducer> producer)
-{
-    return DelayedSingleton<FaceAuthClient>::GetInstance()->SetBufferProducer(producer);
-}
+class FaceAuthProxy : public IRemoteProxy<IFaceAuth>, public NoCopyable {
+public:
+    explicit FaceAuthProxy(const sptr<IRemoteObject> &object);
+    ~FaceAuthProxy() override = default;
+    int32_t SetBufferProducer(sptr<IBufferProducer> &producer) override;
+
+private:
+    bool SendRequest(uint32_t code, MessageParcel &data, MessageParcel &reply);
+    static BrokerDelegator<FaceAuthProxy> delegator_;
+};
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
+
+#endif // FACE_AUTH_PROXY_H

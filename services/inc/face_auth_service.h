@@ -12,37 +12,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef FACE_AUTH_SERVICE_H
+#define FACE_AUTH_SERVICE_H
 
-#ifndef FACE_AUTH_CLIENT_H
-#define FACE_AUTH_CLIENT_H
+#include <cstdint>
+#include <mutex>
 
-#include <list>
 #include "nocopyable.h"
-#include "singleton.h"
-#include "iface_auth.h"
+#include "surface.h"
+#include "system_ability.h"
+
+#include "face_auth_stub.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-class FaceAuthClient : public IRemoteObject::DeathRecipient {
-    DECLARE_DELAYED_SINGLETON(FaceAuthClient);
-    DISALLOW_COPY_AND_MOVE(FaceAuthClient);
+class FaceAuthService : public SystemAbility, public FaceAuthStub {
+    DECLEAR_SYSTEM_ABILITY(FaceAuthService);
 
 public:
-    void ResetFaceAuthProxy();
-    static std::shared_ptr<FaceAuthClient> GetInstance();
-    int32_t SetBufferProducer(sptr<IBufferProducer> &producer);
-    virtual void OnRemoteDied(const wptr<IRemoteObject> &remote);
+    FaceAuthService();
+    ~FaceAuthService() override = default;
+    static std::shared_ptr<FaceAuthService> GetInstance();
+
+    void OnStart() override;
+    void OnStop() override;
+    int32_t SetBufferProducer(sptr<IBufferProducer> &producer) override;
+
+    sptr<IBufferProducer> GetBufferProducer();
 
 private:
-    sptr<IFaceAuth> GetFaceAuthProxy();
+    void StartDriverManager();
+
     static std::mutex mutex_;
-    static std::shared_ptr<FaceAuthClient> instance_;
-    sptr<IFaceAuth> faceAuthProxy_;
-    sptr<IRemoteObject::DeathRecipient> recipient_;
+    static std::shared_ptr<FaceAuthService> instance_;
+    sptr<IBufferProducer> bufferProducer_;
 };
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
 
-#endif // FACE_AUTH_CLIENT_H
+#endif // FACE_AUTH_SERVICE_H
