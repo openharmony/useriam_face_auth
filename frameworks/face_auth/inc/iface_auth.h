@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2022 Huawei Device Co., Ltd.
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the "License") = 0;
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -13,30 +13,37 @@
  * limitations under the License.
  */
 
-#ifndef FACE_AUTH_DRIVER_HDI
-#define FACE_AUTH_DRIVER_HDI
-
-#include <iauth_driver_hdi.h>
+#ifndef IFACE_AUTH_H
+#define IFACE_AUTH_H
+#include <list>
 #include <vector>
 
-#include "iauth_executor_hdi.h"
 #include "iremote_broker.h"
-#include "nocopyable.h"
-#include "v1_0/face_auth_interface_proxy.h"
+#include "iremote_object.h"
+#include "surface.h"
+
+#include "face_auth_defines.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
-class FaceAuthDriverHdi : public UserAuth::IAuthDriverHdi, public NoCopyable {
+class IFaceAuth : public IRemoteBroker {
 public:
-    FaceAuthDriverHdi() = default;
-    virtual ~FaceAuthDriverHdi() = default;
+    DECLARE_INTERFACE_DESCRIPTOR(u"ohos.faceauth.IFaceAuth");
 
-    void GetExecutorList(std::vector<std::shared_ptr<UserAuth::IAuthExecutorHdi>> &executorList);
+    /**
+     * @brief Set buffer producer for enroll preview.
+     *
+     * @return 0 success, others failure.
+     */
+    virtual int32_t SetBufferProducer(sptr<IBufferProducer> &producer) = 0;
+
+    enum {
+        FACE_AUTH_SET_BUFFER_PRODUCER = 1,
+    };
 };
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
 
-#endif // FACE_AUTH_DRIVER_HDI
+#endif // IFACE_AUTH_H

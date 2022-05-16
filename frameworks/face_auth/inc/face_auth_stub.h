@@ -17,30 +17,30 @@
 #define FACE_AUTH_STUB_H
 
 #include <map>
-#include "face_auth_log_wrapper.h"
-#include "iface_auth.h"
+
 #include "iremote_stub.h"
 #include "nocopyable.h"
+
+#include "iface_auth.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-class FaceAuthStub : public IRemoteStub<IFaceAuth> {
+class FaceAuthStub : public IRemoteStub<IFaceAuth>, public NoCopyable {
 public:
     FaceAuthStub();
-    virtual ~FaceAuthStub() override;
-    virtual int32_t OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply,
-        MessageOption &option) override;
+    ~FaceAuthStub() override = default;
+    int32_t OnRemoteRequest(
+        uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
 
 private:
-    DISALLOW_COPY_AND_MOVE(FaceAuthStub);
     using Handler = int32_t (FaceAuthStub::*)(MessageParcel &data, MessageParcel &reply);
     std::map<uint32_t, Handler> keyToHandle_;
     void RegisterKeyToHandle();
     int32_t FaceAuthSetBufferProducer(MessageParcel &data, MessageParcel &reply);
 };
-}  // namespace FaceAuth
-}  // namespace UserIAM
-}  // namespace OHOS
+} // namespace FaceAuth
+} // namespace UserIAM
+} // namespace OHOS
 
-#endif  // FACE_AUTH_STUB_H
+#endif // FACE_AUTH_STUB_H

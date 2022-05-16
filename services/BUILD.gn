@@ -14,13 +14,6 @@
 import("//build/ohos.gni")
 import("//foundation/aafwk/standard/aafwk.gni")
 
-group("faceauthservice_group") {
-  deps = []
-  if (ability_runtime_graphics) {
-    deps += [ ":faceauthservice" ]
-  }
-}
-
 ohos_shared_library("faceauthservice") {
   sources = [
     "src/face_auth_driver_hdi.cpp",
@@ -29,19 +22,17 @@ ohos_shared_library("faceauthservice") {
     "src/face_auth_service.cpp",
   ]
   include_dirs = [
-    "include",
-    "../common/include",
-    "//base/user_iam/user_auth/interfaces/inner_api/include/userauth/",
+    "inc",
+    "//base/user_iam/face_auth/common/inc",
     "//base/user_iam/user_auth/common/logs",
     "//base/user_iam/user_auth/common/utils",
   ]
 
   deps = [
-    "//base/user_iam/face_auth/interfaces/innerkits/faceauth:faceauth_framework",
+    "//base/user_iam/face_auth/frameworks/face_auth:faceauth_framework",
     "//base/user_iam/user_auth/common/executors:userauth_executors",
   ]
   external_deps = [
-    "device_driver_framework:libhdf_utils",
     "faceauth_device_driver_interface:libfaceauth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
     "safwk:system_ability_fwk",

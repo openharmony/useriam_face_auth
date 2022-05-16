@@ -14,34 +14,28 @@
 import("//build/ohos.gni")
 import("//foundation/aafwk/standard/aafwk.gni")
 
-group("faceauth_framework_group") {
-  deps = []
-  if (ability_runtime_graphics) {
-    deps += [ ":faceauth_framework" ]
-  }
-}
-
 config("faceauth_framework_public_config") {
-  include_dirs =
-      [ "//base/user_iam/face_auth/interfaces/innerkits/faceauth/include" ]
+  include_dirs = [
+    "//base/user_iam/face_auth/interfaces/inner_api/face_auth",
+    "inc",
+  ]
 }
 
 ohos_shared_library("faceauth_framework") {
   sources = [
-    "//base/user_iam/face_auth/interfaces/innerkits/faceauth/src/face_auth_client.cpp",
-    "//base/user_iam/face_auth/interfaces/innerkits/faceauth/src/face_auth_innerkit.cpp",
-    "//base/user_iam/face_auth/interfaces/innerkits/faceauth/src/face_auth_proxy.cpp",
-    "//base/user_iam/face_auth/interfaces/innerkits/faceauth/src/face_auth_stub.cpp",
+    "src/face_auth_client.cpp",
+    "src/face_auth_innerkit.cpp",
+    "src/face_auth_proxy.cpp",
+    "src/face_auth_stub.cpp",
   ]
 
   public_configs = [ ":faceauth_framework_public_config" ]
 
+  configs = [ "//base/user_iam/user_auth/common:iam_log_config" ]
+
   include_dirs = [
-    "//base/user_iam/face_auth/common/include",
-    "//base/user_iam/face_auth/interfaces/innerkits/faceauth/include",
-    "//foundation/multimedia/camera_standard/interfaces/inner_api/native/camera/include",
-    "//foundation/multimedia/camera_standard/services/camera_service/binder/base/include",
-    "//utils/native/base/include",
+    "//base/user_iam/user_auth/common/utils",
+    "//base/user_iam/face_auth/common/inc",
   ]
 
   if (ability_runtime_graphics) {
@@ -52,6 +46,7 @@ ohos_shared_library("faceauth_framework") {
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
     "samgr_standard:samgr_proxy",
+    "utils_base:utils",
   ]
 
   subsystem_name = "useriam"

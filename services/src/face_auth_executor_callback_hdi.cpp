@@ -70,12 +70,13 @@ UserIAM::ResultCode FaceAuthExecutorCallbackHdi::ConvertResultCode(const int32_t
     };
 
     UserIAM::ResultCode out;
-    if (data.count(hdiIn) == 0) {
+    auto iter = data.find(hdiIn);
+    if (iter == data.end()) {
         out = UserIAM::ResultCode::GENERAL_ERROR;
         IAM_LOGE("convert hdi undefined result code %{public}d to framework result code %{public}d", in, out);
         return out;
     }
-    out = data.at(hdiIn);
+    out = iter->second;
     IAM_LOGI("covert hdi result code %{public}d to framework result code %{public}d", hdiIn, out);
     return out;
 }

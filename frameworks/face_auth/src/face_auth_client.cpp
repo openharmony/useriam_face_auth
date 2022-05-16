@@ -14,36 +14,34 @@
  */
 
 #include "face_auth_client.h"
-#include "face_auth_log_wrapper.h"
+
 #include "iservice_registry.h"
 #include "system_ability_definition.h"
+
+#include "iam_logger.h"
+
+#define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_SDK
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-std::shared_ptr<FaceAuthClient> FaceAuthClient::instance_ = nullptr;
-std::mutex FaceAuthClient::mutex_;
-FaceAuthClient::FaceAuthClient() = default;
-FaceAuthClient::~FaceAuthClient() = default;
-
 int32_t FaceAuthClient::SetBufferProducer(sptr<IBufferProducer> &producer)
 {
-    FACEAUTH_HILOGI(MODULE_FRAMEWORK, "start");
+    IAM_LOGI("start");
     sptr<IFaceAuth> proxy = GetFaceAuthProxy();
     if (proxy == nullptr) {
-        FACEAUTH_HILOGE(MODULE_FRAMEWORK, "get faceAuthProxy fail");
-        return FA_RET_ERROR;
+        IAM_LOGE("get faceAuthProxy fail");
+        return FACEAUTH_ERROR;
     }
     return proxy->SetBufferProducer(producer);
 }
 
 void FaceAuthClient::OnRemoteDied(const wptr<IRemoteObject> &remote)
 {
-    FACEAUTH_HILOGI(MODULE_FRAMEWORK, "start");
+    IAM_LOGI("start");
     std::lock_guard<std::mutex> lock(mutex_);
     if ((faceAuthProxy_ != nullptr) && (faceAuthProxy_->AsObject() != nullptr)) {
-        faceAuthProxy_->AsObject()->RemoveDeathRecipient(recipient_);
-        recipient_ = nullptr;
+        faceAuthProxy_->AsObject()->RemoveDeathRecipient(this);
     }
     faceAuthProxy_ = nullptr;
     return;
@@ -51,26 +49,28 @@ void FaceAuthClient::OnRemoteDied(const wptr<IRemoteObject> &remote)
 
 sptr<IFaceAuth> FaceAuthClient::GetFaceAuthProxy()
 {
-    FACEAUTH_HILOGI(MODULE_FRAMEWORK, "start");
+    IAM_LOGI("start");
     std::lock_guard<std::mutex> lock(mutex_);
     if (faceAuthProxy_ != nullptr) {
         return faceAuthProxy_;
     }
+
     sptr<ISystemAbilityManager> systemAbilityManager =
         SystemAbilityManagerClient::GetInstance().GetSystemAbilityManager();
     if (systemAbilityManager == nullptr) {
-        FACEAUTH_HILOGE(MODULE_FRAMEWORK, "failed to get systemAbilityManager.");
+        IAM_LOGE("failed to get systemAbilityManager.");
         return nullptr;
     }
+
     sptr<IRemoteObject> remoteObject = systemAbilityManager->GetSystemAbility(SUBSYS_USERIAM_SYS_ABILITY_FACEAUTH);
     if (remoteObject == nullptr) {
-        FACEAUTH_HILOGE(MODULE_FRAMEWORK, "failed to get remoteObject.");
+        IAM_LOGE("failed to get remoteObject.");
         return nullptr;
     }
 
     faceAuthProxy_ = iface_cast<IFaceAuth>(remoteObject);
     if ((faceAuthProxy_ == nullptr) || (faceAuthProxy_->AsObject() == nullptr)) {
-        FACEAUTH_HILOGE(MODULE_FRAMEWORK, "failed to get faceAuthProxy_");
+        IAM_LOGE("failed to get faceAuthProxy_");
         return nullptr;
     }
 
