@@ -22,6 +22,7 @@ import UserAuthModel from '../model/userAuthModel.ets'
 
 class EnrollingController {
   private TAG: string = "EnrollingController:"
+  private ANIMATION_TIME: number = 2000
   private enrolling: boolean = false
 
   constructor() {
@@ -90,6 +91,7 @@ class EnrollingController {
 
   async faceDetected() {
     Log.info(this.TAG, 'faceDetected+')
+    AppStorage.Set('animationTime', this.ANIMATION_TIME);
     AppStorage.Set('stackVideoVisibility', Visibility.Visible);
     AppStorage.Set('stackShelterVisibility', Visibility.Visible);
     AppStorage.Set('stackProgressVisibility', Visibility.Hidden);
@@ -98,7 +100,8 @@ class EnrollingController {
     AppStorage.Set('enrollButtonVisibility', Visibility.Hidden);
 
     AppStorage.Set('stackShelterHeight', AppStorage.Get('stackShelterHeightEnd'));
-    await CommonController.sleepMS(2000)
+    await CommonController.sleepMS(this.ANIMATION_TIME)
+    AppStorage.Set('animationTime', 0);
     Log.info(this.TAG, 'faceDetected-')
   }
 
