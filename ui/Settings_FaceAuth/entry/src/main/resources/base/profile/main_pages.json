@@ -1,0 +1,9 @@
+{
+  "src" : [
+    "pages/enrollDeclare",
+    "pages/enrolling",
+    "pages/enrollIntro",
+    "pages/entryView",
+    "pages/faceConfig"
+  ]
+}
