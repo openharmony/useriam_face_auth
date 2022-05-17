@@ -57,6 +57,7 @@ struct Enrolling {
   @StorageLink('stackRingRadius') stackRingRadius: number = 0
   @StorageLink('stackProgressValue') stackProgressValue : number = 0
   @StorageLink('stackProgressVisibility') stackProgressVisibility: Visibility = Visibility.Hidden
+  @StorageLink('animationTime') animationTime: number = 0
 
   aboutToAppear() {
     Log.info(this.TAG, "aboutToAppear+")
@@ -107,7 +108,7 @@ struct Enrolling {
             .clip(true)
             .markAnchor({ x: '50%', y: '50%' })
             .position({ x: '50%', y: '50%' })
-            .animation({ duration: 2000, curve: Curve.Linear })
+            .animation({ duration: this.animationTime, curve: Curve.Linear })
             .visibility(this.stackShelterVisibility)
           Canvas(this.context)
             .width('100%')
