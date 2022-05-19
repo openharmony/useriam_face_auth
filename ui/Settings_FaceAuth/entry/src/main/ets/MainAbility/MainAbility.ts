@@ -1,0 +1,49 @@
+/*
+ * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import Ability from '@ohos.application.Ability'
+import Log from '../utils/log'
+import UserIDMModel from '../model/userIDMModel'
+import CommonController from '../controller/commonController'
+
+export default class MainAbility extends Ability {
+  private TAG: string = "MainAbility:"
+  onCreate(want, launchParam) {
+    Log.info(this.TAG, 'Application onCreate')
+    globalThis.abilityContext = this.context;
+    globalThis.abilityWant = want;
+  }
+
+  onDestroy() {
+    Log.info(this.TAG, 'Application onDestroy+')
+    UserIDMModel.destroy()
+    Log.info(this.TAG, 'Application onDestroy-')
+  }
+
+  onWindowStageCreate(windowStage) {
+    Log.info(this.TAG, 'onWindowStageCreate')
+    windowStage.setUIContent(this.context, "pages/entryView", null)
+  }
+
+  onWindowStageDestroy() {
+    Log.info(this.TAG, 'onWindowStageDestroy')
+  }
+
+  onBackground() {
+    Log.info(this.TAG, 'Application onBackground+, terminate ability')
+    CommonController.terminateAbility()
+    Log.info(this.TAG, 'Application onBackground-')
+  }
+}
