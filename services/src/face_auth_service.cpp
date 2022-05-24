@@ -85,7 +85,9 @@ sptr<IBufferProducer> FaceAuthService::FaceAuthService::GetBufferProducer()
 void FaceAuthService::StartDriverManager()
 {
     IAM_LOGI("start");
-    auto faceAuthDefaultHdi = Common::MakeShared<FaceAuthDriverHdi>();
+    auto adapter = Common::MakeShared<FaceAuthInterfaceAdapter>();
+    IF_FALSE_LOGE_AND_RETURN(adapter != nullptr);
+    auto faceAuthDefaultHdi = Common::MakeShared<FaceAuthDriverHdi>(adapter);
     IF_FALSE_LOGE_AND_RETURN(faceAuthDefaultHdi != nullptr);
     const uint16_t faceAuthDefaultHdiId = 1;
     // serviceName and HdiConfig.id must be globally unique

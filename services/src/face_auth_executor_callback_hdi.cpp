@@ -30,20 +30,20 @@ FaceAuthExecutorCallbackHdi::FaceAuthExecutorCallbackHdi(std::shared_ptr<UserAut
 {
 }
 
-int32_t FaceAuthExecutorCallbackHdi::OnResult(int32_t code, const std::vector<uint8_t> &extraInfo)
+int32_t FaceAuthExecutorCallbackHdi::OnResult(int32_t result, const std::vector<uint8_t> &extraInfo)
 {
-    IAM_LOGI("OnResult %{public}d", code);
-    UserIAM::ResultCode retCode = ConvertResultCode(code);
+    IAM_LOGI("OnResult %{public}d", result);
+    UserIAM::ResultCode retCode = ConvertResultCode(result);
     IF_FALSE_LOGE_AND_RETURN_VAL(frameworkCallback_ != nullptr, HDF_FAILURE);
     frameworkCallback_->OnResult(retCode, extraInfo);
     return HDF_SUCCESS;
 }
 
-int32_t FaceAuthExecutorCallbackHdi::OnAcquireInfo(int32_t code, const std::vector<uint8_t> &extraInfo)
+int32_t FaceAuthExecutorCallbackHdi::OnAcquireInfo(int32_t acquire, const std::vector<uint8_t> &extraInfo)
 {
-    IAM_LOGI("OnAcquireInfo %{public}d", code);
+    IAM_LOGI("OnAcquireInfo %{public}d", acquire);
     IF_FALSE_LOGE_AND_RETURN_VAL(frameworkCallback_ != nullptr, HDF_FAILURE);
-    frameworkCallback_->OnAcquireInfo(code, extraInfo);
+    frameworkCallback_->OnAcquireInfo(acquire, extraInfo);
     return HDF_SUCCESS;
 }
 

@@ -13,34 +13,15 @@
  * limitations under the License.
  */
 
-#ifndef FACE_AUTH_DRIVER_HDI
-#define FACE_AUTH_DRIVER_HDI
-
-#include <vector>
-
-#include "iremote_broker.h"
-#include "nocopyable.h"
-
-#include "iauth_driver_hdi.h"
-#include "iauth_executor_hdi.h"
-
 #include "face_auth_interface_adapter.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-class FaceAuthDriverHdi : public UserAuth::IAuthDriverHdi, public NoCopyable {
-public:
-    FaceAuthDriverHdi(std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter);
-    ~FaceAuthDriverHdi() override = default;
-
-    void GetExecutorList(std::vector<std::shared_ptr<UserAuth::IAuthExecutorHdi>> &executorList) override;
-
-private:
-    std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter_;
-};
+sptr<IFaceAuthInterface> FaceAuthInterfaceAdapter::Get()
+{
+    return IFaceAuthInterface::Get();
+}
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
-
-#endif // FACE_AUTH_DRIVER_HDI

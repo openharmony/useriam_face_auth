@@ -13,34 +13,26 @@
  * limitations under the License.
  */
 
-#ifndef FACE_AUTH_DRIVER_HDI
-#define FACE_AUTH_DRIVER_HDI
-
-#include <vector>
-
-#include "iremote_broker.h"
-#include "nocopyable.h"
-
-#include "iauth_driver_hdi.h"
-#include "iauth_executor_hdi.h"
+#ifndef MOCK_FACE_AUTH_INTERFACE_ADAPTER
+#define MOCK_FACE_AUTH_INTERFACE_ADAPTER
 
 #include "face_auth_interface_adapter.h"
+#include "v1_0/iface_auth_interface.h"
+#include "gmock/gmock.h"
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
-class FaceAuthDriverHdi : public UserAuth::IAuthDriverHdi, public NoCopyable {
+using namespace OHOS::HDI::FaceAuth::V1_0;
+class MockFaceAuthInterfaceAdapter : public FaceAuthInterfaceAdapter {
 public:
-    FaceAuthDriverHdi(std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter);
-    ~FaceAuthDriverHdi() override = default;
+    MockFaceAuthInterfaceAdapter() = default;
+    virtual ~MockFaceAuthInterfaceAdapter() = default;
 
-    void GetExecutorList(std::vector<std::shared_ptr<UserAuth::IAuthExecutorHdi>> &executorList) override;
-
-private:
-    std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter_;
+    MOCK_METHOD0(Get, sptr<IFaceAuthInterface>());
 };
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
 
-#endif // FACE_AUTH_DRIVER_HDI
+#endif // MOCK_FACE_AUTH_INTERFACE_ADAPTER
