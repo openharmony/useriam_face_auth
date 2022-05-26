@@ -33,7 +33,7 @@ ohos_shared_library("faceauthservice") {
     "//base/user_iam/user_auth/common/executors:userauth_executors",
   ]
   external_deps = [
-    "faceauth_device_driver_interface:libfaceauth_proxy_1.0",
+    "face_auth_device_driver_interface:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
     "safwk:system_ability_fwk",
     "samgr_standard:samgr_proxy",
