@@ -18,7 +18,7 @@ import("//foundation/aafwk/standard/aafwk.gni")
 ohos_fuzztest("FaceAuthServiceFuzzTest") {
   module_out_path = "useriam/face_auth"
   fuzz_config_file =
-      "//base/user_iam/face_auth/test/fuzztest/face_auth_service_fuzzer"
+      "//base/user_iam/face_auth/test/fuzztest/faceauthservice_fuzzer"
   cflags = [
     "-g",
     "-O0",
