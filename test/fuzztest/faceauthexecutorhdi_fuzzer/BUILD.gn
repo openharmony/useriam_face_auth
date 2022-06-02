@@ -13,7 +13,7 @@
 
 import("//build/config/features.gni")
 import("//build/test.gni")
-import("//foundation/aafwk/standard/aafwk.gni")
+import("//foundation/ability/ability_runtime/aafwk.gni")
 
 ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
   module_out_path = "useriam/face_auth"
