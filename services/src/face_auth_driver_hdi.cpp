@@ -19,27 +19,43 @@
 
 #include "face_auth_defines.h"
 #include "face_auth_executor_hdi.h"
+#include "iam_check.h"
 #include "iam_logger.h"
 #include "iam_ptr.h"
 #include "iauth_executor_hdi.h"
 #include "v1_0/iface_auth_interface.h"
 
 #define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_SA
+using namespace OHOS::HDI::FaceAuth::V1_0;
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
+FaceAuthDriverHdi::FaceAuthDriverHdi(std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter)
+    : faceAuthInterfaceAdapter_(faceAuthInterfaceAdapter)
+{
+}
+
 void FaceAuthDriverHdi::GetExecutorList(std::vector<std::shared_ptr<UserAuth::IAuthExecutorHdi>> &executorList)
 {
-    auto faceIf = FaceHdi::IFaceAuthInterface::Get();
+    IF_FALSE_LOGE_AND_RETURN(faceAuthInterfaceAdapter_ != nullptr);
+    auto faceIf = faceAuthInterfaceAdapter_->Get();
     if (faceIf == nullptr) {
         IAM_LOGE("IFaceAuthInterface is null");
         return;
     }
 
-    std::vector<sptr<FaceHdi::IExecutor>> iExecutorList;
-    faceIf->GetExecutorList(iExecutorList);
+    std::vector<sptr<IExecutor>> iExecutorList;
+    auto ret = faceIf->GetExecutorList(iExecutorList);
+    if (ret != HDF_SUCCESS) {
+        IAM_LOGE("GetExecutorList fail");
+        return;
+    }
     for (const auto &iExecutor : iExecutorList) {
+        if (iExecutor == nullptr) {
+            IAM_LOGE("iExecutor is nullptr");
+            continue;
+        }
         auto executor = Common::MakeShared<FaceAuthExecutorHdi>(iExecutor);
         if (executor == nullptr) {
             IAM_LOGE("make share failed");

@@ -11,41 +11,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build/ohos.gni")
+import("//build/config/features.gni")
+import("//build/test.gni")
 import("//foundation/aafwk/standard/aafwk.gni")
 
-ohos_shared_library("faceauthservice") {
-  sources = [
-    "src/face_auth_driver_hdi.cpp",
-    "src/face_auth_executor_callback_hdi.cpp",
-    "src/face_auth_executor_hdi.cpp",
-    "src/face_auth_interface_adapter.cpp",
-    "src/face_auth_service.cpp",
+ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
+  module_out_path = "useriam/face_auth"
+  fuzz_config_file =
+      "//base/user_iam/face_auth/test/fuzztest/faceauthexecutorhdi_fuzzer"
+  cflags = [
+    "-g",
+    "-O0",
+    "-Wno-unused-variable",
+    "-fno-omit-frame-pointer",
   ]
   include_dirs = [
-    "inc",
     "//base/user_iam/face_auth/common/inc",
     "//base/user_iam/user_auth/common/logs",
     "//base/user_iam/user_auth/common/utils",
+    "//base/user_iam/face_auth/services/inc",
   ]
 
+  sources = [ "face_auth_executor_hdi_fuzzer.cpp" ]
+
   deps = [
-    "//base/user_iam/face_auth/frameworks/face_auth:faceauth_framework",
+    "//base/user_iam/face_auth/services:faceauthservice",
+    "//base/user_iam/user_auth/common:iam_test",
     "//base/user_iam/user_auth/common/executors:userauth_executors",
   ]
+
   external_deps = [
     "face_auth_device_driver_interface:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
+    "ipc:ipc_core",
     "safwk:system_ability_fwk",
     "samgr_standard:samgr_proxy",
     "user_auth:coauth_framework",
     "utils_base:utils",
   ]
-  remove_configs = [ "//build/config/compiler:no_exceptions" ]
 
-  if (ability_runtime_graphics) {
-    external_deps += [ "graphic_standard:surface" ]
-  }
-  subsystem_name = "useriam"
-  part_name = "face_auth"
+  remove_configs = [ "//build/config/compiler:no_exceptions" ]
 }

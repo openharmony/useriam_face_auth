@@ -18,8 +18,8 @@
 #include <cstddef>
 #include <cstdint>
 
-#include "parcel.h"
 #include "ibuffer_producer.h"
+#include "parcel.h"
 
 #include "iam_logger.h"
 
@@ -159,6 +159,9 @@ void FuzzSetBufferProducer(Parcel &parcel)
     sptr<IBufferProducer> bufferProducer = nullptr;
     if (parcel.ReadBool()) {
         bufferProducer = new (std::nothrow) DummyBufferProducer();
+        if (bufferProducer == nullptr) {
+            IAM_LOGE("bufferProducer is nullptr");
+        }
     }
     g_service->SetBufferProducer(bufferProducer);
     IAM_LOGI("end");

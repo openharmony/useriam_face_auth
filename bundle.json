@@ -1,5 +1,5 @@
 {
-    "name": "@openharmony/faceauth",
+    "name": "@openharmony/face_auth",
     "version": "3.1.0",
     "description": "Face authentication capability",
     "homePage": "https://gitee.com/openharmony",
@@ -23,7 +23,7 @@
       "deps": {
         "components": [
           "aafwk_standard",
-          "faceauth_device_driver_interface:libfaceauth_proxy_1.0",
+          "face_auth_device_driver_interface:libface_auth_proxy_1.0",
           "hiviewdfx_hilog_native:libhilog",
           "ipc:ipc_core",
           "safwk:system_ability_fwk",
@@ -51,7 +51,8 @@
           }
         ],
         "test": [
-          "///base/user_iam/face_auth/test/fuzztest:fuzztest"
+          "//base/user_iam/face_auth/test/fuzztest:fuzztest",
+          "//base/user_iam/face_auth/test/unittest:unittest"
         ]
       }
     }
