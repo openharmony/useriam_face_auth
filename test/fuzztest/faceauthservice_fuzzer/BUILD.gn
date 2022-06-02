@@ -25,6 +25,7 @@ ohos_fuzztest("FaceAuthServiceFuzzTest") {
     "-Wno-unused-variable",
     "-fno-omit-frame-pointer",
   ]
+
   include_dirs = [
     "//base/user_iam/face_auth/common/inc",
     "//base/user_iam/user_auth/common/logs",

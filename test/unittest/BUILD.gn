@@ -11,41 +11,46 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build/ohos.gni")
-import("//foundation/aafwk/standard/aafwk.gni")
+import("//build/test.gni")
 
-ohos_shared_library("faceauthservice") {
+ohos_unittest("FaceAuthServiceUnitTest") {
+  module_out_path = "user_iam/face_auth"
+
   sources = [
-    "src/face_auth_driver_hdi.cpp",
-    "src/face_auth_executor_callback_hdi.cpp",
-    "src/face_auth_executor_hdi.cpp",
-    "src/face_auth_interface_adapter.cpp",
-    "src/face_auth_service.cpp",
+    "face_auth_driver_hdi_unit_test.cpp",
+    "face_auth_executor_callback_hdi_unit_test.cpp",
+    "face_auth_executor_hdi_unit_test.cpp",
   ]
+
   include_dirs = [
-    "inc",
-    "//base/user_iam/face_auth/common/inc",
+    "mock",
     "//base/user_iam/user_auth/common/logs",
     "//base/user_iam/user_auth/common/utils",
+    "//base/user_iam/user_auth/common/executors/include/public",
+    "//base/user_iam/face_auth/common/inc",
+    "//base/user_iam/face_auth/services/inc",
+    "//base/user_iam/user_auth/interfaces/inner_api/co_auth/",
   ]
 
   deps = [
-    "//base/user_iam/face_auth/frameworks/face_auth:faceauth_framework",
-    "//base/user_iam/user_auth/common/executors:userauth_executors",
+    "//base/user_iam/face_auth/services:faceauthservice",
+    "//third_party/googletest:gmock_main",
+    "//third_party/googletest:gtest_main",
   ]
+
   external_deps = [
+    "ability_runtime:app_manager",
     "face_auth_device_driver_interface:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
-    "safwk:system_ability_fwk",
-    "samgr_standard:samgr_proxy",
+    "ipc:ipc_core",
     "user_auth:coauth_framework",
     "utils_base:utils",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
+}
 
-  if (ability_runtime_graphics) {
-    external_deps += [ "graphic_standard:surface" ]
-  }
-  subsystem_name = "useriam"
-  part_name = "face_auth"
+group("unittest") {
+  testonly = true
+
+  deps = [ ":FaceAuthServiceUnitTest" ]
 }
