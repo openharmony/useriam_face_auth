@@ -18,8 +18,8 @@
 #include <cstddef>
 #include <cstdint>
 
-#include "ibuffer_producer.h"
 #include "parcel.h"
+#include "surface.h"
 
 #include "iam_logger.h"
 
@@ -36,107 +36,6 @@ namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 namespace {
-class DummyBufferProducer : public IBufferProducer {
-public:
-    ~DummyBufferProducer() = default;
-    GSError RequestBuffer(
-        const BufferRequestConfig &config, sptr<BufferExtraData> &bedata, RequestBufferReturnValue &retval)
-    {
-        return GSERROR_OK;
-    }
-
-    GSError CancelBuffer(int32_t sequence, const sptr<BufferExtraData> &bedata)
-    {
-        return GSERROR_OK;
-    }
-
-    GSError FlushBuffer(
-        int32_t sequence, const sptr<BufferExtraData> &bedata, const sptr<SyncFence> &fence, BufferFlushConfig &config)
-    {
-        return GSERROR_OK;
-    }
-
-    GSError AttachBuffer(sptr<SurfaceBuffer> &buffer)
-    {
-        return GSERROR_OK;
-    }
-
-    GSError DetachBuffer(sptr<SurfaceBuffer> &buffer)
-    {
-        return GSERROR_OK;
-    }
-
-    uint32_t GetQueueSize()
-    {
-        return 0;
-    }
-
-    GSError SetQueueSize(uint32_t queueSize)
-    {
-        return GSERROR_OK;
-    }
-
-    GSError GetName(std::string &name)
-    {
-        return GSERROR_OK;
-    }
-
-    uint64_t GetUniqueId()
-    {
-        return 0;
-    }
-
-    GSError GetNameAndUniqueId(std::string &name, uint64_t &uniqueId)
-    {
-        return GSERROR_OK;
-    }
-
-    int32_t GetDefaultWidth()
-    {
-        return 0;
-    }
-
-    int32_t GetDefaultHeight()
-    {
-        return 0;
-    }
-
-    uint32_t GetDefaultUsage()
-    {
-        return 0;
-    }
-
-    GSError CleanCache()
-    {
-        return GSERROR_OK;
-    }
-
-    GSError RegisterReleaseListener(OnReleaseFunc func)
-    {
-        return GSERROR_OK;
-    }
-
-    GSError SetTransform(TransformType transform)
-    {
-        return GSERROR_OK;
-    }
-
-    GSError IsSupportedAlloc(const std::vector<VerifyAllocInfo> &infos, std::vector<bool> &supporteds)
-    {
-        return GSERROR_OK;
-    }
-
-    GSError Disconnect()
-    {
-        return GSERROR_OK;
-    }
-
-    sptr<IRemoteObject> AsObject()
-    {
-        return nullptr;
-    }
-};
-
 auto g_service = FaceAuthService::GetInstance();
 
 void FuzzOnStart(Parcel &parcel)
@@ -158,10 +57,12 @@ void FuzzSetBufferProducer(Parcel &parcel)
     IAM_LOGI("begin");
     sptr<IBufferProducer> bufferProducer = nullptr;
     if (parcel.ReadBool()) {
-        bufferProducer = new (std::nothrow) DummyBufferProducer();
-        if (bufferProducer == nullptr) {
-            IAM_LOGE("bufferProducer is nullptr");
+        auto surface = Surface::CreateSurfaceAsConsumer();
+        if (surface == nullptr) {
+            IAM_LOGE("CreateSurfaceAsConsumer fail");
+            return;
         }
+        bufferProducer = surface->GetProducer();
     }
     g_service->SetBufferProducer(bufferProducer);
     IAM_LOGI("end");
