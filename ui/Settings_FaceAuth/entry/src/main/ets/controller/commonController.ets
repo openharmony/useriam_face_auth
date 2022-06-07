@@ -16,10 +16,10 @@
 import Log from '../utils/log'
 import router from '@system.router';
 import Config from '../config/config'
-import UserIDMModel from '../model/userIDMModel'
+import UserIdmModel from '../model/userIdmModel'
 
 class CommonController {
-  private TAG: string = "CommonController:"
+  private TAG: string = "CommonController"
 
   async routeBack() {
     Log.info(this.TAG, 'router getLength: ' + router.getLength())
@@ -36,10 +36,10 @@ class CommonController {
 
   async terminateAbility() {
     Log.info(this.TAG, 'terminate ability+')
-    UserIDMModel.destroy()
+    UserIdmModel.destroy()
     globalThis.abilityContext.terminateSelf()
-      .then(data => Log.info(this.TAG, 'terminateSelf promise::then : ' + data))
-      .catch(error => Log.error(this.TAG, 'terminateSelf promise::catch : ' + error));
+      .then(data => Log.info(this.TAG, 'terminateSelf promise then ' + data))
+      .catch(error => Log.error(this.TAG, 'terminateSelf promise catch ' + error));
     Log.info(this.TAG, 'terminate ability-')
   }
 
@@ -76,7 +76,9 @@ class CommonController {
     if (Config.getDeviceType() != 'phone') {
       return;
     }
-    let sideLength = Math.floor((nonAppBarDisplayHeight / 4) * 2)
+    nonAppBarDisplayHeight = nonAppBarDisplayHeight + AppStorage.Get<number>('SYSTEM_NAVIGATION_BAR_HEIGHT')
+    Log.info(this.TAG, 'update nonAppBarDisplayHeight to ' + nonAppBarDisplayHeight)
+    let sideLength = Math.floor(nonAppBarDisplayHeight / 2)
     AppStorage.SetOrCreate('enrollImageHeight', sideLength);
     AppStorage.SetOrCreate('enrollImageWidth', nonAppBarDisplayWidth);
     // when percentage is 166%, circular diameter == height
@@ -91,6 +93,8 @@ class CommonController {
     if (Config.getDeviceType() != 'tablet') {
       return;
     }
+    displayHeight = displayHeight + AppStorage.Get<number>('SYSTEM_NAVIGATION_BAR_HEIGHT') + AppStorage.Get<number>('SYSTEM_STATUS_BAR_HEIGHT')
+    Log.info(this.TAG, 'update displayHeight to ' + displayHeight)
     let sideLength = Math.floor(Math.min(displayWidth, displayHeight / 2) * 0.8 / 2) * 2
     Log.info(this.TAG, 'sideLength ' + sideLength)
     AppStorage.SetOrCreate('enrollImageHeight', sideLength);
@@ -158,6 +162,13 @@ class CommonController {
     }
     buffer.push(0)
     return new Uint8Array(buffer)
+  }
+
+  getStartViewImage() : any {
+    if (Config.getDeviceType() === 'tablet') {
+      return $r('app.media.face_start_view_pad')
+    }
+    return $r('app.media.face_start_view')
   }
 }
 

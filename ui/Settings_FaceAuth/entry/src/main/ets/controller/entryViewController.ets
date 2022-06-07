@@ -15,7 +15,7 @@
 
 import Log from '../utils/log'
 import UserAuthModel from '../model/userAuthModel'
-import UserIDMModel from '../model/userIDMModel'
+import UserIdmModel from '../model/userIdmModel'
 import router from '@system.router';
 
 class EntryViewController {
@@ -23,14 +23,14 @@ class EntryViewController {
 
   constructor() {
     Log.info(this.TAG, "constructor+")
-    UserIDMModel.updateFaceInfo()
+    UserIdmModel.updateFaceInfo()
     Log.info(this.TAG, "constructor-")
   }
 
   async doPINAuth() {
     try {
       Log.info(this.TAG, "doPINAuth+")
-      let challenge = await UserIDMModel.getChallenge()
+      let challenge = await UserIdmModel.getChallenge()
       Log.info(this.TAG, "get challenge " + JSON.stringify(challenge) )
       let token = await UserAuthModel.authPin(challenge)
       Log.info(this.TAG, "authPin result " + JSON.stringify(token))
@@ -38,14 +38,14 @@ class EntryViewController {
          Log.error(this.TAG, "authPin fail ")
          throw 1
       }
-      UserIDMModel.setToken(token)
+      UserIdmModel.setToken(token)
       Log.info(this.TAG, "set token ok")
     } catch(err) {
       Log.error(this.TAG, "exception " + JSON.stringify(err))
       Log.info(this.TAG, "doPINAuth -")
       throw 1
     }
-    if (UserIDMModel.getFaceNum() == 0) {
+    if (UserIdmModel.getFaceNum() == 0) {
       Log.info(this.TAG, "route to enrollIntro")
       router.replace({uri: 'pages/enrollIntro'})
     } else {
