@@ -50,7 +50,7 @@ class UserAuthModel {
             setTimeout(()=>{CommonController.terminateAbility()}, 10 * 60 * 1000)
           } else {
             Log.error(this.TAG, 'authPin fail');
-            throw 1
+            resolve(new Uint8Array([]));
           }
         }
       })

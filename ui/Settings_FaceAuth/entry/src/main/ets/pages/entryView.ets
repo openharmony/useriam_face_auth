@@ -32,7 +32,7 @@ struct Index {
         .fontColor(Constants.ohos_id_color_text_primary)
         .fontSize(Constants.ohos_id_text_size_headline7)
         .fontWeight(FontWeight.Bold)
-      Text("请将PIN码设置为123456后，点击认证按钮")
+      Text("请将锁屏密码设置为123456后，点击认证按钮")
         .fontColor(Constants.ohos_id_color_text_primary)
         .fontSize(Constants.ohos_id_text_size_subtitle1)
         .fontWeight(FontWeight.Medium)
@@ -49,7 +49,7 @@ struct Index {
       .backgroundColor(Constants.ohos_id_color_control_actived)
       .onClick(()=>{
         EntryViewController.doPINAuth()
-          .catch(()=>{this.resultString = "认证失败，请将密码设置为123456后重试"})
+          .catch(()=>{this.resultString = "认证失败，请将锁屏密码设置为123456后重试"})
       })
       .width('30%')
       Text(this.resultString)
