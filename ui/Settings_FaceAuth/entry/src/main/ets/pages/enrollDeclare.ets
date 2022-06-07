@@ -40,7 +40,7 @@ import CommonController from '../controller/commonController'
 @Component
 export default struct EnrollDeclare {
   private pattern: string = "2D";
-  private TAG: string = "EnrollDeclare:"
+  private TAG: string = "EnrollDeclare"
   @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
 
   build() {
