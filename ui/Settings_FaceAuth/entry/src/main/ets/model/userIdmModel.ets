@@ -17,8 +17,8 @@ import Log from '../utils/log'
 import account_osAccount from '@ohos.account.osAccount';
 import CommonController from '../controller/commonController'
 
-class UserIDMModel {
-  readonly TAG: string = "UserIDMModel"
+class UserIdmModel {
+  readonly TAG: string = "UserIdmModel"
   protected userIdentityManager: any
   protected challenge: Uint8Array
   protected token: Uint8Array
@@ -44,12 +44,12 @@ class UserIDMModel {
 
   setToken(token: Uint8Array) {
     let tokenStr = CommonController.uin8Array2JsonString(token);
-    AppStorage.SetOrCreate<string>("UserIDM_Token", tokenStr)
+    AppStorage.SetOrCreate<string>("UserIdm_Token", tokenStr)
     Log.info(this.TAG, "setToken ok " + JSON.stringify(token))
   }
 
   getToken() : Uint8Array {
-    let tokenStr = AppStorage.Get<string>("UserIDM_Token")
+    let tokenStr = AppStorage.Get<string>("UserIdm_Token")
     let token =  CommonController.jsonString2Uint8Array(tokenStr)
     Log.info(this.TAG, "getToken ok " + JSON.stringify(token))
     return token
@@ -57,12 +57,12 @@ class UserIDMModel {
 
   setCredentialId(credId: Uint8Array) {
     let credIdStr = CommonController.uin8Array2JsonString(credId);
-    AppStorage.SetOrCreate<string>("UserIDM_CredId", credIdStr)
+    AppStorage.SetOrCreate<string>("UserIdm_CredId", credIdStr)
     Log.info(this.TAG, "setCredentialId ok " + JSON.stringify(credId))
   }
 
   getCredentialId() : Uint8Array {
-    let credIdStr = AppStorage.Get<string>("UserIDM_CredId")
+    let credIdStr = AppStorage.Get<string>("UserIdm_CredId")
     let credId = CommonController.jsonString2Uint8Array(credIdStr)
     Log.info(this.TAG, "getCredentialId ok " + JSON.stringify(credId))
     return credId
@@ -71,7 +71,7 @@ class UserIDMModel {
   updateFaceInfo() {
     this.userIdentityManager.getAuthInfo(2).then((data) => {
       Log.info(this.TAG, 'getAuthInfo length ' + data.length)
-      AppStorage.SetOrCreate<number>("UserIDM_FaceNum", data.length);
+      AppStorage.SetOrCreate<number>("UserIdm_FaceNum", data.length);
       if (data.length > 0) {
         this.setCredentialId(data[0].credentialId);
       }
@@ -79,7 +79,7 @@ class UserIDMModel {
   }
 
   getFaceNum(): number {
-    return AppStorage.Get<number>("UserIDM_FaceNum");
+    return AppStorage.Get<number>("UserIdm_FaceNum");
   }
 
   setOnAcquireCallback(onAcquireCallback: (result: number) => any) {
@@ -135,5 +135,5 @@ class UserIDMModel {
   }
 }
 
-let userIDMModel = new UserIDMModel();
-export default userIDMModel as UserIDMModel
+let userIdmModel = new UserIdmModel();
+export default userIdmModel as UserIdmModel

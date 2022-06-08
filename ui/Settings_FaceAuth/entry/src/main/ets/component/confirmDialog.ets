@@ -17,7 +17,7 @@ import Log from '../utils/log'
 
 @CustomDialog
 export default struct ConfirmDialog {
-  private TAG: string = "ConfirmDialog:"
+  private TAG: string = "ConfirmDialog"
   private controller: CustomDialogController;
   private title: string | Resource
   private content: string | Resource

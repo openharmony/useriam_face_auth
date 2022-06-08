@@ -13,5 +13,8 @@
     "hypium": "^1.0.0",
     "@ohos/hvigor": "1.0.6",
     "@ohos/hvigor-ohos-plugin": "1.0.6"
+  },
+  "scripts": {
+    "buildOhosHaps": "hvigor assembleHap"
   }
 }

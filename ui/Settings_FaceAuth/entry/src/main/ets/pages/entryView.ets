@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+import window from '@ohos.window'
+
 import BackComponent from '../component/backComponent'
 import Log from '../utils/log'
 import EntryViewController from '../controller/entryViewController'
@@ -22,8 +24,12 @@ import Constants from '../config/constant'
 @Entry
 @Component
 struct Index {
-  private TAG: string = "Index:"
+  private TAG: string = "Index"
+  private TYPE_STATUS_BAR_TEMP:number = 2108 // In current version, windows subscribe type id is wrong, temporary use these id
+  private TYPE_NAVIGATION_BAR_TEMP:number = 2112
   @State resultString: string = ""
+  @StorageLink('SYSTEM_STATUS_BAR_HEIGHT') SYSTEM_STATUS_BAR_HEIGHT: number = 0
+  @StorageLink('SYSTEM_NAVIGATION_BAR_HEIGHT') SYSTEM_NAVIGATION_BAR_HEIGHT: number = 0
 
   build() {
     Column() {
@@ -62,6 +68,22 @@ struct Index {
     .height("100%")
     .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
     .onAreaChange((_, newArea) => {
+      window.on('systemBarTintChange', (data) => {
+        Log.info(this.TAG, 'receive system bar tint change: ' + JSON.stringify(data));
+        for (let i = 0; i < data.regionTint.length; i++) {
+          let regionData = data.regionTint[i]
+          if (regionData.type == this.TYPE_STATUS_BAR_TEMP) {
+            this.SYSTEM_STATUS_BAR_HEIGHT = px2vp(regionData.region.height)
+            Log.info(this.TAG, "set status bar height " + regionData.region.height)
+            continue
+          }
+          if (regionData.type == this.TYPE_NAVIGATION_BAR_TEMP) {
+            this.SYSTEM_NAVIGATION_BAR_HEIGHT = px2vp(regionData.region.height)
+            Log.info(this.TAG, "set navigation bar height " + this.SYSTEM_NAVIGATION_BAR_HEIGHT)
+            continue
+          }
+        }
+      });
       Log.info(this.TAG, "new display area :" + JSON.stringify(newArea))
       CommonController.setDisplaySize(Number(newArea.width), Number(newArea.height))
       Log.info(this.TAG, "total area w: " + newArea.width + " h: " + newArea.height)

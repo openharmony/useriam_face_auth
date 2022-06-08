@@ -14,11 +14,11 @@
  */
 
 import Log from '../utils/log'
-import UserIDMModel from '../model/userIDMModel'
+import UserIdmModel from '../model/userIdmModel'
 import CommonController from '../controller/commonController'
 
 class FaceConfigController {
-  private TAG: string = "FaceConfigController:"
+  private TAG: string = "FaceConfigController"
 
   constructor() {
     Log.info(this.TAG, "constructor+")
@@ -27,7 +27,7 @@ class FaceConfigController {
 
   deleteFace() {
     Log.info(this.TAG, "deleteFace+")
-    UserIDMModel.deleteFace().then((result)=>{
+    UserIdmModel.deleteFace().then((result)=>{
       Log.info(this.TAG, "deleteFace result: " + result)
       if (result == 0) {
         Log.info(this.TAG, "deleteFace routeBack+")

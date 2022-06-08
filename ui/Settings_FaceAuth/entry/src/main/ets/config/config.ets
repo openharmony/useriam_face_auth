@@ -17,7 +17,7 @@ import Log from '../utils/log'
 import display from '@ohos.display';
 
 class Config {
-  private TAG: string = "Config:"
+  private TAG: string = "Config"
   private deviceType : string = "tablet"
   private nonAppBarDisplayHeight: number = 0
   private nonDisplayHeight: number = 0
