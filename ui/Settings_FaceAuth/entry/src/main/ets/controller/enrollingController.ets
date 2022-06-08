@@ -17,11 +17,11 @@ import Constants from '../config/constant'
 import Log from '../utils/log'
 import router from '@system.router';
 import CommonController from '../controller/commonController'
-import UserIDMModel from '../model/userIDMModel'
+import UserIdmModel from '../model/userIdmModel'
 import UserAuthModel from '../model/userAuthModel'
 
 class EnrollingController {
-  private TAG: string = "EnrollingController:"
+  private TAG: string = "EnrollingController"
   private ANIMATION_TIME: number = 2000
   private enrolling: boolean = false
 
@@ -62,8 +62,8 @@ class EnrollingController {
     }
     let setResult = await UserAuthModel.setSurfaceId(AppStorage.Get('xComponentSurfaceId'))
     Log.info(this.TAG, 'setSurfaceId result is ' + setResult)
-    UserIDMModel.setOnAcquireCallback(this.onAcquire.bind(this))
-    UserIDMModel.enrollFace().then(this.processResult.bind(this))
+    UserIdmModel.setOnAcquireCallback(this.onAcquire.bind(this))
+    UserIdmModel.enrollFace().then(this.processResult.bind(this))
     this.enrolling = true
     Log.info(this.TAG, 'startEnroll-')
   }
