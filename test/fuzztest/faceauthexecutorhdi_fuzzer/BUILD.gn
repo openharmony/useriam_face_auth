@@ -44,10 +44,7 @@ ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
     "face_auth_device_driver_interface:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
-    "safwk:system_ability_fwk",
-    "samgr_standard:samgr_proxy",
     "user_auth:coauth_framework",
-    "utils_base:utils",
   ]
 
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
