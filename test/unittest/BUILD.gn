@@ -39,7 +39,6 @@ ohos_unittest("FaceAuthServiceUnitTest") {
   ]
 
   external_deps = [
-    "ability_runtime:app_manager",
     "face_auth_device_driver_interface:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
