@@ -38,7 +38,7 @@ ohos_shared_library("faceauthservice") {
     "hiviewdfx_hilog_native:libhilog",
     "safwk:system_ability_fwk",
     "samgr_standard:samgr_proxy",
-    "user_auth:coauth_framework",
+    "user_auth_framework:coauth_framework",
     "utils_base:utils",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
