@@ -28,7 +28,7 @@
           "ipc:ipc_core",
           "safwk:system_ability_fwk",
           "samgr_standard:samgr_proxy",
-          "user_auth_framework:coauth_framework",
+          "user_auth:coauth_framework",
           "utils_base:utils"
         ]
       },
