@@ -16,7 +16,7 @@ import("//foundation/ability/ability_runtime/aafwk.gni")
 
 config("faceauth_framework_public_config") {
   include_dirs = [
-    "//base/user_iam/face_auth/interfaces/inner_api/face_auth",
+    "//base/useriam/face_auth/interfaces/inner_api/face_auth",
     "inc",
   ]
 }
@@ -31,11 +31,11 @@ ohos_shared_library("faceauth_framework") {
 
   public_configs = [ ":faceauth_framework_public_config" ]
 
-  configs = [ "//base/user_iam/user_auth/common:iam_log_config" ]
+  configs = [ "//base/useriam/user_auth_framework/common:iam_log_config" ]
 
   include_dirs = [
-    "//base/user_iam/user_auth/common/utils",
-    "//base/user_iam/face_auth/common/inc",
+    "//base/useriam/user_auth_framework/common/utils",
+    "//base/useriam/face_auth/common/inc",
   ]
 
   if (ability_runtime_graphics) {

@@ -18,7 +18,7 @@ import("//foundation/ability/ability_runtime/aafwk.gni")
 ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
   module_out_path = "useriam/face_auth"
   fuzz_config_file =
-      "//base/user_iam/face_auth/test/fuzztest/faceauthexecutorhdi_fuzzer"
+      "//base/useriam/face_auth/test/fuzztest/faceauthexecutorhdi_fuzzer"
   cflags = [
     "-g",
     "-O0",
@@ -26,25 +26,25 @@ ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
     "-fno-omit-frame-pointer",
   ]
   include_dirs = [
-    "//base/user_iam/face_auth/common/inc",
-    "//base/user_iam/user_auth/common/logs",
-    "//base/user_iam/user_auth/common/utils",
-    "//base/user_iam/face_auth/services/inc",
+    "//base/useriam/face_auth/common/inc",
+    "//base/useriam/user_auth_framework/common/logs",
+    "//base/useriam/user_auth_framework/common/utils",
+    "//base/useriam/face_auth/services/inc",
   ]
 
   sources = [ "face_auth_executor_hdi_fuzzer.cpp" ]
 
   deps = [
-    "//base/user_iam/face_auth/services:faceauthservice",
-    "//base/user_iam/user_auth/common:iam_test",
-    "//base/user_iam/user_auth/common/executors:userauth_executors",
+    "//base/useriam/face_auth/services:faceauthservice",
+    "//base/useriam/user_auth_framework/common:iam_test",
+    "//base/useriam/user_auth_framework/common/executors:userauth_executors",
   ]
 
   external_deps = [
     "face_auth_device_driver_interface:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
-    "user_auth:coauth_framework",
+    "user_auth_framework:coauth_framework",
   ]
 
   remove_configs = [ "//build/config/compiler:no_exceptions" ]

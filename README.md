@@ -22,7 +22,7 @@ Note 1: The OpenHarmony open-source framework provides stub implementation of fa
 ## Directory Structure
 
 ```
-//base/user_iam/face_auth
+//base/useriam/face_auth
 ├── bundle.json              # Module description file
 ├── figures                  # Figures used in the README
 ├── sa_profile               # Service ability profile 
