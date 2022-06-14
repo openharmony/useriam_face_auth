@@ -8,7 +8,7 @@
     "license": "Apache License 2.0",
     "publishAs": "code-segment",
     "segment": {
-      "destPath" : "base/user_iam/face_auth"
+      "destPath" : "base/useriam/face_auth"
     },
     "dirs": {},
     "scripts": {},
@@ -28,31 +28,31 @@
           "ipc:ipc_core",
           "safwk:system_ability_fwk",
           "samgr_standard:samgr_proxy",
-          "user_auth:coauth_framework",
+          "user_auth_framework:coauth_framework",
           "utils_base:utils"
         ]
       },
       "build": {
         "sub_component": [
-          "//base/user_iam/face_auth/services:faceauthservice",
-          "//base/user_iam/face_auth/sa_profile:faceauth_sa_profile.init",
-          "//base/user_iam/face_auth/sa_profile:faceauth_sa_profile"
+          "//base/useriam/face_auth/services:faceauthservice",
+          "//base/useriam/face_auth/sa_profile:faceauth_sa_profile.init",
+          "//base/useriam/face_auth/sa_profile:faceauth_sa_profile"
         ],
         "inner_kits": [
           {
             "type": "so",
-            "name": "//base/user_iam/face_auth/frameworks/face_auth:faceauth_framework",
+            "name": "//base/useriam/face_auth/frameworks/face_auth:faceauth_framework",
             "header": {
               "header_files": [
                 "face_auth_innerkit.h"
               ],
-              "header_base": "//base/user_iam/face_auth/interfaces/inner_api/face_auth/"
+              "header_base": "//base/useriam/face_auth/interfaces/inner_api/face_auth/"
             }
           }
         ],
         "test": [
-          "//base/user_iam/face_auth/test/fuzztest:fuzztest",
-          "//base/user_iam/face_auth/test/unittest:unittest"
+          "//base/useriam/face_auth/test/fuzztest:fuzztest",
+          "//base/useriam/face_auth/test/unittest:unittest"
         ]
       }
     }
