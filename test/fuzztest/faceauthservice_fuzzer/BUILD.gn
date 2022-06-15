@@ -18,7 +18,7 @@ import("//foundation/ability/ability_runtime/aafwk.gni")
 ohos_fuzztest("FaceAuthServiceFuzzTest") {
   module_out_path = "useriam/face_auth"
   fuzz_config_file =
-      "//base/user_iam/face_auth/test/fuzztest/faceauthservice_fuzzer"
+      "//base/useriam/face_auth/test/fuzztest/faceauthservice_fuzzer"
   cflags = [
     "-g",
     "-O0",
@@ -27,18 +27,18 @@ ohos_fuzztest("FaceAuthServiceFuzzTest") {
   ]
 
   include_dirs = [
-    "//base/user_iam/face_auth/common/inc",
-    "//base/user_iam/user_auth/common/logs",
-    "//base/user_iam/user_auth/common/utils",
-    "//base/user_iam/face_auth/services/inc",
+    "//base/useriam/face_auth/common/inc",
+    "//base/useriam/user_auth_framework/common/logs",
+    "//base/useriam/user_auth_framework/common/utils",
+    "//base/useriam/face_auth/services/inc",
   ]
 
   sources = [ "face_auth_service_fuzzer.cpp" ]
 
   deps = [
-    "//base/user_iam/face_auth/frameworks/face_auth:faceauth_framework",
-    "//base/user_iam/face_auth/services:faceauthservice",
-    "//base/user_iam/user_auth/common:iam_test",
+    "//base/useriam/face_auth/frameworks/face_auth:faceauth_framework",
+    "//base/useriam/face_auth/services:faceauthservice",
+    "//base/useriam/user_auth_framework/common:iam_test",
   ]
 
   external_deps = [ "safwk:system_ability_fwk" ]

@@ -25,7 +25,7 @@
 ## 目录
 
 ```
-//base/user_iam/face_auth
+//base/useriam/face_auth
 ├── bundle.json              # 组件描述文件
 ├── common                   # 组件公共文件
 ├── figures                  # README使用的图片
