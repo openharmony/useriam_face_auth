@@ -14,7 +14,7 @@
 import("//build/test.gni")
 
 ohos_unittest("FaceAuthServiceUnitTest") {
-  module_out_path = "user_iam/face_auth"
+  module_out_path = "useriam/face_auth"
 
   sources = [
     "face_auth_driver_hdi_unit_test.cpp",
@@ -24,16 +24,16 @@ ohos_unittest("FaceAuthServiceUnitTest") {
 
   include_dirs = [
     "mock",
-    "//base/user_iam/user_auth/common/logs",
-    "//base/user_iam/user_auth/common/utils",
-    "//base/user_iam/user_auth/common/executors/include/public",
-    "//base/user_iam/face_auth/common/inc",
-    "//base/user_iam/face_auth/services/inc",
-    "//base/user_iam/user_auth/interfaces/inner_api/co_auth/",
+    "//base/useriam/user_auth_framework/common/logs",
+    "//base/useriam/user_auth_framework/common/utils",
+    "//base/useriam/user_auth_framework/common/executors/include/public",
+    "//base/useriam/face_auth/common/inc",
+    "//base/useriam/face_auth/services/inc",
+    "//base/useriam/user_auth_framework/interfaces/inner_api/co_auth/",
   ]
 
   deps = [
-    "//base/user_iam/face_auth/services:faceauthservice",
+    "//base/useriam/face_auth/services:faceauthservice",
     "//third_party/googletest:gmock_main",
     "//third_party/googletest:gtest_main",
   ]
@@ -42,7 +42,7 @@ ohos_unittest("FaceAuthServiceUnitTest") {
     "face_auth_device_driver_interface:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
-    "user_auth:coauth_framework",
+    "user_auth_framework:coauth_framework",
     "utils_base:utils",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
