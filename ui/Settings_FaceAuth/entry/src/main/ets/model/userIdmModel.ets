@@ -45,26 +45,26 @@ class UserIdmModel {
   setToken(token: Uint8Array) {
     let tokenStr = CommonController.uin8Array2JsonString(token);
     AppStorage.SetOrCreate<string>("UserIdm_Token", tokenStr)
-    Log.info(this.TAG, "setToken ok " + JSON.stringify(token))
+    Log.info(this.TAG, "setToken ok, size " + token.length)
   }
 
   getToken() : Uint8Array {
     let tokenStr = AppStorage.Get<string>("UserIdm_Token")
     let token =  CommonController.jsonString2Uint8Array(tokenStr)
-    Log.info(this.TAG, "getToken ok " + JSON.stringify(token))
+    Log.info(this.TAG, "getToken ok, size " + token.length)
     return token
   }
 
   setCredentialId(credId: Uint8Array) {
     let credIdStr = CommonController.uin8Array2JsonString(credId);
     AppStorage.SetOrCreate<string>("UserIdm_CredId", credIdStr)
-    Log.info(this.TAG, "setCredentialId ok " + JSON.stringify(credId))
+    Log.info(this.TAG, "setCredentialId ok, size " + credId.length)
   }
 
   getCredentialId() : Uint8Array {
     let credIdStr = AppStorage.Get<string>("UserIdm_CredId")
     let credId = CommonController.jsonString2Uint8Array(credIdStr)
-    Log.info(this.TAG, "getCredentialId ok " + JSON.stringify(credId))
+    Log.info(this.TAG, "getCredentialId ok, size " + credId.length)
     return credId
   }
 
