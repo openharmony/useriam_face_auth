@@ -23,7 +23,7 @@
       "deps": {
         "components": [
           "aafwk_standard",
-          "face_auth_device_driver_interface:libface_auth_proxy_1.0",
+          "drivers_interface_face_auth:libface_auth_proxy_1.0",
           "hiviewdfx_hilog_native:libhilog",
           "ipc:ipc_core",
           "safwk:system_ability_fwk",
