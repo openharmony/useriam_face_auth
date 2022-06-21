@@ -12,43 +12,33 @@
 # limitations under the License.
 
 import("//build/ohos.gni")
-import("//foundation/ability/ability_runtime/aafwk.gni")
-
-config("faceauth_framework_public_config") {
+import("//foundation/ability/ability_runtime/ability_runtime.gni")
+ohos_shared_library("faceauth") {
   include_dirs = [
-    "//base/useriam/face_auth/interfaces/inner_api/face_auth",
     "inc",
-  ]
-}
-
-ohos_shared_library("faceauth_framework") {
-  sources = [
-    "src/face_auth_client.cpp",
-    "src/face_auth_innerkit.cpp",
-    "src/face_auth_proxy.cpp",
-    "src/face_auth_stub.cpp",
-  ]
-
-  public_configs = [ ":faceauth_framework_public_config" ]
-
-  configs = [ "//base/useriam/user_auth_framework/common:iam_log_config" ]
-
-  include_dirs = [
-    "//base/useriam/user_auth_framework/common/utils",
+    "//base/useriam/user_auth_framework/common/logs",
     "//base/useriam/face_auth/common/inc",
+    "//base/useriam/user_auth_framework/common/utils",
   ]
 
-  if (ability_runtime_graphics) {
-    deps = [ "//foundation/graphic/graphic_2d:libsurface" ]
-  }
+  sources = [
+    "src/face_auth_manager.cpp",
+    "src/face_auth_napi.cpp",
+  ]
 
+  deps = [ "//base/useriam/face_auth/frameworks/inner_api:faceauth_framework" ]
+  if (ability_runtime_graphics) {
+    deps += [ "//foundation/graphic/graphic_2d:libsurface" ]
+  }
+  remove_configs = [ "//build/config/compiler:no_exceptions" ]
   external_deps = [
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
-    "samgr_standard:samgr_proxy",
+    "napi:ace_napi",
     "utils_base:utils",
   ]
 
-  subsystem_name = "useriam"
+  relative_install_dir = "module/useriam"
+
   part_name = "face_auth"
 }

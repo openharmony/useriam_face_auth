@@ -35,18 +35,19 @@
       "build": {
         "sub_component": [
           "//base/useriam/face_auth/services:faceauthservice",
+          "//base/useriam/face_auth/frameworks/js/napi:faceauth",
           "//base/useriam/face_auth/sa_profile:faceauth_sa_profile.init",
           "//base/useriam/face_auth/sa_profile:faceauth_sa_profile"
         ],
         "inner_kits": [
           {
             "type": "so",
-            "name": "//base/useriam/face_auth/frameworks/face_auth:faceauth_framework",
+            "name": "//base/useriam/face_auth/frameworks/inner_api:faceauth_framework",
             "header": {
               "header_files": [
                 "face_auth_innerkit.h"
               ],
-              "header_base": "//base/useriam/face_auth/interfaces/inner_api/face_auth/"
+              "header_base": "//base/useriam/face_auth/interfaces/inner_api/"
             }
           }
         ],
@@ -56,4 +57,4 @@
         ]
       }
     }
-  }
+}

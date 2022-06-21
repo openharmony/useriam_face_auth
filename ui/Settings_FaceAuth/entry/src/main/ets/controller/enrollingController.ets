@@ -18,7 +18,7 @@ import Log from '../utils/log'
 import router from '@system.router';
 import CommonController from '../controller/commonController'
 import UserIdmModel from '../model/userIdmModel'
-import UserAuthModel from '../model/userAuthModel'
+import FaceAuthModel from '../model/faceAuthModel'
 
 class EnrollingController {
   private TAG: string = "EnrollingController"
@@ -60,7 +60,7 @@ class EnrollingController {
       Log.info(this.TAG, 'face is enrolling, skip start enroll')
       return
     }
-    let setResult = await UserAuthModel.setSurfaceId(AppStorage.Get('xComponentSurfaceId'))
+    let setResult = await FaceAuthModel.setSurfaceId(AppStorage.Get('xComponentSurfaceId'))
     Log.info(this.TAG, 'setSurfaceId result is ' + setResult)
     UserIdmModel.setOnAcquireCallback(this.onAcquire.bind(this))
     UserIdmModel.enrollFace().then(this.processResult.bind(this))
@@ -159,7 +159,7 @@ class EnrollingController {
 
   async clear() {
     Log.info(this.TAG, 'clear+')
-    await UserAuthModel.clearSurfaceId()
+    await FaceAuthModel.clearSurfaceId()
     Log.info(this.TAG, 'clear-')
   }
 }

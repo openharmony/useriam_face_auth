@@ -58,21 +58,6 @@ class UserAuthModel {
     Log.info(this.TAG, "auth Pin-")
     return ret
   }
-
-  async setSurfaceId(surfaceIdString: string) : Promise<number> {
-    Log.info(this.TAG, 'set surface id ' + surfaceIdString);
-    return this.userAuthManager.setProperty({
-      authType: account_osAccount.AuthType.FACE,
-      key:this.CMD_SET_SURFACE_ID,
-      setInfo: CommonController.string2Uint8Array(surfaceIdString)
-    })
-  }
-
-  async clearSurfaceId() {
-    Log.info(this.TAG, 'clearSurfaceId+');
-    this.setSurfaceId("0")
-    Log.info(this.TAG, 'clearSurfaceId-');
-  }
 }
 
 let userAuthModel = new UserAuthModel();
