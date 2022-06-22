@@ -32,17 +32,17 @@ Note 1: The OpenHarmony open-source framework provides stub implementation of fa
 
 ## Usage
 
-* To adapt to the face authentication function, device vendors must implement the APIs defined in the **face_auth_ca.h** file. 
+* To adapt to the face authentication function, device vendors must implement the interface defined in the IDL file **//drivers/interface/faceauth** file, **//drivers/peripheral/faceauth** provides interface the stub implementation for development reference.
 * The extraction, comparison, storage, and recording of facial data must be implemented in a secure environment (TEE/secure chipset) to ensure the highest security level in the system.
 
 ## Repositories Involved
 
-[useriam_auth_executor_mgr](https://gitee.com/openharmony/useriam_auth_executor_mgr)
-
-[useriam_user_idm](https://gitee.com/openharmony/useriam_useridm)
-
-[useriam_user_auth](https://gitee.com/openharmony/useriam_userauth)
+[useriam_user_auth_framework](https://gitee.com/openharmony/useriam_user_auth_framework)
 
 [useriam_pin_auth](https://gitee.com/openharmony/useriam_pin_auth)
 
-**[useriam_faceauth](https://gitee.com/openharmony/useriam_faceauth)**
+**[useriam_face_auth](https://gitee.com/openharmony/useriam_face_auth)**
+
+[drivers_interface](https://gitee.com/openharmony/drivers_interface)
+
+[drivers_peripheral](https://gitee.com/openharmony/drivers_peripheral)
