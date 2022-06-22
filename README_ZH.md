@@ -43,11 +43,11 @@
 
 ## 相关仓
 
-[useriam_user_auth](https://gitee.com/openharmony/useriam_userauth)
+[useriam_user_auth_framework](https://gitee.com/openharmony/useriam_user_auth_framework)
 
 [useriam_pin_auth](https://gitee.com/openharmony/useriam_pin_auth)
 
-**[useriam_faceauth](https://gitee.com/openharmony/useriam_faceauth)**
+**[useriam_face_auth](https://gitee.com/openharmony/useriam_face_auth)**
 
 [drivers_interface](https://gitee.com/openharmony/drivers_interface)
 
