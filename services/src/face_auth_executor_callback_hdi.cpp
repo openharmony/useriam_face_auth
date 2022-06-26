@@ -66,7 +66,7 @@ UserIAM::ResultCode FaceAuthExecutorCallbackHdi::ConvertResultCode(const int32_t
         {ResultCode::LOCKED, UserIAM::ResultCode::LOCKED},
         {ResultCode::NOT_ENROLLED, UserIAM::ResultCode::NOT_ENROLLED},
         // should be UserIAM::ResultCode::OPERATION_NOT_SUPPORT
-        {ResultCode::OPERATION_NOT_SUPPORT, UserIAM::ResultCode::GENERAL_ERROR},
+        {ResultCode::OPERATION_NOT_SUPPORT, UserIAM::ResultCode::FAIL},
     };
 
     UserIAM::ResultCode out;

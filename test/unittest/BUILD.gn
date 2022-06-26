@@ -48,7 +48,7 @@ ohos_unittest("FaceAuthServiceUnitTest") {
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
 }
 
-group("unittest") {
+group("faceauth_unittest") {
   testonly = true
 
   deps = [ ":FaceAuthServiceUnitTest" ]
