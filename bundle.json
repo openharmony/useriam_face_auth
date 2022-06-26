@@ -51,8 +51,8 @@
           }
         ],
         "test": [
-          "//base/useriam/face_auth/test/fuzztest:fuzztest",
-          "//base/useriam/face_auth/test/unittest:unittest"
+          "//base/useriam/face_auth/test/fuzztest:faceauth_fuzztest",
+          "//base/useriam/face_auth/test/unittest:faceauth_unittest"
         ]
       }
     }
