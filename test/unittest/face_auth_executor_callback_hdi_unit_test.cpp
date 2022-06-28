@@ -83,7 +83,7 @@ HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnResult_
         {ResultCode::INVALID_PARAMETERS, UserIAM::ResultCode::INVALID_PARAMETERS},
         {ResultCode::LOCKED, UserIAM::ResultCode::LOCKED},
         {ResultCode::NOT_ENROLLED, UserIAM::ResultCode::NOT_ENROLLED},
-        {ResultCode::OPERATION_NOT_SUPPORT, UserIAM::ResultCode::GENERAL_ERROR},
+        {ResultCode::OPERATION_NOT_SUPPORT, UserIAM::ResultCode::FAIL},
         {static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN - 1), UserIAM::ResultCode::GENERAL_ERROR},
         {static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN), UserIAM::ResultCode::GENERAL_ERROR},
         {static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN + 1),
