@@ -36,7 +36,7 @@ ohos_fuzztest("FaceAuthServiceFuzzTest") {
   sources = [ "face_auth_service_fuzzer.cpp" ]
 
   deps = [
-    "//base/useriam/face_auth/frameworks/face_auth:faceauth_framework",
+    "//base/useriam/face_auth/frameworks/inner_api:faceauth_framework",
     "//base/useriam/face_auth/services:faceauthservice",
     "//base/useriam/user_auth_framework/common:iam_test",
   ]

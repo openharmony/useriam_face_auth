@@ -62,7 +62,7 @@ sptr<IFaceAuth> FaceAuthClient::GetFaceAuthProxy()
         return nullptr;
     }
 
-    sptr<IRemoteObject> remoteObject = systemAbilityManager->GetSystemAbility(SUBSYS_USERIAM_SYS_ABILITY_FACEAUTH);
+    sptr<IRemoteObject> remoteObject = systemAbilityManager->CheckSystemAbility(SUBSYS_USERIAM_SYS_ABILITY_FACEAUTH);
     if (remoteObject == nullptr) {
         IAM_LOGE("failed to get remoteObject.");
         return nullptr;

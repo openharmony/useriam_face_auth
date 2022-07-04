@@ -34,6 +34,7 @@ ohos_shared_library("faceauth_framework") {
   configs = [ "//base/useriam/user_auth_framework/common:iam_log_config" ]
 
   include_dirs = [
+    "//foundation/graphic/graphic_2d/frameworks/surface/include",
     "//base/useriam/user_auth_framework/common/utils",
     "//base/useriam/face_auth/common/inc",
   ]
