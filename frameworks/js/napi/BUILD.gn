@@ -13,39 +13,32 @@
 
 import("//build/ohos.gni")
 import("//foundation/ability/ability_runtime/ability_runtime.gni")
-
-ohos_shared_library("faceauthservice") {
-  sources = [
-    "src/face_auth_driver_hdi.cpp",
-    "src/face_auth_executor_callback_hdi.cpp",
-    "src/face_auth_executor_hdi.cpp",
-    "src/face_auth_interface_adapter.cpp",
-    "src/face_auth_service.cpp",
-  ]
+ohos_shared_library("faceauth") {
   include_dirs = [
     "inc",
-    "//base/useriam/face_auth/common/inc",
     "//base/useriam/user_auth_framework/common/logs",
+    "//base/useriam/face_auth/common/inc",
     "//base/useriam/user_auth_framework/common/utils",
   ]
 
-  deps = [
-    "//base/useriam/face_auth/frameworks/inner_api:faceauth_framework",
-    "//base/useriam/user_auth_framework/common/executors:userauth_executors",
+  sources = [
+    "src/face_auth_manager.cpp",
+    "src/face_auth_napi.cpp",
   ]
+
+  deps = [ "//base/useriam/face_auth/frameworks/inner_api:faceauth_framework" ]
+  if (ability_runtime_graphics) {
+    deps += [ "//foundation/graphic/graphic_2d:libsurface" ]
+  }
+  remove_configs = [ "//build/config/compiler:no_exceptions" ]
   external_deps = [
-    "drivers_interface_face_auth:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
-    "safwk:system_ability_fwk",
-    "samgr_standard:samgr_proxy",
-    "user_auth_framework:coauth_framework",
+    "ipc:ipc_core",
+    "napi:ace_napi",
     "utils_base:utils",
   ]
-  remove_configs = [ "//build/config/compiler:no_exceptions" ]
 
-  if (ability_runtime_graphics) {
-    external_deps += [ "graphic_standard:surface" ]
-  }
-  subsystem_name = "useriam"
+  relative_install_dir = "module/useriam"
+
   part_name = "face_auth"
 }

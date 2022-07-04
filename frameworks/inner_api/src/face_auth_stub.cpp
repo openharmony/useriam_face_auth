@@ -16,7 +16,7 @@
 #include "face_auth_stub.h"
 
 #include "securec.h"
-
+#include "buffer_client_producer.h"
 #include "iam_check.h"
 #include "iam_logger.h"
 #include "iam_para2str.h"
@@ -42,7 +42,7 @@ int32_t FaceAuthStub::FaceAuthSetBufferProducer(MessageParcel &data, MessageParc
     sptr<IBufferProducer> buffer = nullptr;
     sptr<IRemoteObject> remoteObj = data.ReadRemoteObject();
     IAM_LOGI("read remote object %{public}s", Common::GetPointerNullStateString(remoteObj).c_str());
-    buffer = iface_cast<OHOS::IBufferProducer>(remoteObj);
+    buffer = iface_cast<BufferClientProducer>(remoteObj);
     int32_t ret = SetBufferProducer(buffer);
     IAM_LOGI("SetBufferProducer ret %{public}d", ret);
     if (!reply.WriteInt32(ret)) {

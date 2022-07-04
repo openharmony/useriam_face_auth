@@ -34,7 +34,9 @@ public:
 
 private:
     bool SendRequest(uint32_t code, MessageParcel &data, MessageParcel &reply);
-    static BrokerDelegator<FaceAuthProxy> delegator_;
+
+    // delegator must be declared static inline to register remote broker
+    static inline BrokerDelegator<FaceAuthProxy> delegator_;
 };
 } // namespace FaceAuth
 } // namespace UserIAM
