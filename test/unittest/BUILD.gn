@@ -13,7 +13,7 @@
 
 import("//build/test.gni")
 
-ohos_unittest("FaceAuthServiceUnitTest") {
+ohos_unittest("faceauth_unittest") {
   module_out_path = "useriam/face_auth"
 
   sources = [
@@ -46,10 +46,4 @@ ohos_unittest("FaceAuthServiceUnitTest") {
     "utils_base:utils",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
-}
-
-group("faceauth_unittest") {
-  testonly = true
-
-  deps = [ ":FaceAuthServiceUnitTest" ]
 }
