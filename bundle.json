@@ -36,7 +36,6 @@
         "sub_component": [
           "//base/useriam/face_auth/services:faceauthservice",
           "//base/useriam/face_auth/frameworks/js/napi:faceauth",
-          "//base/useriam/face_auth/sa_profile:faceauth_sa_profile.init",
           "//base/useriam/face_auth/sa_profile:faceauth_sa_profile"
         ],
         "inner_kits": [
