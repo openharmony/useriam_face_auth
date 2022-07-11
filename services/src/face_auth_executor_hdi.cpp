@@ -57,11 +57,8 @@ UserIAM::ResultCode FaceAuthExecutorHdi::GetTemplateInfo(uint64_t templateId, Us
         IAM_LOGE("GetTemplateInfo fail result %{public}d", result);
         return result;
     }
-    result = MoveHdiTemplateInfo(localInfo, info);
-    if (result != UserIAM::ResultCode::SUCCESS) {
-        IAM_LOGE("MoveHdiTemplateInfo fail result %{public}d", result);
-        return result;
-    }
+    MoveHdiTemplateInfo(localInfo, info);
+    
     return UserIAM::ResultCode::SUCCESS;
 }
 
@@ -196,13 +193,12 @@ UserIAM::ResultCode FaceAuthExecutorHdi::MoveHdiExecutorInfo(FaceHdi::ExecutorIn
     return UserIAM::ResultCode::SUCCESS;
 }
 
-UserIAM::ResultCode FaceAuthExecutorHdi::MoveHdiTemplateInfo(FaceHdi::TemplateInfo &in, UserAuth::TemplateInfo &out)
+void FaceAuthExecutorHdi::MoveHdiTemplateInfo(FaceHdi::TemplateInfo &in, UserAuth::TemplateInfo &out)
 {
     out.executorType = in.executorType;
     out.freezingTime = in.freezingTime;
     out.remainTimes = in.remainTimes;
     in.extraInfo.swap(out.extraInfo);
-    return UserIAM::ResultCode::SUCCESS;
 }
 
 UserIAM::ResultCode FaceAuthExecutorHdi::ConvertCommandId(const UserAuth::AuthPropertyMode in, FaceHdi::CommandId &out)

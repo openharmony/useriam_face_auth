@@ -54,7 +54,7 @@ public:
 
 private:
     UserIAM::ResultCode MoveHdiExecutorInfo(FaceHdi::ExecutorInfo &in, UserIAM::ExecutorInfo &out);
-    UserIAM::ResultCode MoveHdiTemplateInfo(FaceHdi::TemplateInfo &in, UserAuth::TemplateInfo &out);
+    void MoveHdiTemplateInfo(FaceHdi::TemplateInfo &in, UserAuth::TemplateInfo &out);
     UserIAM::ResultCode ConvertCommandId(const UserAuth::AuthPropertyMode in, FaceHdi::CommandId &out);
     UserIAM::ResultCode ConvertAuthType(const FaceHdi::AuthType in, UserIAM::AuthType &out);
     UserIAM::ResultCode ConvertExecutorRole(const FaceHdi::ExecutorRole in, UserIAM::ExecutorRole &out);
