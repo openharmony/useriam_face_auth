@@ -26,7 +26,6 @@ ohos_shared_library("faceauth_framework") {
     "src/face_auth_client.cpp",
     "src/face_auth_innerkit.cpp",
     "src/face_auth_proxy.cpp",
-    "src/face_auth_stub.cpp",
   ]
 
   public_configs = [ ":faceauth_framework_public_config" ]
@@ -34,7 +33,6 @@ ohos_shared_library("faceauth_framework") {
   configs = [ "//base/useriam/user_auth_framework/common:iam_log_config" ]
 
   include_dirs = [
-    "//foundation/graphic/graphic_2d/frameworks/surface/include",
     "//base/useriam/user_auth_framework/common/utils",
     "//base/useriam/face_auth/common/inc",
   ]
@@ -52,4 +50,23 @@ ohos_shared_library("faceauth_framework") {
 
   subsystem_name = "useriam"
   part_name = "face_auth"
+}
+
+ohos_source_set("faceauth_framework_stub") {
+  sources = [ "src/face_auth_stub.cpp" ]
+
+  configs = [ "//base/useriam/user_auth_framework/common:iam_log_config" ]
+
+  public_configs = [ ":faceauth_framework_public_config" ]
+
+  include_dirs = [
+    "//base/useriam/user_auth_framework/common/utils",
+    "//base/useriam/face_auth/common/inc",
+  ]
+
+  if (ability_runtime_graphics) {
+    deps = [ "//foundation/graphic/graphic_2d:libsurface" ]
+    include_dirs +=
+        [ "//foundation/graphic/graphic_2d/frameworks/surface/include" ]
+  }
 }
