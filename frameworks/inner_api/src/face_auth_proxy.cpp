@@ -15,7 +15,20 @@
 
 #include "face_auth_proxy.h"
 
+#include <cstdint>
+
+#include "ibuffer_producer.h"
+#include "ipc_types.h"
+#include "iremote_object.h"
+#include "iremote_proxy.h"
+#include "message_option.h"
+#include "message_parcel.h"
+#include "refbase.h"
+
 #include "iam_logger.h"
+
+#include "face_auth_defines.h"
+#include "iface_auth.h"
 
 #define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_SDK
 

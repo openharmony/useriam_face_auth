@@ -15,11 +15,25 @@
 
 #include "face_auth_stub.h"
 
-#include "securec.h"
+#include <cstdint>
+#include <functional>
+#include <map>
+#include <string>
+#include <utility>
+
 #include "buffer_client_producer.h"
+#include "ibuffer_producer.h"
+#include "ipc_object_stub.h"
+#include "iremote_broker.h"
+#include "message_parcel.h"
+#include "refbase.h"
+
 #include "iam_check.h"
 #include "iam_logger.h"
 #include "iam_para2str.h"
+
+#include "face_auth_defines.h"
+#include "iface_auth.h"
 
 #define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_SDK
 

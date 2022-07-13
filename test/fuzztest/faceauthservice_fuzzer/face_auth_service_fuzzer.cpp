@@ -17,8 +17,11 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 
+#include "ibuffer_producer.h"
 #include "parcel.h"
+#include "refbase.h"
 #include "surface.h"
 
 #include "iam_logger.h"
