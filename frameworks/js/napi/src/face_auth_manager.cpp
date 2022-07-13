@@ -15,17 +15,24 @@
 
 #include "face_auth_manager.h"
 
-#include <cinttypes>
+#include <cstddef>
+#include <cstdint>
+#include <istream>
 #include <sstream>
+#include <string>
 
+#include "ibuffer_producer.h"
+#include "js_native_api.h"
+#include "js_native_api_types.h"
 #include "napi/native_common.h"
+#include "refbase.h"
 #include "surface.h"
 #include "surface_utils.h"
 
-#include "iam_para2str.h"
 #include "iam_check.h"
 #include "iam_logger.h"
 
+#include "face_auth_defines.h"
 #include "face_auth_innerkit.h"
 
 #define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_NAPI

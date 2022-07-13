@@ -15,6 +15,9 @@
 
 #include "face_auth_innerkit.h"
 
+#include "refbase.h"
+#include "singleton.h"
+
 #include "face_auth_client.h"
 
 namespace OHOS {

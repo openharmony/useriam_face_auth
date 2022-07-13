@@ -15,10 +15,12 @@
 
 #include "face_auth_manager.h"
 
-#include <new>
+#include <cstdint>
 
-#include "napi/native_api.h"
+#include "js_native_api.h"
+#include "js_native_api_types.h"
 #include "napi/native_common.h"
+#include "node_api.h"
 
 #include "iam_logger.h"
 

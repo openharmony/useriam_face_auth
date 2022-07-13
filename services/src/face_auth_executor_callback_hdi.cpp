@@ -15,10 +15,21 @@
 
 #include "face_auth_executor_callback_hdi.h"
 
-#include "face_auth_defines.h"
+#include <functional>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <utility>
+#include <vector>
+
+#include "hdf_base.h"
+
 #include "iam_check.h"
 #include "iam_logger.h"
-#include "v1_0/face_auth_types.h"
+#include "co_auth_defines.h"
+#include "iexecute_callback.h"
+
+#include "face_auth_defines.h"
 
 #define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_SA
 
