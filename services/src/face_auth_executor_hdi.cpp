@@ -75,7 +75,7 @@ UserIAM::ResultCode FaceAuthExecutorHdi::OnRegisterFinish(const std::vector<uint
     return UserIAM::ResultCode::SUCCESS;
 }
 
-UserIAM::ResultCode FaceAuthExecutorHdi::Enroll(uint64_t scheduleId, uint64_t callerUid,
+UserIAM::ResultCode FaceAuthExecutorHdi::Enroll(uint64_t scheduleId, uint32_t tokenId,
     const std::vector<uint8_t> &extraInfo, const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj)
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, UserIAM::ResultCode::GENERAL_ERROR);
@@ -91,7 +91,7 @@ UserIAM::ResultCode FaceAuthExecutorHdi::Enroll(uint64_t scheduleId, uint64_t ca
     return UserIAM::ResultCode::SUCCESS;
 }
 
-UserIAM::ResultCode FaceAuthExecutorHdi::Authenticate(uint64_t scheduleId, uint64_t callerUid,
+UserIAM::ResultCode FaceAuthExecutorHdi::Authenticate(uint64_t scheduleId, uint32_t tokenId,
     const std::vector<uint64_t> &templateIdList, const std::vector<uint8_t> &extraInfo,
     const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj)
 {
@@ -108,7 +108,7 @@ UserIAM::ResultCode FaceAuthExecutorHdi::Authenticate(uint64_t scheduleId, uint6
     return UserIAM::ResultCode::SUCCESS;
 }
 
-UserIAM::ResultCode FaceAuthExecutorHdi::Identify(uint64_t scheduleId, uint64_t callerUid,
+UserIAM::ResultCode FaceAuthExecutorHdi::Identify(uint64_t scheduleId, uint32_t tokenId,
     const std::vector<uint8_t> &extraInfo, const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj)
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, UserIAM::ResultCode::GENERAL_ERROR);

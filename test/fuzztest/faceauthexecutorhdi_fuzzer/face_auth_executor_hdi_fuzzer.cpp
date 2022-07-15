@@ -234,12 +234,12 @@ void FuzzEnroll(Parcel &parcel)
 {
     IAM_LOGI("begin");
     uint64_t scheduleId = parcel.ReadUint64();
-    uint64_t callerUid = parcel.ReadUint64();
+    uint32_t tokenId = parcel.ReadUint32();
     std::vector<uint8_t> extraInfo;
     FillFuzzUint8Vector(parcel, extraInfo);
     std::shared_ptr<IExecuteCallback> callbackObj;
     FillFuzzIExecuteCallback(parcel, callbackObj);
-    g_hdi.Enroll(scheduleId, callerUid, extraInfo, callbackObj);
+    g_hdi.Enroll(scheduleId, tokenId, extraInfo, callbackObj);
     IAM_LOGI("end");
 }
 
@@ -247,14 +247,14 @@ void FuzzAuthenticate(Parcel &parcel)
 {
     IAM_LOGI("begin");
     uint64_t scheduleId = parcel.ReadUint64();
-    uint64_t callerUid = parcel.ReadUint64();
+    uint32_t tokenId = parcel.ReadUint32();
     std::vector<uint64_t> templateIdList;
     FillFuzzUint64Vector(parcel, templateIdList);
     std::vector<uint8_t> extraInfo;
     FillFuzzUint8Vector(parcel, extraInfo);
     std::shared_ptr<IExecuteCallback> callbackObj;
     FillFuzzIExecuteCallback(parcel, callbackObj);
-    g_hdi.Authenticate(scheduleId, callerUid, templateIdList, extraInfo, callbackObj);
+    g_hdi.Authenticate(scheduleId, tokenId, templateIdList, extraInfo, callbackObj);
     IAM_LOGI("end");
 }
 
@@ -262,12 +262,12 @@ void FuzzIdentify(Parcel &parcel)
 {
     IAM_LOGI("begin");
     uint64_t scheduleId = parcel.ReadUint64();
-    uint64_t callerUid = parcel.ReadUint64();
+    uint32_t tokenId = parcel.ReadUint32();
     std::vector<uint8_t> extraInfo;
     FillFuzzUint8Vector(parcel, extraInfo);
     std::shared_ptr<IExecuteCallback> callbackObj;
     FillFuzzIExecuteCallback(parcel, callbackObj);
-    g_hdi.Identify(scheduleId, callerUid, extraInfo, callbackObj);
+    g_hdi.Identify(scheduleId, tokenId, extraInfo, callbackObj);
     IAM_LOGI("end");
 }
 
