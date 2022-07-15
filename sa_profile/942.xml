@@ -13,7 +13,7 @@
      limitations under the License.
 -->
 <info>
-    <process>faceauth</process>
+    <process>useriam</process>
     <systemability>
         <name>942</name>
         <libpath>libfaceauthservice.z.so</libpath>
