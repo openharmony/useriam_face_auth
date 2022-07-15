@@ -36,36 +36,47 @@ public:
     explicit FaceAuthExecutorHdi(sptr<FaceHdi::IExecutor> executorProxy);
     ~FaceAuthExecutorHdi() override = default;
 
-    UserIAM::ResultCode GetExecutorInfo(UserIAM::ExecutorInfo &info) override;
-    UserIAM::ResultCode GetTemplateInfo(uint64_t templateId, UserAuth::TemplateInfo &info) override;
-    UserIAM::ResultCode OnRegisterFinish(const std::vector<uint64_t> &templateIdList,
+    UserIam::UserAuth::ResultCode GetExecutorInfo(UserIam::UserAuth::ExecutorInfo &info) override;
+    UserIam::UserAuth::ResultCode GetTemplateInfo(uint64_t templateId, UserAuth::TemplateInfo &info) override;
+    UserIam::UserAuth::ResultCode OnRegisterFinish(const std::vector<uint64_t> &templateIdList,
         const std::vector<uint8_t> &frameworkPublicKey, const std::vector<uint8_t> &extraInfo) override;
-    UserIAM::ResultCode Enroll(uint64_t scheduleId, uint32_t tokenId, const std::vector<uint8_t> &extraInfo,
+    UserIam::UserAuth::ResultCode Enroll(uint64_t scheduleId, uint32_t tokenId, const std::vector<uint8_t> &extraInfo,
         const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj) override;
-    UserIAM::ResultCode Authenticate(uint64_t scheduleId, uint32_t tokenId,
+    UserIam::UserAuth::ResultCode Authenticate(uint64_t scheduleId, uint32_t tokenId,
         const std::vector<uint64_t> &templateIdList, const std::vector<uint8_t> &extraInfo,
         const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj) override;
-    UserIAM::ResultCode Identify(uint64_t scheduleId, uint32_t tokenId, const std::vector<uint8_t> &extraInfo,
+    UserIam::UserAuth::ResultCode Identify(uint64_t scheduleId, uint32_t tokenId, const std::vector<uint8_t> &extraInfo,
         const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj) override;
-    UserIAM::ResultCode Delete(const std::vector<uint64_t> &templateIdList) override;
-    UserIAM::ResultCode Cancel(uint64_t scheduleId) override;
-    UserIAM::ResultCode SendCommand(UserAuth::AuthPropertyMode commandId, const std::vector<uint8_t> &extraInfo,
+    UserIam::UserAuth::ResultCode Delete(const std::vector<uint64_t> &templateIdList) override;
+    UserIam::UserAuth::ResultCode Cancel(uint64_t scheduleId) override;
+    UserIam::UserAuth::ResultCode SendCommand(UserIam::UserAuth::PropertyMode commandId, const std::vector<uint8_t> &extraInfo,
         const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj) override;
 
 private:
-    UserIAM::ResultCode MoveHdiExecutorInfo(FaceHdi::ExecutorInfo &in, UserIAM::ExecutorInfo &out);
+    UserIam::UserAuth::ResultCode MoveHdiExecutorInfo(FaceHdi::ExecutorInfo &in, UserIam::UserAuth::ExecutorInfo &out);
     void MoveHdiTemplateInfo(FaceHdi::TemplateInfo &in, UserAuth::TemplateInfo &out);
-    UserIAM::ResultCode ConvertCommandId(const UserAuth::AuthPropertyMode in, FaceHdi::CommandId &out);
-    UserIAM::ResultCode ConvertAuthType(const FaceHdi::AuthType in, UserIAM::AuthType &out);
-    UserIAM::ResultCode ConvertExecutorRole(const FaceHdi::ExecutorRole in, UserIAM::ExecutorRole &out);
-    UserIAM::ResultCode ConvertExecutorSecureLevel(
-        const FaceHdi::ExecutorSecureLevel in, UserIAM::ExecutorSecureLevel &out);
-    UserIAM::ResultCode ConvertResultCode(const int32_t in);
+    UserIam::UserAuth::ResultCode ConvertCommandId(const UserIam::UserAuth::PropertyMode in, FaceHdi::CommandId &out);
+    UserIam::UserAuth::ResultCode ConvertAuthType(const FaceHdi::AuthType in, UserIam::UserAuth::AuthType &out);
+    UserIam::UserAuth::ResultCode ConvertExecutorRole(const FaceHdi::ExecutorRole in, UserIam::UserAuth::ExecutorRole &out);
+    UserIam::UserAuth::ResultCode ConvertExecutorSecureLevel(
+        const FaceHdi::ExecutorSecureLevel in, UserIam::UserAuth::ExecutorSecureLevel &out);
+    UserIam::UserAuth::ResultCode ConvertResultCode(const int32_t in);
 
     sptr<FaceHdi::IExecutor> executorProxy_;
 };
 } // namespace FaceAuth
 } // namespace UserIAM
+} // namespace OHOS
+namespace OHOS {
+namespace UserIam {
+namespace UserAuth {
+enum CommandId : int32_t {
+    LOCK_TEMPLATE = 0,
+    UNLOCK_TEMPLATE = 1,
+    VENDOR_COMMAND_BEGIN = 10000,
+};
+} // namespace UserAuth
+} // namespace UserIam
 } // namespace OHOS
 
 #endif // FACE_AUTH_EXECUTOR_HDI_H
