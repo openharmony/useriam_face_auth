@@ -15,17 +15,28 @@
 
 #include "face_auth_service.h"
 
+#include <cstdint>
+#include <functional>
 #include <map>
+#include <memory>
+#include <mutex>
+#include <string>
 
+#include "ibuffer_producer.h"
 #include "idriver_manager.h"
+#include "iremote_object.h"
+#include "refbase.h"
+#include "system_ability.h"
 #include "system_ability_definition.h"
 
-#include "face_auth_defines.h"
-#include "face_auth_driver_hdi.h"
 #include "iam_check.h"
 #include "iam_logger.h"
 #include "iam_para2str.h"
 #include "iam_ptr.h"
+
+#include "face_auth_defines.h"
+#include "face_auth_driver_hdi.h"
+#include "face_auth_interface_adapter.h"
 
 #define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_SA
 

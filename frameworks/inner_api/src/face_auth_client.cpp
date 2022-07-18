@@ -15,10 +15,20 @@
 
 #include "face_auth_client.h"
 
+#include <cstdint>
+#include <mutex>
+
+#include "if_system_ability_manager.h"
+#include "iremote_broker.h"
+#include "iremote_object.h"
 #include "iservice_registry.h"
+#include "refbase.h"
 #include "system_ability_definition.h"
 
 #include "iam_logger.h"
+
+#include "face_auth_defines.h"
+#include "iface_auth.h"
 
 #define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_SDK
 

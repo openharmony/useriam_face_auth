@@ -15,6 +15,10 @@
 
 #include "face_auth_interface_adapter.h"
 
+#include "refbase.h"
+
+#include "v1_0/iface_auth_interface.h"
+
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
