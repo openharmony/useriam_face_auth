@@ -69,16 +69,5 @@ private:
 } // namespace FaceAuth
 } // namespace UserIAM
 } // namespace OHOS
-namespace OHOS {
-namespace UserIam {
-namespace UserAuth {
-enum CommandId : int32_t {
-    LOCK_TEMPLATE = 0,
-    UNLOCK_TEMPLATE = 1,
-    VENDOR_COMMAND_BEGIN = 10000,
-};
-} // namespace UserAuth
-} // namespace UserIam
-} // namespace OHOS
 
 #endif // FACE_AUTH_EXECUTOR_HDI_H

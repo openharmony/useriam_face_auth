@@ -486,10 +486,10 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_003, TestS
             {FaceHdi::CommandId::UNLOCK_TEMPLATE, IamResultCode::INVALID_PARAMETERS}},
         {static_cast<IamPropertyMode>(IamPropertyMode::PROPERTY_MODE_UNFREEZE + 1),
             {FaceHdi::CommandId::UNLOCK_TEMPLATE, IamResultCode::INVALID_PARAMETERS}},
-        {static_cast<IamPropertyMode>(UserIam::UserAuth::VENDOR_COMMAND_BEGIN),
+        {static_cast<IamPropertyMode>(FaceHdi::VENDOR_COMMAND_BEGIN),
             {FaceHdi::CommandId::UNLOCK_TEMPLATE, IamResultCode::INVALID_PARAMETERS}},
-        {static_cast<IamPropertyMode>(UserIam::UserAuth::VENDOR_COMMAND_BEGIN + 1),
-            {static_cast<FaceHdi::CommandId>(UserIam::UserAuth::VENDOR_COMMAND_BEGIN + 1), IamResultCode::SUCCESS}}};
+        {static_cast<IamPropertyMode>(FaceHdi::VENDOR_COMMAND_BEGIN + 1),
+            {static_cast<FaceHdi::CommandId>(FaceHdi::VENDOR_COMMAND_BEGIN + 1), IamResultCode::SUCCESS}}};
     for (const auto &pair : data) {
         auto executorProxy = new (std::nothrow) FaceHdi::MockIExecutor();
         ASSERT_TRUE(executorProxy != nullptr);
