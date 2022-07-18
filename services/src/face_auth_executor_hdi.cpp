@@ -206,7 +206,7 @@ void FaceAuthExecutorHdi::MoveHdiTemplateInfo(FaceHdi::TemplateInfo &in, UserAut
 
 IamResultCode FaceAuthExecutorHdi::ConvertCommandId(const UserIam::UserAuth::PropertyMode in, FaceHdi::CommandId &out)
 {
-    if (static_cast<UserIam::UserAuth::CommandId>(in) > UserIam::UserAuth::VENDOR_COMMAND_BEGIN) {
+    if (static_cast<FaceHdi::CommandId>(in) > FaceHdi::CommandId::VENDOR_COMMAND_BEGIN) {
         out = static_cast<FaceHdi::CommandId>(in);
         IAM_LOGI("vendor command id %{public}d, no covert", out);
         return IamResultCode::SUCCESS;
