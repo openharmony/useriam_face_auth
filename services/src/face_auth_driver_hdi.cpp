@@ -15,14 +15,20 @@
 
 #include "face_auth_driver_hdi.h"
 
-#include <cstdint>
+#include <memory>
+#include <vector>
 
-#include "face_auth_defines.h"
-#include "face_auth_executor_hdi.h"
+#include "hdf_base.h"
+#include "refbase.h"
+
 #include "iam_check.h"
 #include "iam_logger.h"
 #include "iam_ptr.h"
-#include "iauth_executor_hdi.h"
+
+#include "face_auth_executor_hdi.h"
+#include "face_auth_interface_adapter.h"
+#include "v1_0/face_auth_types.h"
+#include "v1_0/iexecutor.h"
 #include "v1_0/iface_auth_interface.h"
 
 #define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_SA
