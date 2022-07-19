@@ -26,7 +26,6 @@
 
 #include "iam_check.h"
 #include "iam_logger.h"
-#include "co_auth_defines.h"
 #include "iexecute_callback.h"
 
 #include "face_auth_defines.h"
