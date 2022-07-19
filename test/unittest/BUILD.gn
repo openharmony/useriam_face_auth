@@ -29,7 +29,7 @@ ohos_unittest("faceauth_unittest") {
     "//base/useriam/user_auth_framework/common/executors/include/public",
     "//base/useriam/face_auth/common/inc",
     "//base/useriam/face_auth/services/inc",
-    "//base/useriam/user_auth_framework/interfaces/inner_api/co_auth/",
+    "//base/useriam/user_auth_framework/interfaces/inner_api",
   ]
 
   deps = [

@@ -42,7 +42,7 @@
 
 using namespace std;
 using namespace OHOS::UserIAM::Common;
-using namespace OHOS::UserIAM::UserAuth;
+using namespace OHOS::UserIam::UserAuth;
 namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
 
 namespace OHOS {
@@ -153,7 +153,7 @@ private:
     Parcel *fuzzParcel_;
 };
 
-class DummyExecuteCallback : public IExecuteCallback {
+class DummyExecuteCallback : public UserAuth::IExecuteCallback {
 public:
     virtual ~DummyExecuteCallback() = default;
 
@@ -175,17 +175,16 @@ FaceAuthExecutorHdi g_hdi(g_proxy);
 
 void FillFuzzExecutorInfo(Parcel &parcel, ExecutorInfo &executorInfo)
 {
-    executorInfo.executorId = parcel.ReadInt32();
+    executorInfo.executorSensorHint = parcel.ReadInt32();
     executorInfo.authType = static_cast<AuthType>(parcel.ReadInt32());
-    executorInfo.role = static_cast<ExecutorRole>(parcel.ReadInt32());
-    executorInfo.executorType = parcel.ReadInt32();
+    executorInfo.executorRole = static_cast<ExecutorRole>(parcel.ReadInt32());
+    executorInfo.executorMatcher = parcel.ReadInt32();
     executorInfo.esl = static_cast<ExecutorSecureLevel>(parcel.ReadInt32());
     FillFuzzUint8Vector(parcel, executorInfo.publicKey);
-    FillFuzzUint8Vector(parcel, executorInfo.deviceId);
     IAM_LOGI("success");
 }
 
-void FillFuzzTemplateInfo(Parcel &parcel, TemplateInfo &templateInfo)
+void FillFuzzTemplateInfo(Parcel &parcel, UserAuth::TemplateInfo &templateInfo)
 {
     templateInfo.executorType = parcel.ReadUint32();
     templateInfo.freezingTime = parcel.ReadInt32();
@@ -194,7 +193,7 @@ void FillFuzzTemplateInfo(Parcel &parcel, TemplateInfo &templateInfo)
     IAM_LOGI("success");
 }
 
-void FillFuzzIExecuteCallback(Parcel &parcel, std::shared_ptr<IExecuteCallback> &callback)
+void FillFuzzIExecuteCallback(Parcel &parcel, std::shared_ptr<UserAuth::IExecuteCallback> &callback)
 {
     callback = nullptr;
     if (parcel.ReadBool()) {
@@ -219,7 +218,7 @@ void FuzzGetTemplateInfo(Parcel &parcel)
 {
     IAM_LOGI("begin");
     uint64_t templateId = parcel.ReadUint64();
-    TemplateInfo info;
+    UserAuth::TemplateInfo info;
     FillFuzzTemplateInfo(parcel, info);
     g_hdi.GetTemplateInfo(templateId, info);
     IAM_LOGI("end");
@@ -245,7 +244,7 @@ void FuzzEnroll(Parcel &parcel)
     uint32_t tokenId = parcel.ReadUint32();
     std::vector<uint8_t> extraInfo;
     FillFuzzUint8Vector(parcel, extraInfo);
-    std::shared_ptr<IExecuteCallback> callbackObj;
+    std::shared_ptr<UserAuth::IExecuteCallback> callbackObj;
     FillFuzzIExecuteCallback(parcel, callbackObj);
     g_hdi.Enroll(scheduleId, tokenId, extraInfo, callbackObj);
     IAM_LOGI("end");
@@ -260,7 +259,7 @@ void FuzzAuthenticate(Parcel &parcel)
     FillFuzzUint64Vector(parcel, templateIdList);
     std::vector<uint8_t> extraInfo;
     FillFuzzUint8Vector(parcel, extraInfo);
-    std::shared_ptr<IExecuteCallback> callbackObj;
+    std::shared_ptr<UserAuth::IExecuteCallback> callbackObj;
     FillFuzzIExecuteCallback(parcel, callbackObj);
     g_hdi.Authenticate(scheduleId, tokenId, templateIdList, extraInfo, callbackObj);
     IAM_LOGI("end");
@@ -273,7 +272,7 @@ void FuzzIdentify(Parcel &parcel)
     uint32_t tokenId = parcel.ReadUint32();
     std::vector<uint8_t> extraInfo;
     FillFuzzUint8Vector(parcel, extraInfo);
-    std::shared_ptr<IExecuteCallback> callbackObj;
+    std::shared_ptr<UserAuth::IExecuteCallback> callbackObj;
     FillFuzzIExecuteCallback(parcel, callbackObj);
     g_hdi.Identify(scheduleId, tokenId, extraInfo, callbackObj);
     IAM_LOGI("end");
@@ -299,10 +298,10 @@ void FuzzCancel(Parcel &parcel)
 void FuzzSendCommand(Parcel &parcel)
 {
     IAM_LOGI("begin");
-    AuthPropertyMode commandId = static_cast<AuthPropertyMode>(parcel.ReadInt32());
+    PropertyMode commandId = static_cast<PropertyMode>(parcel.ReadInt32());
     std::vector<uint8_t> extraInfo;
     FillFuzzUint8Vector(parcel, extraInfo);
-    std::shared_ptr<IExecuteCallback> callbackObj;
+    std::shared_ptr<UserAuth::IExecuteCallback> callbackObj;
     FillFuzzIExecuteCallback(parcel, callbackObj);
     g_hdi.SendCommand(commandId, extraInfo, callbackObj);
     IAM_LOGI("end");
