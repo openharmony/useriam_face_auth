@@ -28,7 +28,6 @@
 
 #include "iam_check.h"
 #include "iam_logger.h"
-#include "co_auth_defines.h"
 #include "framework_types.h"
 
 #include "face_auth_executor_callback_hdi.h"
