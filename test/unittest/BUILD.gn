@@ -42,7 +42,6 @@ ohos_unittest("faceauth_unittest") {
     "drivers_interface_face_auth:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
-    "user_auth_framework:coauth_framework",
     "utils_base:utils",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
