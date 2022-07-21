@@ -22,7 +22,6 @@
 #include "nocopyable.h"
 
 #include "iexecute_callback.h"
-#include "iexecutor_messenger.h"
 #include "v1_0/executor_callback_stub.h"
 
 namespace OHOS {
@@ -39,7 +38,7 @@ public:
     int32_t OnAcquireInfo(int32_t acquire, const std::vector<uint8_t> &extraInfo) override;
 
 private:
-    UserIAM::ResultCode ConvertResultCode(const int32_t in);
+    UserIam::UserAuth::ResultCode ConvertResultCode(const int32_t in);
 
     std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback_;
 };

@@ -27,12 +27,13 @@
 using namespace testing;
 using namespace testing::ext;
 using namespace OHOS::HDI::FaceAuth::V1_0;
-using namespace OHOS::UserIAM::UserAuth;
+using namespace OHOS::UserIam::UserAuth;
 using namespace OHOS::UserIAM::Common;
 
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
+using IamResultCode = OHOS::UserIam::UserAuth::ResultCode;
 class FaceAuthExecutorCallbackHdiUnitTest : public testing::Test {
 public:
     static void SetUpTestCase();
@@ -59,7 +60,7 @@ void FaceAuthExecutorCallbackHdiUnitTest ::TearDown()
 
 HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnAcquireInfo_001, TestSize.Level0)
 {
-    auto executeCallback = MakeShared<MockIExecuteCallback>();
+    auto executeCallback = MakeShared<UserAuth::MockIExecuteCallback>();
     ASSERT_TRUE(executeCallback != nullptr);
     const int32_t testAcquire = 5;
     const std::vector<uint8_t> testExtraInfo = {1, 2, 3, 4, 5, 6};
@@ -76,21 +77,21 @@ HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnAcquire
 
 HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnResult_001, TestSize.Level0)
 {
-    static const std::map<ResultCode, UserIAM::ResultCode> data = {{ResultCode::SUCCESS, UserIAM::ResultCode::SUCCESS},
-        {ResultCode::FAIL, UserIAM::ResultCode::FAIL}, {ResultCode::GENERAL_ERROR, UserIAM::ResultCode::GENERAL_ERROR},
-        {ResultCode::CANCELED, UserIAM::ResultCode::CANCELED}, {ResultCode::TIMEOUT, UserIAM::ResultCode::TIMEOUT},
-        {ResultCode::BUSY, UserIAM::ResultCode::BUSY},
-        {ResultCode::INVALID_PARAMETERS, UserIAM::ResultCode::INVALID_PARAMETERS},
-        {ResultCode::LOCKED, UserIAM::ResultCode::LOCKED},
-        {ResultCode::NOT_ENROLLED, UserIAM::ResultCode::NOT_ENROLLED},
-        {ResultCode::OPERATION_NOT_SUPPORT, UserIAM::ResultCode::FAIL},
-        {static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN - 1), UserIAM::ResultCode::GENERAL_ERROR},
-        {static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN), UserIAM::ResultCode::GENERAL_ERROR},
+    static const std::map<ResultCode, IamResultCode> data = {{ResultCode::SUCCESS, IamResultCode::SUCCESS},
+        {ResultCode::FAIL, IamResultCode::FAIL}, {ResultCode::GENERAL_ERROR, IamResultCode::GENERAL_ERROR},
+        {ResultCode::CANCELED, IamResultCode::CANCELED}, {ResultCode::TIMEOUT, IamResultCode::TIMEOUT},
+        {ResultCode::BUSY, IamResultCode::BUSY},
+        {ResultCode::INVALID_PARAMETERS, IamResultCode::INVALID_PARAMETERS},
+        {ResultCode::LOCKED, IamResultCode::LOCKED},
+        {ResultCode::NOT_ENROLLED, IamResultCode::NOT_ENROLLED},
+        {ResultCode::OPERATION_NOT_SUPPORT, IamResultCode::FAIL},
+        {static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN - 1), IamResultCode::GENERAL_ERROR},
+        {static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN), IamResultCode::GENERAL_ERROR},
         {static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN + 1),
-            static_cast<UserIAM::ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN + 1)}};
+            static_cast<IamResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN + 1)}};
 
     for (const auto &pair : data) {
-        auto executeCallback = MakeShared<MockIExecuteCallback>();
+        auto executeCallback = MakeShared<UserAuth::MockIExecuteCallback>();
         ASSERT_TRUE(executeCallback != nullptr);
         std::vector<uint8_t> testExtraInfo = {1, 2, 3, 4, 5, 6};
         EXPECT_CALL(*executeCallback, OnResult(_, _))

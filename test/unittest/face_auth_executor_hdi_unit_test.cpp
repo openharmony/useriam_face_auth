@@ -34,15 +34,21 @@ namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
+using IamResultCode = OHOS::UserIam::UserAuth::ResultCode;
+using IamExecutorRole = OHOS::UserIam::UserAuth::ExecutorRole;
+using IamExecutorInfo = OHOS::UserIam::UserAuth::ExecutorInfo;
+using IamAuthType = OHOS::UserIam::UserAuth::AuthType;
+using IamExecutorSecureLevel = OHOS::UserIam::UserAuth::ExecutorSecureLevel;
+using IamPropertyMode = OHOS::UserIam::UserAuth::PropertyMode;
 namespace {
-static const std::map<HDF_STATUS, UserIAM::ResultCode> RESULT_CODE_MAP = {
-    {HDF_SUCCESS, UserIAM::ResultCode::SUCCESS},
-    {HDF_FAILURE, UserIAM::ResultCode::GENERAL_ERROR},
-    {HDF_ERR_TIMEOUT, UserIAM::ResultCode::TIMEOUT},
-    {HDF_ERR_QUEUE_FULL, UserIAM::ResultCode::BUSY},
-    {HDF_ERR_DEVICE_BUSY, UserIAM::ResultCode::BUSY},
-    {static_cast<HDF_STATUS>(HDF_ERR_DEVICE_BUSY - 1), UserIAM::ResultCode::GENERAL_ERROR},
-    {static_cast<HDF_STATUS>(HDF_SUCCESS + 1), UserIAM::ResultCode::GENERAL_ERROR},
+static const std::map<HDF_STATUS, IamResultCode> RESULT_CODE_MAP = {
+    {HDF_SUCCESS, IamResultCode::SUCCESS},
+    {HDF_FAILURE, IamResultCode::GENERAL_ERROR},
+    {HDF_ERR_TIMEOUT, IamResultCode::TIMEOUT},
+    {HDF_ERR_QUEUE_FULL, IamResultCode::BUSY},
+    {HDF_ERR_DEVICE_BUSY, IamResultCode::BUSY},
+    {static_cast<HDF_STATUS>(HDF_ERR_DEVICE_BUSY - 1), IamResultCode::GENERAL_ERROR},
+    {static_cast<HDF_STATUS>(HDF_SUCCESS + 1), IamResultCode::GENERAL_ERROR},
 };
 }
 
@@ -83,12 +89,12 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_001, T
         return HDF_SUCCESS;
     });
     FaceAuthExecutorHdi executorHdi(executorProxy);
-    ExecutorInfo info = {};
+    IamExecutorInfo info = {};
     auto ret = executorHdi.GetExecutorInfo(info);
-    EXPECT_TRUE(info.role == UserIAM::ExecutorRole::ALL_IN_ONE);
-    EXPECT_TRUE(info.authType == UserIAM::AuthType::FACE);
-    EXPECT_TRUE(info.esl == UserIAM::ExecutorSecureLevel::ESL0);
-    EXPECT_TRUE(ret == UserIAM::ResultCode::SUCCESS);
+    EXPECT_TRUE(info.executorRole == IamExecutorRole::ALL_IN_ONE);
+    EXPECT_TRUE(info.authType == IamAuthType::FACE);
+    EXPECT_TRUE(info.esl == IamExecutorSecureLevel::ESL0);
+    EXPECT_TRUE(ret == IamResultCode::SUCCESS);
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_002, TestSize.Level0)
@@ -107,7 +113,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_002, T
                 return static_cast<int32_t>(pair.first);
             });
         FaceAuthExecutorHdi executorHdi(executorProxy);
-        ExecutorInfo info = {};
+        IamExecutorInfo info = {};
         auto ret = executorHdi.GetExecutorInfo(info);
         EXPECT_TRUE(ret == pair.second);
     }
@@ -115,12 +121,12 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_002, T
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_003, TestSize.Level0)
 {
-    static const std::map<FaceHdi::AuthType, pair<UserIAM::AuthType, UserIAM::ResultCode>> data = {
-        {FaceHdi::FACE, {UserIAM::AuthType::FACE, UserIAM::ResultCode::SUCCESS}},
+    static const std::map<FaceHdi::AuthType, pair<IamAuthType, IamResultCode>> data = {
+        {FaceHdi::FACE, {IamAuthType::FACE, IamResultCode::SUCCESS}},
         {static_cast<FaceHdi::AuthType>(FaceHdi::FACE + 1),
-            {UserIAM::AuthType::FACE, UserIAM::ResultCode::GENERAL_ERROR}},
+            {IamAuthType::FACE, IamResultCode::GENERAL_ERROR}},
         {static_cast<FaceHdi::AuthType>(FaceHdi::FACE - 1),
-            {UserIAM::AuthType::FACE, UserIAM::ResultCode::GENERAL_ERROR}},
+            {IamAuthType::FACE, IamResultCode::GENERAL_ERROR}},
     };
     for (const auto &pair : data) {
         auto executorProxy = new (std::nothrow) FaceHdi::MockIExecutor();
@@ -136,10 +142,10 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_003, T
                 return HDF_SUCCESS;
             });
         FaceAuthExecutorHdi executorHdi(executorProxy);
-        ExecutorInfo info = {};
+        IamExecutorInfo info = {};
         auto ret = executorHdi.GetExecutorInfo(info);
         EXPECT_TRUE(ret == pair.second.second);
-        if (ret == UserIAM::ResultCode::SUCCESS) {
+        if (ret == IamResultCode::SUCCESS) {
             EXPECT_TRUE(info.authType == pair.second.first);
         }
     }
@@ -147,14 +153,14 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_003, T
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_004, TestSize.Level0)
 {
-    static const std::map<FaceHdi::ExecutorRole, pair<UserIAM::ExecutorRole, UserIAM::ResultCode>> data = {
-        {FaceHdi::ExecutorRole::COLLECTOR, {UserIAM::ExecutorRole::COLLECTOR, UserIAM::ResultCode::SUCCESS}},
-        {FaceHdi::ExecutorRole::VERIFIER, {UserIAM::ExecutorRole::VERIFIER, UserIAM::ResultCode::SUCCESS}},
-        {FaceHdi::ExecutorRole::ALL_IN_ONE, {UserIAM::ExecutorRole::ALL_IN_ONE, UserIAM::ResultCode::SUCCESS}},
+    static const std::map<FaceHdi::ExecutorRole, pair<IamExecutorRole, IamResultCode>> data = {
+        {FaceHdi::ExecutorRole::COLLECTOR, {IamExecutorRole::COLLECTOR, IamResultCode::SUCCESS}},
+        {FaceHdi::ExecutorRole::VERIFIER, {IamExecutorRole::VERIFIER, IamResultCode::SUCCESS}},
+        {FaceHdi::ExecutorRole::ALL_IN_ONE, {IamExecutorRole::ALL_IN_ONE, IamResultCode::SUCCESS}},
         {static_cast<FaceHdi::ExecutorRole>(FaceHdi::ExecutorRole::COLLECTOR - 1),
-            {UserIAM::ExecutorRole::ALL_IN_ONE, UserIAM::ResultCode::GENERAL_ERROR}},
+            {IamExecutorRole::ALL_IN_ONE, IamResultCode::GENERAL_ERROR}},
         {static_cast<FaceHdi::ExecutorRole>(FaceHdi::ExecutorRole::ALL_IN_ONE + 1),
-            {UserIAM::ExecutorRole::ALL_IN_ONE, UserIAM::ResultCode::GENERAL_ERROR}},
+            {IamExecutorRole::ALL_IN_ONE, IamResultCode::GENERAL_ERROR}},
     };
     for (const auto &pair : data) {
         auto executorProxy = new (std::nothrow) FaceHdi::MockIExecutor();
@@ -170,27 +176,27 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_004, T
                 return HDF_SUCCESS;
             });
         FaceAuthExecutorHdi executorHdi(executorProxy);
-        ExecutorInfo info = {};
+        IamExecutorInfo info = {};
         auto ret = executorHdi.GetExecutorInfo(info);
         EXPECT_TRUE(ret == pair.second.second);
-        if (ret == UserIAM::ResultCode::SUCCESS) {
-            EXPECT_TRUE(info.role == pair.second.first);
+        if (ret == IamResultCode::SUCCESS) {
+            EXPECT_TRUE(info.executorRole == pair.second.first);
         }
     }
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_005, TestSize.Level0)
 {
-    static const std::map<FaceHdi::ExecutorSecureLevel, pair<UserIAM::ExecutorSecureLevel, UserIAM::ResultCode>> data =
+    static const std::map<FaceHdi::ExecutorSecureLevel, pair<IamExecutorSecureLevel, IamResultCode>> data =
         {
-            {FaceHdi::ExecutorSecureLevel::ESL0, {UserIAM::ExecutorSecureLevel::ESL0, UserIAM::ResultCode::SUCCESS}},
-            {FaceHdi::ExecutorSecureLevel::ESL1, {UserIAM::ExecutorSecureLevel::ESL1, UserIAM::ResultCode::SUCCESS}},
-            {FaceHdi::ExecutorSecureLevel::ESL2, {UserIAM::ExecutorSecureLevel::ESL2, UserIAM::ResultCode::SUCCESS}},
-            {FaceHdi::ExecutorSecureLevel::ESL3, {UserIAM::ExecutorSecureLevel::ESL3, UserIAM::ResultCode::SUCCESS}},
+            {FaceHdi::ExecutorSecureLevel::ESL0, {IamExecutorSecureLevel::ESL0, IamResultCode::SUCCESS}},
+            {FaceHdi::ExecutorSecureLevel::ESL1, {IamExecutorSecureLevel::ESL1, IamResultCode::SUCCESS}},
+            {FaceHdi::ExecutorSecureLevel::ESL2, {IamExecutorSecureLevel::ESL2, IamResultCode::SUCCESS}},
+            {FaceHdi::ExecutorSecureLevel::ESL3, {IamExecutorSecureLevel::ESL3, IamResultCode::SUCCESS}},
             {static_cast<FaceHdi::ExecutorSecureLevel>(FaceHdi::ExecutorSecureLevel::ESL0 - 1),
-                {UserIAM::ExecutorSecureLevel::ESL3, UserIAM::ResultCode::GENERAL_ERROR}},
+                {IamExecutorSecureLevel::ESL3, IamResultCode::GENERAL_ERROR}},
             {static_cast<FaceHdi::ExecutorSecureLevel>(FaceHdi::ExecutorSecureLevel::ESL3 + 1),
-                {UserIAM::ExecutorSecureLevel::ESL3, UserIAM::ResultCode::GENERAL_ERROR}},
+                {IamExecutorSecureLevel::ESL3, IamResultCode::GENERAL_ERROR}},
         };
     for (const auto &pair : data) {
         auto executorProxy = new (std::nothrow) FaceHdi::MockIExecutor();
@@ -206,10 +212,10 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_005, T
                 return HDF_SUCCESS;
             });
         FaceAuthExecutorHdi executorHdi(executorProxy);
-        ExecutorInfo info = {};
+        IamExecutorInfo info = {};
         auto ret = executorHdi.GetExecutorInfo(info);
         EXPECT_TRUE(ret == pair.second.second);
-        if (ret == UserIAM::ResultCode::SUCCESS) {
+        if (ret == IamResultCode::SUCCESS) {
             EXPECT_TRUE(info.esl == pair.second.first);
         }
     }
@@ -218,9 +224,9 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_005, T
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_006, TestSize.Level0)
 {
     FaceAuthExecutorHdi executorHdi(nullptr);
-    ExecutorInfo info = {};
+    IamExecutorInfo info = {};
     auto ret = executorHdi.GetExecutorInfo(info);
-    EXPECT_TRUE(ret == UserIAM::ResultCode::GENERAL_ERROR);
+    EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetTemplateInfo_001, TestSize.Level0)
@@ -243,7 +249,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetTemplateInfo_001, T
     FaceAuthExecutorHdi executorHdi(executorProxy);
     UserAuth::TemplateInfo info = {};
     auto ret = executorHdi.GetTemplateInfo(0, info);
-    EXPECT_TRUE(ret == UserIAM::ResultCode::SUCCESS);
+    EXPECT_TRUE(ret == IamResultCode::SUCCESS);
     EXPECT_TRUE(info.executorType == data.executorType);
     EXPECT_TRUE(info.freezingTime == data.freezingTime);
     EXPECT_TRUE(info.remainTimes == data.remainTimes);
@@ -270,7 +276,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetTemplateInfo_003, T
     FaceAuthExecutorHdi executorHdi(nullptr);
     UserAuth::TemplateInfo info = {};
     auto ret = executorHdi.GetTemplateInfo(0, info);
-    EXPECT_TRUE(ret == UserIAM::ResultCode::GENERAL_ERROR);
+    EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_OnRegisterFinish_001, TestSize.Level0)
@@ -295,7 +301,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_OnRegisterFinish_002, 
 {
     FaceAuthExecutorHdi executorHdi(nullptr);
     auto ret = executorHdi.OnRegisterFinish(std::vector<uint64_t>(), std::vector<uint8_t>(), std::vector<uint8_t>());
-    EXPECT_TRUE(ret == UserIAM::ResultCode::GENERAL_ERROR);
+    EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Enroll_001, TestSize.Level0)
@@ -322,7 +328,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Enroll_002, TestSize.L
     EXPECT_CALL(*executorProxy, Enroll(_, _, _)).Times(Exactly(0));
     FaceAuthExecutorHdi executorHdi(executorProxy);
     auto ret = executorHdi.Enroll(0, 0, std::vector<uint8_t>(), nullptr);
-    EXPECT_TRUE(ret == UserIAM::ResultCode::GENERAL_ERROR);
+    EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Enroll_003, TestSize.Level0)
@@ -331,7 +337,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Enroll_003, TestSize.L
     auto executeCallback = MakeShared<UserAuth::MockIExecuteCallback>();
     ASSERT_TRUE(executeCallback != nullptr);
     auto ret = executorHdi.Enroll(0, 0, std::vector<uint8_t>(), executeCallback);
-    EXPECT_TRUE(ret == UserIAM::ResultCode::GENERAL_ERROR);
+    EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Authenticate_001, TestSize.Level0)
@@ -359,7 +365,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Authenticate_002, Test
     EXPECT_CALL(*executorProxy, Authenticate(_, _, _, _)).Times(Exactly(0));
     FaceAuthExecutorHdi executorHdi(executorProxy);
     auto ret = executorHdi.Authenticate(0, 0, std::vector<uint64_t>(), std::vector<uint8_t>(), nullptr);
-    EXPECT_TRUE(ret == UserIAM::ResultCode::GENERAL_ERROR);
+    EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Authenticate_003, TestSize.Level0)
@@ -368,7 +374,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Authenticate_003, Test
     auto executeCallback = MakeShared<UserAuth::MockIExecuteCallback>();
     ASSERT_TRUE(executeCallback != nullptr);
     auto ret = executorHdi.Authenticate(0, 0, std::vector<uint64_t>(), std::vector<uint8_t>(), executeCallback);
-    EXPECT_TRUE(ret == UserIAM::ResultCode::GENERAL_ERROR);
+    EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Identify_001, TestSize.Level0)
 {
@@ -394,7 +400,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Identify_002, TestSize
     EXPECT_CALL(*executorProxy, Identify(_, _, _)).Times(Exactly(0));
     FaceAuthExecutorHdi executorHdi(executorProxy);
     auto ret = executorHdi.Identify(0, 0, std::vector<uint8_t>(), nullptr);
-    EXPECT_TRUE(ret == UserIAM::ResultCode::GENERAL_ERROR);
+    EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Identify_003, TestSize.Level0)
@@ -403,7 +409,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Identify_003, TestSize
     auto executeCallback = MakeShared<UserAuth::MockIExecuteCallback>();
     ASSERT_TRUE(executeCallback != nullptr);
     auto ret = executorHdi.Identify(0, 0, std::vector<uint8_t>(), executeCallback);
-    EXPECT_TRUE(ret == UserIAM::ResultCode::GENERAL_ERROR);
+    EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Delete_001, TestSize.Level0)
@@ -424,7 +430,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Delete_002, TestSize.L
 {
     FaceAuthExecutorHdi executorHdi(nullptr);
     auto ret = executorHdi.Delete(std::vector<uint64_t>());
-    EXPECT_TRUE(ret == UserIAM::ResultCode::GENERAL_ERROR);
+    EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Cancel_001, TestSize.Level0)
@@ -445,7 +451,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Cancel_002, TestSize.L
 {
     FaceAuthExecutorHdi executorHdi(nullptr);
     auto ret = executorHdi.Cancel(0);
-    EXPECT_TRUE(ret == UserIAM::ResultCode::GENERAL_ERROR);
+    EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_001, TestSize.Level0)
@@ -454,8 +460,8 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_001, TestS
     auto executeCallback = MakeShared<UserAuth::MockIExecuteCallback>();
     ASSERT_TRUE(executeCallback != nullptr);
     auto ret =
-        executorHdi.SendCommand(UserAuth::AuthPropertyMode::PROPERMODE_FREEZE, std::vector<uint8_t>(), executeCallback);
-    EXPECT_TRUE(ret == UserIAM::ResultCode::GENERAL_ERROR);
+        executorHdi.SendCommand(IamPropertyMode::PROPERTY_MODE_FREEZE, std::vector<uint8_t>(), executeCallback);
+    EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_002, TestSize.Level0)
@@ -465,29 +471,29 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_002, TestS
     EXPECT_CALL(*executorProxy, SendCommand(_, _, _)).Times(Exactly(0));
     FaceAuthExecutorHdi executorHdi(executorProxy);
 
-    auto ret = executorHdi.SendCommand(UserAuth::AuthPropertyMode::PROPERMODE_FREEZE, std::vector<uint8_t>(), nullptr);
-    EXPECT_TRUE(ret == UserIAM::ResultCode::GENERAL_ERROR);
+    auto ret = executorHdi.SendCommand(IamPropertyMode::PROPERTY_MODE_FREEZE, std::vector<uint8_t>(), nullptr);
+    EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_003, TestSize.Level0)
 {
-    static const std::map<UserAuth::AuthPropertyMode, pair<FaceHdi::CommandId, UserIAM::ResultCode>> data = {
-        {UserAuth::AuthPropertyMode::PROPERMODE_FREEZE,
-            {FaceHdi::CommandId::LOCK_TEMPLATE, UserIAM::ResultCode::SUCCESS}},
-        {UserAuth::AuthPropertyMode::PROPERMODE_UNFREEZE,
-            {FaceHdi::CommandId::UNLOCK_TEMPLATE, UserIAM::ResultCode::SUCCESS}},
-        {static_cast<UserAuth::AuthPropertyMode>(UserAuth::AuthPropertyMode::PROPERMODE_FREEZE - 1),
-            {FaceHdi::CommandId::UNLOCK_TEMPLATE, UserIAM::ResultCode::INVALID_PARAMETERS}},
-        {static_cast<UserAuth::AuthPropertyMode>(UserAuth::AuthPropertyMode::PROPERMODE_UNFREEZE + 1),
-            {FaceHdi::CommandId::UNLOCK_TEMPLATE, UserIAM::ResultCode::INVALID_PARAMETERS}},
-        {static_cast<UserAuth::AuthPropertyMode>(UserAuth::VENDOR_COMMAND_BEGIN),
-            {FaceHdi::CommandId::UNLOCK_TEMPLATE, UserIAM::ResultCode::INVALID_PARAMETERS}},
-        {static_cast<UserAuth::AuthPropertyMode>(UserAuth::VENDOR_COMMAND_BEGIN + 1),
-            {static_cast<FaceHdi::CommandId>(UserAuth::VENDOR_COMMAND_BEGIN + 1), UserIAM::ResultCode::SUCCESS}}};
+    static const std::map<IamPropertyMode, pair<FaceHdi::CommandId, IamResultCode>> data = {
+        {IamPropertyMode::PROPERTY_MODE_FREEZE,
+            {FaceHdi::CommandId::LOCK_TEMPLATE, IamResultCode::SUCCESS}},
+        {IamPropertyMode::PROPERTY_MODE_UNFREEZE,
+            {FaceHdi::CommandId::UNLOCK_TEMPLATE, IamResultCode::SUCCESS}},
+        {static_cast<IamPropertyMode>(IamPropertyMode::PROPERTY_MODE_FREEZE - 1),
+            {FaceHdi::CommandId::UNLOCK_TEMPLATE, IamResultCode::INVALID_PARAMETERS}},
+        {static_cast<IamPropertyMode>(IamPropertyMode::PROPERTY_MODE_UNFREEZE + 1),
+            {FaceHdi::CommandId::UNLOCK_TEMPLATE, IamResultCode::INVALID_PARAMETERS}},
+        {static_cast<IamPropertyMode>(FaceHdi::VENDOR_COMMAND_BEGIN),
+            {FaceHdi::CommandId::UNLOCK_TEMPLATE, IamResultCode::INVALID_PARAMETERS}},
+        {static_cast<IamPropertyMode>(FaceHdi::VENDOR_COMMAND_BEGIN + 1),
+            {static_cast<FaceHdi::CommandId>(FaceHdi::VENDOR_COMMAND_BEGIN + 1), IamResultCode::SUCCESS}}};
     for (const auto &pair : data) {
         auto executorProxy = new (std::nothrow) FaceHdi::MockIExecutor();
         ASSERT_TRUE(executorProxy != nullptr);
-        if (pair.second.second == UserIAM::ResultCode::SUCCESS) {
+        if (pair.second.second == IamResultCode::SUCCESS) {
             EXPECT_CALL(*executorProxy, SendCommand(_, _, _))
                 .Times(Exactly(1))
                 .WillOnce([&pair](int32_t commandId, const std::vector<uint8_t> &extraInfo,
@@ -519,7 +525,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_004, TestS
         auto executeCallback = MakeShared<UserAuth::MockIExecuteCallback>();
         ASSERT_TRUE(executeCallback != nullptr);
         auto ret = executorHdi.SendCommand(
-            UserAuth::AuthPropertyMode::PROPERMODE_FREEZE, std::vector<uint8_t>(), executeCallback);
+            IamPropertyMode::PROPERTY_MODE_FREEZE, std::vector<uint8_t>(), executeCallback);
         EXPECT_TRUE(ret == pair.second);
     }
 }
