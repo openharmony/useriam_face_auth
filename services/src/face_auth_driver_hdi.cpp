@@ -31,7 +31,7 @@
 #include "v1_0/iexecutor.h"
 #include "v1_0/iface_auth_interface.h"
 
-#define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_SA
+#define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
 using namespace OHOS::HDI::FaceAuth::V1_0;
 
 namespace OHOS {

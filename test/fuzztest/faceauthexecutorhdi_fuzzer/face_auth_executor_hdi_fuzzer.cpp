@@ -35,7 +35,7 @@
 #include "v1_0/face_auth_types.h"
 #include "v1_0/iexecutor.h"
 
-#define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_SA
+#define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
 
 #undef private
 

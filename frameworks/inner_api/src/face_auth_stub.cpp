@@ -35,7 +35,7 @@
 #include "face_auth_defines.h"
 #include "iface_auth.h"
 
-#define LOG_LABEL UserIAM::Common::LABEL_FACE_AUTH_SDK
+#define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SDK
 
 namespace OHOS {
 namespace UserIAM {
