@@ -31,6 +31,7 @@ namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
+namespace UserAuth = OHOS::UserIam::UserAuth;
 class FaceAuthExecutorHdi : public UserAuth::IAuthExecutorHdi, public NoCopyable {
 public:
     explicit FaceAuthExecutorHdi(sptr<FaceHdi::IExecutor> executorProxy);
