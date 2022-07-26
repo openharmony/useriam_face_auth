@@ -29,6 +29,7 @@
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
+namespace UserAuth = OHOS::UserIam::UserAuth;
 class FaceAuthDriverHdi : public UserAuth::IAuthDriverHdi, public NoCopyable {
 public:
     FaceAuthDriverHdi(std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter);
