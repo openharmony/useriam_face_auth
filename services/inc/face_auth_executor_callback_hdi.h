@@ -28,6 +28,7 @@ namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
+namespace UserAuth = OHOS::UserIam::UserAuth;
 class FaceAuthExecutorCallbackHdi : public FaceHdi::IExecutorCallback, public NoCopyable {
 public:
     explicit FaceAuthExecutorCallbackHdi(std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback);

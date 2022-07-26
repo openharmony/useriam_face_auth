@@ -43,6 +43,7 @@
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
+namespace UserAuth = OHOS::UserIam::UserAuth;
 const bool REGISTER_RESULT = SystemAbility::MakeAndRegisterAbility(FaceAuthService::GetInstance().get());
 std::mutex FaceAuthService::mutex_;
 std::shared_ptr<FaceAuthService> FaceAuthService::instance_ = nullptr;
@@ -105,7 +106,7 @@ void FaceAuthService::StartDriverManager()
     const std::map<std::string, UserAuth::HdiConfig> hdiName2Config = {
         {"face_auth_interface_service", {faceAuthDefaultHdiId, faceAuthDefaultHdi}},
     };
-    int32_t ret = UserIAM::UserAuth::IDriverManager::Start(hdiName2Config);
+    int32_t ret = UserAuth::IDriverManager::Start(hdiName2Config);
     if (ret != FACEAUTH_SUCCESS) {
         IAM_LOGE("start driver manager failed");
     }
