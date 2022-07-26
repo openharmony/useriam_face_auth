@@ -23,7 +23,7 @@
 namespace OHOS {
 namespace UserIAM {
 namespace UserAuth {
-class MockIExecuteCallback : public IExecuteCallback {
+class MockIExecuteCallback : public UserIam::UserAuth::IExecuteCallback {
 public:
     MockIExecuteCallback() = default;
     virtual ~MockIExecuteCallback() = default;

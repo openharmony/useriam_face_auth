@@ -43,6 +43,7 @@ namespace FaceAuth {
 using IamResultCode = OHOS::UserIam::UserAuth::ResultCode;
 using IamExecutorRole = UserIam::UserAuth::ExecutorRole;
 using IamExecutorInfo = UserIam::UserAuth::ExecutorInfo;
+namespace UserAuth = OHOS::UserIam::UserAuth;
 FaceAuthExecutorHdi::FaceAuthExecutorHdi(sptr<FaceHdi::IExecutor> executorProxy) : executorProxy_(executorProxy) {};
 
 IamResultCode FaceAuthExecutorHdi::GetExecutorInfo(IamExecutorInfo &info)
