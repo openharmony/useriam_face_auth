@@ -44,6 +44,7 @@ namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
 namespace UserAuth = OHOS::UserIam::UserAuth;
+using namespace OHOS::UserIam;
 const bool REGISTER_RESULT = SystemAbility::MakeAndRegisterAbility(FaceAuthService::GetInstance().get());
 std::mutex FaceAuthService::mutex_;
 std::shared_ptr<FaceAuthService> FaceAuthService::instance_ = nullptr;
