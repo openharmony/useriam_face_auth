@@ -28,7 +28,7 @@
 
 using namespace testing;
 using namespace testing::ext;
-using namespace OHOS::UserIAM::Common;
+using namespace OHOS::UserIam::Common;
 namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
 
 namespace OHOS {
