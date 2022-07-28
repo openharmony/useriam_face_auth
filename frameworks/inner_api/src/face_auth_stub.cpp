@@ -40,6 +40,7 @@
 namespace OHOS {
 namespace UserIAM {
 namespace FaceAuth {
+using namespace OHOS::UserIam;
 FaceAuthStub::FaceAuthStub()
 {
     IAM_LOGI("start");
