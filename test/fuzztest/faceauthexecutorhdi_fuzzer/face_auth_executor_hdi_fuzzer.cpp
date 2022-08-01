@@ -40,7 +40,6 @@
 #undef private
 
 using namespace std;
-using namespace OHOS::UserIAM::Common;
 using namespace OHOS::UserIam::Common;
 using namespace OHOS::UserIam::UserAuth;
 namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
