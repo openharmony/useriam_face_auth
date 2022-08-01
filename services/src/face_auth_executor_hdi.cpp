@@ -189,8 +189,8 @@ IamResultCode FaceAuthExecutorHdi::SendCommand(UserIam::UserAuth::PropertyMode c
 
 IamResultCode FaceAuthExecutorHdi::MoveHdiExecutorInfo(FaceHdi::ExecutorInfo &in, IamExecutorInfo &out)
 {
-    out.executorSensorHint = static_cast<int32_t>(in.sensorId);
-    out.executorMatcher = static_cast<int32_t>(in.executorType);
+    out.executorSensorHint = static_cast<uint32_t>(in.sensorId);
+    out.executorMatcher = in.executorType;
     IamResultCode result = ConvertExecutorRole(in.executorRole, out.executorRole);
     if (result != IamResultCode::SUCCESS) {
         IAM_LOGE("ConvertExecutorRole fail result %{public}d", result);
