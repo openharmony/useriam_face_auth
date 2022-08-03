@@ -33,7 +33,7 @@
 #define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SDK
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 FaceAuthProxy::FaceAuthProxy(const sptr<IRemoteObject> &object) : IRemoteProxy<IFaceAuth>(object)
 {
@@ -80,5 +80,5 @@ bool FaceAuthProxy::SendRequest(uint32_t code, MessageParcel &data, MessageParce
     return true;
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS

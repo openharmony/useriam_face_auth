@@ -19,13 +19,13 @@
 #include "ibuffer_producer.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 class FaceAuthInnerKit {
 public:
     static int32_t SetBufferProducer(sptr<IBufferProducer> producer);
 };
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 #endif // FACE_AUTH_INNERKIT_H

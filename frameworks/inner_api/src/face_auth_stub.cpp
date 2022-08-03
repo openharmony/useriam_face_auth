@@ -38,7 +38,7 @@
 #define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SDK
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 using namespace OHOS::UserIam;
 FaceAuthStub::FaceAuthStub()
@@ -84,5 +84,5 @@ int32_t FaceAuthStub::OnRemoteRequest(uint32_t code, MessageParcel &data, Messag
     return (this->*requestFunc)(data, reply);
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS

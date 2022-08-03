@@ -21,12 +21,12 @@
 #include "face_auth_client.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 int32_t FaceAuthInnerKit::SetBufferProducer(sptr<IBufferProducer> producer)
 {
     return Singleton<FaceAuthClient>::GetInstance().SetBufferProducer(producer);
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS

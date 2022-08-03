@@ -35,7 +35,7 @@
 using namespace std;
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 namespace {
 auto g_service = FaceAuthService::GetInstance();
@@ -85,12 +85,12 @@ void FaceAuthServiceFuzzTest(const uint8_t *data, size_t size)
 }
 } // namespace
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 
 /* Fuzzer entry point */
 extern "C" int32_t LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 {
-    OHOS::UserIAM::FaceAuth::FaceAuthServiceFuzzTest(data, size);
+    OHOS::UserIam::FaceAuth::FaceAuthServiceFuzzTest(data, size);
     return 0;
 }

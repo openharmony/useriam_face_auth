@@ -25,7 +25,7 @@
 #include "v1_0/executor_callback_stub.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
 namespace UserAuth = OHOS::UserIam::UserAuth;
@@ -44,7 +44,7 @@ private:
     std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback_;
 };
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 
 #endif // FACE_AUTH_EXECUTOR_CALLBACK_HDI

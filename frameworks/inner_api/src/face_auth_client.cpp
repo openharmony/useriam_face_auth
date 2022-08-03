@@ -33,7 +33,7 @@
 #define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SDK
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 int32_t FaceAuthClient::SetBufferProducer(sptr<IBufferProducer> &producer)
 {
@@ -88,5 +88,5 @@ sptr<IFaceAuth> FaceAuthClient::GetFaceAuthProxy()
     return faceAuthProxy_;
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS

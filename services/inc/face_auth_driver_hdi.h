@@ -27,7 +27,7 @@
 #include "face_auth_interface_adapter.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 namespace UserAuth = OHOS::UserIam::UserAuth;
 class FaceAuthDriverHdi : public UserAuth::IAuthDriverHdi, public NoCopyable {
@@ -41,7 +41,7 @@ private:
     std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter_;
 };
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 
 #endif // FACE_AUTH_DRIVER_HDI

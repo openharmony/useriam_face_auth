@@ -31,7 +31,7 @@
 using namespace std;
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 namespace {
 FaceAuthManager g_faceAuthManager;
@@ -133,5 +133,5 @@ extern "C" __attribute__((constructor)) void RegisterModule(void)
     napi_module_register(&module);
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS

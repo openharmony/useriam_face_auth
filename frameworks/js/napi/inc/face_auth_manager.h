@@ -21,7 +21,7 @@
 #include "face_auth_defines.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 class FaceAuthManager {
 public:
@@ -30,6 +30,6 @@ public:
     FaceAuthRet SetSurfaceId(napi_env env, napi_callback_info info);
 };
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 #endif // FACE_AUTH_MANAGER_H

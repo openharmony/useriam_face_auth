@@ -25,7 +25,7 @@
 #include "face_auth_defines.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 class IFaceAuth : public IRemoteBroker {
 public:
@@ -43,7 +43,7 @@ public:
     };
 };
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 
 #endif // IFACE_AUTH_H

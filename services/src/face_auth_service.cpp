@@ -41,7 +41,7 @@
 #define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 namespace UserAuth = OHOS::UserIam::UserAuth;
 using namespace OHOS::UserIam;
@@ -113,5 +113,5 @@ void FaceAuthService::StartDriverManager()
     }
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
