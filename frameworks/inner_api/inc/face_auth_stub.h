@@ -24,7 +24,7 @@
 #include "iface_auth.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 class FaceAuthStub : public IRemoteStub<IFaceAuth>, public NoCopyable {
 public:
@@ -39,7 +39,7 @@ private:
     int32_t FaceAuthSetBufferProducer(MessageParcel &data, MessageParcel &reply);
 };
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 
 #endif // FACE_AUTH_STUB_H

@@ -20,12 +20,12 @@
 #include "v1_0/iface_auth_interface.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 sptr<IFaceAuthInterface> FaceAuthInterfaceAdapter::Get()
 {
     return IFaceAuthInterface::Get();
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS

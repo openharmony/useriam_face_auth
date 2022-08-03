@@ -21,7 +21,7 @@
 #include "iexecute_callback.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace UserAuth {
 class MockIExecuteCallback : public UserIam::UserAuth::IExecuteCallback {
 public:
@@ -33,7 +33,7 @@ public:
     MOCK_METHOD2(OnAcquireInfo, void(int32_t acquire, const std::vector<uint8_t> &extraInfo));
 };
 } // namespace UserAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 
 #endif // MOCK_IEXECUTE_CALLBACK_H

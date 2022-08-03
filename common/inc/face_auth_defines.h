@@ -17,7 +17,7 @@
 #define COMMON_H
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 #include <cstdint>
 
@@ -81,6 +81,6 @@ enum ResultCode {
     VENDOR_RESULT_CODE_BEGIN = 10000
 };
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 #endif // COMMON_H

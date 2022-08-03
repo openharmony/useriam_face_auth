@@ -33,7 +33,7 @@
 #define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 namespace UserAuth = OHOS::UserIam::UserAuth;
 FaceAuthExecutorCallbackHdi::FaceAuthExecutorCallbackHdi(std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback)
@@ -92,5 +92,5 @@ UserIam::UserAuth::ResultCode FaceAuthExecutorCallbackHdi::ConvertResultCode(con
     return out;
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
