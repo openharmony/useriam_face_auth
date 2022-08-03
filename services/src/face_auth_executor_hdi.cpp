@@ -38,7 +38,7 @@
 #define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 using IamResultCode = OHOS::UserIam::UserAuth::ResultCode;
 using IamExecutorRole = UserIam::UserAuth::ExecutorRole;
@@ -309,5 +309,5 @@ IamResultCode FaceAuthExecutorHdi::ConvertResultCode(const int32_t in)
     return out;
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS

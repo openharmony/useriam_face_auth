@@ -31,7 +31,7 @@ using namespace OHOS::HDI::FaceAuth::V1_0;
 using namespace OHOS::UserIam::Common;
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 class FaceAuthDriverHdiUnitTest : public testing::Test {
 public:
@@ -197,5 +197,5 @@ HWTEST_F(FaceAuthDriverHdiUnitTest, FaceAuthDriverHdi_GetExecutorListTest_008, T
     EXPECT_TRUE(executorList.size() == 0);
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS

@@ -31,7 +31,7 @@ using namespace OHOS::UserIam::UserAuth;
 using namespace OHOS::UserIam::Common;
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 using IamResultCode = OHOS::UserIam::UserAuth::ResultCode;
 class FaceAuthExecutorCallbackHdiUnitTest : public testing::Test {
@@ -60,7 +60,7 @@ void FaceAuthExecutorCallbackHdiUnitTest ::TearDown()
 
 HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnAcquireInfo_001, TestSize.Level0)
 {
-    auto executeCallback = MakeShared<UserIAM::UserAuth::MockIExecuteCallback>();
+    auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
     ASSERT_TRUE(executeCallback != nullptr);
     const int32_t testAcquire = 5;
     const std::vector<uint8_t> testExtraInfo = {1, 2, 3, 4, 5, 6};
@@ -91,7 +91,7 @@ HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnResult_
             static_cast<IamResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN + 1)}};
 
     for (const auto &pair : data) {
-        auto executeCallback = MakeShared<UserIAM::UserAuth::MockIExecuteCallback>();
+        auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
         ASSERT_TRUE(executeCallback != nullptr);
         std::vector<uint8_t> testExtraInfo = {1, 2, 3, 4, 5, 6};
         EXPECT_CALL(*executeCallback, OnResult(_, _))
@@ -106,5 +106,5 @@ HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnResult_
     }
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS

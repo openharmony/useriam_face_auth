@@ -19,7 +19,7 @@
 #include "v1_0/iface_auth_interface.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 using namespace OHOS::HDI::FaceAuth::V1_0;
 class FaceAuthInterfaceAdapter {
@@ -30,7 +30,7 @@ public:
     virtual sptr<IFaceAuthInterface> Get();
 };
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 
 #endif // FACE_AUTH_INTERFACE_ADAPTER

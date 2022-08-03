@@ -23,7 +23,7 @@
 #include "iface_auth.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 class FaceAuthClient : public IRemoteObject::DeathRecipient, public Singleton<FaceAuthClient> {
 public:
@@ -37,7 +37,7 @@ private:
     sptr<IFaceAuth> faceAuthProxy_;
 };
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 
 #endif // FACE_AUTH_CLIENT_H

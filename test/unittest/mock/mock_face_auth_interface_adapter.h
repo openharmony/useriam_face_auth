@@ -21,7 +21,7 @@
 #include "gmock/gmock.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 using namespace OHOS::HDI::FaceAuth::V1_0;
 class MockFaceAuthInterfaceAdapter : public FaceAuthInterfaceAdapter {
@@ -32,7 +32,7 @@ public:
     MOCK_METHOD0(Get, sptr<IFaceAuthInterface>());
 };
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 
 #endif // MOCK_FACE_AUTH_INTERFACE_ADAPTER
