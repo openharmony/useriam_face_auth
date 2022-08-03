@@ -32,7 +32,7 @@ using namespace OHOS::UserIam::Common;
 namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 using IamResultCode = OHOS::UserIam::UserAuth::ResultCode;
 using IamExecutorRole = OHOS::UserIam::UserAuth::ExecutorRole;
@@ -314,7 +314,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Enroll_001, TestSize.L
             .WillOnce([&pair](uint64_t scheduleId, const std::vector<uint8_t> &extraInfo,
                           const sptr<FaceHdi::IExecutorCallback> &callbackObj) { return pair.first; });
         FaceAuthExecutorHdi executorHdi(executorProxy);
-        auto executeCallback = MakeShared<UserIAM::UserAuth::MockIExecuteCallback>();
+        auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
         ASSERT_TRUE(executeCallback != nullptr);
         auto ret = executorHdi.Enroll(0, 0, std::vector<uint8_t>(), executeCallback);
         EXPECT_TRUE(ret == pair.second);
@@ -334,7 +334,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Enroll_002, TestSize.L
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Enroll_003, TestSize.Level0)
 {
     FaceAuthExecutorHdi executorHdi(nullptr);
-    auto executeCallback = MakeShared<UserIAM::UserAuth::MockIExecuteCallback>();
+    auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
     ASSERT_TRUE(executeCallback != nullptr);
     auto ret = executorHdi.Enroll(0, 0, std::vector<uint8_t>(), executeCallback);
     EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
@@ -351,7 +351,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Authenticate_001, Test
                           const std::vector<uint8_t> &extraInfo,
                           const sptr<FaceHdi::IExecutorCallback> &callbackObj) { return pair.first; });
         FaceAuthExecutorHdi executorHdi(executorProxy);
-        auto executeCallback = MakeShared<UserIAM::UserAuth::MockIExecuteCallback>();
+        auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
         ASSERT_TRUE(executeCallback != nullptr);
         auto ret = executorHdi.Authenticate(0, 0, std::vector<uint64_t>(), std::vector<uint8_t>(), executeCallback);
         EXPECT_TRUE(ret == pair.second);
@@ -371,7 +371,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Authenticate_002, Test
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Authenticate_003, TestSize.Level0)
 {
     FaceAuthExecutorHdi executorHdi(nullptr);
-    auto executeCallback = MakeShared<UserIAM::UserAuth::MockIExecuteCallback>();
+    auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
     ASSERT_TRUE(executeCallback != nullptr);
     auto ret = executorHdi.Authenticate(0, 0, std::vector<uint64_t>(), std::vector<uint8_t>(), executeCallback);
     EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
@@ -386,7 +386,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Identify_001, TestSize
             .WillOnce([&pair](uint64_t scheduleId, const std::vector<uint8_t> &extraInfo,
                           const sptr<FaceHdi::IExecutorCallback> &callbackObj) { return pair.first; });
         FaceAuthExecutorHdi executorHdi(executorProxy);
-        auto executeCallback = MakeShared<UserIAM::UserAuth::MockIExecuteCallback>();
+        auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
         ASSERT_TRUE(executeCallback != nullptr);
         auto ret = executorHdi.Identify(0, 0, std::vector<uint8_t>(), executeCallback);
         EXPECT_TRUE(ret == pair.second);
@@ -406,7 +406,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Identify_002, TestSize
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Identify_003, TestSize.Level0)
 {
     FaceAuthExecutorHdi executorHdi(nullptr);
-    auto executeCallback = MakeShared<UserIAM::UserAuth::MockIExecuteCallback>();
+    auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
     ASSERT_TRUE(executeCallback != nullptr);
     auto ret = executorHdi.Identify(0, 0, std::vector<uint8_t>(), executeCallback);
     EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
@@ -457,7 +457,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Cancel_002, TestSize.L
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_001, TestSize.Level0)
 {
     FaceAuthExecutorHdi executorHdi(nullptr);
-    auto executeCallback = MakeShared<UserIAM::UserAuth::MockIExecuteCallback>();
+    auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
     ASSERT_TRUE(executeCallback != nullptr);
     auto ret =
         executorHdi.SendCommand(IamPropertyMode::PROPERTY_MODE_FREEZE, std::vector<uint8_t>(), executeCallback);
@@ -505,7 +505,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_003, TestS
             EXPECT_CALL(*executorProxy, SendCommand(_, _, _)).Times(Exactly(0));
         }
         FaceAuthExecutorHdi executorHdi(executorProxy);
-        auto executeCallback = MakeShared<UserIAM::UserAuth::MockIExecuteCallback>();
+        auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
         ASSERT_TRUE(executeCallback != nullptr);
         auto ret = executorHdi.SendCommand(pair.first, std::vector<uint8_t>(), executeCallback);
         EXPECT_TRUE(ret == pair.second.second);
@@ -522,7 +522,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_004, TestS
             .WillOnce([&pair](int32_t commandId, const std::vector<uint8_t> &extraInfo,
                           const sptr<FaceHdi::IExecutorCallback> &callbackObj) { return pair.first; });
         FaceAuthExecutorHdi executorHdi(executorProxy);
-        auto executeCallback = MakeShared<UserIAM::UserAuth::MockIExecuteCallback>();
+        auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
         ASSERT_TRUE(executeCallback != nullptr);
         auto ret = executorHdi.SendCommand(
             IamPropertyMode::PROPERTY_MODE_FREEZE, std::vector<uint8_t>(), executeCallback);
@@ -530,5 +530,5 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_004, TestS
     }
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS

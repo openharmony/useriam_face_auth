@@ -24,7 +24,7 @@
 #include "iface_auth.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 class FaceAuthProxy : public IRemoteProxy<IFaceAuth>, public NoCopyable {
 public:
@@ -39,7 +39,7 @@ private:
     static inline BrokerDelegator<FaceAuthProxy> delegator_;
 };
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 
 #endif // FACE_AUTH_PROXY_H

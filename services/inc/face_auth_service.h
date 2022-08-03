@@ -25,7 +25,7 @@
 #include "face_auth_stub.h"
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 class FaceAuthService : public SystemAbility, public FaceAuthStub {
     DECLEAR_SYSTEM_ABILITY(FaceAuthService);
@@ -49,7 +49,7 @@ private:
     sptr<IBufferProducer> bufferProducer_;
 };
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
 
 #endif // FACE_AUTH_SERVICE_H

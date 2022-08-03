@@ -35,7 +35,7 @@
 using namespace OHOS::HDI::FaceAuth::V1_0;
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 namespace UserAuth = OHOS::UserIam::UserAuth;
 using namespace OHOS::UserIam;
@@ -73,5 +73,5 @@ void FaceAuthDriverHdi::GetExecutorList(std::vector<std::shared_ptr<UserAuth::IA
     }
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS

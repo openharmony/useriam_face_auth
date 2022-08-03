@@ -40,7 +40,7 @@
 using namespace std;
 
 namespace OHOS {
-namespace UserIAM {
+namespace UserIam {
 namespace FaceAuth {
 namespace {
 FaceAuthRet GetOneParaArgv(napi_env env, napi_callback_info info, napi_value &argv)
@@ -118,5 +118,5 @@ FaceAuthRet FaceAuthManager::SetSurfaceId(napi_env env, napi_callback_info info)
     return FACEAUTH_SUCCESS;
 }
 } // namespace FaceAuth
-} // namespace UserIAM
+} // namespace UserIam
 } // namespace OHOS
