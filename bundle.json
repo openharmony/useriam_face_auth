@@ -28,7 +28,7 @@
           "ipc:ipc_core",
           "safwk:system_ability_fwk",
           "samgr:samgr_proxy",
-          "utils_base:utils"
+          "c_utils:utils"
         ]
       },
       "build": {
