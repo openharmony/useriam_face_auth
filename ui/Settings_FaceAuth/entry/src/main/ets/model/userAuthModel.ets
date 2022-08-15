@@ -42,7 +42,7 @@ class UserAuthModel {
     let ret = new Promise<Uint8Array>((resolve)=> {
       this.userAuthManager.auth(challenge, 1, 10000, {
         onResult: (result, extraInfo) => {
-          Log.info(this.TAG, 'authPin onResult: ' + result + ' extraInfo: ' + JSON.stringify(extraInfo));
+          Log.info(this.TAG, 'authPin onResult: ' + result);
           this.pinAuthManger.unregisterInputer();
           if ((result == 0) && extraInfo.token && (Object.keys(extraInfo.token).length > 0) ) {
             resolve(extraInfo.token);
