@@ -17,6 +17,7 @@ import Ability from '@ohos.application.Ability'
 import Log from '../utils/log'
 import UserIdmModel from '../model/userIdmModel'
 import CommonController from '../controller/commonController'
+import EnrollingController from '../controller/enrollingController'
 
 export default class MainAbility extends Ability {
   private TAG: string = "MainAbility:"
@@ -28,6 +29,7 @@ export default class MainAbility extends Ability {
 
   onDestroy() {
     Log.info(this.TAG, 'Application onDestroy+')
+    EnrollingController.clear()
     UserIdmModel.destroy()
     Log.info(this.TAG, 'Application onDestroy-')
   }
