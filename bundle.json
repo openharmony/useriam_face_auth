@@ -32,11 +32,17 @@
         ]
       },
       "build": {
-        "sub_component": [
-          "//base/useriam/face_auth/services:faceauthservice",
-          "//base/useriam/face_auth/frameworks/js/napi:faceauth",
-          "//base/useriam/face_auth/sa_profile:faceauth_sa_profile"
-        ],
+        "group_type": {
+          "base_group": [
+          ],
+          "fwk_group": [
+            "//base/useriam/face_auth/frameworks/js/napi:faceauth"
+          ],
+          "service_group": [
+            "//base/useriam/face_auth/sa_profile:faceauth_sa_profile",
+            "//base/useriam/face_auth/services:faceauthservice"
+          ]
+        },
         "inner_kits": [
           {
             "type": "so",
