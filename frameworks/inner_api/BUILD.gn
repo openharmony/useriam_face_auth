@@ -37,16 +37,16 @@ ohos_shared_library("faceauth_framework") {
     "//base/useriam/face_auth/common/inc",
   ]
 
-  if (ability_runtime_graphics) {
-    deps = [ "//foundation/graphic/graphic_2d:libsurface" ]
-  }
-
   external_deps = [
     "c_utils:utils",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
     "samgr:samgr_proxy",
   ]
+
+  if (ability_runtime_graphics) {
+    external_deps += [ "graphic_standard:surface" ]
+  }
 
   subsystem_name = "useriam"
   part_name = "face_auth"
@@ -65,7 +65,7 @@ ohos_source_set("faceauth_framework_stub") {
   ]
 
   if (ability_runtime_graphics) {
-    deps = [ "//foundation/graphic/graphic_2d:libsurface" ]
+    external_deps = [ "graphic_standard:surface" ]
     include_dirs +=
         [ "//foundation/graphic/graphic_2d/frameworks/surface/include" ]
   }
