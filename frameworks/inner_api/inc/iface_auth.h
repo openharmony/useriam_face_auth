@@ -20,7 +20,7 @@
 
 #include "iremote_broker.h"
 #include "iremote_object.h"
-#include "surface.h"
+#include "ibuffer_producer.h"
 
 #include "face_auth_defines.h"
 
