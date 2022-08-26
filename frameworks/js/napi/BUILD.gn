@@ -27,16 +27,15 @@ ohos_shared_library("faceauth") {
   ]
 
   deps = [ "//base/useriam/face_auth/frameworks/inner_api:faceauth_framework" ]
-  if (ability_runtime_graphics) {
-    deps += [ "//foundation/graphic/graphic_2d:libsurface" ]
-  }
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
   external_deps = [
     "c_utils:utils",
     "hiviewdfx_hilog_native:libhilog",
-    "ipc:ipc_core",
     "napi:ace_napi",
   ]
+  if (ability_runtime_graphics) {
+    external_deps += [ "graphic_standard:surface" ]
+  }
 
   relative_install_dir = "module/useriam"
 
