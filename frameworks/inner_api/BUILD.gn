@@ -40,7 +40,6 @@ ohos_shared_library("faceauth_framework") {
   external_deps = [
     "c_utils:utils",
     "hiviewdfx_hilog_native:libhilog",
-    "ipc:ipc_core",
     "samgr:samgr_proxy",
   ]
 
