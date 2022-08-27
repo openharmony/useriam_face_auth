@@ -27,6 +27,7 @@ ohos_shared_library("faceauthservice") {
     "//base/useriam/face_auth/common/inc",
     "//base/useriam/user_auth_framework/common/logs",
     "//base/useriam/user_auth_framework/common/utils",
+    "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include",
   ]
 
   deps = [
@@ -38,7 +39,6 @@ ohos_shared_library("faceauthservice") {
     "drivers_interface_face_auth:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
     "safwk:system_ability_fwk",
-    "samgr:samgr_proxy",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
 
