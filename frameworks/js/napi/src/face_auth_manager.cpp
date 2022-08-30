@@ -33,7 +33,7 @@
 #include "iam_logger.h"
 
 #include "face_auth_defines.h"
-#include "face_auth_innerkit.h"
+#include "face_auth_client.h"
 
 #define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_NAPI
 
@@ -113,7 +113,7 @@ FaceAuthRet FaceAuthManager::SetSurfaceId(napi_env env, napi_callback_info info)
     auto getBufferProducerResult = GetBufferProducerBySurfaceId(surfaceId, bufferProducer);
     IF_FALSE_LOGE_AND_RETURN_VAL(getBufferProducerResult == FACEAUTH_SUCCESS, FACEAUTH_ERROR);
 
-    auto setBufferProducerResult = FaceAuthInnerKit::SetBufferProducer(bufferProducer);
+    auto setBufferProducerResult = Singleton<FaceAuthClient>::GetInstance().SetBufferProducer(bufferProducer);
     IF_FALSE_LOGE_AND_RETURN_VAL(setBufferProducerResult == FACEAUTH_SUCCESS, FACEAUTH_ERROR);
     return FACEAUTH_SUCCESS;
 }
