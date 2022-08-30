@@ -19,8 +19,6 @@
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-#include <cstdint>
-
 enum FaceAuthRet {
     FACEAUTH_SUCCESS = 0,
     FACEAUTH_ERROR = 1,

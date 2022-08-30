@@ -15,16 +15,12 @@ import("//build/ohos.gni")
 import("//foundation/ability/ability_runtime/ability_runtime.gni")
 
 config("faceauth_framework_public_config") {
-  include_dirs = [
-    "//base/useriam/face_auth/interfaces/inner_api",
-    "inc",
-  ]
+  include_dirs = [ "inc" ]
 }
 
 ohos_shared_library("faceauth_framework") {
   sources = [
     "src/face_auth_client.cpp",
-    "src/face_auth_innerkit.cpp",
     "src/face_auth_proxy.cpp",
   ]
 
