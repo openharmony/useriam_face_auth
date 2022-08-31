@@ -31,7 +31,7 @@ ohos_shared_library("faceauthservice") {
   ]
 
   deps = [
-    "//base/useriam/face_auth/frameworks/inner_api:faceauth_framework_stub",
+    "//base/useriam/face_auth/frameworks/ipc:faceauth_framework_stub",
     "//base/useriam/user_auth_framework/common/executors:userauth_executors",
   ]
   external_deps = [
