@@ -26,7 +26,7 @@ ohos_shared_library("faceauth") {
     "src/face_auth_napi.cpp",
   ]
 
-  deps = [ "//base/useriam/face_auth/frameworks/inner_api:faceauth_framework" ]
+  deps = [ "//base/useriam/face_auth/frameworks/ipc:faceauth_framework" ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
   external_deps = [
     "c_utils:utils",
