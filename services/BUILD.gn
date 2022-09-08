@@ -38,6 +38,7 @@ ohos_shared_library("faceauthservice") {
     "c_utils:utils",
     "drivers_interface_face_auth:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
+    "ipc:ipc_core",
     "safwk:system_ability_fwk",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
