@@ -19,6 +19,7 @@ ohos_shared_library("faceauth") {
     "//base/useriam/user_auth_framework/common/logs",
     "//base/useriam/face_auth/common/inc",
     "//base/useriam/user_auth_framework/common/utils",
+    "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include",
   ]
 
   sources = [
