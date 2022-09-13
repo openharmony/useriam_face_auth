@@ -22,7 +22,7 @@
 #include "nocopyable.h"
 
 #include "iexecute_callback.h"
-#include "v1_0/executor_callback_stub.h"
+#include "v1_0/iexecutor_callback.h"
 
 namespace OHOS {
 namespace UserIam {

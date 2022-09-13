@@ -25,7 +25,7 @@
 #include "framework_types.h"
 #include "iauth_executor_hdi.h"
 #include "iexecute_callback.h"
-#include "v1_0/executor_proxy.h"
+#include "v1_0/iexecutor.h"
 
 namespace OHOS {
 namespace UserIam {
