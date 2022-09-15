@@ -21,6 +21,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <vector>
 
 #include "ibuffer_producer.h"
 #include "idriver_manager.h"
@@ -45,7 +46,17 @@ namespace UserIam {
 namespace FaceAuth {
 namespace UserAuth = OHOS::UserIam::UserAuth;
 using namespace OHOS::UserIam;
+namespace {
 const bool REGISTER_RESULT = SystemAbility::MakeAndRegisterAbility(FaceAuthService::GetInstance().get());
+const uint16_t FACE_AUTH_DEFAULT_HDI_ID = 1;
+const auto FACE_AUTH_DEFAULT_HDI_ADAPTER = Common::MakeShared<FaceAuthInterfaceAdapter>();
+auto FACE_AUTH_DEFAULT_HDI = Common::MakeShared<FaceAuthDriverHdi>(FACE_AUTH_DEFAULT_HDI_ADAPTER);
+// serviceName and HdiConfig.id must be globally unique
+const std::map<std::string, UserAuth::HdiConfig> HDI_NAME_2_CONFIG = {
+    {"face_auth_interface_service", {FACE_AUTH_DEFAULT_HDI_ID, FACE_AUTH_DEFAULT_HDI}},
+};
+const std::vector<std::shared_ptr<FaceAuthDriverHdi>> FACE_AUTH_DRIVER_HDIS = {FACE_AUTH_DEFAULT_HDI};
+} // namespace
 std::mutex FaceAuthService::mutex_;
 std::shared_ptr<FaceAuthService> FaceAuthService::instance_ = nullptr;
 
@@ -84,30 +95,21 @@ int32_t FaceAuthService::SetBufferProducer(sptr<IBufferProducer> &producer)
 {
     std::lock_guard<std::mutex> gurard(mutex_);
     IAM_LOGI("set buffer producer %{public}s", Common::GetPointerNullStateString(producer).c_str());
-    bufferProducer_ = producer;
+    for (auto hdi : FACE_AUTH_DRIVER_HDIS) {
+        IF_FALSE_LOGE_AND_RETURN_VAL(hdi != nullptr, FACEAUTH_ERROR);
+        int ret = hdi->SetBufferProducer(producer);
+        if (ret != FACEAUTH_SUCCESS) {
+            IAM_LOGE("SetBufferProducer fail");
+            return FACEAUTH_ERROR;
+        }
+    }
     return FACEAUTH_SUCCESS;
-}
-
-sptr<IBufferProducer> FaceAuthService::FaceAuthService::GetBufferProducer()
-{
-    std::lock_guard<std::mutex> gurard(mutex_);
-    IAM_LOGI("get buffer producer %{public}s", Common::GetPointerNullStateString(bufferProducer_).c_str());
-    return bufferProducer_;
 }
 
 void FaceAuthService::StartDriverManager()
 {
     IAM_LOGI("start");
-    auto adapter = Common::MakeShared<FaceAuthInterfaceAdapter>();
-    IF_FALSE_LOGE_AND_RETURN(adapter != nullptr);
-    auto faceAuthDefaultHdi = Common::MakeShared<FaceAuthDriverHdi>(adapter);
-    IF_FALSE_LOGE_AND_RETURN(faceAuthDefaultHdi != nullptr);
-    const uint16_t faceAuthDefaultHdiId = 1;
-    // serviceName and HdiConfig.id must be globally unique
-    const std::map<std::string, UserAuth::HdiConfig> hdiName2Config = {
-        {"face_auth_interface_service", {faceAuthDefaultHdiId, faceAuthDefaultHdi}},
-    };
-    int32_t ret = UserAuth::IDriverManager::Start(hdiName2Config);
+    int32_t ret = UserAuth::IDriverManager::Start(HDI_NAME_2_CONFIG);
     if (ret != FACEAUTH_SUCCESS) {
         IAM_LOGE("start driver manager failed");
     }

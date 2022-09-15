@@ -25,6 +25,7 @@
 #include "iam_logger.h"
 #include "iam_ptr.h"
 
+#include "face_auth_defines.h"
 #include "face_auth_executor_hdi.h"
 #include "face_auth_interface_adapter.h"
 #include "v1_0/face_auth_types.h"
@@ -39,7 +40,10 @@ namespace UserIam {
 namespace FaceAuth {
 namespace UserAuth = OHOS::UserIam::UserAuth;
 using namespace OHOS::UserIam;
-FaceAuthDriverHdi::FaceAuthDriverHdi(std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter)
+
+std::mutex FaceAuthDriverHdi::mutex_;
+
+FaceAuthDriverHdi::FaceAuthDriverHdi(const std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter)
     : faceAuthInterfaceAdapter_(faceAuthInterfaceAdapter)
 {
 }
@@ -59,6 +63,9 @@ void FaceAuthDriverHdi::GetExecutorList(std::vector<std::shared_ptr<UserAuth::IA
         IAM_LOGE("GetExecutorList fail");
         return;
     }
+
+    std::lock_guard<std::mutex> gurard(mutex_);
+    faceAuthExecutorList_.clear();
     for (const auto &iExecutor : iExecutorList) {
         if (iExecutor == nullptr) {
             IAM_LOGE("iExecutor is nullptr");
@@ -70,7 +77,27 @@ void FaceAuthDriverHdi::GetExecutorList(std::vector<std::shared_ptr<UserAuth::IA
             continue;
         }
         executorList.push_back(executor);
+        faceAuthExecutorList_.push_back(executor);
     }
+}
+
+int32_t FaceAuthDriverHdi::SetBufferProducer(sptr<IBufferProducer> &producer)
+{
+    if (faceAuthExecutorList_.size() == 0) {
+        IAM_LOGE("no executor to set buffer producer");
+        return FACEAUTH_ERROR;
+    }
+
+    std::lock_guard<std::mutex> gurard(mutex_);
+    for (auto executor : faceAuthExecutorList_) {
+        IF_FALSE_LOGE_AND_RETURN_VAL(executor != nullptr, FACEAUTH_ERROR);
+        int32_t ret = executor->SetBufferProducer(producer);
+        if (ret != FACEAUTH_SUCCESS) {
+            IAM_LOGE("executor SetBufferProducer fail %{public}d", ret);
+            return FACEAUTH_ERROR;
+        }
+    }
+    return FACEAUTH_SUCCESS;
 }
 } // namespace FaceAuth
 } // namespace UserIam

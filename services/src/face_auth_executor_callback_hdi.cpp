@@ -15,8 +15,8 @@
 
 #include "face_auth_executor_callback_hdi.h"
 
-#include <functional>
 #include <cstdint>
+#include <functional>
 #include <map>
 #include <memory>
 #include <utility>

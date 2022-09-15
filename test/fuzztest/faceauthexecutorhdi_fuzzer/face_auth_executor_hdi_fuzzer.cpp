@@ -43,6 +43,7 @@ using namespace std;
 using namespace OHOS::UserIam::Common;
 using namespace OHOS::UserIam::UserAuth;
 namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
+using BufferProducerSequenceable = OHOS::HDI::Camera::V1_0::BufferProducerSequenceable;
 
 namespace OHOS {
 namespace UserIam {
@@ -112,6 +113,12 @@ public:
 
     int32_t SendCommand(
         int32_t commandId, const std::vector<uint8_t> &extraInfo, const sptr<FaceHdi::IExecutorCallback> &callbackObj)
+    {
+        IF_FALSE_LOGE_AND_RETURN_VAL(fuzzParcel_ != nullptr, 0);
+        return (*fuzzParcel_).ReadInt32();
+    }
+
+    int32_t SetBufferProducer(const sptr<BufferProducerSequenceable> &bufferProducer)
     {
         IF_FALSE_LOGE_AND_RETURN_VAL(fuzzParcel_ != nullptr, 0);
         return (*fuzzParcel_).ReadInt32();

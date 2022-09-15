@@ -38,15 +38,11 @@ public:
     void OnStart() override;
     void OnStop() override;
     int32_t SetBufferProducer(sptr<IBufferProducer> &producer) override;
-
-    sptr<IBufferProducer> GetBufferProducer();
-
 private:
     void StartDriverManager();
 
     static std::mutex mutex_;
     static std::shared_ptr<FaceAuthService> instance_;
-    sptr<IBufferProducer> bufferProducer_;
 };
 } // namespace FaceAuth
 } // namespace UserIam

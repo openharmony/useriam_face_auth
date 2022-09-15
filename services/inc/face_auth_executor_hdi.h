@@ -22,6 +22,8 @@
 
 #include "nocopyable.h"
 
+#include "ibuffer_producer.h"
+
 #include "framework_types.h"
 #include "iauth_executor_hdi.h"
 #include "iexecute_callback.h"
@@ -51,16 +53,16 @@ public:
     UserIam::UserAuth::ResultCode Delete(const std::vector<uint64_t> &templateIdList) override;
     UserIam::UserAuth::ResultCode Cancel(uint64_t scheduleId) override;
     UserIam::UserAuth::ResultCode SendCommand(UserIam::UserAuth::PropertyMode commandId,
-        const std::vector<uint8_t> &extraInfo,
-        const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj) override;
+        const std::vector<uint8_t> &extraInfo, const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj) override;
+    int32_t SetBufferProducer(sptr<IBufferProducer> &producer);
 
 private:
     UserIam::UserAuth::ResultCode MoveHdiExecutorInfo(FaceHdi::ExecutorInfo &in, UserIam::UserAuth::ExecutorInfo &out);
     void MoveHdiTemplateInfo(FaceHdi::TemplateInfo &in, UserAuth::TemplateInfo &out);
     UserIam::UserAuth::ResultCode ConvertCommandId(const UserIam::UserAuth::PropertyMode in, FaceHdi::CommandId &out);
     UserIam::UserAuth::ResultCode ConvertAuthType(const FaceHdi::AuthType in, UserIam::UserAuth::AuthType &out);
-    UserIam::UserAuth::ResultCode ConvertExecutorRole(const FaceHdi::ExecutorRole in,
-        UserIam::UserAuth::ExecutorRole &out);
+    UserIam::UserAuth::ResultCode ConvertExecutorRole(
+        const FaceHdi::ExecutorRole in, UserIam::UserAuth::ExecutorRole &out);
     UserIam::UserAuth::ResultCode ConvertExecutorSecureLevel(
         const FaceHdi::ExecutorSecureLevel in, UserIam::UserAuth::ExecutorSecureLevel &out);
     UserIam::UserAuth::ResultCode ConvertResultCode(const int32_t in);
