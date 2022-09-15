@@ -26,6 +26,7 @@ namespace FaceAuth {
 namespace V1_0 {
 using namespace OHOS;
 using namespace OHOS::HDI;
+using BufferProducerSequenceable = OHOS::HDI::Camera::V1_0::BufferProducerSequenceable;
 
 class MockIExecutor : public IExecutor {
 public:
@@ -46,6 +47,7 @@ public:
     MOCK_METHOD1(Cancel, int32_t(uint64_t scheduleId));
     MOCK_METHOD3(SendCommand,
         int32_t(int32_t commandId, const std::vector<uint8_t> &extraInfo, const sptr<IExecutorCallback> &callbackObj));
+    MOCK_METHOD1(SetBufferProducer, int32_t(const sptr<BufferProducerSequenceable> &bufferProducer));
 };
 } // namespace V1_0
 } // namespace FaceAuth
