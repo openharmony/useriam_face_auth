@@ -26,10 +26,12 @@
 #include "hdf_base.h"
 #include "refbase.h"
 
+#include "framework_types.h"
 #include "iam_check.h"
 #include "iam_logger.h"
-#include "framework_types.h"
 
+#include "buffer_producer_sequenceable.h"
+#include "face_auth_defines.h"
 #include "face_auth_executor_callback_hdi.h"
 #include "v1_0/face_auth_types.h"
 #include "v1_0/iexecutor.h"
@@ -43,6 +45,7 @@ namespace FaceAuth {
 using IamResultCode = OHOS::UserIam::UserAuth::ResultCode;
 using IamExecutorRole = UserIam::UserAuth::ExecutorRole;
 using IamExecutorInfo = UserIam::UserAuth::ExecutorInfo;
+using BufferProducerSequenceable = OHOS::HDI::Camera::V1_0::BufferProducerSequenceable;
 namespace UserAuth = OHOS::UserIam::UserAuth;
 FaceAuthExecutorHdi::FaceAuthExecutorHdi(sptr<FaceHdi::IExecutor> executorProxy) : executorProxy_(executorProxy) {};
 
@@ -75,7 +78,7 @@ IamResultCode FaceAuthExecutorHdi::GetTemplateInfo(uint64_t templateId, UserAuth
         return result;
     }
     MoveHdiTemplateInfo(localInfo, info);
-    
+
     return IamResultCode::SUCCESS;
 }
 
@@ -92,8 +95,8 @@ IamResultCode FaceAuthExecutorHdi::OnRegisterFinish(const std::vector<uint64_t> 
     return IamResultCode::SUCCESS;
 }
 
-IamResultCode FaceAuthExecutorHdi::Enroll(uint64_t scheduleId, uint32_t tokenId,
-    const std::vector<uint8_t> &extraInfo, const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj)
+IamResultCode FaceAuthExecutorHdi::Enroll(uint64_t scheduleId, uint32_t tokenId, const std::vector<uint8_t> &extraInfo,
+    const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj)
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
     IF_FALSE_LOGE_AND_RETURN_VAL(callbackObj != nullptr, IamResultCode::GENERAL_ERROR);
@@ -181,10 +184,28 @@ IamResultCode FaceAuthExecutorHdi::SendCommand(UserIam::UserAuth::PropertyMode c
     int32_t status = executorProxy_->SendCommand(hdiCommandId, extraInfo, callback);
     result = ConvertResultCode(status);
     if (status != IamResultCode::SUCCESS) {
-        IAM_LOGE("SendCommand fail result %{public}d", status);
+        IAM_LOGE("SendCommand fail result %{public}d", result);
         return result;
     }
     return IamResultCode::SUCCESS;
+}
+
+int32_t FaceAuthExecutorHdi::SetBufferProducer(sptr<IBufferProducer> &producer)
+{
+    IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
+    OHOS::sptr<BufferProducerSequenceable> producerSequenceable = nullptr;
+    if (producer != nullptr) {
+        producerSequenceable = new (std::nothrow) BufferProducerSequenceable(producer);
+        IF_FALSE_LOGE_AND_RETURN_VAL(producerSequenceable != nullptr, FACEAUTH_ERROR);
+    }
+
+    int32_t status = executorProxy_->SetBufferProducer(producerSequenceable);
+    IamResultCode result = ConvertResultCode(status);
+    if (status != IamResultCode::SUCCESS) {
+        IAM_LOGE("SetBufferProducer fail result %{public}d", result);
+        return FACEAUTH_ERROR;
+    }
+    return FACEAUTH_SUCCESS;
 }
 
 IamResultCode FaceAuthExecutorHdi::MoveHdiExecutorInfo(FaceHdi::ExecutorInfo &in, IamExecutorInfo &out)

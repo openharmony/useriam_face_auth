@@ -24,6 +24,7 @@
 #include "iauth_driver_hdi.h"
 #include "iauth_executor_hdi.h"
 
+#include "face_auth_executor_hdi.h"
 #include "face_auth_interface_adapter.h"
 
 namespace OHOS {
@@ -32,13 +33,16 @@ namespace FaceAuth {
 namespace UserAuth = OHOS::UserIam::UserAuth;
 class FaceAuthDriverHdi : public UserAuth::IAuthDriverHdi, public NoCopyable {
 public:
-    FaceAuthDriverHdi(std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter);
+    FaceAuthDriverHdi(const std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter);
     ~FaceAuthDriverHdi() override = default;
 
     void GetExecutorList(std::vector<std::shared_ptr<UserAuth::IAuthExecutorHdi>> &executorList) override;
+    int32_t SetBufferProducer(sptr<IBufferProducer> &producer);
 
 private:
-    std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter_;
+    static std::mutex mutex_;
+    const std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter_;
+    std::vector<std::shared_ptr<FaceAuthExecutorHdi>> faceAuthExecutorList_;
 };
 } // namespace FaceAuth
 } // namespace UserIam
