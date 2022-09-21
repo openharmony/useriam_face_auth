@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 
+#include "accesstoken_kit.h"
 #include "ibuffer_producer.h"
 #include "idriver_manager.h"
 #include "iremote_object.h"
@@ -91,10 +92,27 @@ void FaceAuthService::OnStop()
     IAM_LOGE("service is persistent, OnStop is not implemented");
 }
 
+bool FaceAuthService::IsPermissionGranted(const std::string &permission)
+{
+    IAM_LOGI("start");
+    uint32_t tokenId = this->GetCallingTokenID();
+    int ret = Security::AccessToken::AccessTokenKit::VerifyAccessToken(tokenId, permission);
+    if (ret != Security::AccessToken::RET_SUCCESS) {
+        IAM_LOGE("failed to verify access token, code = %{public}d", ret);
+        return false;
+    }
+    return true;
+}
+
 int32_t FaceAuthService::SetBufferProducer(sptr<IBufferProducer> &producer)
 {
+    const std::string MANAGE_USER_IDM_PERMISSION = "ohos.permission.MANAGE_USER_IDM";
     std::lock_guard<std::mutex> gurard(mutex_);
     IAM_LOGI("set buffer producer %{public}s", Common::GetPointerNullStateString(producer).c_str());
+    if (!IsPermissionGranted(MANAGE_USER_IDM_PERMISSION)) {
+        IAM_LOGE("failed to check permission");
+        return FACEAUTH_ERROR;
+    }
     for (auto hdi : FACE_AUTH_DRIVER_HDIS) {
         IF_FALSE_LOGE_AND_RETURN_VAL(hdi != nullptr, FACEAUTH_ERROR);
         int ret = hdi->SetBufferProducer(producer);
