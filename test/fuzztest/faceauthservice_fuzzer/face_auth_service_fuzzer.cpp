@@ -43,14 +43,18 @@ auto g_service = FaceAuthService::GetInstance();
 void FuzzOnStart(Parcel &parcel)
 {
     IAM_LOGI("begin");
-    g_service->OnStart();
+    if (g_service != nullptr) {
+        g_service->OnStart();
+    }
     IAM_LOGI("end");
 }
 
 void FuzzOnStop(Parcel &parcel)
 {
     IAM_LOGI("begin");
-    g_service->OnStop();
+    if (g_service != nullptr) {
+        g_service->OnStop();
+    }
     IAM_LOGI("end");
 }
 
@@ -66,7 +70,9 @@ void FuzzSetBufferProducer(Parcel &parcel)
         }
         bufferProducer = surface->GetProducer();
     }
-    g_service->SetBufferProducer(bufferProducer);
+    if (g_service != nullptr) {
+        g_service->SetBufferProducer(bufferProducer);
+    }
     IAM_LOGI("end");
 }
 
