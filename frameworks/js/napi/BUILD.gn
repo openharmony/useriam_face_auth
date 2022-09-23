@@ -15,17 +15,13 @@ import("//build/ohos.gni")
 import("//foundation/ability/ability_runtime/ability_runtime.gni")
 ohos_shared_library("faceauth") {
   include_dirs = [
-    "inc",
     "//base/useriam/user_auth_framework/common/logs",
     "//base/useriam/face_auth/common/inc",
     "//base/useriam/user_auth_framework/common/utils",
     "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include",
   ]
 
-  sources = [
-    "src/face_auth_manager.cpp",
-    "src/face_auth_napi.cpp",
-  ]
+  sources = [ "src/face_auth_napi.cpp" ]
 
   deps = [ "//base/useriam/face_auth/frameworks/ipc:faceauth_framework" ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
