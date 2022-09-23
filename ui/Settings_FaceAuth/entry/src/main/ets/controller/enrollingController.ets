@@ -60,8 +60,7 @@ class EnrollingController {
       Log.info(this.TAG, 'face is enrolling, skip start enroll')
       return
     }
-    let setResult = await FaceAuthModel.setSurfaceId(AppStorage.Get('xComponentSurfaceId'))
-    Log.info(this.TAG, 'setSurfaceId result is ' + setResult)
+    await FaceAuthModel.setSurfaceId(AppStorage.Get('xComponentSurfaceId'))
     UserIdmModel.setOnAcquireCallback(this.onAcquire.bind(this))
     UserIdmModel.enrollFace().then(this.processResult.bind(this))
     this.enrolling = true
