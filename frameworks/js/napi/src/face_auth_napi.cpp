@@ -13,20 +13,22 @@
  * limitations under the License.
  */
 
-#include "face_auth_manager.h"
-
 #include <cstdint>
+#include <string>
+#include <sstream>
 
-#include "js_native_api.h"
-#include "js_native_api_types.h"
 #include "napi/native_common.h"
 #include "node_api.h"
+
+#include "surface.h"
+#include "surface_utils.h"
 
 #include "iam_logger.h"
 
 #include "face_auth_defines.h"
+#include "face_auth_client.h"
 
-#define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_NAPI
+#define LOG_LABEL Common::LABEL_FACE_AUTH_NAPI
 
 using namespace std;
 
@@ -34,58 +36,106 @@ namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
 namespace {
-FaceAuthManager g_faceAuthManager;
-
-napi_value ConvertToNapiValue(napi_env env, int32_t in)
-{
-    napi_value ret;
-    napi_create_int32(env, in, &ret);
-    return ret;
-}
+constexpr int32_t RESULT_CODE_FAIL = 12700001;
 
 napi_value FaceAuthManagerConstructor(napi_env env, napi_callback_info info)
 {
     IAM_LOGI("start");
     napi_value thisVar = nullptr;
     NAPI_CALL(env, napi_get_cb_info(env, info, nullptr, nullptr, &thisVar, nullptr));
-
-    NAPI_CALL(env, napi_wrap(env, thisVar, &g_faceAuthManager,
-                        [](napi_env env, void *data, void *hint) {}, nullptr, nullptr));
-
     return thisVar;
 }
 
-napi_value FaceAuthManagerSetSurfaceId(napi_env env, napi_callback_info info)
+napi_value GenerateFailBusinessError(napi_env env)
 {
-    IAM_LOGI("start");
-    napi_value thisVar = nullptr;
-    NAPI_CALL(env, napi_get_cb_info(env, info, nullptr, nullptr, &thisVar, nullptr));
-    FaceAuthManager *manager = nullptr;
-    NAPI_CALL(env, napi_unwrap(env, thisVar, reinterpret_cast<void **>(&manager)));
-    if (manager == nullptr) {
-        IAM_LOGI("unwarp FaceAuthManager error");
-        return ConvertToNapiValue(env, FACEAUTH_ERROR);
+    napi_value code;
+    NAPI_CALL(env, napi_create_int32(env, RESULT_CODE_FAIL, &code));
+    napi_value msg;
+    NAPI_CALL(env, napi_create_string_utf8(env, "Set surface ID error.", NAPI_AUTO_LENGTH, &msg));
+    napi_value businessError;
+    NAPI_CALL(env, napi_create_error(env, nullptr, msg, &businessError));
+    NAPI_CALL(env, napi_set_named_property(env, businessError, "code", code));
+    return businessError;
+}
+
+bool GetBufferProducerBySurfaceId(uint64_t surfaceId, sptr<IBufferProducer> &bufferProducer)
+{
+    if (surfaceId == 0) {
+        IAM_LOGI("surface id is 0, get buffer producer null");
+        bufferProducer = nullptr;
+        return true;
     }
 
-    return ConvertToNapiValue(env, manager->SetSurfaceId(env, info));
+    auto surfaceUtils = SurfaceUtils::GetInstance();
+    if (surfaceUtils == nullptr) {
+        IAM_LOGE("Get SurfaceUtils failed!");
+        return false;
+    }
+
+    sptr<Surface> previewSurface = surfaceUtils->GetSurface(surfaceId);
+    if (previewSurface == nullptr) {
+        IAM_LOGE("GetSurface failed!");
+        return false;
+    }
+
+    bufferProducer = previewSurface->GetProducer();
+    if (bufferProducer == nullptr) {
+        IAM_LOGE("GetProducer Failed!");
+        return false;
+    }
+
+    IAM_LOGI("get buffer producer success");
+    return true;
+}
+
+napi_value SetSurfaceId(napi_env env, napi_callback_info info)
+{
+    static constexpr size_t argsOne = 1;
+    size_t argc = argsOne;
+    napi_value argv;
+    napi_status ret = napi_get_cb_info(env, info, &argc, &argv, nullptr, nullptr);
+    if (ret != napi_ok || argc != argsOne) {
+        IAM_LOGE("napi_get_cb_info fail:%{public}d", ret);
+        napi_throw(env, GenerateFailBusinessError(env));
+        return nullptr;
+    }
+    static constexpr int maxLen = 25;
+    char buf[maxLen] = {'\0'};
+    size_t len;
+    ret = napi_get_value_string_utf8(env, argv, buf, maxLen, &len);
+    if (ret != napi_ok) {
+        IAM_LOGE("napi_get_value_string_utf8 fail:%{public}d", ret);
+        napi_throw(env, GenerateFailBusinessError(env));
+        return nullptr;
+    }
+    buf[maxLen - 1] = '\0';
+    std::string strSurfaceId = buf;
+    std::istringstream surfaceIdStream(strSurfaceId);
+    uint64_t surfaceId;
+    surfaceIdStream >> surfaceId;
+
+    sptr<IBufferProducer> bufferProducer = nullptr;
+    if (!GetBufferProducerBySurfaceId(surfaceId, bufferProducer)) {
+        IAM_LOGE("GetBufferProducerBySurfaceId fail");
+        napi_throw(env, GenerateFailBusinessError(env));
+        return nullptr;
+    }
+    if (Singleton<FaceAuthClient>::GetInstance().SetBufferProducer(bufferProducer) != FACEAUTH_SUCCESS) {
+        IAM_LOGE("SetBufferProducer fail");
+        napi_throw(env, GenerateFailBusinessError(env));
+        return nullptr;
+    }
+    return nullptr;
 }
 
 napi_value GetFaceAuthManagerConstructor(napi_env env)
 {
     IAM_LOGI("start");
-    napi_property_descriptor methods[] = {DECLARE_NAPI_FUNCTION("setSurfaceId", FaceAuthManagerSetSurfaceId)};
+    napi_property_descriptor methods[] = {DECLARE_NAPI_FUNCTION("setSurfaceId", SetSurfaceId)};
     napi_value result = nullptr;
     NAPI_CALL(env, napi_define_class(env, "FaceAuth", NAPI_AUTO_LENGTH, FaceAuthManagerConstructor, nullptr,
                        sizeof(methods) / sizeof(napi_property_descriptor), methods, &result));
     return result;
-}
-
-napi_value DefineFaceAuthManager(napi_env env, napi_value exports)
-{
-    IAM_LOGI("start");
-    napi_status status = napi_set_named_property(env, exports, "FaceAuthManager", GetFaceAuthManagerConstructor(env));
-    NAPI_ASSERT(env, status == napi_ok, "FaceAuthManager napi_set_named_property failed");
-    return exports;
 }
 
 napi_value GetResultCodeConstructor(napi_env env)
@@ -93,30 +143,22 @@ napi_value GetResultCodeConstructor(napi_env env)
     IAM_LOGI("start");
     napi_value resultCode = nullptr;
     NAPI_CALL(env, napi_create_object(env, &resultCode));
-    napi_value success = nullptr;
-    NAPI_CALL(env, napi_create_int32(env, static_cast<int32_t>(FACEAUTH_SUCCESS), &success));
-    NAPI_CALL(env, napi_set_named_property(env, resultCode, "SUCCESS", success));
     napi_value fail = nullptr;
-    NAPI_CALL(env, napi_create_int32(env, static_cast<int32_t>(FACEAUTH_ERROR), &fail));
+    NAPI_CALL(env, napi_create_int32(env, RESULT_CODE_FAIL, &fail));
     NAPI_CALL(env, napi_set_named_property(env, resultCode, "FAIL", fail));
     return resultCode;
-}
-
-napi_value DefineEnums(napi_env env, napi_value exports)
-{
-    IAM_LOGI("start");
-    napi_property_descriptor enums[] = {
-        DECLARE_NAPI_PROPERTY("ResultCode", GetResultCodeConstructor(env)),
-    };
-    napi_define_properties(env, exports, sizeof(enums) / sizeof(napi_property_descriptor), enums);
-    return exports;
 }
 
 napi_value ModuleInit(napi_env env, napi_value exports)
 {
     IAM_LOGI("start");
-    DefineFaceAuthManager(env, exports);
-    DefineEnums(env, exports);
+    NAPI_CALL(env, napi_set_named_property(env, exports, "FaceAuthManager", GetFaceAuthManagerConstructor(env)));
+
+    napi_property_descriptor enums[] = {
+        DECLARE_NAPI_PROPERTY("ResultCode", GetResultCodeConstructor(env)),
+    };
+    NAPI_CALL(env, napi_define_properties(env, exports, sizeof(enums) / sizeof(napi_property_descriptor), enums));
+
     return exports;
 }
 } // namespace
