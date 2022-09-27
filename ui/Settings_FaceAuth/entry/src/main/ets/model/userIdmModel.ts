@@ -124,13 +124,13 @@ class UserIdmModel {
     let localToken = this.getToken()
     let credId = this.getCredentialId()
     return new Promise<number>((resolve)=> {
-      this.userIdentityManager.delCred(credId, localToken), {
+      this.userIdentityManager.delCred(credId, localToken, {
           onResult: (result, extraInfo) => {
               Log.info(this.TAG, 'FaceEnroll face.delete onResult result = ' + result);
               this.updateFaceInfo()
               resolve(result)
           }
-        }
+        })
     })
   }
 }
