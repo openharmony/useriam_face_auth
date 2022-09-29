@@ -241,8 +241,8 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetTemplateInfo_001, T
         .Times(Exactly(1))
         .WillOnce([&data](uint64_t templateId, FaceHdi::TemplateInfo &info) {
             info = {.executorType = data.executorType,
-                .freezingTime = data.freezingTime,
-                .remainTimes = data.remainTimes,
+                .lockoutDuration = data.freezingTime,
+                .remainAttempts = data.remainTimes,
                 .extraInfo = data.extraInfo};
             return HDF_SUCCESS;
         });
