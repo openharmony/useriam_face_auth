@@ -72,7 +72,7 @@ HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnAcquire
             EXPECT_TRUE(std::equal(extraInfo.begin(), extraInfo.end(), testExtraInfo.begin()));
         });
     FaceAuthExecutorCallbackHdi callbackHdi(executeCallback);
-    callbackHdi.OnAcquireInfo(testAcquire, testExtraInfo);
+    callbackHdi.OnTip(testAcquire, testExtraInfo);
 }
 
 HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnResult_001, TestSize.Level0)

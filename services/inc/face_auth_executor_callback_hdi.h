@@ -36,7 +36,7 @@ public:
 
     // FaceHdi::IExecutorCallback
     int32_t OnResult(int32_t result, const std::vector<uint8_t> &extraInfo) override;
-    int32_t OnAcquireInfo(int32_t acquire, const std::vector<uint8_t> &extraInfo) override;
+    int32_t OnTip(int32_t tip, const std::vector<uint8_t> &extraInfo) override;
 
 private:
     UserIam::UserAuth::ResultCode ConvertResultCode(const int32_t in);

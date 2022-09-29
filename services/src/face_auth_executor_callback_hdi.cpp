@@ -50,11 +50,11 @@ int32_t FaceAuthExecutorCallbackHdi::OnResult(int32_t result, const std::vector<
     return HDF_SUCCESS;
 }
 
-int32_t FaceAuthExecutorCallbackHdi::OnAcquireInfo(int32_t acquire, const std::vector<uint8_t> &extraInfo)
+int32_t FaceAuthExecutorCallbackHdi::OnTip(int32_t tip, const std::vector<uint8_t> &extraInfo)
 {
-    IAM_LOGI("OnAcquireInfo %{public}d", acquire);
+    IAM_LOGI("OnTip %{public}d", tip);
     IF_FALSE_LOGE_AND_RETURN_VAL(frameworkCallback_ != nullptr, HDF_FAILURE);
-    frameworkCallback_->OnAcquireInfo(acquire, extraInfo);
+    frameworkCallback_->OnAcquireInfo(tip, extraInfo);
     return HDF_SUCCESS;
 }
 
