@@ -150,8 +150,8 @@ private:
     void FillFuzzHdiTemplateInfo(Parcel &parcel, FaceHdi::TemplateInfo &templateInfo)
     {
         templateInfo.executorType = parcel.ReadUint32();
-        templateInfo.freezingTime = parcel.ReadInt32();
-        templateInfo.remainTimes = parcel.ReadInt32();
+        templateInfo.lockoutDuration = parcel.ReadInt32();
+        templateInfo.remainAttempts = parcel.ReadInt32();
         FillFuzzUint8Vector(parcel, templateInfo.extraInfo);
         IAM_LOGI("success");
     }
