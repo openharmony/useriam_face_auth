@@ -26,14 +26,19 @@ class FaceAuthModel {
     Log.info(this.TAG, "constructor -")
   }
 
-  async setSurfaceId(surfaceIdString: string) : Promise<number> {
+  async setSurfaceId(surfaceIdString: string) : Promise<void> {
     Log.info(this.TAG, 'set surface id ' + surfaceIdString);
-    return this.faceAuthManager.setSurfaceId(surfaceIdString);
+    try {
+        this.faceAuthManager.setSurfaceId(surfaceIdString)
+        Log.info(this.TAG, 'setSurfaceId result is success')
+    } catch {
+        Log.info(this.TAG, 'setSurfaceId result is failed')
+    }
   }
 
   async clearSurfaceId() {
     Log.info(this.TAG, 'clearSurfaceId+');
-    this.setSurfaceId("0")
+    await this.setSurfaceId("0")
     Log.info(this.TAG, 'clearSurfaceId-');
   }
 }
