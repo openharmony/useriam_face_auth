@@ -36,7 +36,17 @@ namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
 namespace {
-constexpr int32_t RESULT_CODE_FAIL = 12700001;
+enum ResultCode : int32_t {
+    OHOS_CHECK_PERMISSION_FAILED = 201,
+    OHOS_CHECK_SYSTEM_PERMISSION_FAILED = 202,
+    RESULT_CODE_FAIL = 12700001,
+};
+
+const std::map<int32_t, std::string> g_result2Str = {
+    {OHOS_CHECK_PERMISSION_FAILED, "Permission verification failed."},
+    {OHOS_CHECK_SYSTEM_PERMISSION_FAILED, "The caller is not a system application."},
+    {RESULT_CODE_FAIL, "The operation is failed."},
+};
 
 napi_value FaceAuthManagerConstructor(napi_env env, napi_callback_info info)
 {
@@ -46,15 +56,28 @@ napi_value FaceAuthManagerConstructor(napi_env env, napi_callback_info info)
     return thisVar;
 }
 
-napi_value GenerateFailBusinessError(napi_env env)
+napi_value GenerateBusinessError(napi_env env, int32_t result)
 {
     napi_value code;
-    NAPI_CALL(env, napi_create_int32(env, RESULT_CODE_FAIL, &code));
+    std::string msgStr;
+    auto res = g_result2Str.find(result);
+    if (res == g_result2Str.end()) {
+        IAM_LOGE("result %{public}d not found", result);
+        msgStr = g_result2Str.at(RESULT_CODE_FAIL);
+        NAPI_CALL(env, napi_create_int32(env, RESULT_CODE_FAIL, &code));
+    } else {
+        msgStr = res->second;
+        NAPI_CALL(env, napi_create_int32(env, result, &code));
+    }
+    IAM_LOGI("get msg %{public}s", msgStr.c_str());
+
     napi_value msg;
-    NAPI_CALL(env, napi_create_string_utf8(env, "Set surface ID error.", NAPI_AUTO_LENGTH, &msg));
+    NAPI_CALL(env, napi_create_string_utf8(env, msgStr.c_str(), NAPI_AUTO_LENGTH, &msg));
+
     napi_value businessError;
     NAPI_CALL(env, napi_create_error(env, nullptr, msg, &businessError));
     NAPI_CALL(env, napi_set_named_property(env, businessError, "code", code));
+
     return businessError;
 }
 
@@ -96,7 +119,7 @@ napi_value SetSurfaceId(napi_env env, napi_callback_info info)
     napi_status ret = napi_get_cb_info(env, info, &argc, &argv, nullptr, nullptr);
     if (ret != napi_ok || argc != argsOne) {
         IAM_LOGE("napi_get_cb_info fail:%{public}d", ret);
-        napi_throw(env, GenerateFailBusinessError(env));
+        napi_throw(env, GenerateBusinessError(env, RESULT_CODE_FAIL));
         return nullptr;
     }
     static constexpr int maxLen = 25;
@@ -105,7 +128,7 @@ napi_value SetSurfaceId(napi_env env, napi_callback_info info)
     ret = napi_get_value_string_utf8(env, argv, buf, maxLen, &len);
     if (ret != napi_ok) {
         IAM_LOGE("napi_get_value_string_utf8 fail:%{public}d", ret);
-        napi_throw(env, GenerateFailBusinessError(env));
+        napi_throw(env, GenerateBusinessError(env, RESULT_CODE_FAIL));
         return nullptr;
     }
     buf[maxLen - 1] = '\0';
@@ -117,12 +140,13 @@ napi_value SetSurfaceId(napi_env env, napi_callback_info info)
     sptr<IBufferProducer> bufferProducer = nullptr;
     if (!GetBufferProducerBySurfaceId(surfaceId, bufferProducer)) {
         IAM_LOGE("GetBufferProducerBySurfaceId fail");
-        napi_throw(env, GenerateFailBusinessError(env));
+        napi_throw(env, GenerateBusinessError(env, RESULT_CODE_FAIL));
         return nullptr;
     }
-    if (Singleton<FaceAuthClient>::GetInstance().SetBufferProducer(bufferProducer) != FACEAUTH_SUCCESS) {
+    int32_t result = FaceAuthClient::GetInstance().SetBufferProducer(bufferProducer);
+    if (result != FACE_AUTH_SUCCESS) {
         IAM_LOGE("SetBufferProducer fail");
-        napi_throw(env, GenerateFailBusinessError(env));
+        napi_throw(env, GenerateBusinessError(env, result));
         return nullptr;
     }
     return nullptr;
