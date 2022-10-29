@@ -24,9 +24,12 @@
 #include <vector>
 
 #include "accesstoken_kit.h"
+#include "bundle_mgr_proxy.h"
 #include "ibuffer_producer.h"
 #include "idriver_manager.h"
+#include "ipc_skeleton.h"
 #include "iremote_object.h"
+#include "iservice_registry.h"
 #include "refbase.h"
 #include "system_ability.h"
 #include "system_ability_definition.h"
@@ -60,6 +63,7 @@ const std::vector<std::shared_ptr<FaceAuthDriverHdi>> FACE_AUTH_DRIVER_HDIS = {F
 } // namespace
 std::mutex FaceAuthService::mutex_;
 std::shared_ptr<FaceAuthService> FaceAuthService::instance_ = nullptr;
+sptr<AppExecFwk::IBundleMgr> FaceAuthService::bundleMgr_ = nullptr;
 
 FaceAuthService::FaceAuthService() : SystemAbility(SUBSYS_USERIAM_SYS_ABILITY_FACEAUTH, true)
 {
@@ -104,31 +108,61 @@ bool FaceAuthService::IsPermissionGranted(const std::string &permission)
     return true;
 }
 
+sptr<AppExecFwk::IBundleMgr> FaceAuthService::GetBundleMgr()
+{
+    IAM_LOGI("start");
+    if (bundleMgr_ != nullptr) {
+        return bundleMgr_;
+    }
+    auto sam = SystemAbilityManagerClient::GetInstance().GetSystemAbilityManager();
+    if (sam == nullptr) {
+        IAM_LOGE("GetSystemAbilityManager return nullptr");
+        return nullptr;
+    }
+    auto bundleMgrSa = sam->GetSystemAbility(BUNDLE_MGR_SERVICE_SYS_ABILITY_ID);
+    if (bundleMgrSa == nullptr) {
+        IAM_LOGE("GetSystemAbility return nullptr");
+        return nullptr;
+    }
+    bundleMgr_ = iface_cast<AppExecFwk::BundleMgrProxy>(bundleMgrSa);
+    return bundleMgr_;
+}
+
 int32_t FaceAuthService::SetBufferProducer(sptr<IBufferProducer> &producer)
 {
     const std::string MANAGE_USER_IDM_PERMISSION = "ohos.permission.MANAGE_USER_IDM";
     std::lock_guard<std::mutex> gurard(mutex_);
     IAM_LOGI("set buffer producer %{public}s", Common::GetPointerNullStateString(producer).c_str());
+    int32_t uid = IPCSkeleton::GetCallingUid();
+    auto bundleMgr = GetBundleMgr();
+    if (bundleMgr == nullptr) {
+        IAM_LOGE("bundleMgr is nullptr");
+        return FACE_AUTH_ERROR;
+    }
+    if (!bundleMgr->CheckIsSystemAppByUid(uid)) {
+        IAM_LOGE("the caller is not a system application");
+        return FACE_AUTH_CHECK_SYSTEM_PERMISSION_FAILED;
+    }
     if (!IsPermissionGranted(MANAGE_USER_IDM_PERMISSION)) {
         IAM_LOGE("failed to check permission");
-        return FACEAUTH_ERROR;
+        return FACE_AUTH_CHECK_PERMISSION_FAILED;
     }
     for (auto hdi : FACE_AUTH_DRIVER_HDIS) {
-        IF_FALSE_LOGE_AND_RETURN_VAL(hdi != nullptr, FACEAUTH_ERROR);
+        IF_FALSE_LOGE_AND_RETURN_VAL(hdi != nullptr, FACE_AUTH_ERROR);
         int ret = hdi->SetBufferProducer(producer);
-        if (ret != FACEAUTH_SUCCESS) {
+        if (ret != FACE_AUTH_SUCCESS) {
             IAM_LOGE("SetBufferProducer fail");
-            return FACEAUTH_ERROR;
+            return FACE_AUTH_ERROR;
         }
     }
-    return FACEAUTH_SUCCESS;
+    return FACE_AUTH_SUCCESS;
 }
 
 void FaceAuthService::StartDriverManager()
 {
     IAM_LOGI("start");
     int32_t ret = UserAuth::IDriverManager::Start(HDI_NAME_2_CONFIG);
-    if (ret != FACEAUTH_SUCCESS) {
+    if (ret != FACE_AUTH_SUCCESS) {
         IAM_LOGE("start driver manager failed");
     }
 }
