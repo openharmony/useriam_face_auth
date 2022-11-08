@@ -21,6 +21,7 @@
     "description": "$string:description_enrollmentstartview",
     "mainElement": "com.ohos.settings.faceauth.enrollmentstartview",
     "deviceTypes": [
+      "default",
       "tablet"
     ],
     "deliveryWithInstall": true,
