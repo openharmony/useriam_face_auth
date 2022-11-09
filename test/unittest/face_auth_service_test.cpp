@@ -16,6 +16,7 @@
 #include "gtest/gtest.h"
 
 #include "accesstoken_kit.h"
+#include "message_parcel.h"
 #include "nativetoken_kit.h"
 #include "token_setproc.h"
 
@@ -70,10 +71,29 @@ void FaceAuthServiceTest::TearDown()
 HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_001, TestSize.Level0)
 {
     auto service = FaceAuthService::GetInstance();
+    EXPECT_NE(service, nullptr);
     service->OnStart();
     sptr<IBufferProducer> producer = nullptr;
     int32_t ret = service->SetBufferProducer(producer);
     EXPECT_EQ(ret, FACEAUTH_ERROR);
+}
+
+HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_002, TestSize.Level0)
+{
+    MessageParcel data;
+    MessageParcel reply;
+    MessageOption option(MessageOption::TF_SYNC);
+    uint32_t code = IFaceAuth::FACE_AUTH_SET_BUFFER_PRODUCER;
+
+    auto service = FaceAuthService::GetInstance();
+    EXPECT_NE(service, nullptr);
+    service->OnStart();
+    EXPECT_EQ(service->OnRemoteRequest(code, data, reply, option), 1);
+    EXPECT_TRUE(data.WriteInterfaceToken(IFaceAuth::GetDescriptor()));
+    EXPECT_EQ(service->OnRemoteRequest(code, data, reply, option), 0);
+    int32_t result = -1;
+    EXPECT_TRUE(reply.ReadInt32(result));
+    EXPECT_EQ(result, 1);
 }
 } // namespace FaceAuth
 } // namespace UserIam
