@@ -13,7 +13,7 @@
 
 import("//build/test.gni")
 
-ohos_unittest("faceauth_unittest") {
+ohos_unittest("face_auth_service_test") {
   module_out_path = "useriam/face_auth"
 
   sources = [
@@ -50,4 +50,43 @@ ohos_unittest("faceauth_unittest") {
     "ipc:ipc_core",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
+}
+
+ohos_unittest("face_auth_perm_test") {
+  module_out_path = "useriam/face_auth"
+
+  sources = [ "face_auth_service_perm_test.cpp" ]
+
+  include_dirs = [
+    "mock",
+    "//base/useriam/user_auth_framework/common/logs",
+    "//base/useriam/user_auth_framework/common/utils",
+    "//base/useriam/user_auth_framework/common/executors/include/public",
+    "//base/useriam/face_auth/common/inc",
+    "//base/useriam/face_auth/frameworks/ipc/inc",
+    "//base/useriam/face_auth/services/inc",
+    "//base/useriam/user_auth_framework/interfaces/inner_api",
+  ]
+
+  deps = [
+    "//base/useriam/face_auth/services:faceauthservice",
+    "//third_party/googletest:gmock_main",
+    "//third_party/googletest:gtest_main",
+  ]
+
+  external_deps = [
+    "c_utils:utils",
+    "drivers_interface_face_auth:libface_auth_proxy_1.0",
+    "hiviewdfx_hilog_native:libhilog",
+    "ipc:ipc_core",
+  ]
+  remove_configs = [ "//build/config/compiler:no_exceptions" ]
+}
+
+group("faceauth_unittest") {
+  testonly = true
+  deps = [
+    ":face_auth_perm_test",
+    ":face_auth_service_test",
+  ]
 }
