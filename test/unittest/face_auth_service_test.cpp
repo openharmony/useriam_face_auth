@@ -75,7 +75,7 @@ HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_001, TestSize.Level0)
     service->OnStart();
     sptr<IBufferProducer> producer = nullptr;
     int32_t ret = service->SetBufferProducer(producer);
-    EXPECT_EQ(ret, FACEAUTH_ERROR);
+    EXPECT_EQ(ret, FACE_AUTH_ERROR);
 }
 
 HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_002, TestSize.Level0)
@@ -93,7 +93,7 @@ HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_002, TestSize.Level0)
     EXPECT_EQ(service->OnRemoteRequest(code, data, reply, option), 0);
     int32_t result = -1;
     EXPECT_TRUE(reply.ReadInt32(result));
-    EXPECT_EQ(result, 1);
+    EXPECT_EQ(result, FACE_AUTH_ERROR);
 }
 } // namespace FaceAuth
 } // namespace UserIam

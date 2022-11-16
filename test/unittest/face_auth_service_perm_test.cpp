@@ -53,10 +53,9 @@ HWTEST_F(FaceAuthServicePermTest, FaceAuthServicePermTest_001, TestSize.Level0)
 {
     auto service = FaceAuthService::GetInstance();
     EXPECT_NE(service, nullptr);
-    service->OnStart();
     sptr<IBufferProducer> producer = nullptr;
     int32_t ret = service->SetBufferProducer(producer);
-    EXPECT_EQ(ret, FACEAUTH_ERROR);
+    EXPECT_EQ(ret, FACE_AUTH_CHECK_PERMISSION_FAILED);
 }
 } // namespace FaceAuth
 } // namespace UserIam
