@@ -21,6 +21,7 @@
     "description": "$string:description_enrollmentstartview",
     "mainElement": "com.ohos.settings.faceauth.enrollmentstartview",
     "deviceTypes": [
+      "default",
       "tablet"
     ],
     "deliveryWithInstall": true,
@@ -46,6 +47,9 @@
         "name": "com.ohos.settings.faceauth.enrollmentstartview",
         "srcEntrance": "./ets/MainAbility/MainAbility.ts",
         "launchType": "singleton",
+        "permissions": [
+          "ohos.permission.MANAGE_USER_IDM"
+        ],
         "description": "$string:mainability_description",
         "icon": "$media:app_icon",
         "label": "$string:app_name",

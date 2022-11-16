@@ -39,7 +39,7 @@ FaceAuthProxy::FaceAuthProxy(const sptr<IRemoteObject> &object) : IRemoteProxy<I
 {
 }
 
-int32_t FaceAuthProxy::SetBufferProducer(sptr<IBufferProducer> &bufferProducer)
+int32_t FaceAuthProxy::SetBufferProducer(sptr<IBufferProducer> &producer)
 {
     MessageParcel data;
     MessageParcel reply;
@@ -47,9 +47,9 @@ int32_t FaceAuthProxy::SetBufferProducer(sptr<IBufferProducer> &bufferProducer)
         IAM_LOGE("write descriptor failed");
         return FACE_AUTH_ERROR;
     }
-    if (bufferProducer != nullptr) {
-        if (!data.WriteRemoteObject(bufferProducer->AsObject())) {
-            IAM_LOGE("failed to WriteRemoteObject(bufferProducer).");
+    if (producer != nullptr) {
+        if (!data.WriteRemoteObject(producer->AsObject())) {
+            IAM_LOGE("failed to WriteRemoteObject(producer).");
             return FACE_AUTH_ERROR;
         }
     }
