@@ -62,9 +62,9 @@ int32_t FaceAuthStub::FaceAuthSetBufferProducer(MessageParcel &data, MessageParc
     IAM_LOGI("SetBufferProducer ret %{public}d", ret);
     if (!reply.WriteInt32(ret)) {
         IAM_LOGE("failed to WriteInt32(ret)");
-        return FACEAUTH_ERROR;
+        return FACE_AUTH_ERROR;
     }
-    return FACEAUTH_SUCCESS;
+    return FACE_AUTH_SUCCESS;
 }
 
 int32_t FaceAuthStub::OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option)
@@ -72,7 +72,7 @@ int32_t FaceAuthStub::OnRemoteRequest(uint32_t code, MessageParcel &data, Messag
     IAM_LOGI("start");
     if (data.ReadInterfaceToken() != FaceAuthStub::GetDescriptor()) {
         IAM_LOGE("descriptor is not matched");
-        return FACEAUTH_ERROR;
+        return FACE_AUTH_ERROR;
     }
     auto itFunc = keyToHandle_.find(code);
     if (itFunc == keyToHandle_.end()) {
@@ -80,7 +80,7 @@ int32_t FaceAuthStub::OnRemoteRequest(uint32_t code, MessageParcel &data, Messag
         return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
     }
     auto requestFunc = itFunc->second;
-    IF_FALSE_LOGE_AND_RETURN_VAL(requestFunc != nullptr, FACEAUTH_ERROR);
+    IF_FALSE_LOGE_AND_RETURN_VAL(requestFunc != nullptr, FACE_AUTH_ERROR);
     return (this->*requestFunc)(data, reply);
 }
 } // namespace FaceAuth
