@@ -85,19 +85,19 @@ int32_t FaceAuthDriverHdi::SetBufferProducer(sptr<IBufferProducer> &producer)
 {
     if (faceAuthExecutorList_.size() == 0) {
         IAM_LOGE("no executor to set buffer producer");
-        return FACEAUTH_ERROR;
+        return FACE_AUTH_ERROR;
     }
 
     std::lock_guard<std::mutex> gurard(mutex_);
     for (auto executor : faceAuthExecutorList_) {
-        IF_FALSE_LOGE_AND_RETURN_VAL(executor != nullptr, FACEAUTH_ERROR);
+        IF_FALSE_LOGE_AND_RETURN_VAL(executor != nullptr, FACE_AUTH_ERROR);
         int32_t ret = executor->SetBufferProducer(producer);
-        if (ret != FACEAUTH_SUCCESS) {
+        if (ret != FACE_AUTH_SUCCESS) {
             IAM_LOGE("executor SetBufferProducer fail %{public}d", ret);
-            return FACEAUTH_ERROR;
+            return FACE_AUTH_ERROR;
         }
     }
-    return FACEAUTH_SUCCESS;
+    return FACE_AUTH_SUCCESS;
 }
 } // namespace FaceAuth
 } // namespace UserIam

@@ -35,12 +35,15 @@ ohos_shared_library("faceauthservice") {
     "//base/useriam/user_auth_framework/common/executors:userauth_executors",
   ]
   external_deps = [
+    "ability_base:want",
     "access_token:libaccesstoken_sdk",
+    "bundle_framework:appexecfwk_core",
     "c_utils:utils",
     "drivers_interface_face_auth:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_core",
     "safwk:system_ability_fwk",
+    "samgr:samgr_proxy",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
 

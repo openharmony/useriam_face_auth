@@ -41,7 +41,7 @@ int32_t FaceAuthClient::SetBufferProducer(sptr<IBufferProducer> &producer)
     sptr<IFaceAuth> proxy = GetFaceAuthProxy();
     if (proxy == nullptr) {
         IAM_LOGE("get faceAuthProxy fail");
-        return FACEAUTH_ERROR;
+        return FACE_AUTH_ERROR;
     }
     return proxy->SetBufferProducer(producer);
 }
