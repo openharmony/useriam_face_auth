@@ -18,6 +18,7 @@
 #include <cstdint>
 #include <mutex>
 
+#include "bundle_mgr_interface.h"
 #include "nocopyable.h"
 #include "surface.h"
 #include "system_ability.h"
@@ -41,8 +42,10 @@ public:
 private:
     static std::mutex mutex_;
     static std::shared_ptr<FaceAuthService> instance_;
+    static sptr<AppExecFwk::IBundleMgr> bundleMgr_;
     void StartDriverManager();
     bool IsPermissionGranted(const std::string &permission);
+    sptr<AppExecFwk::IBundleMgr> GetBundleMgr();
 };
 } // namespace FaceAuth
 } // namespace UserIam

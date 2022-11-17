@@ -45,18 +45,18 @@ int32_t FaceAuthProxy::SetBufferProducer(sptr<IBufferProducer> &producer)
     MessageParcel reply;
     if (!data.WriteInterfaceToken(FaceAuthProxy::GetDescriptor())) {
         IAM_LOGE("write descriptor failed");
-        return FACEAUTH_ERROR;
+        return FACE_AUTH_ERROR;
     }
     if (producer != nullptr) {
         if (!data.WriteRemoteObject(producer->AsObject())) {
             IAM_LOGE("failed to WriteRemoteObject(producer).");
-            return FACEAUTH_ERROR;
+            return FACE_AUTH_ERROR;
         }
     }
     bool ret = SendRequest(FACE_AUTH_SET_BUFFER_PRODUCER, data, reply);
     if (!ret) {
         IAM_LOGE("failed to send request.");
-        return FACEAUTH_ERROR;
+        return FACE_AUTH_ERROR;
     }
     int32_t result = reply.ReadInt32();
     IAM_LOGI("result = %{public}d", result);
