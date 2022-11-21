@@ -45,6 +45,7 @@ ohos_shared_library("faceauthservice") {
     "safwk:system_ability_fwk",
     "samgr:samgr_proxy",
   ]
+
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
 
   if (ability_runtime_graphics) {
