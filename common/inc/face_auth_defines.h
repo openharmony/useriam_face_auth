@@ -16,12 +16,16 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <cstdint>
+
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-enum FaceAuthRet {
-    FACEAUTH_SUCCESS = 0,
-    FACEAUTH_ERROR = 1,
+enum FaceAuthRet : int32_t {
+    FACE_AUTH_SUCCESS = 0,
+    FACE_AUTH_ERROR = 1,
+    FACE_AUTH_CHECK_PERMISSION_FAILED = 201,
+    FACE_AUTH_CHECK_SYSTEM_PERMISSION_FAILED = 202,
 };
 
 enum ResultCode {

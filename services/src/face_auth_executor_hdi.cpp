@@ -196,16 +196,16 @@ int32_t FaceAuthExecutorHdi::SetBufferProducer(sptr<IBufferProducer> &producer)
     OHOS::sptr<BufferProducerSequenceable> producerSequenceable = nullptr;
     if (producer != nullptr) {
         producerSequenceable = new (std::nothrow) BufferProducerSequenceable(producer);
-        IF_FALSE_LOGE_AND_RETURN_VAL(producerSequenceable != nullptr, FACEAUTH_ERROR);
+        IF_FALSE_LOGE_AND_RETURN_VAL(producerSequenceable != nullptr, FACE_AUTH_ERROR);
     }
 
     int32_t status = executorProxy_->SetBufferProducer(producerSequenceable);
     IamResultCode result = ConvertResultCode(status);
     if (status != IamResultCode::SUCCESS) {
         IAM_LOGE("SetBufferProducer fail result %{public}d", result);
-        return FACEAUTH_ERROR;
+        return FACE_AUTH_ERROR;
     }
-    return FACEAUTH_SUCCESS;
+    return FACE_AUTH_SUCCESS;
 }
 
 IamResultCode FaceAuthExecutorHdi::MoveHdiExecutorInfo(FaceHdi::ExecutorInfo &in, IamExecutorInfo &out)
