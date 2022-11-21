@@ -33,7 +33,7 @@ namespace FaceAuth {
 namespace UserAuth = OHOS::UserIam::UserAuth;
 class FaceAuthDriverHdi : public UserAuth::IAuthDriverHdi, public NoCopyable {
 public:
-    FaceAuthDriverHdi(const std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter);
+    explicit FaceAuthDriverHdi(const std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter);
     ~FaceAuthDriverHdi() override = default;
 
     void GetExecutorList(std::vector<std::shared_ptr<UserAuth::IAuthExecutorHdi>> &executorList) override;
