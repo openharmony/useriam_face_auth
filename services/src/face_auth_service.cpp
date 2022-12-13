@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "accesstoken_kit.h"
-#include "bundle_mgr_proxy.h"
 #include "ibuffer_producer.h"
 #include "idriver_manager.h"
 #include "ipc_skeleton.h"
@@ -33,6 +32,7 @@
 #include "refbase.h"
 #include "system_ability.h"
 #include "system_ability_definition.h"
+#include "tokenid_kit.h"
 
 #include "iam_check.h"
 #include "iam_logger.h"
@@ -63,7 +63,6 @@ const std::vector<std::shared_ptr<FaceAuthDriverHdi>> FACE_AUTH_DRIVER_HDIS = {F
 } // namespace
 std::mutex FaceAuthService::mutex_;
 std::shared_ptr<FaceAuthService> FaceAuthService::instance_ = nullptr;
-sptr<AppExecFwk::IBundleMgr> FaceAuthService::bundleMgr_ = nullptr;
 
 FaceAuthService::FaceAuthService() : SystemAbility(SUBSYS_USERIAM_SYS_ABILITY_FACEAUTH, true)
 {
@@ -108,38 +107,17 @@ bool FaceAuthService::IsPermissionGranted(const std::string &permission)
     return true;
 }
 
-sptr<AppExecFwk::IBundleMgr> FaceAuthService::GetBundleMgr()
-{
-    IAM_LOGI("start");
-    if (bundleMgr_ != nullptr) {
-        return bundleMgr_;
-    }
-    auto sam = SystemAbilityManagerClient::GetInstance().GetSystemAbilityManager();
-    if (sam == nullptr) {
-        IAM_LOGE("GetSystemAbilityManager return nullptr");
-        return nullptr;
-    }
-    auto bundleMgrSa = sam->GetSystemAbility(BUNDLE_MGR_SERVICE_SYS_ABILITY_ID);
-    if (bundleMgrSa == nullptr) {
-        IAM_LOGE("GetSystemAbility return nullptr");
-        return nullptr;
-    }
-    bundleMgr_ = iface_cast<AppExecFwk::BundleMgrProxy>(bundleMgrSa);
-    return bundleMgr_;
-}
-
 int32_t FaceAuthService::SetBufferProducer(sptr<IBufferProducer> &producer)
 {
     const std::string MANAGE_USER_IDM_PERMISSION = "ohos.permission.MANAGE_USER_IDM";
     std::lock_guard<std::mutex> gurard(mutex_);
     IAM_LOGI("set buffer producer %{public}s", Common::GetPointerNullStateString(producer).c_str());
-    int32_t uid = IPCSkeleton::GetCallingUid();
-    auto bundleMgr = GetBundleMgr();
-    if (bundleMgr == nullptr) {
-        IAM_LOGE("bundleMgr is nullptr");
-        return FACE_AUTH_ERROR;
-    }
-    if (!bundleMgr->CheckIsSystemAppByUid(uid)) {
+    using namespace Security::AccessToken;
+    uint64_t fullTokenId = IPCSkeleton::GetCallingFullTokenID();
+    bool checkRet = TokenIdKit::IsSystemAppByFullTokenID(fullTokenId);
+    uint32_t tokenId = this->GetCallingTokenID();
+    ATokenTypeEnum callingType = AccessTokenKit::GetTokenTypeFlag(tokenId);
+    if (callingType == TOKEN_HAP && !checkRet) {
         IAM_LOGE("the caller is not a system application");
         return FACE_AUTH_CHECK_SYSTEM_PERMISSION_FAILED;
     }

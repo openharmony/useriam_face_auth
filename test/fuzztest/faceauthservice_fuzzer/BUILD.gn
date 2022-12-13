@@ -43,11 +43,8 @@ ohos_fuzztest("FaceAuthServiceFuzzTest") {
   ]
 
   external_deps = [
-    "ability_base:want",
-    "bundle_framework:appexecfwk_core",
     "hilog_native:libhilog",
     "safwk:system_ability_fwk",
-    "samgr:samgr_proxy",
   ]
 
   if (ability_runtime_graphics) {
