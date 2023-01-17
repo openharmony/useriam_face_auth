@@ -33,6 +33,7 @@ public:
 
 private:
     sptr<IFaceAuth> GetFaceAuthProxy();
+    bool CheckSystemPermission();
     std::mutex mutex_;
     sptr<IFaceAuth> faceAuthProxy_;
 };

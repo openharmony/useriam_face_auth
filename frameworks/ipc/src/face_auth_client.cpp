@@ -18,12 +18,16 @@
 #include <cstdint>
 #include <mutex>
 
+#include "access_token.h"
+#include "accesstoken_kit.h"
 #include "if_system_ability_manager.h"
 #include "iremote_broker.h"
 #include "iremote_object.h"
 #include "iservice_registry.h"
 #include "refbase.h"
 #include "system_ability_definition.h"
+#include "tokenid_kit.h"
+#include "token_setproc.h"
 
 #include "iam_logger.h"
 
@@ -35,9 +39,29 @@
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
+namespace {
+const uint64_t TOKEN_ID_LOWMASK = 0xffffffff;
+} // namespace
+
+bool FaceAuthClient::CheckSystemPermission()
+{
+    using namespace Security::AccessToken;
+    uint64_t fullTokenId = GetSelfTokenID();
+    bool checkRet = TokenIdKit::IsSystemAppByFullTokenID(fullTokenId);
+    AccessTokenID tokenId = fullTokenId & TOKEN_ID_LOWMASK;
+    if (AccessTokenKit::GetTokenType(tokenId) == TOKEN_HAP && !checkRet) {
+        return false;
+    }
+    return true;
+}
+
 int32_t FaceAuthClient::SetBufferProducer(sptr<IBufferProducer> &producer)
 {
     IAM_LOGI("start");
+    if (!CheckSystemPermission()) {
+        IAM_LOGE("the caller is not a system application");
+        return FACE_AUTH_CHECK_SYSTEM_PERMISSION_FAILED;
+    }
     sptr<IFaceAuth> proxy = GetFaceAuthProxy();
     if (proxy == nullptr) {
         IAM_LOGE("get faceAuthProxy fail");
