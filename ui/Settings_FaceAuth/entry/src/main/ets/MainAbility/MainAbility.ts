@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import Ability from '@ohos.application.Ability'
+import Ability from '@ohos.app.ability.UIAbility'
 import Log from '../utils/log'
 import UserIdmModel from '../model/userIdmModel'
 import CommonController from '../controller/commonController'
