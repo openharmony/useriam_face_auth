@@ -22,7 +22,7 @@
 #include "ibuffer_producer.h"
 #include "parcel.h"
 #include "refbase.h"
-#include "surface.h"
+#include "iconsumer_surface.h"
 
 #include "iam_logger.h"
 
@@ -63,7 +63,7 @@ void FuzzSetBufferProducer(Parcel &parcel)
     IAM_LOGI("begin");
     sptr<IBufferProducer> bufferProducer = nullptr;
     if (parcel.ReadBool()) {
-        auto surface = Surface::CreateSurfaceAsConsumer();
+        auto surface = IConsumerSurface::Create();
         if (surface == nullptr) {
             IAM_LOGE("CreateSurfaceAsConsumer fail");
             return;
