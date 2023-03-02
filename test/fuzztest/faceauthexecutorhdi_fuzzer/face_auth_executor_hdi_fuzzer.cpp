@@ -28,8 +28,8 @@
 #include "iam_fuzz_test.h"
 #include "iam_logger.h"
 #include "iam_ptr.h"
-#include "framework_types.h"
-#include "iexecute_callback.h"
+#include "iam_executor_framework_types.h"
+#include "iam_executor_iexecute_callback.h"
 
 #include "face_auth_executor_hdi.h"
 #include "v1_0/face_auth_types.h"

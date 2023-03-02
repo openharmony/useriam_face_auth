@@ -25,7 +25,7 @@
 
 #include "accesstoken_kit.h"
 #include "ibuffer_producer.h"
-#include "idriver_manager.h"
+#include "iam_executor_idriver_manager.h"
 #include "ipc_skeleton.h"
 #include "iremote_object.h"
 #include "iservice_registry.h"
