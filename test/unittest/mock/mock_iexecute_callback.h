@@ -18,7 +18,7 @@
 
 #include "gmock/gmock.h"
 
-#include "iexecute_callback.h"
+#include "iam_executor_iexecute_callback.h"
 
 namespace OHOS {
 namespace UserIam {

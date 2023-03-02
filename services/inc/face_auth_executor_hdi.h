@@ -24,9 +24,9 @@
 
 #include "ibuffer_producer.h"
 
-#include "framework_types.h"
-#include "iauth_executor_hdi.h"
-#include "iexecute_callback.h"
+#include "iam_executor_framework_types.h"
+#include "iam_executor_iauth_executor_hdi.h"
+#include "iam_executor_iexecute_callback.h"
 #include "v1_0/iexecutor.h"
 
 namespace OHOS {
