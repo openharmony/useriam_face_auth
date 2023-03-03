@@ -39,7 +39,7 @@ ohos_shared_library("faceauth_framework") {
     "access_token:libtokenid_sdk",
     "c_utils:utils",
     "hiviewdfx_hilog_native:libhilog",
-    "ipc:ipc_core",
+    "ipc:ipc_single",
     "samgr:samgr_proxy",
   ]
 
@@ -61,10 +61,12 @@ ohos_source_set("faceauth_framework_stub") {
   include_dirs = [
     "//base/useriam/user_auth_framework/common/utils",
     "//base/useriam/face_auth/common/inc",
-    "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include",
   ]
 
-  external_deps = [ "hiviewdfx_hilog_native:libhilog" ]
+  external_deps = [
+    "hiviewdfx_hilog_native:libhilog",
+    "ipc:ipc_single",
+  ]
 
   if (ability_runtime_graphics) {
     external_deps += [ "graphic_standard:surface" ]

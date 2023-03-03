@@ -30,18 +30,16 @@ ohos_shared_library("faceauthservice") {
     "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include",
   ]
 
-  deps = [
-    "//base/useriam/face_auth/frameworks/ipc:faceauth_framework_stub",
-    "//base/useriam/user_auth_framework/common/executors:userauth_executors",
-  ]
+  deps = [ "../frameworks/ipc:faceauth_framework_stub" ]
   external_deps = [
     "access_token:libaccesstoken_sdk",
     "access_token:libtokenid_sdk",
     "c_utils:utils",
     "drivers_interface_face_auth:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
-    "ipc:ipc_core",
+    "ipc:ipc_single",
     "safwk:system_ability_fwk",
+    "user_auth_framework:userauth_executors",
   ]
 
   remove_configs = [ "//build/config/compiler:no_exceptions" ]

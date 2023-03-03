@@ -25,7 +25,7 @@
           "aafwk_standard",
           "drivers_interface_face_auth:libface_auth_proxy_1.0",
           "hiviewdfx_hilog_native:libhilog",
-          "ipc:ipc_core",
+          "ipc:ipc_single",
           "safwk:system_ability_fwk",
           "samgr:samgr_proxy",
           "c_utils:utils"

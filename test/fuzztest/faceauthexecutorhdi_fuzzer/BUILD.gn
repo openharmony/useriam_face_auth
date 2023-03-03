@@ -27,6 +27,7 @@ ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
   ]
   include_dirs = [
     "//base/useriam/face_auth/common/inc",
+    "../../../../user_auth_framework/interfaces/inner_api/iam_executor",
     "//base/useriam/user_auth_framework/common/logs",
     "//base/useriam/user_auth_framework/common/utils",
     "//base/useriam/face_auth/services/inc",
@@ -37,13 +38,13 @@ ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
   deps = [
     "//base/useriam/face_auth/services:faceauthservice",
     "//base/useriam/user_auth_framework/common:iam_test",
-    "//base/useriam/user_auth_framework/common/executors:userauth_executors",
   ]
 
   external_deps = [
     "drivers_interface_face_auth:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
-    "ipc:ipc_core",
+    "ipc:ipc_single",
+    "user_auth_framework:userauth_executors",
   ]
 
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
