@@ -27,7 +27,6 @@ ohos_unittest("face_auth_service_test") {
     "mock",
     "//base/useriam/user_auth_framework/common/logs",
     "//base/useriam/user_auth_framework/common/utils",
-    "//base/useriam/user_auth_framework/common/executors/include/public",
     "//base/useriam/face_auth/common/inc",
     "//base/useriam/face_auth/frameworks/ipc/inc",
     "//base/useriam/face_auth/services/inc",
@@ -47,7 +46,8 @@ ohos_unittest("face_auth_service_test") {
     "c_utils:utils",
     "drivers_interface_face_auth:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
-    "ipc:ipc_core",
+    "ipc:ipc_single",
+    "user_auth_framework:userauth_executors",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
 }
@@ -61,7 +61,6 @@ ohos_unittest("face_auth_perm_test") {
     "mock",
     "//base/useriam/user_auth_framework/common/logs",
     "//base/useriam/user_auth_framework/common/utils",
-    "//base/useriam/user_auth_framework/common/executors/include/public",
     "//base/useriam/face_auth/common/inc",
     "//base/useriam/face_auth/frameworks/ipc/inc",
     "//base/useriam/face_auth/services/inc",
@@ -80,7 +79,7 @@ ohos_unittest("face_auth_perm_test") {
     "c_utils:utils",
     "drivers_interface_face_auth:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
-    "ipc:ipc_core",
+    "ipc:ipc_single",
     "samgr:samgr_proxy",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]

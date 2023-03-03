@@ -21,8 +21,8 @@
 #include "iremote_broker.h"
 #include "nocopyable.h"
 
-#include "iauth_driver_hdi.h"
-#include "iauth_executor_hdi.h"
+#include "iam_executor_iauth_driver_hdi.h"
+#include "iam_executor_iauth_executor_hdi.h"
 
 #include "face_auth_executor_hdi.h"
 #include "face_auth_interface_adapter.h"
