@@ -1,12 +1,10 @@
 # Face Authentication
 
-
-
 ## Introduction
 
-Face authentication (faceauth) supports recording, deletion, and authentication of user faces.
+Face authentication (faceauth) supports enrollment, deletion, and authentication of user faces.
 
-faceauth is a biometric authentication executor supported by OpenHarmony. It registers face authentication resource information with the collaborative authentication framework based on the resource registration interface defined by collaborative authentication, and invokes camera functions according to the scheduling of the collaborative authentication framework to record, delete, and authenticate user faces.
+faceauth is a biometric authentication executor supported by OpenHarmony. It registers face authentication resource information with the collaborative authentication framework through the interface defined by collaborative authentication. The collaborative authentication framework calls faceauth HDI interfaces to enroll or delete facial credentials and perform face authentication.
 
 **Figure 1** Face authentication architecture
 
@@ -14,26 +12,31 @@ faceauth is a biometric authentication executor supported by OpenHarmony. It reg
 
 Facial data is important biometric information of users. The following security measures are taken to protect the facial data during the authentication process:
 
-- Permission management: High access permissions are defined for face recording and deletion APIs, which can be invoked only by setter applications.
-- Secure storage and comparison of facial data: The faceauth HDI defines the adaptation interfaces for device vendors. Device vendors can implement secure facial data comparison and storage in a trusted execution environment (TEE). <sup>Note 1</sup>
+1. Permission management: High-level permissions are defined for face enrollment and deletion APIs, which can be called only by system applications.
+1. Secure storage and comparison of facial data: The faceauth HDI provides adaptation interfaces for device vendors. Device vendors can implement secure facial data comparison and storage in a trusted execution environment (TEE). 
 
-Note 1: The OpenHarmony open-source framework provides stub implementation of face authentication for developers to demo the face authentication function. The stub software implementation does not include secure storage and comparison of facial data in a TEE.
+> **NOTE**
+>
+>  The OpenHarmony open-source framework provides stub implementation for face authentication, but does not include secure storage and comparison of face data in a TEE.
 
-## Directory Structure
+# Directory Structure
 
 ```
 //base/useriam/face_auth
-├── bundle.json              # Module description file
-├── figures                  # Figures used in the README
-├── sa_profile               # Service ability profile 
-├── services                 # Service implementation
-└── ui                       # User interface for face recording
+├── bundle.json            # Module description file
+├── common                 # Common files
+├── figures                # Figures used in the README
+├── frameworks             # Framework code
+├── interfaces             # External APIs
+│   └── inner_api          # Header file exposed to internal subsystems for system services
+├── sa_profile             # Service ability profile 
+├── services               # Service ability implementation
+└── ui                     # User interface for face enrollment
 ```
 
 ## Usage
 
-* To adapt to the face authentication function, device vendors must implement the interface defined in the IDL file **//drivers/interface/faceauth** file, **//drivers/peripheral/faceauth** provides interface the stub implementation for development reference.
-* The extraction, comparison, storage, and recording of facial data must be implemented in a secure environment (TEE/secure chipset) to ensure the highest security level in the system.
+Device vendors need to implement the APIs defined in the IDL file **//drivers/interface/faceauth**. This IDL file provides stub implementation of APIs. The extraction, comparison, storage, and enrollment of facial data must be implemented in a secure environment (TEE or secure chipset) to ensure the highest security level in the system.
 
 ## Repositories Involved
 
