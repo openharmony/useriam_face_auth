@@ -80,6 +80,7 @@ ohos_unittest("face_auth_perm_test") {
     "drivers_interface_face_auth:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_single",
+    "safwk:system_ability_fwk",
     "samgr:samgr_proxy",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
