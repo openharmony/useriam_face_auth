@@ -73,4 +73,7 @@ ohos_source_set("faceauth_framework_stub") {
     include_dirs +=
         [ "//foundation/graphic/graphic_2d/frameworks/surface/include" ]
   }
+
+  subsystem_name = "useriam"
+  part_name = "face_auth"
 }
