@@ -36,5 +36,6 @@ ohos_shared_library("faceauth") {
 
   relative_install_dir = "module/useriam"
 
+  subsystem_name = "useriam"
   part_name = "face_auth"
 }
