@@ -25,8 +25,6 @@ import Constants from '../config/constant'
 @Component
 struct Index {
   private TAG: string = "Index"
-  private TYPE_STATUS_BAR_TEMP:number = 2108 // In current version, windows subscribe type id is wrong, temporary use these id
-  private TYPE_NAVIGATION_BAR_TEMP:number = 2112
   @State resultString: string = ""
   @StorageLink('SYSTEM_STATUS_BAR_HEIGHT') SYSTEM_STATUS_BAR_HEIGHT: number = 0
   @StorageLink('SYSTEM_NAVIGATION_BAR_HEIGHT') SYSTEM_NAVIGATION_BAR_HEIGHT: number = 0
@@ -72,12 +70,12 @@ struct Index {
         Log.info(this.TAG, 'receive system bar tint change: ' + JSON.stringify(data));
         for (let i = 0; i < data.regionTint.length; i++) {
           let regionData = data.regionTint[i]
-          if (regionData.type == this.TYPE_STATUS_BAR_TEMP) {
+          if (regionData.type == window.WindowType.TYPE_STATUS_BAR) {
             this.SYSTEM_STATUS_BAR_HEIGHT = px2vp(regionData.region.height)
             Log.info(this.TAG, "set status bar height " + regionData.region.height)
             continue
           }
-          if (regionData.type == this.TYPE_NAVIGATION_BAR_TEMP) {
+          if (regionData.type == window.WindowType.TYPE_NAVIGATION_BAR) {
             this.SYSTEM_NAVIGATION_BAR_HEIGHT = px2vp(regionData.region.height)
             Log.info(this.TAG, "set navigation bar height " + this.SYSTEM_NAVIGATION_BAR_HEIGHT)
             continue
