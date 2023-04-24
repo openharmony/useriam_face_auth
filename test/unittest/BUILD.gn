@@ -1,4 +1,4 @@
-# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Copyright (c) 2022-2023 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -25,16 +25,15 @@ ohos_unittest("face_auth_service_test") {
 
   include_dirs = [
     "mock",
-    "//base/useriam/user_auth_framework/common/logs",
-    "//base/useriam/user_auth_framework/common/utils",
-    "//base/useriam/face_auth/common/inc",
-    "//base/useriam/face_auth/frameworks/ipc/inc",
-    "//base/useriam/face_auth/services/inc",
-    "//base/useriam/user_auth_framework/interfaces/inner_api",
+    "../../common/logs",
+    "../../common/utils",
+    "../../common/inc",
+    "../../frameworks/ipc/inc",
+    "../../services/inc",
   ]
 
   deps = [
-    "//base/useriam/face_auth/services:faceauthservice",
+    "../../services:faceauthservice",
     "//third_party/googletest:gmock_main",
     "//third_party/googletest:gtest_main",
   ]
@@ -47,9 +46,13 @@ ohos_unittest("face_auth_service_test") {
     "drivers_interface_face_auth:libface_auth_proxy_1.0",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_single",
+    "user_auth_framework:userauth_client",
     "user_auth_framework:userauth_executors",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
+
+  subsystem_name = "useriam"
+  part_name = "face_auth"
 }
 
 ohos_unittest("face_auth_perm_test") {
@@ -59,16 +62,15 @@ ohos_unittest("face_auth_perm_test") {
 
   include_dirs = [
     "mock",
-    "//base/useriam/user_auth_framework/common/logs",
-    "//base/useriam/user_auth_framework/common/utils",
-    "//base/useriam/face_auth/common/inc",
-    "//base/useriam/face_auth/frameworks/ipc/inc",
-    "//base/useriam/face_auth/services/inc",
-    "//base/useriam/user_auth_framework/interfaces/inner_api",
+    "../../common/logs",
+    "../../common/utils",
+    "../../common/inc",
+    "../../frameworks/ipc/inc",
+    "../../services/inc",
   ]
 
   deps = [
-    "//base/useriam/face_auth/services:faceauthservice",
+    "../../services:faceauthservice",
     "//third_party/googletest:gmock_main",
     "//third_party/googletest:gtest_main",
   ]
@@ -82,8 +84,12 @@ ohos_unittest("face_auth_perm_test") {
     "ipc:ipc_single",
     "safwk:system_ability_fwk",
     "samgr:samgr_proxy",
+    "user_auth_framework:userauth_client",
   ]
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
+
+  subsystem_name = "useriam"
+  part_name = "face_auth"
 }
 
 group("faceauth_unittest") {

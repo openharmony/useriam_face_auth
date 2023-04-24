@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,7 +21,6 @@
 #include <string>
 #include <utility>
 
-#include "buffer_client_producer.h"
 #include "ibuffer_producer.h"
 #include "ipc_object_stub.h"
 #include "iremote_broker.h"
@@ -57,7 +56,7 @@ int32_t FaceAuthStub::FaceAuthSetBufferProducer(MessageParcel &data, MessageParc
     sptr<IBufferProducer> buffer = nullptr;
     sptr<IRemoteObject> remoteObj = data.ReadRemoteObject();
     IAM_LOGI("read remote object %{public}s", Common::GetPointerNullStateString(remoteObj).c_str());
-    buffer = iface_cast<BufferClientProducer>(remoteObj);
+    buffer = iface_cast<IBufferProducer>(remoteObj);
     int32_t ret = SetBufferProducer(buffer);
     IAM_LOGI("SetBufferProducer ret %{public}d", ret);
     if (!reply.WriteInt32(ret)) {
