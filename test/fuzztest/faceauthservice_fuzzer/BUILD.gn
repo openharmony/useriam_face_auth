@@ -1,4 +1,4 @@
-# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Copyright (c) 2022-2023 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -27,18 +27,21 @@ ohos_fuzztest("FaceAuthServiceFuzzTest") {
   ]
 
   include_dirs = [
-    "//base/useriam/face_auth/common/inc",
-    "//base/useriam/user_auth_framework/common/logs",
-    "//base/useriam/user_auth_framework/common/utils",
-    "//base/useriam/face_auth/services/inc",
+    "../../../common/inc",
+    "../../../common/logs",
+    "../../../common/utils",
+    "../../../services/inc",
+    "../iamfuzz",
   ]
 
-  sources = [ "face_auth_service_fuzzer.cpp" ]
+  sources = [
+    "../iamfuzz/iam_fuzz_test.cpp",
+    "face_auth_service_fuzzer.cpp",
+  ]
 
   deps = [
-    "//base/useriam/face_auth/frameworks/ipc:faceauth_framework",
-    "//base/useriam/face_auth/services:faceauthservice",
-    "//base/useriam/user_auth_framework/common:iam_test",
+    "../../../frameworks/ipc:faceauth_framework",
+    "../../../services:faceauthservice",
   ]
 
   external_deps = [
@@ -50,4 +53,7 @@ ohos_fuzztest("FaceAuthServiceFuzzTest") {
   if (ability_runtime_graphics) {
     external_deps += [ "graphic_standard:surface" ]
   }
+
+  subsystem_name = "useriam"
+  part_name = "face_auth"
 }
