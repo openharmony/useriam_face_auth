@@ -1,4 +1,4 @@
-# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Copyright (c) 2022-2023 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -26,11 +26,11 @@ ohos_shared_library("faceauth_framework") {
 
   public_configs = [ ":faceauth_framework_public_config" ]
 
-  configs = [ "//base/useriam/user_auth_framework/common:iam_log_config" ]
+  configs = [ "../../common:iam_log_config" ]
 
   include_dirs = [
-    "//base/useriam/user_auth_framework/common/utils",
-    "//base/useriam/face_auth/common/inc",
+    "../../common/utils",
+    "../../common/inc",
   ]
 
   external_deps = [
@@ -54,13 +54,13 @@ ohos_shared_library("faceauth_framework") {
 ohos_source_set("faceauth_framework_stub") {
   sources = [ "src/face_auth_stub.cpp" ]
 
-  configs = [ "//base/useriam/user_auth_framework/common:iam_log_config" ]
+  configs = [ "../../common:iam_log_config" ]
 
   public_configs = [ ":faceauth_framework_public_config" ]
 
   include_dirs = [
-    "//base/useriam/user_auth_framework/common/utils",
-    "//base/useriam/face_auth/common/inc",
+    "../../common/utils",
+    "../../common/inc",
   ]
 
   external_deps = [
@@ -69,8 +69,12 @@ ohos_source_set("faceauth_framework_stub") {
   ]
 
   if (ability_runtime_graphics) {
-    external_deps += [ "graphic_standard:surface" ]
-    include_dirs +=
-        [ "//foundation/graphic/graphic_2d/frameworks/surface/include" ]
+    external_deps += [
+      "graphic_chipsetsdk:surface",
+      "graphic_standard:surface",
+    ]
   }
+
+  subsystem_name = "useriam"
+  part_name = "face_auth"
 }
