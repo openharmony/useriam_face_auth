@@ -18,8 +18,8 @@
       "adapted_system_type": [ "standard" ],
       "syscap": ["SystemCapability.UserIAM.UserAuth.FaceAuth"],
       "features": [],
-      "rom": "1000KB",
-      "ram": "16000KB",
+      "rom": "1024KB",
+      "ram": "1306KB",
       "deps": {
         "components": [
           "aafwk_standard",
