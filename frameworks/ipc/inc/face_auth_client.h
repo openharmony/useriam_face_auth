@@ -18,24 +18,15 @@
 
 #include <list>
 
-#include "singleton.h"
-
 #include "iface_auth.h"
 
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-class FaceAuthClient : public IRemoteObject::DeathRecipient, public Singleton<FaceAuthClient> {
+class FaceAuthClient {
 public:
-    void ResetFaceAuthProxy();
-    int32_t SetBufferProducer(sptr<IBufferProducer> &producer);
-    void OnRemoteDied(const wptr<IRemoteObject> &remote) override;
-
-private:
-    sptr<IFaceAuth> GetFaceAuthProxy();
-    bool CheckSystemPermission();
-    std::mutex mutex_;
-    sptr<IFaceAuth> faceAuthProxy_;
+    static FaceAuthClient &GetInstance();
+    virtual int32_t SetBufferProducer(sptr<IBufferProducer> &producer) = 0;
 };
 } // namespace FaceAuth
 } // namespace UserIam
