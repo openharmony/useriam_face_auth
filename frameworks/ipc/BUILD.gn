@@ -20,7 +20,7 @@ config("faceauth_framework_public_config") {
 
 ohos_shared_library("faceauth_framework") {
   sources = [
-    "src/face_auth_client.cpp",
+    "src/face_auth_client_impl.cpp",
     "src/face_auth_proxy.cpp",
   ]
 
@@ -42,6 +42,10 @@ ohos_shared_library("faceauth_framework") {
     "ipc:ipc_single",
     "samgr:samgr_proxy",
   ]
+
+  if (use_musl) {
+    version_script = "face_auth_framework_map"
+  }
 
   if (ability_runtime_graphics) {
     external_deps += [ "graphic_standard:surface" ]
