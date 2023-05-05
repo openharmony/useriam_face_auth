@@ -1,6 +1,6 @@
 {
     "name": "@openharmony/face_auth",
-    "version": "3.1.0",
+    "version": "4.0",
     "description": "Face authentication capability",
     "homePage": "https://gitee.com/openharmony",
     "author": {},
@@ -22,13 +22,18 @@
       "ram": "1306KB",
       "deps": {
         "components": [
-          "aafwk_standard",
-          "drivers_interface_face_auth:libface_auth_proxy_1.0",
-          "hiviewdfx_hilog_native:libhilog",
-          "ipc:ipc_single",
-          "safwk:system_ability_fwk",
-          "samgr:samgr_proxy",
-          "c_utils:utils"
+          "user_auth_framework",
+          "napi",
+          "samgr",
+          "c_utils",
+          "access_token",
+          "ipc",
+          "graphic_standard",
+          "safwk",
+          "graphic_chipsetsdk",
+          "hiviewdfx_hilog_native",
+          "drivers_interface_face_auth",
+          "hilog_native"
         ]
       },
       "build": {
