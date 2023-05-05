@@ -13,12 +13,11 @@
 
 import("//build/config/features.gni")
 import("//build/test.gni")
-import("//foundation/ability/ability_runtime/ability_runtime.gni")
 
 ohos_fuzztest("FaceAuthServiceFuzzTest") {
   module_out_path = "useriam/face_auth"
-  fuzz_config_file =
-      "//base/useriam/face_auth/test/fuzztest/faceauthservice_fuzzer"
+  fuzz_config_file = "../faceauthservice_fuzzer"
+
   cflags = [
     "-g",
     "-O0",
@@ -60,7 +59,7 @@ ohos_fuzztest("FaceAuthServiceFuzzTest") {
 
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
 
-  if (ability_runtime_graphics) {
+  if (defined(global_parts_info.graphic_graphic_standard)) {
     external_deps += [ "graphic_standard:surface" ]
   }
 

@@ -13,12 +13,11 @@
 
 import("//build/config/features.gni")
 import("//build/test.gni")
-import("//foundation/ability/ability_runtime/ability_runtime.gni")
 
 ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
   module_out_path = "useriam/face_auth"
-  fuzz_config_file =
-      "//base/useriam/face_auth/test/fuzztest/faceauthexecutorhdi_fuzzer"
+  fuzz_config_file = "../faceauthexecutorhdi_fuzzer"
+
   cflags = [
     "-g",
     "-O0",
