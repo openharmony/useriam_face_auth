@@ -12,7 +12,6 @@
 # limitations under the License.
 
 import("//build/ohos.gni")
-import("//foundation/ability/ability_runtime/ability_runtime.gni")
 
 ohos_shared_library("faceauthservice") {
   sources = [
@@ -49,7 +48,7 @@ ohos_shared_library("faceauthservice") {
 
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
 
-  if (ability_runtime_graphics) {
+  if (defined(global_parts_info.graphic_graphic_standard)) {
     external_deps += [ "graphic_standard:surface" ]
   }
   subsystem_name = "useriam"

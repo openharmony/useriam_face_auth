@@ -12,7 +12,7 @@
 # limitations under the License.
 
 import("//build/ohos.gni")
-import("//foundation/ability/ability_runtime/ability_runtime.gni")
+
 ohos_shared_library("faceauth") {
   include_dirs = [
     "../../../common/logs",
@@ -30,7 +30,7 @@ ohos_shared_library("faceauth") {
     "ipc:ipc_single",
     "napi:ace_napi",
   ]
-  if (ability_runtime_graphics) {
+  if (defined(global_parts_info.graphic_graphic_standard)) {
     external_deps += [ "graphic_standard:surface" ]
   }
 
