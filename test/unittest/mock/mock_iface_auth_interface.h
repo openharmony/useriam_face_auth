@@ -18,24 +18,21 @@
 
 #include "gmock/gmock.h"
 
-#include "v1_0/iface_auth_interface.h"
+#include "face_auth_hdi.h"
 
 namespace OHOS {
-namespace HDI {
+namespace UserIam {
 namespace FaceAuth {
-namespace V1_0 {
-using namespace OHOS;
-using namespace OHOS::HDI;
-
 class MockIFaceAuthInterface : public IFaceAuthInterface {
 public:
     virtual ~MockIFaceAuthInterface() = default;
 
-    MOCK_METHOD1(GetExecutorList, int32_t(std::vector<sptr<IExecutor>> &executorList));
+    MOCK_METHOD1(GetExecutorList, int32_t(std::vector<sptr<IExecutorV1_0>> &executorList));
+
+    MOCK_METHOD1(GetExecutorListV1_1, int32_t(std::vector<sptr<IExecutor>> &executorList));
 };
-} // namespace V1_0
 } // namespace FaceAuth
-} // namespace HDI
+} // namespace UserIam
 } // namespace OHOS
 
 #endif // MOCK_IFACE_AUTH_INTERFACE_MOCK_H

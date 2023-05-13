@@ -21,20 +21,20 @@
 #include "hdf_base.h"
 #include "nocopyable.h"
 
+#include "face_auth_executor_hdi.h"
+#include "face_auth_hdi.h"
 #include "iam_executor_iexecute_callback.h"
-#include "v1_0/iexecutor_callback.h"
 
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
 namespace UserAuth = OHOS::UserIam::UserAuth;
-class FaceAuthExecutorCallbackHdi : public FaceHdi::IExecutorCallback, public NoCopyable {
+class FaceAuthExecutorCallbackHdi : public IExecutorCallback, public NoCopyable {
 public:
     explicit FaceAuthExecutorCallbackHdi(std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback);
     ~FaceAuthExecutorCallbackHdi() override = default;
 
-    // FaceHdi::IExecutorCallback
+    // IExecutorCallback
     int32_t OnResult(int32_t result, const std::vector<uint8_t> &extraInfo) override;
     int32_t OnTip(int32_t tip, const std::vector<uint8_t> &extraInfo) override;
 

@@ -17,28 +17,17 @@ ohos_unittest("face_auth_service_test") {
   module_out_path = "useriam/face_auth"
 
   sources = [
-    "../../frameworks/ipc/src/face_auth_stub.cpp",
-    "../../services/src/face_auth_driver_hdi.cpp",
-    "../../services/src/face_auth_executor_callback_hdi.cpp",
-    "../../services/src/face_auth_executor_hdi.cpp",
-    "../../services/src/face_auth_interface_adapter.cpp",
-    "../../services/src/face_auth_service.cpp",
     "face_auth_driver_hdi_unit_test.cpp",
     "face_auth_executor_callback_hdi_unit_test.cpp",
     "face_auth_executor_hdi_unit_test.cpp",
     "face_auth_service_test.cpp",
   ]
 
-  include_dirs = [
-    "mock",
-    "../../common/logs",
-    "../../common/utils",
-    "../../common/inc",
-    "../../frameworks/ipc/inc",
-    "../../services/inc",
-  ]
+  include_dirs = [ "mock" ]
 
   deps = [
+    "../../frameworks/ipc:faceauth_framework_stub",
+    "../../services:faceauthservice_source_set",
     "//third_party/googletest:gmock_main",
     "//third_party/googletest:gtest_main",
   ]
@@ -48,13 +37,37 @@ ohos_unittest("face_auth_service_test") {
     "access_token:libnativetoken",
     "access_token:libtoken_setproc",
     "access_token:libtokenid_sdk",
-    "c_utils:utils",
-    "drivers_interface_face_auth:libface_auth_proxy_1.0",
+    "drivers_interface_face_auth:libface_auth_proxy_1.1",
+    "graphic_standard:surface",
     "hiviewdfx_hilog_native:libhilog",
-    "ipc:ipc_single",
-    "safwk:system_ability_fwk",
-    "samgr:samgr_proxy",
-    "user_auth_framework:userauth_client",
+    "user_auth_framework:userauth_executors",
+  ]
+
+  remove_configs = [ "//build/config/compiler:no_exceptions" ]
+
+  subsystem_name = "useriam"
+  part_name = "face_auth"
+}
+
+ohos_unittest("face_auth_screen_brightness_test") {
+  module_out_path = "useriam/face_auth"
+
+  include_dirs = [ "mock" ]
+
+  sources = [
+    "face_auth_screen_brightness_test.cpp",
+  ]
+
+  deps = [
+    "../../services:faceauthservice_source_set",
+    "//third_party/googletest:gmock_main",
+    "//third_party/googletest:gtest_main",
+  ]
+
+  external_deps = [
+    "drivers_interface_face_auth:libface_auth_proxy_1.1",
+    "graphic_standard:surface",
+    "hiviewdfx_hilog_native:libhilog",
     "user_auth_framework:userauth_executors",
   ]
 
@@ -67,42 +80,23 @@ ohos_unittest("face_auth_service_test") {
 ohos_unittest("face_auth_perm_test") {
   module_out_path = "useriam/face_auth"
 
-  sources = [
-    "../../frameworks/ipc/src/face_auth_stub.cpp",
-    "../../services/src/face_auth_driver_hdi.cpp",
-    "../../services/src/face_auth_executor_callback_hdi.cpp",
-    "../../services/src/face_auth_executor_hdi.cpp",
-    "../../services/src/face_auth_interface_adapter.cpp",
-    "../../services/src/face_auth_service.cpp",
-    "face_auth_service_perm_test.cpp",
-  ]
+  sources = [ "face_auth_service_perm_test.cpp" ]
 
-  include_dirs = [
-    "mock",
-    "../../common/logs",
-    "../../common/utils",
-    "../../common/inc",
-    "../../frameworks/ipc/inc",
-    "../../services/inc",
-  ]
+  include_dirs = [ "mock" ]
 
   deps = [
+    "../../frameworks/ipc:faceauth_framework_stub",
+    "../../services:faceauthservice_source_set",
     "//third_party/googletest:gmock_main",
     "//third_party/googletest:gtest_main",
   ]
 
   external_deps = [
-    "ability_base:want",
     "access_token:libaccesstoken_sdk",
-    "access_token:libtokenid_sdk",
-    "bundle_framework:appexecfwk_core",
-    "c_utils:utils",
-    "drivers_interface_face_auth:libface_auth_proxy_1.0",
+    "access_token:libnativetoken",
+    "drivers_interface_face_auth:libface_auth_proxy_1.1",
+    "graphic_standard:surface",
     "hiviewdfx_hilog_native:libhilog",
-    "ipc:ipc_single",
-    "safwk:system_ability_fwk",
-    "samgr:samgr_proxy",
-    "user_auth_framework:userauth_client",
     "user_auth_framework:userauth_executors",
   ]
 
@@ -116,6 +110,7 @@ group("faceauth_unittest") {
   testonly = true
   deps = [
     ":face_auth_perm_test",
+    ":face_auth_screen_brightness_test",
     ":face_auth_service_test",
   ]
 }
