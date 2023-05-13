@@ -24,50 +24,70 @@
 
 #include "ibuffer_producer.h"
 
+#include "face_auth_hdi.h"
 #include "iam_executor_framework_types.h"
 #include "iam_executor_iauth_executor_hdi.h"
 #include "iam_executor_iexecute_callback.h"
-#include "v1_0/iexecutor.h"
 
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-namespace FaceHdi = OHOS::HDI::FaceAuth::V1_0;
 namespace UserAuth = OHOS::UserIam::UserAuth;
-class FaceAuthExecutorHdi : public UserAuth::IAuthExecutorHdi, public NoCopyable {
+class FaceAuthExecutorHdi : public std::enable_shared_from_this<FaceAuthExecutorHdi>,
+                            public UserAuth::IAuthExecutorHdi,
+                            public NoCopyable {
 public:
-    explicit FaceAuthExecutorHdi(sptr<FaceHdi::IExecutor> executorProxy);
+    explicit FaceAuthExecutorHdi(sptr<IExecutor> executorProxy);
     ~FaceAuthExecutorHdi() override = default;
 
-    UserIam::UserAuth::ResultCode GetExecutorInfo(UserIam::UserAuth::ExecutorInfo &info) override;
-    UserIam::UserAuth::ResultCode GetTemplateInfo(uint64_t templateId, UserAuth::TemplateInfo &info) override;
-    UserIam::UserAuth::ResultCode OnRegisterFinish(const std::vector<uint64_t> &templateIdList,
+    UserAuth::ResultCode GetExecutorInfo(UserAuth::ExecutorInfo &info) override;
+    UserAuth::ResultCode OnRegisterFinish(const std::vector<uint64_t> &templateIdList,
         const std::vector<uint8_t> &frameworkPublicKey, const std::vector<uint8_t> &extraInfo) override;
-    UserIam::UserAuth::ResultCode Enroll(uint64_t scheduleId, uint32_t tokenId, const std::vector<uint8_t> &extraInfo,
+    UserAuth::ResultCode Enroll(uint64_t scheduleId, const UserAuth::EnrollParam &param,
         const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj) override;
-    UserIam::UserAuth::ResultCode Authenticate(uint64_t scheduleId, uint32_t tokenId,
-        const std::vector<uint64_t> &templateIdList, const std::vector<uint8_t> &extraInfo,
+    UserAuth::ResultCode Authenticate(uint64_t scheduleId, const UserAuth::AuthenticateParam &param,
         const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj) override;
-    UserIam::UserAuth::ResultCode Identify(uint64_t scheduleId, uint32_t tokenId, const std::vector<uint8_t> &extraInfo,
+    UserAuth::ResultCode Identify(uint64_t scheduleId, const UserAuth::IdentifyParam &param,
         const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj) override;
-    UserIam::UserAuth::ResultCode Delete(const std::vector<uint64_t> &templateIdList) override;
-    UserIam::UserAuth::ResultCode Cancel(uint64_t scheduleId) override;
-    UserIam::UserAuth::ResultCode SendCommand(UserIam::UserAuth::PropertyMode commandId,
-        const std::vector<uint8_t> &extraInfo, const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj) override;
+    UserAuth::ResultCode Delete(const std::vector<uint64_t> &templateIdList) override;
+    UserAuth::ResultCode Cancel(uint64_t scheduleId) override;
+    UserAuth::ResultCode SendCommand(UserAuth::PropertyMode commandId, const std::vector<uint8_t> &extraInfo,
+        const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj) override;
+    UserAuth::ResultCode GetProperty(const std::vector<uint64_t> &templateIdList,
+        const std::vector<UserAuth::Attributes::AttributeKey> &keys, UserAuth::Property &property) override;
+    UserAuth::ResultCode SetCachedTemplates(const std::vector<uint64_t> &templateIdList) override;
     int32_t SetBufferProducer(sptr<IBufferProducer> &producer);
+    void OnHdiDisconnect();
 
 private:
-    UserIam::UserAuth::ResultCode MoveHdiExecutorInfo(FaceHdi::ExecutorInfo &in, UserIam::UserAuth::ExecutorInfo &out);
-    void MoveHdiTemplateInfo(FaceHdi::TemplateInfo &in, UserAuth::TemplateInfo &out);
-    UserIam::UserAuth::ResultCode ConvertCommandId(const UserIam::UserAuth::PropertyMode in, FaceHdi::CommandId &out);
-    UserIam::UserAuth::ResultCode ConvertAuthType(const FaceHdi::AuthType in, UserIam::UserAuth::AuthType &out);
-    UserIam::UserAuth::ResultCode ConvertExecutorRole(
-        const FaceHdi::ExecutorRole in, UserIam::UserAuth::ExecutorRole &out);
-    UserIam::UserAuth::ResultCode ConvertExecutorSecureLevel(
-        const FaceHdi::ExecutorSecureLevel in, UserIam::UserAuth::ExecutorSecureLevel &out);
-    UserIam::UserAuth::ResultCode ConvertResultCode(const int32_t in);
+    class SaCommandCallback;
 
-    sptr<FaceHdi::IExecutor> executorProxy_;
+    UserAuth::ResultCode MoveHdiExecutorInfo(ExecutorInfo &in, UserAuth::ExecutorInfo &out);
+    void MoveHdiTemplateInfo(TemplateInfo &in, UserAuth::TemplateInfo &out);
+    void MoveHdiProperty(Property &in, UserAuth::Property &out);
+    UserAuth::ResultCode ConvertCommandId(const UserAuth::PropertyMode in, CommandId &out);
+    UserAuth::ResultCode ConvertAuthType(const AuthType in, UserAuth::AuthType &out);
+    UserAuth::ResultCode ConvertExecutorRole(const ExecutorRole in, UserAuth::ExecutorRole &out);
+    UserAuth::ResultCode ConvertExecutorSecureLevel(const ExecutorSecureLevel in, UserAuth::ExecutorSecureLevel &out);
+    UserAuth::ResultCode ConvertResultCode(const int32_t in);
+    UserAuth::ResultCode ConvertAttributeKeyToPropertyType(const UserAuth::Attributes::AttributeKey in,
+        GetPropertyType &out);
+    UserAuth::ResultCode ConvertAttributeKeyVectorToPropertyType(
+        const std::vector<UserAuth::Attributes::AttributeKey> inVector, std::vector<GetPropertyType> &outVector);
+    UserAuth::ResultCode RegisterSaCommandCallback();
+
+    sptr<IExecutor> executorProxy_;
+    sptr<SaCommandCallback> saCommandCallback_;
+};
+
+class FaceAuthExecutorHdi::SaCommandCallback : public ISaCommandCallback, public NoCopyable {
+public:
+    explicit SaCommandCallback(std::shared_ptr<FaceAuthExecutorHdi> executorHdi) : executorHdi_(executorHdi) {};
+    ~SaCommandCallback() override {};
+    int32_t OnSaCommands(const std::vector<SaCommand> &commands) override;
+
+private:
+    std::shared_ptr<FaceAuthExecutorHdi> executorHdi_;
 };
 } // namespace FaceAuth
 } // namespace UserIam

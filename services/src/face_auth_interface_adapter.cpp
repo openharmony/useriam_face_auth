@@ -17,7 +17,7 @@
 
 #include "refbase.h"
 
-#include "v1_0/iface_auth_interface.h"
+#include "face_auth_hdi.h"
 
 namespace OHOS {
 namespace UserIam {
