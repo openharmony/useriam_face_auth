@@ -37,6 +37,8 @@ public:
     ~FaceAuthDriverHdi() override = default;
 
     void GetExecutorList(std::vector<std::shared_ptr<UserAuth::IAuthExecutorHdi>> &executorList) override;
+    void OnHdiDisconnect() override;
+
     int32_t SetBufferProducer(sptr<IBufferProducer> &producer);
 
 private:

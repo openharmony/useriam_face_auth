@@ -22,18 +22,20 @@
       "ram": "1306KB",
       "deps": {
         "components": [
-          "user_auth_framework",
-          "napi",
-          "samgr",
-          "c_utils",
           "access_token",
-          "ipc",
-          "graphic_standard",
-          "safwk",
-          "graphic_chipsetsdk",
-          "hiviewdfx_hilog_native",
+          "c_utils",
+          "display_manager",
           "drivers_interface_face_auth",
-          "hilog_native"
+          "graphic_chipsetsdk",
+          "graphic_standard",
+          "hiviewdfx_hilog_native",
+          "ipc",
+          "napi",
+          "power_manager",
+          "safwk",
+          "samgr",
+          "sensor",
+          "user_auth_framework"
         ]
       },
       "build": {

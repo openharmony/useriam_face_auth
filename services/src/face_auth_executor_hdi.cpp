@@ -26,33 +26,32 @@
 #include "hdf_base.h"
 #include "refbase.h"
 
-#include "iam_executor_framework_types.h"
 #include "iam_check.h"
+#include "iam_executor_framework_types.h"
 #include "iam_logger.h"
 
 #include "buffer_producer_sequenceable.h"
 #include "face_auth_defines.h"
 #include "face_auth_executor_callback_hdi.h"
-#include "v1_0/face_auth_types.h"
-#include "v1_0/iexecutor.h"
-#include "v1_0/iexecutor_callback.h"
+#include "face_auth_hdi.h"
+#include "sa_command_manager.h"
 
 #define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
 
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-using IamResultCode = OHOS::UserIam::UserAuth::ResultCode;
-using IamExecutorRole = UserIam::UserAuth::ExecutorRole;
-using IamExecutorInfo = UserIam::UserAuth::ExecutorInfo;
+using IamResultCode = UserAuth::ResultCode;
+using IamExecutorRole = UserAuth::ExecutorRole;
+using IamExecutorInfo = UserAuth::ExecutorInfo;
 using BufferProducerSequenceable = OHOS::HDI::Camera::V1_0::BufferProducerSequenceable;
 namespace UserAuth = OHOS::UserIam::UserAuth;
-FaceAuthExecutorHdi::FaceAuthExecutorHdi(sptr<FaceHdi::IExecutor> executorProxy) : executorProxy_(executorProxy) {};
+FaceAuthExecutorHdi::FaceAuthExecutorHdi(sptr<IExecutor> executorProxy) : executorProxy_(executorProxy) {};
 
 IamResultCode FaceAuthExecutorHdi::GetExecutorInfo(IamExecutorInfo &info)
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
-    FaceHdi::ExecutorInfo localInfo = {};
+    ExecutorInfo localInfo = {};
     int32_t status = executorProxy_->GetExecutorInfo(localInfo);
     IamResultCode result = ConvertResultCode(status);
     if (result != IamResultCode::SUCCESS) {
@@ -67,21 +66,6 @@ IamResultCode FaceAuthExecutorHdi::GetExecutorInfo(IamExecutorInfo &info)
     return IamResultCode::SUCCESS;
 }
 
-IamResultCode FaceAuthExecutorHdi::GetTemplateInfo(uint64_t templateId, UserAuth::TemplateInfo &info)
-{
-    IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
-    FaceHdi::TemplateInfo localInfo = {};
-    int32_t status = executorProxy_->GetTemplateInfo(templateId, localInfo);
-    IamResultCode result = ConvertResultCode(status);
-    if (result != IamResultCode::SUCCESS) {
-        IAM_LOGE("GetTemplateInfo fail result %{public}d", result);
-        return result;
-    }
-    MoveHdiTemplateInfo(localInfo, info);
-
-    return IamResultCode::SUCCESS;
-}
-
 IamResultCode FaceAuthExecutorHdi::OnRegisterFinish(const std::vector<uint64_t> &templateIdList,
     const std::vector<uint8_t> &frameworkPublicKey, const std::vector<uint8_t> &extraInfo)
 {
@@ -89,20 +73,27 @@ IamResultCode FaceAuthExecutorHdi::OnRegisterFinish(const std::vector<uint64_t> 
     int32_t status = executorProxy_->OnRegisterFinish(templateIdList, frameworkPublicKey, extraInfo);
     IamResultCode result = ConvertResultCode(status);
     if (result != IamResultCode::SUCCESS) {
-        IAM_LOGE("OnRegisterFinish fail result %{public}d", status);
+        IAM_LOGE("OnRegisterFinish fail result %{public}d", result);
+        return result;
+    }
+
+    result = RegisterSaCommandCallback();
+    if (result != IamResultCode::SUCCESS) {
+        IAM_LOGE("RegisterSaCommandCallback fail");
         return result;
     }
     return IamResultCode::SUCCESS;
 }
 
-IamResultCode FaceAuthExecutorHdi::Enroll(uint64_t scheduleId, uint32_t tokenId, const std::vector<uint8_t> &extraInfo,
+IamResultCode FaceAuthExecutorHdi::Enroll(uint64_t scheduleId, const UserAuth::EnrollParam &param,
     const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj)
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
     IF_FALSE_LOGE_AND_RETURN_VAL(callbackObj != nullptr, IamResultCode::GENERAL_ERROR);
-    auto callback = sptr<FaceHdi::IExecutorCallback>(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
+    auto callback =
+        sptr<IExecutorCallback>(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
     IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
-    int32_t status = executorProxy_->Enroll(scheduleId, extraInfo, callback);
+    int32_t status = executorProxy_->Enroll(scheduleId, param.extraInfo, callback);
     IamResultCode result = ConvertResultCode(status);
     if (result != IamResultCode::SUCCESS) {
         IAM_LOGE("Enroll fail result %{public}d", result);
@@ -111,15 +102,15 @@ IamResultCode FaceAuthExecutorHdi::Enroll(uint64_t scheduleId, uint32_t tokenId,
     return IamResultCode::SUCCESS;
 }
 
-IamResultCode FaceAuthExecutorHdi::Authenticate(uint64_t scheduleId, uint32_t tokenId,
-    const std::vector<uint64_t> &templateIdList, const std::vector<uint8_t> &extraInfo,
+IamResultCode FaceAuthExecutorHdi::Authenticate(uint64_t scheduleId, const UserAuth::AuthenticateParam &param,
     const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj)
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
     IF_FALSE_LOGE_AND_RETURN_VAL(callbackObj != nullptr, IamResultCode::GENERAL_ERROR);
-    auto callback = sptr<FaceHdi::IExecutorCallback>(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
+    auto callback =
+        sptr<IExecutorCallback>(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
     IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
-    int32_t status = executorProxy_->Authenticate(scheduleId, templateIdList, extraInfo, callback);
+    int32_t status = executorProxy_->Authenticate(scheduleId, param.templateIdList, param.extraInfo, callback);
     IamResultCode result = ConvertResultCode(status);
     if (result != IamResultCode::SUCCESS) {
         IAM_LOGE("Authenticate fail result %{public}d", result);
@@ -128,14 +119,15 @@ IamResultCode FaceAuthExecutorHdi::Authenticate(uint64_t scheduleId, uint32_t to
     return IamResultCode::SUCCESS;
 }
 
-IamResultCode FaceAuthExecutorHdi::Identify(uint64_t scheduleId, uint32_t tokenId,
-    const std::vector<uint8_t> &extraInfo, const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj)
+IamResultCode FaceAuthExecutorHdi::Identify(uint64_t scheduleId, const UserAuth::IdentifyParam &param,
+    const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj)
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
     IF_FALSE_LOGE_AND_RETURN_VAL(callbackObj != nullptr, IamResultCode::GENERAL_ERROR);
-    auto callback = sptr<FaceHdi::IExecutorCallback>(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
+    auto callback =
+        sptr<IExecutorCallback>(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
     IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
-    int32_t status = executorProxy_->Identify(scheduleId, extraInfo, callback);
+    int32_t status = executorProxy_->Identify(scheduleId, param.extraInfo, callback);
     IamResultCode result = ConvertResultCode(status);
     if (result != IamResultCode::SUCCESS) {
         IAM_LOGE("Identify fail result %{public}d", result);
@@ -168,22 +160,56 @@ IamResultCode FaceAuthExecutorHdi::Cancel(uint64_t scheduleId)
     return IamResultCode::SUCCESS;
 }
 
-IamResultCode FaceAuthExecutorHdi::SendCommand(UserIam::UserAuth::PropertyMode commandId,
-    const std::vector<uint8_t> &extraInfo, const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj)
+IamResultCode FaceAuthExecutorHdi::SendCommand(UserAuth::PropertyMode commandId, const std::vector<uint8_t> &extraInfo,
+    const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj)
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
     IF_FALSE_LOGE_AND_RETURN_VAL(callbackObj != nullptr, IamResultCode::GENERAL_ERROR);
-    FaceHdi::CommandId hdiCommandId;
+    CommandId hdiCommandId;
     IamResultCode result = ConvertCommandId(commandId, hdiCommandId);
     if (result != IamResultCode::SUCCESS) {
         IAM_LOGE("ConvertCommandId fail result %{public}d", result);
         return result;
     }
-    auto callback = sptr<FaceHdi::IExecutorCallback>(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
+    auto callback =
+        sptr<IExecutorCallback>(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
     IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
     int32_t status = executorProxy_->SendCommand(hdiCommandId, extraInfo, callback);
     result = ConvertResultCode(status);
-    if (status != IamResultCode::SUCCESS) {
+    if (result != IamResultCode::SUCCESS) {
+        IAM_LOGE("SendCommand fail result %{public}d", result);
+        return result;
+    }
+    return IamResultCode::SUCCESS;
+}
+
+UserAuth::ResultCode FaceAuthExecutorHdi::GetProperty(const std::vector<uint64_t> &templateIdList,
+    const std::vector<UserAuth::Attributes::AttributeKey> &keys, UserAuth::Property &property)
+{
+    IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
+
+    std::vector<GetPropertyType> propertyTypes;
+    IamResultCode result = ConvertAttributeKeyVectorToPropertyType(keys, propertyTypes);
+    IF_FALSE_LOGE_AND_RETURN_VAL(result == IamResultCode::SUCCESS, IamResultCode::GENERAL_ERROR);
+
+    Property hdiProperty;
+    int32_t status = executorProxy_->GetProperty(templateIdList, propertyTypes, hdiProperty);
+    result = ConvertResultCode(status);
+    if (result != IamResultCode::SUCCESS) {
+        IAM_LOGE("SendCommand fail result %{public}d", result);
+        return result;
+    }
+    MoveHdiProperty(hdiProperty, property);
+    return IamResultCode::SUCCESS;
+}
+
+UserAuth::ResultCode FaceAuthExecutorHdi::SetCachedTemplates(const std::vector<uint64_t> &templateIdList)
+{
+    IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
+
+    int32_t status = executorProxy_->SetCachedTemplates(templateIdList);
+    IamResultCode result = ConvertResultCode(status);
+    if (result != IamResultCode::SUCCESS) {
         IAM_LOGE("SendCommand fail result %{public}d", result);
         return result;
     }
@@ -201,14 +227,20 @@ int32_t FaceAuthExecutorHdi::SetBufferProducer(sptr<IBufferProducer> &producer)
 
     int32_t status = executorProxy_->SetBufferProducer(producerSequenceable);
     IamResultCode result = ConvertResultCode(status);
-    if (status != IamResultCode::SUCCESS) {
+    if (result != IamResultCode::SUCCESS) {
         IAM_LOGE("SetBufferProducer fail result %{public}d", result);
         return FACE_AUTH_ERROR;
     }
     return FACE_AUTH_SUCCESS;
 }
 
-IamResultCode FaceAuthExecutorHdi::MoveHdiExecutorInfo(FaceHdi::ExecutorInfo &in, IamExecutorInfo &out)
+void FaceAuthExecutorHdi::OnHdiDisconnect()
+{
+    IAM_LOGE("start");
+    SaCommandManager::GetInstance().OnHdiDisconnect(shared_from_this());
+}
+
+IamResultCode FaceAuthExecutorHdi::MoveHdiExecutorInfo(ExecutorInfo &in, IamExecutorInfo &out)
 {
     out.executorSensorHint = static_cast<uint32_t>(in.sensorId);
     out.executorMatcher = in.executorType;
@@ -231,7 +263,16 @@ IamResultCode FaceAuthExecutorHdi::MoveHdiExecutorInfo(FaceHdi::ExecutorInfo &in
     return IamResultCode::SUCCESS;
 }
 
-void FaceAuthExecutorHdi::MoveHdiTemplateInfo(FaceHdi::TemplateInfo &in, UserAuth::TemplateInfo &out)
+void FaceAuthExecutorHdi::MoveHdiProperty(Property &in, UserAuth::Property &out)
+{
+    out.authSubType = in.authSubType;
+    out.lockoutDuration = in.lockoutDuration;
+    out.remainAttempts = in.remainAttempts;
+    out.enrollmentProgress.swap(in.enrollmentProgress);
+    out.sensorInfo.swap(in.sensorInfo);
+}
+
+void FaceAuthExecutorHdi::MoveHdiTemplateInfo(TemplateInfo &in, UserAuth::TemplateInfo &out)
 {
     out.executorType = in.executorType;
     out.freezingTime = in.lockoutDuration;
@@ -239,17 +280,17 @@ void FaceAuthExecutorHdi::MoveHdiTemplateInfo(FaceHdi::TemplateInfo &in, UserAut
     in.extraInfo.swap(out.extraInfo);
 }
 
-IamResultCode FaceAuthExecutorHdi::ConvertCommandId(const UserIam::UserAuth::PropertyMode in, FaceHdi::CommandId &out)
+IamResultCode FaceAuthExecutorHdi::ConvertCommandId(const UserAuth::PropertyMode in, CommandId &out)
 {
-    if (static_cast<FaceHdi::CommandId>(in) > FaceHdi::CommandId::VENDOR_COMMAND_BEGIN) {
-        out = static_cast<FaceHdi::CommandId>(in);
+    if (static_cast<CommandId>(in) > CommandId::VENDOR_COMMAND_BEGIN) {
+        out = static_cast<CommandId>(in);
         IAM_LOGI("vendor command id %{public}d, no covert", out);
         return IamResultCode::SUCCESS;
     }
 
-    static const std::map<UserIam::UserAuth::PropertyMode, FaceHdi::CommandId> data = {
-        {UserIam::UserAuth::PropertyMode::PROPERTY_MODE_FREEZE, FaceHdi::CommandId::LOCK_TEMPLATE},
-        {UserIam::UserAuth::PropertyMode::PROPERTY_MODE_UNFREEZE, FaceHdi::CommandId::UNLOCK_TEMPLATE}};
+    static const std::map<UserAuth::PropertyMode, CommandId> data = {
+        { UserAuth::PropertyMode::PROPERTY_MODE_FREEZE, CommandId::LOCK_TEMPLATE },
+        { UserAuth::PropertyMode::PROPERTY_MODE_UNFREEZE, CommandId::UNLOCK_TEMPLATE } };
     auto iter = data.find(in);
     if (iter == data.end()) {
         IAM_LOGE("command id %{public}d is invalid", in);
@@ -260,10 +301,10 @@ IamResultCode FaceAuthExecutorHdi::ConvertCommandId(const UserIam::UserAuth::Pro
     return IamResultCode::SUCCESS;
 }
 
-IamResultCode FaceAuthExecutorHdi::ConvertAuthType(const FaceHdi::AuthType in, UserIam::UserAuth::AuthType &out)
+IamResultCode FaceAuthExecutorHdi::ConvertAuthType(const AuthType in, UserAuth::AuthType &out)
 {
-    static const std::map<FaceHdi::AuthType, UserIam::UserAuth::AuthType> data = {
-        {FaceHdi::FACE, UserIam::UserAuth::AuthType::FACE},
+    static const std::map<AuthType, UserAuth::AuthType> data = {
+        { AuthType::FACE, UserAuth::AuthType::FACE },
     };
     auto iter = data.find(in);
     if (iter == data.end()) {
@@ -274,12 +315,12 @@ IamResultCode FaceAuthExecutorHdi::ConvertAuthType(const FaceHdi::AuthType in, U
     return IamResultCode::SUCCESS;
 }
 
-IamResultCode FaceAuthExecutorHdi::ConvertExecutorRole(const FaceHdi::ExecutorRole in, IamExecutorRole &out)
+IamResultCode FaceAuthExecutorHdi::ConvertExecutorRole(const ExecutorRole in, IamExecutorRole &out)
 {
-    static const std::map<FaceHdi::ExecutorRole, IamExecutorRole> data = {
-        {FaceHdi::ExecutorRole::COLLECTOR, IamExecutorRole::COLLECTOR},
-        {FaceHdi::ExecutorRole::VERIFIER, IamExecutorRole::VERIFIER},
-        {FaceHdi::ExecutorRole::ALL_IN_ONE, IamExecutorRole::ALL_IN_ONE},
+    static const std::map<ExecutorRole, IamExecutorRole> data = {
+        { ExecutorRole::COLLECTOR, IamExecutorRole::COLLECTOR },
+        { ExecutorRole::VERIFIER, IamExecutorRole::VERIFIER },
+        { ExecutorRole::ALL_IN_ONE, IamExecutorRole::ALL_IN_ONE },
     };
     auto iter = data.find(in);
     if (iter == data.end()) {
@@ -290,14 +331,14 @@ IamResultCode FaceAuthExecutorHdi::ConvertExecutorRole(const FaceHdi::ExecutorRo
     return IamResultCode::SUCCESS;
 }
 
-IamResultCode FaceAuthExecutorHdi::ConvertExecutorSecureLevel(
-    const FaceHdi::ExecutorSecureLevel in, UserIam::UserAuth::ExecutorSecureLevel &out)
+IamResultCode FaceAuthExecutorHdi::ConvertExecutorSecureLevel(const ExecutorSecureLevel in,
+    UserAuth::ExecutorSecureLevel &out)
 {
-    static const std::map<FaceHdi::ExecutorSecureLevel, UserIam::UserAuth::ExecutorSecureLevel> data = {
-        {FaceHdi::ExecutorSecureLevel::ESL0, UserIam::UserAuth::ExecutorSecureLevel::ESL0},
-        {FaceHdi::ExecutorSecureLevel::ESL1, UserIam::UserAuth::ExecutorSecureLevel::ESL1},
-        {FaceHdi::ExecutorSecureLevel::ESL2, UserIam::UserAuth::ExecutorSecureLevel::ESL2},
-        {FaceHdi::ExecutorSecureLevel::ESL3, UserIam::UserAuth::ExecutorSecureLevel::ESL3},
+    static const std::map<ExecutorSecureLevel, UserAuth::ExecutorSecureLevel> data = {
+        { ExecutorSecureLevel::ESL0, UserAuth::ExecutorSecureLevel::ESL0 },
+        { ExecutorSecureLevel::ESL1, UserAuth::ExecutorSecureLevel::ESL1 },
+        { ExecutorSecureLevel::ESL2, UserAuth::ExecutorSecureLevel::ESL2 },
+        { ExecutorSecureLevel::ESL3, UserAuth::ExecutorSecureLevel::ESL3 },
     };
     auto iter = data.find(in);
     if (iter == data.end()) {
@@ -312,11 +353,11 @@ IamResultCode FaceAuthExecutorHdi::ConvertResultCode(const int32_t in)
 {
     HDF_STATUS hdfIn = static_cast<HDF_STATUS>(in);
     static const std::map<HDF_STATUS, IamResultCode> data = {
-        {HDF_SUCCESS, IamResultCode::SUCCESS},
-        {HDF_FAILURE, IamResultCode::GENERAL_ERROR},
-        {HDF_ERR_TIMEOUT, IamResultCode::TIMEOUT},
-        {HDF_ERR_QUEUE_FULL, IamResultCode::BUSY},
-        {HDF_ERR_DEVICE_BUSY, IamResultCode::BUSY},
+        { HDF_SUCCESS, IamResultCode::SUCCESS },
+        { HDF_FAILURE, IamResultCode::GENERAL_ERROR },
+        { HDF_ERR_TIMEOUT, IamResultCode::TIMEOUT },
+        { HDF_ERR_QUEUE_FULL, IamResultCode::BUSY },
+        { HDF_ERR_DEVICE_BUSY, IamResultCode::BUSY },
     };
 
     IamResultCode out;
@@ -329,6 +370,71 @@ IamResultCode FaceAuthExecutorHdi::ConvertResultCode(const int32_t in)
     IAM_LOGI("covert hdi result code %{public}d to framework result code %{public}d", in, out);
     return out;
 }
+
+IamResultCode FaceAuthExecutorHdi::ConvertAttributeKeyVectorToPropertyType(
+    const std::vector<UserAuth::Attributes::AttributeKey> inItems, std::vector<GetPropertyType> &outItems)
+{
+    outItems.clear();
+    for (auto &inItem : inItems) {
+        GetPropertyType outItem;
+        IamResultCode result = ConvertAttributeKeyToPropertyType(inItem, outItem);
+        IF_FALSE_LOGE_AND_RETURN_VAL(result == IamResultCode::SUCCESS, IamResultCode::GENERAL_ERROR);
+        outItems.push_back(outItem);
+    }
+
+    return IamResultCode::SUCCESS;
+}
+
+IamResultCode FaceAuthExecutorHdi::ConvertAttributeKeyToPropertyType(const UserAuth::Attributes::AttributeKey in,
+    GetPropertyType &out)
+{
+    static const std::map<UserAuth::Attributes::AttributeKey, GetPropertyType> data = {
+        { UserAuth::Attributes::ATTR_PIN_SUB_TYPE, GetPropertyType::AUTH_SUB_TYPE },
+        { UserAuth::Attributes::ATTR_FREEZING_TIME, GetPropertyType::LOCKOUT_DURATION },
+        { UserAuth::Attributes::ATTR_REMAIN_TIMES, GetPropertyType::REMAIN_ATTEMPTS },
+        { UserAuth::Attributes::ATTR_ENROLL_PROGRESS, GetPropertyType::ENROLL_PROGRESS },
+        { UserAuth::Attributes::ATTR_SENSOR_INFO, GetPropertyType::SENSOR_INFO },
+    };
+
+    auto iter = data.find(in);
+    if (iter == data.end()) {
+        IAM_LOGE("attribute %{public}d is invalid", in);
+        return IamResultCode::GENERAL_ERROR;
+    } else {
+        out = iter->second;
+    }
+    IAM_LOGI("covert hdi result code %{public}d to framework result code %{public}d", in, out);
+    return IamResultCode::SUCCESS;
+}
+
+UserAuth::ResultCode FaceAuthExecutorHdi::RegisterSaCommandCallback()
+{
+    IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
+
+    sptr<SaCommandCallback> callback = new (std::nothrow) SaCommandCallback(shared_from_this());
+    IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
+
+    int32_t status = executorProxy_->RegisterSaCommandCallback(callback);
+    IamResultCode result = ConvertResultCode(status);
+    if (result != IamResultCode::SUCCESS) {
+        IAM_LOGE("RegisterSaCommandCallback fail result %{public}d", result);
+        return result;
+    }
+
+    return IamResultCode::SUCCESS;
+}
+
+int32_t FaceAuthExecutorHdi::SaCommandCallback::OnSaCommands(const std::vector<SaCommand> &commands)
+{
+    IAM_LOGI("start");
+    IamResultCode result = SaCommandManager::GetInstance().ProcessSaCommands(executorHdi_, commands);
+    if (result != IamResultCode::SUCCESS) {
+        IAM_LOGE("ProcessSaCommands fail");
+        return HDF_FAILURE;
+    }
+    IAM_LOGI("success");
+    return HDF_SUCCESS;
+};
 } // namespace FaceAuth
 } // namespace UserIam
 } // namespace OHOS

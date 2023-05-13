@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,23 +13,28 @@
  * limitations under the License.
  */
 
-#ifndef FACE_AUTH_INTERFACE_ADAPTER
-#define FACE_AUTH_INTERFACE_ADAPTER
+#ifndef ISA_COMMAND_PROCESSOR
+#define ISA_COMMAND_PROCESSOR
 
 #include "face_auth_hdi.h"
+
+#include "face_auth_executor_hdi.h"
 
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-class FaceAuthInterfaceAdapter {
+namespace UserAuth = OHOS::UserIam::UserAuth;
+class ISaCommandProcessor {
 public:
-    explicit FaceAuthInterfaceAdapter() = default;
-    virtual ~FaceAuthInterfaceAdapter() = default;
+    ISaCommandProcessor() = default;
+    virtual ~ISaCommandProcessor() = default;
 
-    virtual sptr<IFaceAuthInterface> Get();
+    virtual UserAuth::ResultCode ProcessSaCommand(std::shared_ptr<FaceAuthExecutorHdi> executor,
+        const SaCommand &command) = 0;
+    virtual void OnHdiDisconnect(std::shared_ptr<FaceAuthExecutorHdi> executor) = 0;
 };
 } // namespace FaceAuth
 } // namespace UserIam
 } // namespace OHOS
 
-#endif // FACE_AUTH_INTERFACE_ADAPTER
+#endif // ISA_COMMAND_PROCESSOR
