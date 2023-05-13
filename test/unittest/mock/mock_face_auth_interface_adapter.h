@@ -17,13 +17,12 @@
 #define MOCK_FACE_AUTH_INTERFACE_ADAPTER
 
 #include "face_auth_interface_adapter.h"
-#include "v1_0/iface_auth_interface.h"
+#include "face_auth_hdi.h"
 #include "gmock/gmock.h"
 
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-using namespace OHOS::HDI::FaceAuth::V1_0;
 class MockFaceAuthInterfaceAdapter : public FaceAuthInterfaceAdapter {
 public:
     MockFaceAuthInterfaceAdapter() = default;
