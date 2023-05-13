@@ -93,7 +93,8 @@ class CommonController {
     if (Config.getDeviceType() != 'tablet') {
       return;
     }
-    displayHeight = displayHeight + AppStorage.Get<number>('SYSTEM_NAVIGATION_BAR_HEIGHT') + AppStorage.Get<number>('SYSTEM_STATUS_BAR_HEIGHT')
+    displayHeight = displayHeight + AppStorage.Get<number>('SYSTEM_NAVIGATION_BAR_HEIGHT') +
+      AppStorage.Get<number>('SYSTEM_STATUS_BAR_HEIGHT')
     Log.info(this.TAG, 'update displayHeight to ' + displayHeight)
     let sideLength = Math.floor(Math.min(displayWidth, displayHeight / 2) * 0.8 / 2) * 2
     Log.info(this.TAG, 'sideLength ' + sideLength)

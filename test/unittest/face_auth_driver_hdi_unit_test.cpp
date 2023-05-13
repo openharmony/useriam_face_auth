@@ -27,7 +27,6 @@
 
 using namespace testing;
 using namespace testing::ext;
-using namespace OHOS::HDI::FaceAuth::V1_0;
 using namespace OHOS::UserIam::Common;
 
 namespace OHOS {
@@ -81,7 +80,7 @@ HWTEST_F(FaceAuthDriverHdiUnitTest, FaceAuthDriverHdi_GetExecutorListTest_003, T
 {
     sptr<MockIFaceAuthInterface> interface = new (std::nothrow) MockIFaceAuthInterface();
     ASSERT_TRUE(interface != nullptr);
-    EXPECT_CALL(*interface, GetExecutorList(_)).Times(Exactly(1));
+    EXPECT_CALL(*interface, GetExecutorListV1_1(_)).Times(Exactly(1));
 
     auto adapter = MakeShared<MockFaceAuthInterfaceAdapter>();
     ASSERT_TRUE(adapter != nullptr);
@@ -97,7 +96,7 @@ HWTEST_F(FaceAuthDriverHdiUnitTest, FaceAuthDriverHdi_GetExecutorListTest_004, T
 {
     sptr<MockIFaceAuthInterface> interface = new (std::nothrow) MockIFaceAuthInterface();
     ASSERT_TRUE(interface != nullptr);
-    EXPECT_CALL(*interface, GetExecutorList(_)).Times(Exactly(1)).WillOnce([](std::vector<sptr<IExecutor>> &list) {
+    EXPECT_CALL(*interface, GetExecutorListV1_1(_)).Times(Exactly(1)).WillOnce([](std::vector<sptr<IExecutor>> &list) {
         return static_cast<int32_t>(HDF_FAILURE);
     });
 
@@ -115,7 +114,7 @@ HWTEST_F(FaceAuthDriverHdiUnitTest, FaceAuthDriverHdi_GetExecutorListTest_005, T
 {
     sptr<MockIFaceAuthInterface> interface = new (std::nothrow) MockIFaceAuthInterface();
     ASSERT_TRUE(interface != nullptr);
-    EXPECT_CALL(*interface, GetExecutorList(_)).Times(Exactly(1)).WillOnce([](std::vector<sptr<IExecutor>> &list) {
+    EXPECT_CALL(*interface, GetExecutorListV1_1(_)).Times(Exactly(1)).WillOnce([](std::vector<sptr<IExecutor>> &list) {
         return static_cast<int32_t>(HDF_SUCCESS);
     });
 
@@ -133,7 +132,7 @@ HWTEST_F(FaceAuthDriverHdiUnitTest, FaceAuthDriverHdi_GetExecutorListTest_006, T
 {
     sptr<MockIFaceAuthInterface> interface = new (std::nothrow) MockIFaceAuthInterface();
     ASSERT_TRUE(interface != nullptr);
-    EXPECT_CALL(*interface, GetExecutorList(_)).Times(Exactly(1)).WillOnce([](std::vector<sptr<IExecutor>> &list) {
+    EXPECT_CALL(*interface, GetExecutorListV1_1(_)).Times(Exactly(1)).WillOnce([](std::vector<sptr<IExecutor>> &list) {
         auto executor = sptr<IExecutor>(new (std::nothrow) MockIExecutor());
         EXPECT_TRUE(executor != nullptr);
         list.push_back(executor);
@@ -154,7 +153,7 @@ HWTEST_F(FaceAuthDriverHdiUnitTest, FaceAuthDriverHdi_GetExecutorListTest_007, T
 {
     sptr<MockIFaceAuthInterface> interface = new (std::nothrow) MockIFaceAuthInterface();
     ASSERT_TRUE(interface != nullptr);
-    EXPECT_CALL(*interface, GetExecutorList(_)).Times(Exactly(1)).WillOnce([](std::vector<sptr<IExecutor>> &list) {
+    EXPECT_CALL(*interface, GetExecutorListV1_1(_)).Times(Exactly(1)).WillOnce([](std::vector<sptr<IExecutor>> &list) {
         list.push_back(sptr<IExecutor>(nullptr));
         auto executor = sptr<IExecutor>(new (std::nothrow) MockIExecutor());
         EXPECT_TRUE(executor != nullptr);
@@ -180,7 +179,7 @@ HWTEST_F(FaceAuthDriverHdiUnitTest, FaceAuthDriverHdi_GetExecutorListTest_008, T
 {
     sptr<MockIFaceAuthInterface> interface = new (std::nothrow) MockIFaceAuthInterface();
     ASSERT_TRUE(interface != nullptr);
-    EXPECT_CALL(*interface, GetExecutorList(_)).Times(Exactly(1)).WillOnce([](std::vector<sptr<IExecutor>> &list) {
+    EXPECT_CALL(*interface, GetExecutorListV1_1(_)).Times(Exactly(1)).WillOnce([](std::vector<sptr<IExecutor>> &list) {
         auto executor = sptr<IExecutor>(new (std::nothrow) MockIExecutor());
         EXPECT_TRUE(executor != nullptr);
         list.push_back(executor);

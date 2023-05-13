@@ -13,13 +13,28 @@
 
 import("//build/ohos.gni")
 
-ohos_shared_library("faceauthservice") {
+config("faceauthservice_config") {
+  include_dirs = [
+    "inc",
+    "../common/inc",
+    "../common/logs",
+    "../common/utils",
+  ]
+}
+
+ohos_source_set("faceauthservice_source_set") {
   sources = [
     "src/face_auth_driver_hdi.cpp",
     "src/face_auth_executor_callback_hdi.cpp",
     "src/face_auth_executor_hdi.cpp",
     "src/face_auth_interface_adapter.cpp",
     "src/face_auth_service.cpp",
+    "src/finite_state_machine_builder.cpp",
+    "src/finite_state_machine_impl.cpp",
+    "src/sa_command_manager.cpp",
+    "src/screen_brightness_manager.cpp",
+    "src/screen_brightness_task.cpp",
+    "src/thread_handler_impl.cpp",
   ]
   include_dirs = [
     "inc",
@@ -28,29 +43,42 @@ ohos_shared_library("faceauthservice") {
     "../common/utils",
   ]
 
+  public_configs = [ ":faceauthservice_config" ]
+
   deps = [ "../frameworks/ipc:faceauth_framework_stub" ]
 
   external_deps = [
     "access_token:libaccesstoken_sdk",
     "access_token:libtokenid_sdk",
     "c_utils:utils",
-    "drivers_interface_face_auth:libface_auth_proxy_1.0",
+    "display_manager:displaymgr",
+    "drivers_interface_face_auth:libface_auth_proxy_1.1",
     "hiviewdfx_hilog_native:libhilog",
     "ipc:ipc_single",
+    "power_manager:powermgr_client",
     "safwk:system_ability_fwk",
     "samgr:samgr_proxy",
+    "sensor:sensor_interface_native",
     "user_auth_framework:userauth_executors",
   ]
+
+  if (defined(global_parts_info.graphic_graphic_standard)) {
+    external_deps += [ "graphic_standard:surface" ]
+  }
+
+  remove_configs = [ "//build/config/compiler:no_exceptions" ]
+
+  subsystem_name = "useriam"
+  part_name = "face_auth"
+}
+
+ohos_shared_library("faceauthservice") {
+  deps = [ ":faceauthservice_source_set" ]
 
   if (use_musl) {
     version_script = "face_auth_service_map"
   }
 
-  remove_configs = [ "//build/config/compiler:no_exceptions" ]
-
-  if (defined(global_parts_info.graphic_graphic_standard)) {
-    external_deps += [ "graphic_standard:surface" ]
-  }
   subsystem_name = "useriam"
   part_name = "face_auth"
 }

@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,23 +13,24 @@
  * limitations under the License.
  */
 
-#ifndef FACE_AUTH_INTERFACE_ADAPTER
-#define FACE_AUTH_INTERFACE_ADAPTER
+#ifndef IAM_THREAD_HANDLER_H
+#define IAM_THREAD_HANDLER_H
 
-#include "face_auth_hdi.h"
+#include <functional>
 
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-class FaceAuthInterfaceAdapter {
+class ThreadHandler {
 public:
-    explicit FaceAuthInterfaceAdapter() = default;
-    virtual ~FaceAuthInterfaceAdapter() = default;
-
-    virtual sptr<IFaceAuthInterface> Get();
+    using Task = std::function<void(void)>;
+    virtual ~ThreadHandler() = default;
+    virtual void PostTask(const Task &task) = 0;
+    virtual void EnsureTask(const Task &task) = 0;
+    static std::shared_ptr<ThreadHandler> GetSingleThreadInstance();
 };
 } // namespace FaceAuth
 } // namespace UserIam
 } // namespace OHOS
 
-#endif // FACE_AUTH_INTERFACE_ADAPTER
+#endif // IAM_THREAD_HANDLER_H
