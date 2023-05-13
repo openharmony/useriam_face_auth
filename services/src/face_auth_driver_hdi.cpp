@@ -27,20 +27,15 @@
 
 #include "face_auth_defines.h"
 #include "face_auth_executor_hdi.h"
+#include "face_auth_hdi.h"
 #include "face_auth_interface_adapter.h"
-#include "v1_0/face_auth_types.h"
-#include "v1_0/iexecutor.h"
-#include "v1_0/iface_auth_interface.h"
 
 #define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
-using namespace OHOS::HDI::FaceAuth::V1_0;
 
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
 namespace UserAuth = OHOS::UserIam::UserAuth;
-using namespace OHOS::UserIam;
-
 std::mutex FaceAuthDriverHdi::mutex_;
 
 FaceAuthDriverHdi::FaceAuthDriverHdi(const std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter)
@@ -58,13 +53,13 @@ void FaceAuthDriverHdi::GetExecutorList(std::vector<std::shared_ptr<UserAuth::IA
     }
 
     std::vector<sptr<IExecutor>> iExecutorList;
-    auto ret = faceIf->GetExecutorList(iExecutorList);
+    auto ret = faceIf->GetExecutorListV1_1(iExecutorList);
     if (ret != HDF_SUCCESS) {
         IAM_LOGE("GetExecutorList fail");
         return;
     }
 
-    std::lock_guard<std::mutex> gurard(mutex_);
+    std::lock_guard<std::mutex> guard(mutex_);
     faceAuthExecutorList_.clear();
     for (const auto &iExecutor : iExecutorList) {
         if (iExecutor == nullptr) {
@@ -81,6 +76,21 @@ void FaceAuthDriverHdi::GetExecutorList(std::vector<std::shared_ptr<UserAuth::IA
     }
 }
 
+void FaceAuthDriverHdi::OnHdiDisconnect()
+{
+    IAM_LOGI("start");
+    std::lock_guard<std::mutex> guard(mutex_);
+    for (const auto &iExecutor : faceAuthExecutorList_) {
+        if (iExecutor == nullptr) {
+            IAM_LOGE("iExecutor is nullptr");
+            continue;
+        }
+        iExecutor->OnHdiDisconnect();
+    }
+    faceAuthExecutorList_.clear();
+    return;
+}
+
 int32_t FaceAuthDriverHdi::SetBufferProducer(sptr<IBufferProducer> &producer)
 {
     if (faceAuthExecutorList_.size() == 0) {
@@ -88,7 +98,7 @@ int32_t FaceAuthDriverHdi::SetBufferProducer(sptr<IBufferProducer> &producer)
         return FACE_AUTH_ERROR;
     }
 
-    std::lock_guard<std::mutex> gurard(mutex_);
+    std::lock_guard<std::mutex> guard(mutex_);
     for (auto executor : faceAuthExecutorList_) {
         IF_FALSE_LOGE_AND_RETURN_VAL(executor != nullptr, FACE_AUTH_ERROR);
         int32_t ret = executor->SetBufferProducer(producer);

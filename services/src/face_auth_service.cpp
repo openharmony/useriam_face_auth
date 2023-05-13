@@ -24,8 +24,8 @@
 #include <vector>
 
 #include "accesstoken_kit.h"
-#include "ibuffer_producer.h"
 #include "iam_executor_idriver_manager.h"
+#include "ibuffer_producer.h"
 #include "ipc_skeleton.h"
 #include "iremote_object.h"
 #include "iservice_registry.h"
@@ -42,6 +42,7 @@
 #include "face_auth_defines.h"
 #include "face_auth_driver_hdi.h"
 #include "face_auth_interface_adapter.h"
+#include "screen_brightness_manager.h"
 
 #define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
 
@@ -57,9 +58,11 @@ const auto FACE_AUTH_DEFAULT_HDI_ADAPTER = Common::MakeShared<FaceAuthInterfaceA
 auto FACE_AUTH_DEFAULT_HDI = Common::MakeShared<FaceAuthDriverHdi>(FACE_AUTH_DEFAULT_HDI_ADAPTER);
 // serviceName and HdiConfig.id must be globally unique
 const std::map<std::string, UserAuth::HdiConfig> HDI_NAME_2_CONFIG = {
-    {"face_auth_interface_service", {FACE_AUTH_DEFAULT_HDI_ID, FACE_AUTH_DEFAULT_HDI}},
+    { "face_auth_interface_service", { FACE_AUTH_DEFAULT_HDI_ID, FACE_AUTH_DEFAULT_HDI } },
 };
-const std::vector<std::shared_ptr<FaceAuthDriverHdi>> FACE_AUTH_DRIVER_HDIS = {FACE_AUTH_DEFAULT_HDI};
+const std::vector<std::shared_ptr<FaceAuthDriverHdi>> FACE_AUTH_DRIVER_HDIS = { FACE_AUTH_DEFAULT_HDI };
+// setup brightness manager
+const auto screenBrightnessManager = ScreenBrightnessManager::GetInstance();
 } // namespace
 std::mutex FaceAuthService::mutex_;
 std::shared_ptr<FaceAuthService> FaceAuthService::instance_ = nullptr;
@@ -71,7 +74,7 @@ FaceAuthService::FaceAuthService() : SystemAbility(SUBSYS_USERIAM_SYS_ABILITY_FA
 std::shared_ptr<FaceAuthService> FaceAuthService::GetInstance()
 {
     if (instance_ == nullptr) {
-        std::lock_guard<std::mutex> gurard(mutex_);
+        std::lock_guard<std::mutex> guard(mutex_);
         if (instance_ == nullptr) {
             instance_ = Common::MakeShared<FaceAuthService>();
             if (instance_ == nullptr) {
@@ -110,7 +113,7 @@ bool FaceAuthService::IsPermissionGranted(const std::string &permission)
 int32_t FaceAuthService::SetBufferProducer(sptr<IBufferProducer> &producer)
 {
     const std::string MANAGE_USER_IDM_PERMISSION = "ohos.permission.MANAGE_USER_IDM";
-    std::lock_guard<std::mutex> gurard(mutex_);
+    std::lock_guard<std::mutex> guard(mutex_);
     IAM_LOGI("set buffer producer %{public}s", Common::GetPointerNullStateString(producer).c_str());
     using namespace Security::AccessToken;
     uint64_t fullTokenId = IPCSkeleton::GetCallingFullTokenID();
