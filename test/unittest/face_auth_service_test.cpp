@@ -72,7 +72,6 @@ HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_001, TestSize.Level0)
 {
     auto service = FaceAuthService::GetInstance();
     EXPECT_NE(service, nullptr);
-    service->OnStart();
     sptr<IBufferProducer> producer = nullptr;
     int32_t ret = service->SetBufferProducer(producer);
     EXPECT_EQ(ret, FACE_AUTH_ERROR);
@@ -87,7 +86,6 @@ HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_002, TestSize.Level0)
 
     auto service = FaceAuthService::GetInstance();
     EXPECT_NE(service, nullptr);
-    service->OnStart();
     EXPECT_EQ(service->OnRemoteRequest(code, data, reply, option), 1);
     EXPECT_TRUE(data.WriteInterfaceToken(IFaceAuth::GetDescriptor()));
     EXPECT_EQ(service->OnRemoteRequest(code, data, reply, option), 0);
