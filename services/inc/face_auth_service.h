@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -35,9 +35,12 @@ public:
     ~FaceAuthService() override = default;
     static std::shared_ptr<FaceAuthService> GetInstance();
 
+    int32_t SetBufferProducer(sptr<IBufferProducer> &producer) override;
+
+protected:
     void OnStart() override;
     void OnStop() override;
-    int32_t SetBufferProducer(sptr<IBufferProducer> &producer) override;
+
 private:
     static std::mutex mutex_;
     static std::shared_ptr<FaceAuthService> instance_;
