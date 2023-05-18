@@ -14,7 +14,7 @@
 {
     global:
     extern "C++" {
-        OHOS::UserIam::FaceAuth::ScreenBrightnessManager*;
+        OHOS::UserIam::FaceAuth::GetScreenBrightnessTask*;
     };
     local:
         *;

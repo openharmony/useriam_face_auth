@@ -23,19 +23,23 @@
 #include "timer.h"
 
 #include "finite_state_machine.h"
+#include "iscreen_brightness_task.h"
 
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-class ScreenBrightnessTask : public std::enable_shared_from_this<ScreenBrightnessTask>, public NoCopyable {
+class ScreenBrightnessTask : public IScreenBrightnessTask,
+                             public std::enable_shared_from_this<ScreenBrightnessTask>,
+                             public NoCopyable {
 public:
     ScreenBrightnessTask();
     ~ScreenBrightnessTask() override;
 
-    void Start();
-    void Stop();
+    void Start() override;
+    void Stop() override;
+    void SetAmbientLight(float lux) override;
+    void RegisterDestructCallback(DestructCallback callback) override;
 
-    void SetAmbientLight(float lux);
     void OnStartDelayTimeout();
     void OnIncreaseBrightness();
 
@@ -71,6 +75,7 @@ private:
     uint32_t increaseBrightnessIndex_;
     uint32_t increaseBrightnessInterval_;
     uint32_t increaseBrightnessMax_;
+    DestructCallback destructCallback_;
 };
 } // namespace FaceAuth
 } // namespace UserIam
