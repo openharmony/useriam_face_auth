@@ -69,6 +69,8 @@ private:
     std::mutex currentAmbientLightLuxMutex_;
     uint32_t currentBrightness_;
     uint32_t increaseBrightnessIndex_;
+    uint32_t increaseBrightnessInterval_;
+    uint32_t increaseBrightnessMax_;
 };
 } // namespace FaceAuth
 } // namespace UserIam

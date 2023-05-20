@@ -54,6 +54,7 @@ ohos_source_set("faceauthservice_source_set") {
     "display_manager:displaymgr",
     "drivers_interface_face_auth:libface_auth_proxy_1.1",
     "hiviewdfx_hilog_native:libhilog",
+    "init:libbegetutil",
     "ipc:ipc_single",
     "power_manager:powermgr_client",
     "safwk:system_ability_fwk",

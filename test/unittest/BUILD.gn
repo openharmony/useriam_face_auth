@@ -54,9 +54,7 @@ ohos_unittest("face_auth_screen_brightness_test") {
 
   include_dirs = [ "mock" ]
 
-  sources = [
-    "face_auth_screen_brightness_test.cpp",
-  ]
+  sources = [ "face_auth_screen_brightness_test.cpp" ]
 
   deps = [
     "../../services:faceauthservice_source_set",
