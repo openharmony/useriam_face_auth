@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,8 +21,8 @@ import UserIdmModel from '../model/userIdmModel'
 import FaceAuthModel from '../model/faceAuthModel'
 
 class EnrollingController {
-  private readonly TAG: string = "EnrollingController"
-  private readonly ANIMATION_TIME: number = 2000
+  private readonly TAG: string = 'EnrollingController';
+  private readonly ANIMATION_TIME: number = 2000;
   private enrolling: boolean = false
 
   constructor() {
@@ -123,7 +123,7 @@ class EnrollingController {
     Log.info(this.TAG, 'enrollProcessing-')
   }
 
-  async enrollSuccess(): Promise<void>  {
+  async enrollSuccess(): Promise<void> {
     Log.info(this.TAG, 'enrollSuccess+')
     AppStorage.Set('stackVideoVisibility', Visibility.Hidden);
     AppStorage.Set('stackShelterVisibility', Visibility.Hidden);

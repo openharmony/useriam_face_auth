@@ -29,6 +29,7 @@
           "graphic_chipsetsdk",
           "graphic_standard",
           "hiviewdfx_hilog_native",
+          "init",
           "ipc",
           "napi",
           "power_manager",

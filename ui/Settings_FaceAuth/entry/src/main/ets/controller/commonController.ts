@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,7 +19,7 @@ import Config from '../config/config'
 import UserIdmModel from '../model/userIdmModel'
 
 class CommonController {
-  private readonly TAG: string = "CommonController"
+  private readonly TAG: string = 'CommonController';
 
   async routeBack(): Promise<void> {
     Log.info(this.TAG, 'router getLength: ' + router.getLength())
@@ -68,8 +68,9 @@ class CommonController {
     let b = height / 2
     let R = Math.sqrt(a * a + b * b)
     let H = R / 0.3
-    let hPercentage = "" + Math.trunc(H * 166 / height) + '%'
-    return hPercentage
+    const H_WEIGHT = 166;
+    let hPercentage = '' + Math.trunc(H * H_WEIGHT / height) + '%';
+    return hPercentage;
   }
 
   setNonAppBarDisplaySize(nonAppBarDisplayWidth: number, nonAppBarDisplayHeight: number): void {
@@ -116,31 +117,49 @@ class CommonController {
   }
 
   setGridWidthForTablet(displayWidth: number): void {
-    let columnNum = 12
-    let margin = 24
-    let gutterWidth = 24
-    let columnWidth = (displayWidth - margin * 2 - (columnNum - 1) * gutterWidth) / columnNum
-    AppStorage.SetOrCreate('CONTENT_TYPE_WIDTH', 8 * columnWidth + 7 * gutterWidth);
-    AppStorage.SetOrCreate('BUTTON_TYPE_WIDTH', 4 * columnWidth + 3 * gutterWidth);
-    AppStorage.SetOrCreate('POP_TYPE_WIDTH', 6 * columnWidth + 5 * gutterWidth);
-    margin = 12
-    gutterWidth = 12
-    columnWidth = (displayWidth - margin * 2 - (columnNum - 1) * gutterWidth) / columnNum
-    AppStorage.SetOrCreate('CARD_TYPE_WIDTH', 8 * columnWidth + 7 * gutterWidth);
+    const COLUMN_NUM = 12;
+    const MARGIN = 24;
+    const GUTTER_WIDTH = 24;
+    const MARGIN_WEIGHT = 2;
+    let columnWidth = (displayWidth - MARGIN * MARGIN_WEIGHT - (COLUMN_NUM - 1) * GUTTER_WIDTH) / COLUMN_NUM;
+    const CONTENT_COLUMN_WIDTH_WEIGHT = 8;
+    const CONTENT_GUTTER_WIDTH_WEIGHT = 7;
+    AppStorage.SetOrCreate('CONTENT_TYPE_WIDTH', CONTENT_COLUMN_WIDTH_WEIGHT * columnWidth + CONTENT_GUTTER_WIDTH_WEIGHT * GUTTER_WIDTH);
+    const BUTTON_COLUMN_WIDTH_WEIGHT = 4;
+    const BUTTON_GUTTER_WIDTH_WEIGHT = 3;
+    AppStorage.SetOrCreate('BUTTON_TYPE_WIDTH', BUTTON_COLUMN_WIDTH_WEIGHT * columnWidth + BUTTON_GUTTER_WIDTH_WEIGHT * GUTTER_WIDTH);
+    const POP_COLUMN_WIDTH_WEIGHT = 6;
+    const POP_GUTTER_WIDTH_WEIGHT = 5;
+    AppStorage.SetOrCreate('POP_TYPE_WIDTH', POP_COLUMN_WIDTH_WEIGHT * columnWidth + POP_GUTTER_WIDTH_WEIGHT * GUTTER_WIDTH);
+    const CARD_MARGIN = 12;
+    const CARD_GUTTER_WIDTH = 12;
+    const CARD_COLUMN_WIDTH_WEIGHT = 8;
+    const CARD_GUTTER_WIDTH_WEIGHT = 7;
+    columnWidth = (displayWidth - CARD_MARGIN * MARGIN_WEIGHT - (COLUMN_NUM - 1) * CARD_GUTTER_WIDTH) / COLUMN_NUM;
+    AppStorage.SetOrCreate('CARD_TYPE_WIDTH', CARD_COLUMN_WIDTH_WEIGHT * columnWidth + CARD_GUTTER_WIDTH_WEIGHT * CARD_GUTTER_WIDTH);
   }
 
   setGridWidthForPhone(displayWidth: number): void {
-    let columnNum = 4
-    let margin = 24
-    let gutterWidth = 24
-    let columnWidth = (displayWidth - margin * 2 - (columnNum - 1) * gutterWidth) / columnNum
-    AppStorage.SetOrCreate('CONTENT_TYPE_WIDTH', 4 * columnWidth + 3 * gutterWidth);
-    AppStorage.SetOrCreate('BUTTON_TYPE_WIDTH', 2 * columnWidth + 3 * gutterWidth);
-    AppStorage.SetOrCreate('POP_TYPE_WIDTH', 4 * columnWidth + 3 * gutterWidth);
-    margin = 12
-    gutterWidth = 12
-    columnWidth = (displayWidth - margin * 2 - (columnNum - 1) * gutterWidth) / columnNum
-    AppStorage.SetOrCreate('CARD_TYPE_WIDTH', 4 * columnWidth + 3 * gutterWidth);
+    const COLUMN_NUM = 4;
+    const MARGIN = 24;
+    const GUTTER_WIDTH = 24;
+    const MARGIN_WEIGHT = 2;
+    let columnWidth = (displayWidth - MARGIN * MARGIN_WEIGHT - (COLUMN_NUM - 1) * GUTTER_WIDTH) / COLUMN_NUM;
+    const CONTENT_COLUMN_WIDTH_WEIGHT = 4;
+    const CONTENT_GUTTER_WIDTH_WEIGHT = 3;
+    AppStorage.SetOrCreate('CONTENT_TYPE_WIDTH', CONTENT_COLUMN_WIDTH_WEIGHT * columnWidth + CONTENT_GUTTER_WIDTH_WEIGHT * GUTTER_WIDTH);
+    const BUTTON_COLUMN_WIDTH_WEIGHT = 2;
+    const BUTTON_GUTTER_WIDTH_WEIGHT = 3;
+    AppStorage.SetOrCreate('BUTTON_TYPE_WIDTH', BUTTON_COLUMN_WIDTH_WEIGHT * columnWidth + BUTTON_GUTTER_WIDTH_WEIGHT * GUTTER_WIDTH);
+    const POP_COLUMN_WIDTH_WEIGHT = 4;
+    const POP_GUTTER_WIDTH_WEIGHT = 3;
+    AppStorage.SetOrCreate('POP_TYPE_WIDTH', POP_COLUMN_WIDTH_WEIGHT * columnWidth + POP_GUTTER_WIDTH_WEIGHT * GUTTER_WIDTH);
+    const CARD_MARGIN = 12;
+    const CARD_GUTTER_WIDTH = 12;
+    const CARD_COLUMN_WIDTH_WEIGHT = 4;
+    const CARD_GUTTER_WIDTH_WEIGHT = 3;
+    columnWidth = (displayWidth - CARD_MARGIN * MARGIN_WEIGHT - (COLUMN_NUM - 1) * CARD_GUTTER_WIDTH) / COLUMN_NUM;
+    AppStorage.SetOrCreate('CARD_TYPE_WIDTH', CARD_COLUMN_WIDTH_WEIGHT * columnWidth + CARD_GUTTER_WIDTH_WEIGHT * CARD_GUTTER_WIDTH);
   }
 
   uin8Array2JsonString(inArray: Uint8Array): string {

@@ -22,12 +22,12 @@ import commonController from '../controller/commonController'
 export default struct BackComponent {
   private prevTag: string
   private title: string | Resource = ""
-  private readonly TAG : string = "BackComponent"
+  private tag : string = "BackComponent"
   @State isTouch: boolean = false
   @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
 
   aboutToAppear() {
-    this.TAG = this.prevTag + "BackComp:"
+    this.tag = this.prevTag + "BackComp:"
   }
 
   build() {
@@ -37,9 +37,9 @@ export default struct BackComponent {
         .width('24vp')
         .backgroundColor(this.isTouch ? Constants.ohos_id_color_click_effect : "#00000000")
         .onClick(() => {
-          Log.info(this.TAG, 'back image onClick +')
+          Log.info(this.tag, 'back image onClick +')
           commonController.routeBack()
-          Log.info(this.TAG, 'back image onClick -')
+          Log.info(this.tag, 'back image onClick -')
         })
         .margin({
           top: '16vp',
@@ -49,7 +49,7 @@ export default struct BackComponent {
         })
         .responseRegion({ x: '-12vp', y: '-16vp', width: '48vp', height: '56vp' })
         .onTouch((event: TouchEvent) => {
-          Log.info(this.TAG, 'touch event')
+          Log.info(this.tag, 'touch event')
           if (event.type === TouchType.Down) {
             this.isTouch = true;
           }

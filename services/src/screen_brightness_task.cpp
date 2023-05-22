@@ -15,9 +15,11 @@
 
 #include "screen_brightness_task.h"
 
+#include <string>
 #include <vector>
 
 #include "display_power_mgr_client.h"
+#include "parameter.h"
 #include "sensor_agent.h"
 
 #include "iam_check.h"
@@ -54,11 +56,63 @@ constexpr SensorUser SENSOR_USER = {
 constexpr uint32_t INVALID_BRIGHTNESS = -1;
 constexpr uint32_t SENSOR_SAMPLE_AND_REPORT_INTERVAL = 100 * 1000 * 1000; // ns
 constexpr uint32_t INCREASE_BRIGHTNESS_START_DELAY = 100;                 // ms
-constexpr uint32_t INCREASE_BRIGHTNESS_INTERVAL = 75;                     // ms
+constexpr uint32_t DEFAULT_INCREASE_BRIGHTNESS_INTERVAL = 75;             // ms
+constexpr uint32_t DEFAULT_INCREASE_BRIGHTNESS_MAX = 30;
 const std::vector<uint32_t> INCREASE_BRIGHTNESS_ARRAY = { 4, 4, 5, 5, 6, 6, 7, 8, 9, 9, 10, 11, 13, 14, 15, 17, 18, 20,
     22, 24, 27, 30, 33, 36, 39, 43, 48, 52, 58, 63, 70, 77, 84, 93, 102, 112, 124, 136, 150, 166, 181, 199, 219, 241 };
-constexpr uint32_t INCREASE_BRIGHTNESS_MAX = 30;
 constexpr float AMBIENT_LIGHT_THRESHOLD_FOR_BEGIN = 2.0; // lux
+constexpr uint32_t MAX_BRIGHTNESS = 255;
+constexpr uint32_t MAX_INT_STRING_LEN = 12;
+const char *INCREASE_BRIGHTNESS_MAX_KEY = "const.useriam.face_auth_increase_brightness_max";
+const char *INCREASE_BRIGHTNESS_INTERVAL_KEY = "const.useriam.face_auth_increase_brightness_interval";
+
+uint32_t GetUInt32Param(const char *key, uint32_t defaultValue)
+{
+    std::string defaultStr = std::to_string(defaultValue);
+    char str[MAX_INT_STRING_LEN] = { 0 };
+    int32_t ret = GetParameter(key, defaultStr.c_str(), str, MAX_INT_STRING_LEN - 1);
+    if (ret < 0) {
+        IAM_LOGE("failed to get param %{public}s, return default value", key);
+        return defaultValue;
+    }
+    uint32_t uintValue;
+    try {
+        unsigned long longValue = std::stoul(str);
+        if (longValue > std::numeric_limits<uint32_t>::max()) {
+            IAM_LOGE("value exceeds uint32");
+            return std::numeric_limits<uint32_t>::max();
+        }
+        uintValue = static_cast<uint32_t>(longValue);
+    } catch (const std::exception &e) {
+        IAM_LOGE("failed to convert %{public}s to int, return default value", str);
+        return defaultValue;
+    }
+
+    return uintValue;
+}
+
+uint32_t GetIncreaseBrightnessInterval()
+{
+    uint32_t val = GetUInt32Param(INCREASE_BRIGHTNESS_INTERVAL_KEY, DEFAULT_INCREASE_BRIGHTNESS_INTERVAL);
+    if (val == 0) {
+        IAM_LOGE("interval cannot be 0");
+        return DEFAULT_INCREASE_BRIGHTNESS_INTERVAL;
+    }
+    IAM_LOGI("param interval %{public}u", val);
+    return val;
+}
+
+uint32_t GetIncreaseBrightnessMax()
+{
+    uint32_t val = GetUInt32Param(INCREASE_BRIGHTNESS_MAX_KEY, DEFAULT_INCREASE_BRIGHTNESS_MAX);
+    if (val > MAX_BRIGHTNESS) {
+        IAM_LOGE("val exceeds max brightness");
+        return MAX_BRIGHTNESS;
+    }
+    IAM_LOGI("param increase brightness max %{public}u", val);
+    return val;
+}
+
 ResultCode SubscribeSensor()
 {
     IAM_LOGI("start");
@@ -74,6 +128,7 @@ ResultCode SubscribeSensor()
 
     return ResultCode::SUCCESS;
 }
+
 void UnsubscribeSensor()
 {
     IAM_LOGI("start");
@@ -125,6 +180,8 @@ ScreenBrightnessTask::ScreenBrightnessTask() : timer_("screen_brightness_timer")
 {
     timer_.Setup();
     increaseBrightnessIndex_ = 0;
+    increaseBrightnessInterval_ = GetIncreaseBrightnessInterval();
+    increaseBrightnessMax_ = GetIncreaseBrightnessMax();
 }
 
 ScreenBrightnessTask::~ScreenBrightnessTask()
@@ -264,13 +321,13 @@ void ScreenBrightnessTask::DoIncreaseBrightness()
     IAM_LOGI("start");
 
     if (increaseBrightnessIndex_ < INCREASE_BRIGHTNESS_ARRAY.size()) {
-        if (INCREASE_BRIGHTNESS_ARRAY[increaseBrightnessIndex_] <= INCREASE_BRIGHTNESS_MAX) {
+        if (INCREASE_BRIGHTNESS_ARRAY[increaseBrightnessIndex_] <= increaseBrightnessMax_) {
             OverrideScreenBrightness(INCREASE_BRIGHTNESS_ARRAY[increaseBrightnessIndex_]);
             IAM_LOGI("increase brightness index %{public}u value %{public}u", increaseBrightnessIndex_,
                 INCREASE_BRIGHTNESS_ARRAY[increaseBrightnessIndex_]);
             timer_.Unregister(currTimerId_);
             currTimerId_ = timer_.Register([self = shared_from_this()]() { self->OnIncreaseBrightness(); },
-                INCREASE_BRIGHTNESS_INTERVAL, true);
+                increaseBrightnessInterval_, true);
         }
         increaseBrightnessIndex_++;
     }

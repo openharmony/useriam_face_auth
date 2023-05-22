@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,8 +18,8 @@ import account_osAccount from '@ohos.account.osAccount';
 import CommonController from '../controller/commonController'
 
 class UserIdmModel {
-  protected readonly TAG: string = "UserIdmModel"
-  protected userIdentityManager: account_osAccount.UserIdentityManager
+  protected readonly TAG: string = 'UserIdmModel';
+  protected userIdentityManager: account_osAccount.UserIdentityManager;
   protected challenge: Uint8Array
   protected token: Uint8Array
   protected credentialId: Uint8Array
@@ -106,7 +106,7 @@ class UserIdmModel {
           resolve(result)
         },
         onAcquireInfo(moduleId, number, extraInfo) {
-          Log.info(this.TAG, "onAcquireInfo+ " + moduleId + ":" + number + ":" + JSON.stringify(extraInfo))
+          Log.info(this.TAG, 'onAcquireInfo+ ' + moduleId + ':' + number + ':' + JSON.stringify(extraInfo));
           this.onAcquireCallback(number)
           Log.info(this.TAG, "onAcquireInfo-")
         }
