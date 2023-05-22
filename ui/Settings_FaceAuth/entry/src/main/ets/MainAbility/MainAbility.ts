@@ -20,7 +20,7 @@ import CommonController from '../controller/commonController'
 import EnrollingController from '../controller/enrollingController'
 
 export default class MainAbility extends Ability {
-  private TAG: string = "MainAbility:"
+  private readonly TAG: string = "MainAbility:"
   onCreate(want, launchParam) {
     Log.info(this.TAG, 'Application onCreate')
     globalThis.abilityContext = this.context;
@@ -39,11 +39,11 @@ export default class MainAbility extends Ability {
     windowStage.setUIContent(this.context, "pages/entryView", null)
   }
 
-  onWindowStageDestroy() {
+  onWindowStageDestroy(): void {
     Log.info(this.TAG, 'onWindowStageDestroy')
   }
 
-  onBackground() {
+  onBackground(): void {
     Log.info(this.TAG, 'Application onBackground+, terminate ability')
     CommonController.terminateAbility()
     Log.info(this.TAG, 'Application onBackground-')

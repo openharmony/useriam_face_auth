@@ -18,18 +18,18 @@ import UserIdmModel from '../model/userIdmModel'
 import CommonController from '../controller/commonController'
 
 class FaceConfigController {
-  private TAG: string = "FaceConfigController"
+  private readonly TAG: string = "FaceConfigController"
 
   constructor() {
     Log.info(this.TAG, "constructor+")
     Log.info(this.TAG, "constructor-")
   }
 
-  deleteFace() {
+  deleteFace(): void {
     Log.info(this.TAG, "deleteFace+")
     UserIdmModel.deleteFace().then((result)=>{
       Log.info(this.TAG, "deleteFace result: " + result)
-      if (result == 0) {
+      if (result === 0) {
         Log.info(this.TAG, "deleteFace routeBack+")
         CommonController.routeBack()
         Log.info(this.TAG, "deleteFace routerBack-")

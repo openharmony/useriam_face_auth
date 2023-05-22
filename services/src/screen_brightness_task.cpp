@@ -124,6 +124,7 @@ bool ShouldBeginIncreaseBrightness(float currentAmbientLightLux)
 ScreenBrightnessTask::ScreenBrightnessTask() : timer_("screen_brightness_timer")
 {
     timer_.Setup();
+    increaseBrightnessIndex_ = 0;
 }
 
 ScreenBrightnessTask::~ScreenBrightnessTask()

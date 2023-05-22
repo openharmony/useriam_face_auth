@@ -24,7 +24,7 @@ import Constants from '../config/constant'
 @Entry
 @Component
 struct Index {
-  private TAG: string = "Index"
+  private readonly TAG: string = "Index"
   @State resultString: string = ""
   @StorageLink('SYSTEM_STATUS_BAR_HEIGHT') SYSTEM_STATUS_BAR_HEIGHT: number = 0
   @StorageLink('SYSTEM_NAVIGATION_BAR_HEIGHT') SYSTEM_NAVIGATION_BAR_HEIGHT: number = 0
@@ -70,12 +70,12 @@ struct Index {
         Log.info(this.TAG, 'receive system bar tint change: ' + JSON.stringify(data));
         for (let i = 0; i < data.regionTint.length; i++) {
           let regionData = data.regionTint[i]
-          if (regionData.type == window.WindowType.TYPE_STATUS_BAR) {
+          if (regionData.type === window.WindowType.TYPE_STATUS_BAR) {
             this.SYSTEM_STATUS_BAR_HEIGHT = px2vp(regionData.region.height)
             Log.info(this.TAG, "set status bar height " + regionData.region.height)
             continue
           }
-          if (regionData.type == window.WindowType.TYPE_NAVIGATION_BAR) {
+          if (regionData.type === window.WindowType.TYPE_NAVIGATION_BAR) {
             this.SYSTEM_NAVIGATION_BAR_HEIGHT = px2vp(regionData.region.height)
             Log.info(this.TAG, "set navigation bar height " + this.SYSTEM_NAVIGATION_BAR_HEIGHT)
             continue

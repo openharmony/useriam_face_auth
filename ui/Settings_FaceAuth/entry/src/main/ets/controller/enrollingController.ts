@@ -21,8 +21,8 @@ import UserIdmModel from '../model/userIdmModel'
 import FaceAuthModel from '../model/faceAuthModel'
 
 class EnrollingController {
-  private TAG: string = "EnrollingController"
-  private ANIMATION_TIME: number = 2000
+  private readonly TAG: string = "EnrollingController"
+  private readonly ANIMATION_TIME: number = 2000
   private enrolling: boolean = false
 
   constructor() {
@@ -30,7 +30,7 @@ class EnrollingController {
     Log.info(this.TAG, 'constructor-')
   }
 
-  init() {
+  init(): void {
     Log.info(this.TAG, 'init+')
     AppStorage.Set('stackVideoVisibility', Visibility.Visible);
     AppStorage.Set('stackShelterVisibility', Visibility.Hidden);
@@ -41,7 +41,7 @@ class EnrollingController {
 
     AppStorage.Set('stackProgressValue', 0);
     AppStorage.Set('stackShelterHeight', AppStorage.Get('stackShelterHeightBegin'));
-    AppStorage.Set('enrollTip',  $r('app.string.face_intro'));
+    AppStorage.Set('enrollTip', $r('app.string.face_intro'));
     AppStorage.Set('enrollTipSize', Constants.ohos_id_text_size_subtitle1);
     AppStorage.Set('stackVideoBlurRadius', 0);
 
@@ -50,7 +50,7 @@ class EnrollingController {
     Log.info(this.TAG, 'init-')
   }
 
-  async startEnroll() {
+  async startEnroll(): Promise<void> {
     Log.info(this.TAG, 'startEnroll+')
     if (AppStorage.Get('xComponentSurfaceId') === "") {
       Log.info(this.TAG, 'surface id is not set, skip start enroll')
@@ -67,10 +67,10 @@ class EnrollingController {
     Log.info(this.TAG, 'startEnroll-')
   }
 
-  async processResult(result : number) {
+  async processResult(result : number): Promise<void> {
     await this.faceDetected()
     await this.enrollProcessing()
-    if (result == 0) {
+    if (result === 0) {
       await this.enrollSuccess()
     } else {
       await this.enrollFail()
@@ -78,7 +78,7 @@ class EnrollingController {
     this.enrolling = false
   }
 
-  async onAcquire(result: number) {
+  async onAcquire(result: number): Promise<void> {
     Log.info(this.TAG, 'onAcquire+ result: ' + result)
     if (result === 25) {
       Log.info(this.TAG, 'onAcquire face detected+')
@@ -88,7 +88,7 @@ class EnrollingController {
     Log.info(this.TAG, 'onAcquire-')
   }
 
-  async faceDetected() {
+  async faceDetected(): Promise<void> {
     Log.info(this.TAG, 'faceDetected+')
     AppStorage.Set('animationTime', this.ANIMATION_TIME);
     AppStorage.Set('stackVideoVisibility', Visibility.Visible);
@@ -104,7 +104,7 @@ class EnrollingController {
     Log.info(this.TAG, 'faceDetected-')
   }
 
-  async enrollProcessing() {
+  async enrollProcessing(): Promise<void> {
     Log.info(this.TAG, 'enrollProcessing+')
     AppStorage.Set('stackVideoVisibility', Visibility.Visible);
     AppStorage.Set('stackShelterVisibility', Visibility.Visible);
@@ -113,7 +113,7 @@ class EnrollingController {
     AppStorage.Set('enrollTipVisibility', Visibility.Hidden);
     AppStorage.Set('enrollButtonVisibility', Visibility.Hidden);
 
-    for (let i=0; i <= 100; i+=1) {
+    for (let i = 0; i <= 100; i+=1) {
       await CommonController.sleepMS(30)
       AppStorage.Set('stackProgressVisibility', Visibility.Hidden);
       AppStorage.Set('stackProgressValue', i);
@@ -123,7 +123,7 @@ class EnrollingController {
     Log.info(this.TAG, 'enrollProcessing-')
   }
 
-  async enrollSuccess() {
+  async enrollSuccess(): Promise<void>  {
     Log.info(this.TAG, 'enrollSuccess+')
     AppStorage.Set('stackVideoVisibility', Visibility.Hidden);
     AppStorage.Set('stackShelterVisibility', Visibility.Hidden);
@@ -138,7 +138,7 @@ class EnrollingController {
     Log.info(this.TAG, 'enrollSuccess-')
   }
 
-  async enrollFail() {
+  async enrollFail(): Promise<void> {
     Log.info(this.TAG, 'enrollFail+')
     AppStorage.Set('stackVideoVisibility', Visibility.Visible);
     AppStorage.Set('stackShelterVisibility', Visibility.Visible);
@@ -156,7 +156,7 @@ class EnrollingController {
     Log.info(this.TAG, 'enrollFail-')
   }
 
-  async clear() {
+  async clear(): Promise<void> {
     Log.info(this.TAG, 'clear+')
     await FaceAuthModel.clearSurfaceId()
     Log.info(this.TAG, 'clear-')
