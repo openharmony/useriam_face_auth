@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,7 +17,7 @@ import AbilityStage from '@ohos.app.ability.AbilityStage'
 import Log from '../utils/log'
 
 export default class MyAbilityStage extends AbilityStage {
-  private readonly TAG: string = "MyAbilityStage:"
+  private readonly TAG: string = 'MyAbilityStage:';
   onCreate() {
     Log.info(this.TAG, 'onCreate')
   }

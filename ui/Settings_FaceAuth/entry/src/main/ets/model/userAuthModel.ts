@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,10 +18,10 @@ import CommonController from '../controller/commonController'
 import account_osAccount from '@ohos.account.osAccount';
 
 class UserAuthModel {
-  protected readonly TAG: string = "UserAuthModel"
-  protected pinAuthManger : account_osAccount.PINAuth
-  protected userAuthManager : account_osAccount.UserAuth
-  private readonly CMD_SET_SURFACE_ID = 100
+  protected readonly TAG: string = 'UserAuthModel';
+  protected pinAuthManger : account_osAccount.PINAuth;
+  protected userAuthManager : account_osAccount.UserAuth;
+  private readonly CMD_SET_SURFACE_ID = 100;
 
   constructor() {
     Log.info(this.TAG, "constructor+")
@@ -44,7 +44,7 @@ class UserAuthModel {
         onResult: (result, extraInfo) => {
           Log.info(this.TAG, 'authPin onResult: ' + result);
           this.pinAuthManger.unregisterInputer();
-          if ((result === 0) && extraInfo.token && (Object.keys(extraInfo.token).length > 0) ) {
+          if ((result === 0) && extraInfo.token && (Object.keys(extraInfo.token).length > 0)) {
             resolve(extraInfo.token);
             Log.info(this.TAG, 'authPin success');
             setTimeout(()=>{CommonController.terminateAbility()}, 10 * 60 * 1000)
