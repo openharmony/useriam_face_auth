@@ -42,7 +42,7 @@ import Constants from '../config/constant'
 @Entry
 @Component
 struct FaceConfig {
-  @State TAG: string = "FaceConfig"
+  @State readonly TAG: string = "FaceConfig"
   @State touched: boolean = false
   @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
   @StorageLink('CARD_TYPE_WIDTH') CARD_TYPE_WIDTH: number = 0

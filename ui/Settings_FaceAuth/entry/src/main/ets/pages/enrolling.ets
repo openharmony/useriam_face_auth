@@ -34,7 +34,7 @@ import EnrollingController from '../controller/enrollingController'
 @Entry
 @Component
 struct Enrolling {
-  private TAG: string = "Enrolling"
+  private readonly TAG: string = "Enrolling"
   private xComponentController = new XComponentController()
   @StorageLink('enrollStatus') enrollStatus: string = ""
   @StorageLink('stackVideoVisibility') stackVideoVisibility: Visibility = Visibility.Visible

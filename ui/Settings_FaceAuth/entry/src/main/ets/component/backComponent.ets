@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,7 +22,7 @@ import commonController from '../controller/commonController'
 export default struct BackComponent {
   private prevTag: string
   private title: string | Resource = ""
-  private TAG : string = "BackComponent"
+  private readonly TAG : string = "BackComponent"
   @State isTouch: boolean = false
   @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
 

@@ -46,7 +46,7 @@ import Constants from '../config/constant'
 @Entry
 @Component
 struct EnrollIntro {
-  @State TAG: string = "EnrollIntro"
+  @State readonly TAG: string = "EnrollIntro"
   @StorageLink('enrollImageHeight') enrollImageHeight: number = 0
   @StorageLink('enrollImageWidth') enrollImageWidth: number = 0
   @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
