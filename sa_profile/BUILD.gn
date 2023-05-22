@@ -15,6 +15,6 @@ import("//build/ohos.gni")
 import("//build/ohos/sa_profile/sa_profile.gni")
 
 ohos_sa_profile("faceauth_sa_profile") {
-  sources = [ "942.xml" ]
+  sources = [ "942.json" ]
   part_name = "face_auth"
 }
