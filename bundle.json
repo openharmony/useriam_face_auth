@@ -48,7 +48,8 @@
           ],
           "service_group": [
             "//base/useriam/face_auth/sa_profile:faceauth_sa_profile",
-            "//base/useriam/face_auth/services:faceauthservice"
+            "//base/useriam/face_auth/services:faceauthservice",
+            "//base/useriam/face_auth/services_ex:faceauthservice_ex"
           ]
         },
         "test": [

@@ -20,6 +20,7 @@
 #include "iam_ptr.h"
 
 #include "sa_command_manager.h"
+#include "service_ex_manager.h"
 
 #define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
 
@@ -48,7 +49,7 @@ std::shared_ptr<ScreenBrightnessManager> ScreenBrightnessManager::GetInstance()
     return manager;
 }
 
-std::shared_ptr<ScreenBrightnessTask> ScreenBrightnessManager::GetCurrentTask()
+std::shared_ptr<IScreenBrightnessTask> ScreenBrightnessManager::GetCurrentTask()
 {
     return taskInProc_;
 }
@@ -108,8 +109,19 @@ UserAuth::ResultCode ScreenBrightnessManager::ProcessScreenBrightnessIncreaseBeg
     }
 
     IAM_LOGI("start");
-    auto taskInProc = Common::MakeShared<ScreenBrightnessTask>();
-    IF_FALSE_LOGE_AND_RETURN_VAL(taskInProc != nullptr, UserAuth::GENERAL_ERROR);
+    auto acquireRet = ServiceExManager::GetInstance().Acquire();
+    IF_FALSE_LOGE_AND_RETURN_VAL(acquireRet == UserAuth::SUCCESS, UserAuth::GENERAL_ERROR);
+
+    auto taskInProc = ServiceExManager::GetInstance().GetScreenBrightnessTask();
+    if (taskInProc == nullptr) {
+        ServiceExManager::GetInstance().Release();
+        IAM_LOGE("failed to get task");
+        return UserAuth::GENERAL_ERROR;
+    }
+    taskInProc->RegisterDestructCallback([]() {
+        IAM_LOGI("task destruct");
+        ServiceExManager::GetInstance().Release();
+    });
     taskInProc->Start();
 
     executorInProc_ = executor;

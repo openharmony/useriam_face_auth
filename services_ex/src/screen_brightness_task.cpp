@@ -185,7 +185,16 @@ ScreenBrightnessTask::ScreenBrightnessTask() : timer_("screen_brightness_timer")
 
 ScreenBrightnessTask::~ScreenBrightnessTask()
 {
-    timer_.Shutdown();
+    if (machine_ != nullptr) {
+        // make sure state machine is stopped
+        uint32_t state = machine_->EnsureCurrentState();
+        if (state != S_END) {
+            IAM_LOGE("state is not STOP when destruct");
+        }
+    }
+    if (destructCallback_ != nullptr) {
+        destructCallback_();
+    }
 }
 
 void ScreenBrightnessTask::Start()
@@ -209,7 +218,7 @@ std::shared_ptr<FiniteStateMachine> ScreenBrightnessTask::MakeFiniteStateMachine
 
     // S_INIT
     builder->MakeTransition(S_INIT, E_START, S_WAIT_AMBIENT_LIGHT_INFO_AND_START_DELAY,
-        [self = shared_from_this()](FiniteStateMachine &machine, uint32_t event) { self->StartProcess(); });
+        [self = this](FiniteStateMachine &machine, uint32_t event) { self->StartProcess(); });
 
     // S_WAIT_*
     builder->MakeTransition(S_WAIT_AMBIENT_LIGHT_INFO_AND_START_DELAY, E_START_DELAY_EXPIRED,
@@ -221,14 +230,14 @@ std::shared_ptr<FiniteStateMachine> ScreenBrightnessTask::MakeFiniteStateMachine
 
     // S_INCREASING_BRIGHTNESS
     builder->MakeOnStateEnter(S_INCREASING_BRIGHTNESS,
-        [self = shared_from_this()](FiniteStateMachine &machine, uint32_t event) { self->BeginIncreaseBrightness(); });
+        [self = this](FiniteStateMachine &machine, uint32_t event) { self->BeginIncreaseBrightness(); });
 
     builder->MakeTransition(S_INCREASING_BRIGHTNESS, E_INCREASE_BRIGHTNESS, S_INCREASING_BRIGHTNESS,
-        [self = shared_from_this()](FiniteStateMachine &machine, uint32_t event) { self->DoIncreaseBrightness(); });
+        [self = this](FiniteStateMachine &machine, uint32_t event) { self->DoIncreaseBrightness(); });
 
     // S_END
     builder->MakeOnStateEnter(S_END,
-        [self = shared_from_this()](FiniteStateMachine &machine, uint32_t event) { self->EndProcess(); });
+        [self = this](FiniteStateMachine &machine, uint32_t event) { self->EndProcess(); });
 
     // process E_STOP
     builder->MakeTransition(S_WAIT_AMBIENT_LIGHT_INFO_AND_START_DELAY, E_STOP, S_END);
@@ -283,7 +292,15 @@ void ScreenBrightnessTask::StartProcess()
     }
 
     timer_.Unregister(currTimerId_);
-    currTimerId_ = timer_.Register([self = shared_from_this()]() { self->OnStartDelayTimeout(); },
+    currTimerId_ = timer_.Register(
+        [weak_self = weak_from_this()]() {
+            auto self = weak_self.lock();
+            if (self == nullptr) {
+                IAM_LOGE("object is released");
+                return;
+            }
+            self->OnStartDelayTimeout();
+        },
         INCREASE_BRIGHTNESS_START_DELAY, true);
 
     IAM_LOGI("time id %{public}d", currTimerId_);
@@ -319,14 +336,22 @@ void ScreenBrightnessTask::DoIncreaseBrightness()
 {
     IAM_LOGI("start");
 
+    auto timeCallback = [weak_self = weak_from_this()]() {
+        auto self = weak_self.lock();
+        if (self == nullptr) {
+            IAM_LOGE("object is released");
+            return;
+        }
+        self->OnIncreaseBrightness();
+    };
+
     if (increaseBrightnessIndex_ < INCREASE_BRIGHTNESS_ARRAY.size()) {
         if (INCREASE_BRIGHTNESS_ARRAY[increaseBrightnessIndex_] <= increaseBrightnessMax_) {
             OverrideScreenBrightness(INCREASE_BRIGHTNESS_ARRAY[increaseBrightnessIndex_]);
             IAM_LOGI("increase brightness index %{public}u value %{public}u", increaseBrightnessIndex_,
                 INCREASE_BRIGHTNESS_ARRAY[increaseBrightnessIndex_]);
             timer_.Unregister(currTimerId_);
-            currTimerId_ = timer_.Register([self = shared_from_this()]() { self->OnIncreaseBrightness(); },
-                increaseBrightnessInterval_, true);
+            currTimerId_ = timer_.Register(timeCallback, increaseBrightnessInterval_, true);
         }
         increaseBrightnessIndex_++;
     }
@@ -334,10 +359,21 @@ void ScreenBrightnessTask::DoIncreaseBrightness()
 
 void ScreenBrightnessTask::EndProcess()
 {
+    IAM_LOGI("start");
     timer_.Unregister(currTimerId_);
+    timer_.Shutdown();
     UnsubscribeSensor();
-
     RestoreScreenBrightness();
+}
+
+void ScreenBrightnessTask::RegisterDestructCallback(DestructCallback destructCallback)
+{
+    destructCallback_ = destructCallback;
+}
+
+__attribute__((visibility("default"))) std::shared_ptr<IScreenBrightnessTask> GetScreenBrightnessTask()
+{
+    return Common::MakeShared<ScreenBrightnessTask>();
 }
 } // namespace FaceAuth
 } // namespace UserIam
