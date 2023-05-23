@@ -67,11 +67,9 @@ HWTEST_F(FaceAuthScreenBrightnessTest, FaceAuthScreenBrightnessTest_001, TestSiz
     });
     task->Start();
     IAM_LOGI("start brightness increase task");
-    sleep(1);
     task->Stop();
     IAM_LOGI("end brightness increase task");
     task = nullptr;
-    sleep(1);
 }
 
 HWTEST_F(FaceAuthScreenBrightnessTest, FaceAuthScreenBrightnessTest_002, TestSize.Level0)
@@ -86,11 +84,9 @@ HWTEST_F(FaceAuthScreenBrightnessTest, FaceAuthScreenBrightnessTest_002, TestSiz
     auto result = manager->ProcessSaCommand(executor, beginCommand);
     EXPECT_TRUE(result == UserAuth::SUCCESS);
     IAM_LOGI("start brightness increase task");
-    sleep(1);
     result = manager->ProcessSaCommand(executor, endCommand);
     EXPECT_TRUE(result == UserAuth::SUCCESS);
     IAM_LOGI("end brightness increase task");
-    sleep(1);
 }
 
 } // namespace FaceAuth
