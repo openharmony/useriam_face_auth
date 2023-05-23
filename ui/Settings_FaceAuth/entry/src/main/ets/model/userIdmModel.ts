@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,8 +18,8 @@ import account_osAccount from '@ohos.account.osAccount';
 import CommonController from '../controller/commonController'
 
 class UserIdmModel {
-  readonly TAG: string = "UserIdmModel"
-  protected userIdentityManager: any
+  protected readonly TAG: string = 'UserIdmModel';
+  protected userIdentityManager: account_osAccount.UserIdentityManager;
   protected challenge: Uint8Array
   protected token: Uint8Array
   protected credentialId: Uint8Array
@@ -32,7 +32,7 @@ class UserIdmModel {
     Log.info(this.TAG, "constructor-")
   }
 
-  destroy() {
+  destroy(): void {
     Log.info(this.TAG, "destroy+")
     this.userIdentityManager.closeSession()
     Log.info(this.TAG, "destroy-")
@@ -42,7 +42,7 @@ class UserIdmModel {
     return await this.userIdentityManager.openSession()
   }
 
-  setToken(token: Uint8Array) {
+  setToken(token: Uint8Array): void {
     let tokenStr = CommonController.uin8Array2JsonString(token);
     AppStorage.SetOrCreate<string>("UserIdm_Token", tokenStr)
     Log.info(this.TAG, "setToken ok, size " + token.length)
@@ -50,12 +50,12 @@ class UserIdmModel {
 
   getToken() : Uint8Array {
     let tokenStr = AppStorage.Get<string>("UserIdm_Token")
-    let token =  CommonController.jsonString2Uint8Array(tokenStr)
+    let token = CommonController.jsonString2Uint8Array(tokenStr)
     Log.info(this.TAG, "getToken ok, size " + token.length)
     return token
   }
 
-  setCredentialId(credId: Uint8Array) {
+  setCredentialId(credId: Uint8Array): void {
     let credIdStr = CommonController.uin8Array2JsonString(credId);
     AppStorage.SetOrCreate<string>("UserIdm_CredId", credIdStr)
     Log.info(this.TAG, "setCredentialId ok, size " + credId.length)
@@ -68,7 +68,7 @@ class UserIdmModel {
     return credId
   }
 
-  updateFaceInfo() {
+  updateFaceInfo(): void {
     this.userIdentityManager.getAuthInfo(2).then((data) => {
       Log.info(this.TAG, 'getAuthInfo length ' + data.length)
       AppStorage.SetOrCreate<number>("UserIdm_FaceNum", data.length);
@@ -82,7 +82,7 @@ class UserIdmModel {
     return AppStorage.Get<number>("UserIdm_FaceNum");
   }
 
-  setOnAcquireCallback(onAcquireCallback: (result: number) => any) {
+  setOnAcquireCallback(onAcquireCallback: (result: number) => {}): void {
     this.onAcquireCallback = onAcquireCallback
   }
 
@@ -98,15 +98,15 @@ class UserIdmModel {
         onResult: (result, extraInfo) => {
           Log.info(this.TAG, "enrollFace onResult+")
           Log.info(this.TAG, 'FaceEnroll face.addCredential onResult ' + result)
-          if (result == 0) {
+          if (result === 0) {
             this.setCredentialId(extraInfo.credentialId)
             this.updateFaceInfo()
           }
           Log.info(this.TAG, "enrollFace onResult-")
           resolve(result)
         },
-        onAcquireInfo(module_id, number, extraInfo) {
-          Log.info(this.TAG, "onAcquireInfo+ " + module_id +  ":" + number + ":" + JSON.stringify(extraInfo))
+        onAcquireInfo(moduleId, number, extraInfo) {
+          Log.info(this.TAG, 'onAcquireInfo+ ' + moduleId + ':' + number + ':' + JSON.stringify(extraInfo));
           this.onAcquireCallback(number)
           Log.info(this.TAG, "onAcquireInfo-")
         }
@@ -126,11 +126,11 @@ class UserIdmModel {
     return new Promise<number>((resolve)=> {
       this.userIdentityManager.delCred(credId, localToken, {
           onResult: (result, extraInfo) => {
-              Log.info(this.TAG, 'FaceEnroll face.delete onResult result = ' + result);
-              this.updateFaceInfo()
-              resolve(result)
+            Log.info(this.TAG, 'FaceEnroll face.delete onResult result = ' + result);
+            this.updateFaceInfo()
+            resolve(result)
           }
-        })
+      })
     })
   }
 }

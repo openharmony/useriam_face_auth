@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,18 +18,18 @@ import UserIdmModel from '../model/userIdmModel'
 import CommonController from '../controller/commonController'
 
 class FaceConfigController {
-  private TAG: string = "FaceConfigController"
+  private readonly TAG: string = 'FaceConfigController';
 
   constructor() {
     Log.info(this.TAG, "constructor+")
     Log.info(this.TAG, "constructor-")
   }
 
-  deleteFace() {
+  deleteFace(): void {
     Log.info(this.TAG, "deleteFace+")
     UserIdmModel.deleteFace().then((result)=>{
       Log.info(this.TAG, "deleteFace result: " + result)
-      if (result == 0) {
+      if (result === 0) {
         Log.info(this.TAG, "deleteFace routeBack+")
         CommonController.routeBack()
         Log.info(this.TAG, "deleteFace routerBack-")

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,9 +19,9 @@ import Config from '../config/config'
 import UserIdmModel from '../model/userIdmModel'
 
 class CommonController {
-  private TAG: string = "CommonController"
+  private readonly TAG: string = 'CommonController';
 
-  async routeBack() {
+  async routeBack(): Promise<void> {
     Log.info(this.TAG, 'router getLength: ' + router.getLength())
     if (parseInt(router.getLength()) > 1) {
       Log.info(this.TAG, 'router back: back+')
@@ -34,7 +34,7 @@ class CommonController {
     }
   }
 
-  async terminateAbility() {
+  async terminateAbility(): Promise<void> {
     Log.info(this.TAG, 'terminate ability+')
     UserIdmModel.destroy()
     globalThis.abilityContext.terminateSelf()
@@ -43,7 +43,7 @@ class CommonController {
     Log.info(this.TAG, 'terminate ability-')
   }
 
-  async sleepMS(ms) {
+  async sleepMS(ms): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
@@ -55,7 +55,7 @@ class CommonController {
     }
   }
 
-  getDialogYOffset():any {
+  getDialogYOffset():string {
     if (Config.getDeviceType() === 'phone') {
       return "-12vp"
     } else {
@@ -68,12 +68,13 @@ class CommonController {
     let b = height / 2
     let R = Math.sqrt(a * a + b * b)
     let H = R / 0.3
-    let HPercentage = "" + Math.trunc(H * 166 / height) + '%'
-    return HPercentage
+    const H_WEIGHT = 166;
+    let hPercentage = '' + Math.trunc(H * H_WEIGHT / height) + '%';
+    return hPercentage;
   }
 
-  setNonAppBarDisplaySize(nonAppBarDisplayWidth: number, nonAppBarDisplayHeight: number) {
-    if (Config.getDeviceType() != 'phone') {
+  setNonAppBarDisplaySize(nonAppBarDisplayWidth: number, nonAppBarDisplayHeight: number): void {
+    if (Config.getDeviceType() !== 'phone') {
       return;
     }
     nonAppBarDisplayHeight = nonAppBarDisplayHeight + AppStorage.Get<number>('SYSTEM_NAVIGATION_BAR_HEIGHT')
@@ -88,9 +89,9 @@ class CommonController {
     AppStorage.SetOrCreate('stackRingRadius', (sideLength * 1.328 * 0.6 + 21) / 2);
   }
 
-  setDisplaySize(displayWidth: number, displayHeight: number) {
+  setDisplaySize(displayWidth: number, displayHeight: number): void {
     this.setGridWidth(displayWidth)
-    if (Config.getDeviceType() != 'tablet') {
+    if (Config.getDeviceType() !== 'tablet') {
       return;
     }
     displayHeight = displayHeight + AppStorage.Get<number>('SYSTEM_NAVIGATION_BAR_HEIGHT') +
@@ -107,7 +108,7 @@ class CommonController {
     AppStorage.SetOrCreate('stackRingRadius', Math.floor((sideLength * 1.46 * 0.6 + 21) / 2))
   }
 
-  setGridWidth(displayWidth: number) {
+  setGridWidth(displayWidth: number): void {
     if (Config.getDeviceType() === 'tablet') {
       this.setGridWidthForTablet(displayWidth)
       return;
@@ -115,32 +116,50 @@ class CommonController {
     this.setGridWidthForPhone(displayWidth)
   }
 
-  setGridWidthForTablet(displayWidth: number) {
-    let column_num = 12
-    let margin = 24
-    let gutter_width = 24
-    let column_width = (displayWidth - margin * 2 - (column_num - 1) * gutter_width) / column_num
-    AppStorage.SetOrCreate('CONTENT_TYPE_WIDTH', 8 * column_width + 7 * gutter_width);
-    AppStorage.SetOrCreate('BUTTON_TYPE_WIDTH', 4 * column_width + 3 * gutter_width);
-    AppStorage.SetOrCreate('POP_TYPE_WIDTH', 6 * column_width + 5 * gutter_width);
-    margin = 12
-    gutter_width = 12
-    column_width = (displayWidth - margin * 2 - (column_num - 1) * gutter_width) / column_num
-    AppStorage.SetOrCreate('CARD_TYPE_WIDTH', 8 * column_width + 7 * gutter_width);
+  setGridWidthForTablet(displayWidth: number): void {
+    const COLUMN_NUM = 12;
+    const MARGIN = 24;
+    const GUTTER_WIDTH = 24;
+    const MARGIN_WEIGHT = 2;
+    let columnWidth = (displayWidth - MARGIN * MARGIN_WEIGHT - (COLUMN_NUM - 1) * GUTTER_WIDTH) / COLUMN_NUM;
+    const CONTENT_COLUMN_WIDTH_WEIGHT = 8;
+    const CONTENT_GUTTER_WIDTH_WEIGHT = 7;
+    AppStorage.SetOrCreate('CONTENT_TYPE_WIDTH', CONTENT_COLUMN_WIDTH_WEIGHT * columnWidth + CONTENT_GUTTER_WIDTH_WEIGHT * GUTTER_WIDTH);
+    const BUTTON_COLUMN_WIDTH_WEIGHT = 4;
+    const BUTTON_GUTTER_WIDTH_WEIGHT = 3;
+    AppStorage.SetOrCreate('BUTTON_TYPE_WIDTH', BUTTON_COLUMN_WIDTH_WEIGHT * columnWidth + BUTTON_GUTTER_WIDTH_WEIGHT * GUTTER_WIDTH);
+    const POP_COLUMN_WIDTH_WEIGHT = 6;
+    const POP_GUTTER_WIDTH_WEIGHT = 5;
+    AppStorage.SetOrCreate('POP_TYPE_WIDTH', POP_COLUMN_WIDTH_WEIGHT * columnWidth + POP_GUTTER_WIDTH_WEIGHT * GUTTER_WIDTH);
+    const CARD_MARGIN = 12;
+    const CARD_GUTTER_WIDTH = 12;
+    const CARD_COLUMN_WIDTH_WEIGHT = 8;
+    const CARD_GUTTER_WIDTH_WEIGHT = 7;
+    columnWidth = (displayWidth - CARD_MARGIN * MARGIN_WEIGHT - (COLUMN_NUM - 1) * CARD_GUTTER_WIDTH) / COLUMN_NUM;
+    AppStorage.SetOrCreate('CARD_TYPE_WIDTH', CARD_COLUMN_WIDTH_WEIGHT * columnWidth + CARD_GUTTER_WIDTH_WEIGHT * CARD_GUTTER_WIDTH);
   }
 
-  setGridWidthForPhone(displayWidth: number) {
-    let column_num = 4
-    let margin = 24
-    let gutter_width = 24
-    let column_width = (displayWidth - margin * 2 - (column_num - 1) * gutter_width) / column_num
-    AppStorage.SetOrCreate('CONTENT_TYPE_WIDTH', 4 * column_width + 3 * gutter_width);
-    AppStorage.SetOrCreate('BUTTON_TYPE_WIDTH', 2 * column_width + 3 * gutter_width);
-    AppStorage.SetOrCreate('POP_TYPE_WIDTH', 4 * column_width + 3 * gutter_width);
-    margin = 12
-    gutter_width = 12
-    column_width = (displayWidth - margin * 2 - (column_num - 1) * gutter_width) / column_num
-    AppStorage.SetOrCreate('CARD_TYPE_WIDTH', 4 * column_width + 3 * gutter_width);
+  setGridWidthForPhone(displayWidth: number): void {
+    const COLUMN_NUM = 4;
+    const MARGIN = 24;
+    const GUTTER_WIDTH = 24;
+    const MARGIN_WEIGHT = 2;
+    let columnWidth = (displayWidth - MARGIN * MARGIN_WEIGHT - (COLUMN_NUM - 1) * GUTTER_WIDTH) / COLUMN_NUM;
+    const CONTENT_COLUMN_WIDTH_WEIGHT = 4;
+    const CONTENT_GUTTER_WIDTH_WEIGHT = 3;
+    AppStorage.SetOrCreate('CONTENT_TYPE_WIDTH', CONTENT_COLUMN_WIDTH_WEIGHT * columnWidth + CONTENT_GUTTER_WIDTH_WEIGHT * GUTTER_WIDTH);
+    const BUTTON_COLUMN_WIDTH_WEIGHT = 2;
+    const BUTTON_GUTTER_WIDTH_WEIGHT = 3;
+    AppStorage.SetOrCreate('BUTTON_TYPE_WIDTH', BUTTON_COLUMN_WIDTH_WEIGHT * columnWidth + BUTTON_GUTTER_WIDTH_WEIGHT * GUTTER_WIDTH);
+    const POP_COLUMN_WIDTH_WEIGHT = 4;
+    const POP_GUTTER_WIDTH_WEIGHT = 3;
+    AppStorage.SetOrCreate('POP_TYPE_WIDTH', POP_COLUMN_WIDTH_WEIGHT * columnWidth + POP_GUTTER_WIDTH_WEIGHT * GUTTER_WIDTH);
+    const CARD_MARGIN = 12;
+    const CARD_GUTTER_WIDTH = 12;
+    const CARD_COLUMN_WIDTH_WEIGHT = 4;
+    const CARD_GUTTER_WIDTH_WEIGHT = 3;
+    columnWidth = (displayWidth - CARD_MARGIN * MARGIN_WEIGHT - (COLUMN_NUM - 1) * CARD_GUTTER_WIDTH) / COLUMN_NUM;
+    AppStorage.SetOrCreate('CARD_TYPE_WIDTH', CARD_COLUMN_WIDTH_WEIGHT * columnWidth + CARD_GUTTER_WIDTH_WEIGHT * CARD_GUTTER_WIDTH);
   }
 
   uin8Array2JsonString(inArray: Uint8Array): string {
@@ -165,7 +184,7 @@ class CommonController {
     return new Uint8Array(buffer)
   }
 
-  getStartViewImage() : any {
+  getStartViewImage() : Object {
     if (Config.getDeviceType() === 'tablet') {
       return $r('app.media.face_start_view_pad')
     }

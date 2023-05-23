@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,7 +20,7 @@ import CommonController from '../controller/commonController'
 import EnrollingController from '../controller/enrollingController'
 
 export default class MainAbility extends Ability {
-  private TAG: string = "MainAbility:"
+  private readonly TAG: string = 'MainAbility:';
   onCreate(want, launchParam) {
     Log.info(this.TAG, 'Application onCreate')
     globalThis.abilityContext = this.context;
@@ -39,11 +39,11 @@ export default class MainAbility extends Ability {
     windowStage.setUIContent(this.context, "pages/entryView", null)
   }
 
-  onWindowStageDestroy() {
+  onWindowStageDestroy(): void {
     Log.info(this.TAG, 'onWindowStageDestroy')
   }
 
-  onBackground() {
+  onBackground(): void {
     Log.info(this.TAG, 'Application onBackground+, terminate ability')
     CommonController.terminateAbility()
     Log.info(this.TAG, 'Application onBackground-')
