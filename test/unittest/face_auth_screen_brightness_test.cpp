@@ -15,10 +15,11 @@
 
 #include "gtest/gtest.h"
 
-#include "screen_brightness_manager.h"
-
 #include "iam_logger.h"
 #include "iam_ptr.h"
+
+#include "screen_brightness_manager.h"
+#include "service_ex_manager.h"
 
 using namespace testing;
 using namespace testing::ext;
@@ -54,12 +55,23 @@ void FaceAuthScreenBrightnessTest::TearDown()
 
 HWTEST_F(FaceAuthScreenBrightnessTest, FaceAuthScreenBrightnessTest_001, TestSize.Level0)
 {
-    auto task = std::make_shared<ScreenBrightnessTask>();
+    auto acquireRet = ServiceExManager::GetInstance().Acquire();
+    EXPECT_TRUE(acquireRet == UserAuth::SUCCESS);
+
+    auto task = ServiceExManager::GetInstance().GetScreenBrightnessTask();
+    EXPECT_TRUE(task != nullptr);
+
+    task->RegisterDestructCallback([]() {
+        IAM_LOGI("task destruct");
+        ServiceExManager::GetInstance().Release();
+    });
     task->Start();
     IAM_LOGI("start brightness increase task");
-    sleep(3);
+    sleep(1);
     task->Stop();
     IAM_LOGI("end brightness increase task");
+    task = nullptr;
+    sleep(1);
 }
 
 HWTEST_F(FaceAuthScreenBrightnessTest, FaceAuthScreenBrightnessTest_002, TestSize.Level0)
@@ -74,10 +86,11 @@ HWTEST_F(FaceAuthScreenBrightnessTest, FaceAuthScreenBrightnessTest_002, TestSiz
     auto result = manager->ProcessSaCommand(executor, beginCommand);
     EXPECT_TRUE(result == UserAuth::SUCCESS);
     IAM_LOGI("start brightness increase task");
-    sleep(3);
+    sleep(1);
     result = manager->ProcessSaCommand(executor, endCommand);
     EXPECT_TRUE(result == UserAuth::SUCCESS);
     IAM_LOGI("end brightness increase task");
+    sleep(1);
 }
 
 } // namespace FaceAuth

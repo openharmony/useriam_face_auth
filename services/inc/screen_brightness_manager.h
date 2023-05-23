@@ -24,7 +24,7 @@
 #include "face_auth_executor_hdi.h"
 #include "face_auth_hdi.h"
 #include "isa_command_processor.h"
-#include "screen_brightness_task.h"
+#include "iscreen_brightness_task.h"
 
 namespace OHOS {
 namespace UserIam {
@@ -42,7 +42,7 @@ public:
         const SaCommand &command) override;
     void OnHdiDisconnect(std::shared_ptr<FaceAuthExecutorHdi> executor) override;
 
-    std::shared_ptr<ScreenBrightnessTask> GetCurrentTask();
+    std::shared_ptr<IScreenBrightnessTask> GetCurrentTask();
 
 private:
     UserAuth::ResultCode ProcessScreenBrightnessIncreaseBegin(std::shared_ptr<FaceAuthExecutorHdi> executor,
@@ -51,7 +51,7 @@ private:
         const SaCommandParam param);
 
     std::shared_ptr<FaceAuthExecutorHdi> executorInProc_ = nullptr;
-    std::shared_ptr<ScreenBrightnessTask> taskInProc_ = nullptr;
+    std::shared_ptr<IScreenBrightnessTask> taskInProc_ = nullptr;
     std::mutex mutex_;
 };
 } // namespace FaceAuth
