@@ -13,6 +13,10 @@
 
 import("//build/ohos.gni")
 
+config("faceauthservice_ex_config") {
+  include_dirs = [ "inc" ]
+}
+
 ohos_source_set("faceauthservice_ex_source_set") {
   sources = [
     "src/finite_state_machine_builder.cpp",
@@ -27,6 +31,8 @@ ohos_source_set("faceauthservice_ex_source_set") {
     "../common/logs",
     "../common/utils",
   ]
+
+  public_configs = [ ":faceauthservice_ex_config" ]
 
   deps = [ "../services:faceauthservice" ]
 

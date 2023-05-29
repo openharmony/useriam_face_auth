@@ -195,6 +195,28 @@ HWTEST_F(FaceAuthDriverHdiUnitTest, FaceAuthDriverHdi_GetExecutorListTest_008, T
     driverHdi.GetExecutorList(executorList);
     EXPECT_TRUE(executorList.size() == 0);
 }
+
+HWTEST_F(FaceAuthDriverHdiUnitTest, FaceAuthDriverHdi_OnHdiDisconnectTest_001, TestSize.Level0)
+{
+    sptr<MockIFaceAuthInterface> interface = new (std::nothrow) MockIFaceAuthInterface();
+    ASSERT_TRUE(interface != nullptr);
+    EXPECT_CALL(*interface, GetExecutorListV1_1(_)).Times(Exactly(1)).WillOnce([](std::vector<sptr<IExecutor>> &list) {
+        auto executor = sptr<IExecutor>(new (std::nothrow) MockIExecutor());
+        EXPECT_TRUE(executor != nullptr);
+        list.push_back(executor);
+        return static_cast<int32_t>(HDF_SUCCESS);
+    });
+
+    auto adapter = MakeShared<MockFaceAuthInterfaceAdapter>();
+    ASSERT_TRUE(adapter != nullptr);
+    EXPECT_CALL(*adapter, Get()).Times(Exactly(1)).WillOnce(Return(interface));
+
+    FaceAuthDriverHdi driverHdi(adapter);
+    std::vector<std::shared_ptr<UserAuth::IAuthExecutorHdi>> executorList;
+    driverHdi.GetExecutorList(executorList);
+    EXPECT_TRUE(executorList.size() == 1);
+    driverHdi.OnHdiDisconnect();
+}
 } // namespace FaceAuth
 } // namespace UserIam
 } // namespace OHOS
