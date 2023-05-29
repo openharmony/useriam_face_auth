@@ -63,6 +63,7 @@ const std::vector<uint32_t> INCREASE_BRIGHTNESS_ARRAY = { 4, 4, 5, 5, 6, 6, 7, 8
 constexpr float AMBIENT_LIGHT_THRESHOLD_FOR_BEGIN = 2.0; // lux
 constexpr uint32_t MAX_BRIGHTNESS = 255;
 constexpr uint32_t MAX_INT_STRING_LEN = 12;
+constexpr float INVALID_AMBIENT_LIGHT_LUX = -1.0;
 const char *INCREASE_BRIGHTNESS_MAX_KEY = "const.useriam.face_auth_increase_brightness_max";
 const char *INCREASE_BRIGHTNESS_INTERVAL_KEY = "const.useriam.face_auth_increase_brightness_interval";
 
@@ -182,6 +183,8 @@ ScreenBrightnessTask::ScreenBrightnessTask() : timer_("screen_brightness_timer")
     increaseBrightnessIndex_ = 0;
     increaseBrightnessInterval_ = GetIncreaseBrightnessInterval();
     increaseBrightnessMax_ = GetIncreaseBrightnessMax();
+    currTimerId_ = 0;
+    currentAmbientLightLux_ = INVALID_AMBIENT_LIGHT_LUX;
 }
 
 ScreenBrightnessTask::~ScreenBrightnessTask()
