@@ -37,6 +37,8 @@ public:
 
     void RegisterSaCommandProcessor(std::vector<SaCommandId> commandIds,
         std::shared_ptr<ISaCommandProcessor> processor);
+    void UnregisterSaCommandProcessor(std::vector<SaCommandId> commandIds,
+        std::shared_ptr<ISaCommandProcessor> processor);
 
     UserAuth::ResultCode ProcessSaCommands(std::shared_ptr<FaceAuthExecutorHdi> executor,
         const std::vector<SaCommand> &commands);
