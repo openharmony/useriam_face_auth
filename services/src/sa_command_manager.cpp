@@ -46,6 +46,24 @@ void SaCommandManager::RegisterSaCommandProcessor(std::vector<SaCommandId> comma
     }
 }
 
+void SaCommandManager::UnregisterSaCommandProcessor(std::vector<SaCommandId> commandIds,
+    std::shared_ptr<ISaCommandProcessor> processor)
+{
+    IF_FALSE_LOGE_AND_RETURN(processor != nullptr);
+
+    std::unique_lock<std::shared_mutex> lock(mutex_);
+
+    processors_.erase(processor);
+
+    for (const auto &commandId : commandIds) {
+        if (commandId2Processors_.find(commandId) == commandId2Processors_.end()) {
+            continue;
+        }
+
+        commandId2Processors_[commandId].erase(processor);
+    }
+}
+
 UserAuth::ResultCode SaCommandManager::ProcessSaCommands(std::shared_ptr<FaceAuthExecutorHdi> executor,
     const std::vector<SaCommand> &commands)
 {

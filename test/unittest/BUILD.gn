@@ -21,6 +21,8 @@ ohos_unittest("face_auth_service_test") {
     "face_auth_executor_callback_hdi_unit_test.cpp",
     "face_auth_executor_hdi_unit_test.cpp",
     "face_auth_service_test.cpp",
+    "sa_command_manager_unit_test.cpp",
+    "state_machine_test.cpp",
   ]
 
   include_dirs = [ "mock" ]
@@ -28,6 +30,7 @@ ohos_unittest("face_auth_service_test") {
   deps = [
     "../../frameworks/ipc:faceauth_framework_stub",
     "../../services:faceauthservice_source_set",
+    "../../services_ex:faceauthservice_ex_source_set",
     "//third_party/googletest:gmock_main",
     "//third_party/googletest:gtest_main",
   ]
