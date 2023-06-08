@@ -51,6 +51,7 @@ ohos_shared_library("faceauth_framework") {
   }
 
   subsystem_name = "useriam"
+  innerapi_tags = [ "platformsdk" ]
   part_name = "face_auth"
 }
 
