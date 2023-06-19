@@ -189,6 +189,8 @@ ScreenBrightnessTask::ScreenBrightnessTask() : timer_("screen_brightness_timer")
 
 ScreenBrightnessTask::~ScreenBrightnessTask()
 {
+    timer_.Unregister(currTimerId_);
+    timer_.Shutdown();
     if (machine_ != nullptr) {
         // make sure state machine is stopped
         uint32_t state = machine_->EnsureCurrentState();
@@ -365,7 +367,6 @@ void ScreenBrightnessTask::EndProcess()
 {
     IAM_LOGI("start");
     timer_.Unregister(currTimerId_);
-    timer_.Shutdown();
     UnsubscribeSensor();
     RestoreScreenBrightness();
 }
