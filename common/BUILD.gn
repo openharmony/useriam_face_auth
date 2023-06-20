@@ -34,7 +34,7 @@ ohos_source_set("iam_utils") {
 
   external_deps = [
     "c_utils:utils",
-    "hilog:libhilog",
+    "hilog_native:libhilog",
   ]
 
   public_configs = [
