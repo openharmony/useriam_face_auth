@@ -184,6 +184,7 @@ ScreenBrightnessTask::ScreenBrightnessTask() : timer_("screen_brightness_timer")
     increaseBrightnessInterval_ = GetIncreaseBrightnessInterval();
     increaseBrightnessMax_ = GetIncreaseBrightnessMax();
     currTimerId_ = 0;
+    currentBrightness_ = 0;
     currentAmbientLightLux_ = INVALID_AMBIENT_LIGHT_LUX;
 }
 
