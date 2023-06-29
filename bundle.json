@@ -27,7 +27,6 @@
           "display_manager",
           "drivers_interface_camera",
           "drivers_interface_face_auth",
-          "graphic_chipsetsdk",
           "graphic_standard",
           "hilog",
           "init",
