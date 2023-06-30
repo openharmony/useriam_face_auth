@@ -73,10 +73,7 @@ ohos_source_set("faceauth_framework_stub") {
   ]
 
   if (defined(global_parts_info.graphic_graphic_standard)) {
-    external_deps += [
-      "graphic_chipsetsdk:surface",
-      "graphic_standard:surface",
-    ]
+    external_deps += [ "graphic_standard:surface" ]
   }
 
   subsystem_name = "useriam"
