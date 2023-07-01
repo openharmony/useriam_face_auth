@@ -82,7 +82,7 @@ HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_002, TestSize.Level0)
     MessageParcel data;
     MessageParcel reply;
     MessageOption option(MessageOption::TF_SYNC);
-    uint32_t code = static_cast<uint32_t>(IFaceAuthInterfaceCode::FACE_AUTH_SET_BUFFER_PRODUCER);
+    uint32_t code = IFaceAuthInterfaceCode::FACE_AUTH_SET_BUFFER_PRODUCER;
 
     auto service = FaceAuthService::GetInstance();
     EXPECT_NE(service, nullptr);

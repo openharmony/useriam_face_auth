@@ -20,7 +20,7 @@
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-enum class IFaceAuthInterfaceCode {
+enum IFaceAuthInterfaceCode : uint32_t {
     FACE_AUTH_SET_BUFFER_PRODUCER = 1,
 };
 } // namespace FaceAuth
