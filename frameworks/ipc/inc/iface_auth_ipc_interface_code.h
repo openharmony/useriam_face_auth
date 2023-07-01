@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License") = 0;
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,34 +13,18 @@
  * limitations under the License.
  */
 
-#ifndef IFACE_AUTH_H
-#define IFACE_AUTH_H
-#include <list>
-#include <vector>
+#ifndef IFACE_AUTH_IPC_INTERFACE_CODE_H
+#define IFACE_AUTH_IPC_INTERFACE_CODE_H
 
-#include "iremote_broker.h"
-#include "iremote_object.h"
-#include "ibuffer_producer.h"
-
-#include "iface_auth_ipc_interface_code.h"
-#include "face_auth_defines.h"
-
+/* SAID: 942 */
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-class IFaceAuth : public IRemoteBroker {
-public:
-    DECLARE_INTERFACE_DESCRIPTOR(u"ohos.faceauth.IFaceAuth");
-
-    /**
-     * @brief Set buffer producer for enroll preview.
-     *
-     * @return 0 success, others failure.
-     */
-    virtual int32_t SetBufferProducer(sptr<IBufferProducer> &producer) = 0;
+enum IFaceAuthInterfaceCode : uint32_t {
+    FACE_AUTH_SET_BUFFER_PRODUCER = 1,
 };
 } // namespace FaceAuth
 } // namespace UserIam
 } // namespace OHOS
 
-#endif // IFACE_AUTH_H
+#endif // IFACE_AUTH_IPC_INTERFACE_CODE_H

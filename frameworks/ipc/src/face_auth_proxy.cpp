@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2022-2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -53,7 +53,7 @@ int32_t FaceAuthProxy::SetBufferProducer(sptr<IBufferProducer> &producer)
             return FACE_AUTH_ERROR;
         }
     }
-    bool ret = SendRequest(FACE_AUTH_SET_BUFFER_PRODUCER, data, reply);
+    bool ret = SendRequest(IFaceAuthInterfaceCode::FACE_AUTH_SET_BUFFER_PRODUCER, data, reply);
     if (!ret) {
         IAM_LOGE("failed to send request.");
         return FACE_AUTH_ERROR;
