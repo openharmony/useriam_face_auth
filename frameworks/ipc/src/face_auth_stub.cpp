@@ -48,7 +48,7 @@ FaceAuthStub::FaceAuthStub()
 
 void FaceAuthStub::RegisterKeyToHandle()
 {
-    keyToHandle_[static_cast<uint32_t>(IFaceAuthInterfaceCode::FACE_AUTH_SET_BUFFER_PRODUCER)] = &FaceAuthStub::FaceAuthSetBufferProducer;
+    keyToHandle_[IFaceAuthInterfaceCode::FACE_AUTH_SET_BUFFER_PRODUCER] = &FaceAuthStub::FaceAuthSetBufferProducer;
 }
 
 int32_t FaceAuthStub::FaceAuthSetBufferProducer(MessageParcel &data, MessageParcel &reply)

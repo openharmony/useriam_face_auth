@@ -53,7 +53,7 @@ int32_t FaceAuthProxy::SetBufferProducer(sptr<IBufferProducer> &producer)
             return FACE_AUTH_ERROR;
         }
     }
-    bool ret = SendRequest(static_cast<uint32_t>(IFaceAuthInterfaceCode::FACE_AUTH_SET_BUFFER_PRODUCER), data, reply);
+    bool ret = SendRequest(IFaceAuthInterfaceCode::FACE_AUTH_SET_BUFFER_PRODUCER, data, reply);
     if (!ret) {
         IAM_LOGE("failed to send request.");
         return FACE_AUTH_ERROR;
