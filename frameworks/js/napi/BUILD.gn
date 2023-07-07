@@ -30,8 +30,8 @@ ohos_shared_library("faceauth") {
     "ipc:ipc_single",
     "napi:ace_napi",
   ]
-  if (defined(global_parts_info.graphic_graphic_standard)) {
-    external_deps += [ "graphic_standard:surface" ]
+  if (defined(global_parts_info.graphic_graphic_2d)) {
+    external_deps += [ "graphic_2d:surface" ]
   }
 
   relative_install_dir = "module/useriam"

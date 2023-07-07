@@ -35,7 +35,7 @@ ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
 
   external_deps = [
     "drivers_interface_face_auth:libface_auth_proxy_1.1",
-    "graphic_standard:surface",
+    "graphic_2d:surface",
     "hilog:libhilog",
     "user_auth_framework:userauth_executors",
   ]
