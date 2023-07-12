@@ -47,8 +47,8 @@ ohos_source_set("faceauthservice_ex_source_set") {
     "user_auth_framework:userauth_executors",
   ]
 
-  if (defined(global_parts_info.graphic_graphic_standard)) {
-    external_deps += [ "graphic_standard:surface" ]
+  if (defined(global_parts_info.graphic_graphic_2d)) {
+    external_deps += [ "graphic_2d:surface" ]
   }
 
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
