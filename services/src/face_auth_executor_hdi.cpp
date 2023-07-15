@@ -289,6 +289,7 @@ IamResultCode FaceAuthExecutorHdi::ConvertCommandId(const UserAuth::PropertyMode
     }
 
     static const std::map<UserAuth::PropertyMode, CommandId> data = {
+        { UserAuth::PropertyMode::PROPERTY_INIT_ALGORITHM, CommandId::INIT_ALGORITHM },
         { UserAuth::PropertyMode::PROPERTY_MODE_FREEZE, CommandId::LOCK_TEMPLATE },
         { UserAuth::PropertyMode::PROPERTY_MODE_UNFREEZE, CommandId::UNLOCK_TEMPLATE } };
     auto iter = data.find(in);
