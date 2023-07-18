@@ -212,7 +212,7 @@ private:
     }
 
     Parcel *fuzzParcel_;
-    sptr<ISaCommandCallback> callbackObj_ = nullptr;
+    sptr<ISaCommandCallback> callbackObj_ {nullptr};
 };
 
 class DummyExecuteCallback : public UserAuth::IExecuteCallback {
@@ -387,7 +387,7 @@ void FuzzSetCachedTemplates(Parcel &parcel)
 void FuzzSetBufferProducer(Parcel &parcel)
 {
     IAM_LOGI("begin");
-    sptr<IBufferProducer> bufferProducer = nullptr;
+    sptr<IBufferProducer> bufferProducer(nullptr);
     if (parcel.ReadBool()) {
         auto surface = IConsumerSurface::Create();
         if (surface == nullptr) {
