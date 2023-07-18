@@ -90,8 +90,7 @@ IamResultCode FaceAuthExecutorHdi::Enroll(uint64_t scheduleId, const UserAuth::E
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
     IF_FALSE_LOGE_AND_RETURN_VAL(callbackObj != nullptr, IamResultCode::GENERAL_ERROR);
-    auto callback =
-        sptr<IExecutorCallback>(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
+    sptr<IExecutorCallback> callback(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
     IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
     int32_t status = executorProxy_->Enroll(scheduleId, param.extraInfo, callback);
     IamResultCode result = ConvertResultCode(status);
@@ -107,8 +106,7 @@ IamResultCode FaceAuthExecutorHdi::Authenticate(uint64_t scheduleId, const UserA
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
     IF_FALSE_LOGE_AND_RETURN_VAL(callbackObj != nullptr, IamResultCode::GENERAL_ERROR);
-    auto callback =
-        sptr<IExecutorCallback>(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
+    sptr<IExecutorCallback> callback(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
     IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
     int32_t status = executorProxy_->Authenticate(scheduleId, param.templateIdList, param.extraInfo, callback);
     IamResultCode result = ConvertResultCode(status);
@@ -124,8 +122,7 @@ IamResultCode FaceAuthExecutorHdi::Identify(uint64_t scheduleId, const UserAuth:
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
     IF_FALSE_LOGE_AND_RETURN_VAL(callbackObj != nullptr, IamResultCode::GENERAL_ERROR);
-    auto callback =
-        sptr<IExecutorCallback>(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
+    sptr<IExecutorCallback> callback(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
     IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
     int32_t status = executorProxy_->Identify(scheduleId, param.extraInfo, callback);
     IamResultCode result = ConvertResultCode(status);
@@ -171,8 +168,7 @@ IamResultCode FaceAuthExecutorHdi::SendCommand(UserAuth::PropertyMode commandId,
         IAM_LOGE("ConvertCommandId fail result %{public}d", result);
         return result;
     }
-    auto callback =
-        sptr<IExecutorCallback>(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
+    sptr<IExecutorCallback> callback(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
     IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
     int32_t status = executorProxy_->SendCommand(hdiCommandId, extraInfo, callback);
     result = ConvertResultCode(status);
@@ -219,9 +215,10 @@ UserAuth::ResultCode FaceAuthExecutorHdi::SetCachedTemplates(const std::vector<u
 int32_t FaceAuthExecutorHdi::SetBufferProducer(sptr<IBufferProducer> &producer)
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
-    OHOS::sptr<BufferProducerSequenceable> producerSequenceable = nullptr;
+    OHOS::sptr<BufferProducerSequenceable> producerSequenceable(nullptr);
     if (producer != nullptr) {
-        producerSequenceable = new (std::nothrow) BufferProducerSequenceable(producer);
+        producerSequenceable =
+            sptr<BufferProducerSequenceable>(new (std::nothrow) BufferProducerSequenceable(producer));
         IF_FALSE_LOGE_AND_RETURN_VAL(producerSequenceable != nullptr, FACE_AUTH_ERROR);
     }
 
@@ -411,7 +408,7 @@ UserAuth::ResultCode FaceAuthExecutorHdi::RegisterSaCommandCallback()
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
 
-    sptr<SaCommandCallback> callback = new (std::nothrow) SaCommandCallback(shared_from_this());
+    sptr<SaCommandCallback> callback(new (std::nothrow) SaCommandCallback(shared_from_this()));
     IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
 
     int32_t status = executorProxy_->RegisterSaCommandCallback(callback);

@@ -43,7 +43,7 @@ auto g_service = FaceAuthService::GetInstance();
 void FuzzSetBufferProducer(Parcel &parcel)
 {
     IAM_LOGI("begin");
-    sptr<IBufferProducer> bufferProducer = nullptr;
+    sptr<IBufferProducer> bufferProducer(nullptr);
     if (parcel.ReadBool()) {
         auto surface = IConsumerSurface::Create();
         if (surface == nullptr) {

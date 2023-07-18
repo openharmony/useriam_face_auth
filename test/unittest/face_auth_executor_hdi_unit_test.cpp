@@ -231,7 +231,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_GetExecutorInfo_006, T
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_OnRegisterFinish_001, TestSize.Level0)
 {
     for (const auto &pair : RESULT_CODE_MAP) {
-        auto executorProxy = new (std::nothrow) MockIExecutor();
+        sptr<MockIExecutor> executorProxy(new (std::nothrow) MockIExecutor());
         ASSERT_TRUE(executorProxy != nullptr);
         EXPECT_CALL(*executorProxy, OnRegisterFinish(_, _, _))
             .Times(Exactly(1))
@@ -263,7 +263,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_OnRegisterFinish_002, 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_OnRegisterFinish_003, TestSize.Level0)
 {
     for (const auto &pair : RESULT_CODE_MAP) {
-        auto executorProxy = new (std::nothrow) MockIExecutor();
+        sptr<MockIExecutor> executorProxy(new (std::nothrow) MockIExecutor());
         ASSERT_TRUE(executorProxy != nullptr);
         EXPECT_CALL(*executorProxy, OnRegisterFinish(_, _, _))
             .Times(Exactly(1))
@@ -286,7 +286,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_OnRegisterFinish_003, 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Enroll_001, TestSize.Level0)
 {
     for (const auto &pair : RESULT_CODE_MAP) {
-        auto executorProxy = new (std::nothrow) MockIExecutor();
+        sptr<MockIExecutor> executorProxy(new (std::nothrow) MockIExecutor());
         ASSERT_TRUE(executorProxy != nullptr);
         EXPECT_CALL(*executorProxy, Enroll(_, _, _))
             .Times(Exactly(1))
@@ -302,7 +302,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Enroll_001, TestSize.L
 
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Enroll_002, TestSize.Level0)
 {
-    auto executorProxy = new (std::nothrow) MockIExecutor();
+    sptr<MockIExecutor> executorProxy(new (std::nothrow) MockIExecutor());
     ASSERT_TRUE(executorProxy != nullptr);
     EXPECT_CALL(*executorProxy, Enroll(_, _, _)).Times(Exactly(0));
     auto executorHdi = MakeShared<FaceAuthExecutorHdi>(executorProxy);
@@ -322,7 +322,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Enroll_003, TestSize.L
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Authenticate_001, TestSize.Level0)
 {
     for (const auto &pair : RESULT_CODE_MAP) {
-        auto executorProxy = new (std::nothrow) MockIExecutor();
+        sptr<MockIExecutor> executorProxy(new (std::nothrow) MockIExecutor());
         ASSERT_TRUE(executorProxy != nullptr);
         EXPECT_CALL(*executorProxy, Authenticate(_, _, _, _))
             .Times(Exactly(1))
@@ -361,7 +361,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Authenticate_003, Test
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_Identify_001, TestSize.Level0)
 {
     for (const auto &pair : RESULT_CODE_MAP) {
-        auto executorProxy = new (std::nothrow) MockIExecutor();
+        sptr<MockIExecutor> executorProxy(new (std::nothrow) MockIExecutor());
         ASSERT_TRUE(executorProxy != nullptr);
         EXPECT_CALL(*executorProxy, Identify(_, _, _))
             .Times(Exactly(1))
@@ -473,7 +473,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_003, TestS
         {static_cast<IamPropertyMode>(CommandId::VENDOR_COMMAND_BEGIN + 1),
             {static_cast<CommandId>(CommandId::VENDOR_COMMAND_BEGIN + 1), IamResultCode::SUCCESS}}};
     for (const auto &pair : data) {
-        auto executorProxy = new (std::nothrow) MockIExecutor();
+        sptr<MockIExecutor> executorProxy(new (std::nothrow) MockIExecutor());
         ASSERT_TRUE(executorProxy != nullptr);
         if (pair.second.second == IamResultCode::SUCCESS) {
             EXPECT_CALL(*executorProxy, SendCommand(_, _, _))
@@ -497,7 +497,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_003, TestS
 HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_SendCommand_004, TestSize.Level0)
 {
     for (const auto &pair : RESULT_CODE_MAP) {
-        auto executorProxy = new (std::nothrow) MockIExecutor();
+        sptr<MockIExecutor> executorProxy(new (std::nothrow) MockIExecutor());
         ASSERT_TRUE(executorProxy != nullptr);
         EXPECT_CALL(*executorProxy, SendCommand(_, _, _))
             .Times(Exactly(1))
@@ -595,7 +595,7 @@ HWTEST_F(FaceAuthExecutorHdiUnitTest, FaceAuthExecutorHdi_OnHdiDisconnect_001, T
 HWTEST_F(FaceAuthExecutorHdiUnitTest,
     FaceAuthExecutorHdi_SaCommandCallback_OnSaCommands_001, TestSize.Level0)
 {
-    auto executorProxy = new (std::nothrow) MockIExecutor();
+    sptr<MockIExecutor> executorProxy(new (std::nothrow) MockIExecutor());
     ASSERT_TRUE(executorProxy != nullptr);
     EXPECT_CALL(*executorProxy, OnRegisterFinish(_, _, _))
         .Times(Exactly(1))
