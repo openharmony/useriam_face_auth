@@ -137,7 +137,7 @@ napi_value SetSurfaceId(napi_env env, napi_callback_info info)
     uint64_t surfaceId;
     surfaceIdStream >> surfaceId;
 
-    sptr<IBufferProducer> bufferProducer = nullptr;
+    sptr<IBufferProducer> bufferProducer(nullptr);
     if (!GetBufferProducerBySurfaceId(surfaceId, bufferProducer)) {
         IAM_LOGE("GetBufferProducerBySurfaceId fail");
         napi_throw(env, GenerateBusinessError(env, RESULT_CODE_FAIL));

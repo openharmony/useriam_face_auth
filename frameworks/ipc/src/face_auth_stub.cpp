@@ -53,7 +53,7 @@ void FaceAuthStub::RegisterKeyToHandle()
 
 int32_t FaceAuthStub::FaceAuthSetBufferProducer(MessageParcel &data, MessageParcel &reply)
 {
-    sptr<IBufferProducer> buffer = nullptr;
+    sptr<IBufferProducer> buffer(nullptr);
     sptr<IRemoteObject> remoteObj = data.ReadRemoteObject();
     IAM_LOGI("read remote object %{public}s", Common::GetPointerNullStateString(remoteObj).c_str());
     buffer = iface_cast<IBufferProducer>(remoteObj);

@@ -112,7 +112,7 @@ sptr<IFaceAuth> FaceAuthClientImpl::GetProxy()
         return nullptr;
     }
 
-    sptr<IRemoteObject::DeathRecipient> dr = new (std::nothrow) FaceAuthClientImplDeathRecipient();
+    sptr<IRemoteObject::DeathRecipient> dr(new (std::nothrow) FaceAuthClientImplDeathRecipient());
     if ((dr == nullptr) || (obj->IsProxyObject() && !obj->AddDeathRecipient(dr))) {
         IAM_LOGE("add death recipient fail");
         return nullptr;
