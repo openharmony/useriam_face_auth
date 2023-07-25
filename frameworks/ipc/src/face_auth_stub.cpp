@@ -26,6 +26,7 @@
 #include "iremote_broker.h"
 #include "message_parcel.h"
 #include "refbase.h"
+#include "surface.h"
 
 #include "iam_check.h"
 #include "iam_logger.h"
@@ -44,6 +45,10 @@ FaceAuthStub::FaceAuthStub()
 {
     IAM_LOGI("start");
     RegisterKeyToHandle();
+    // For iface_cast<IBufferProducer> to work, static variable BrokerDelegator of BufferClientProducer must be
+    // initialized. Create an unused surface would include BufferClientProducer and ensure BrokerDelegator is
+    // initialized.
+    OHOS::Surface::CreateSurfaceAsConsumer("unused");
 }
 
 void FaceAuthStub::RegisterKeyToHandle()
@@ -57,6 +62,9 @@ int32_t FaceAuthStub::FaceAuthSetBufferProducer(MessageParcel &data, MessageParc
     sptr<IRemoteObject> remoteObj = data.ReadRemoteObject();
     IAM_LOGI("read remote object %{public}s", Common::GetPointerNullStateString(remoteObj).c_str());
     buffer = iface_cast<IBufferProducer>(remoteObj);
+    bool remoteObjNull = (remoteObj == nullptr);
+    bool bufferNull = (buffer == nullptr);
+    IF_FALSE_LOGE_AND_RETURN_VAL(bufferNull == remoteObjNull, FACE_AUTH_ERROR);
     int32_t ret = SetBufferProducer(buffer);
     IAM_LOGI("SetBufferProducer ret %{public}d", ret);
     if (!reply.WriteInt32(ret)) {
