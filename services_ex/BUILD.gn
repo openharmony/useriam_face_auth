@@ -18,6 +18,16 @@ config("faceauthservice_ex_config") {
 }
 
 ohos_source_set("faceauthservice_ex_source_set") {
+  sanitize = {
+    integer_overflow = true
+    ubsan = true
+    boundary_sanitize = true
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+    blocklist = "../cfi_blocklist.txt"
+  }
+  stack_protector_ret = true
   sources = [
     "src/finite_state_machine_builder.cpp",
     "src/finite_state_machine_impl.cpp",
@@ -58,6 +68,16 @@ ohos_source_set("faceauthservice_ex_source_set") {
 }
 
 ohos_shared_library("faceauthservice_ex") {
+  sanitize = {
+    integer_overflow = true
+    ubsan = true
+    boundary_sanitize = true
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+    blocklist = "../cfi_blocklist.txt"
+  }
+  stack_protector_ret = true
   deps = [ ":faceauthservice_ex_source_set" ]
 
   if (use_musl) {

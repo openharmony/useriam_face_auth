@@ -18,6 +18,16 @@ config("faceauth_framework_public_config") {
 }
 
 ohos_shared_library("faceauth_framework") {
+  sanitize = {
+    integer_overflow = true
+    ubsan = true
+    boundary_sanitize = true
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+    blocklist = "../../cfi_blocklist.txt"
+  }
+  stack_protector_ret = true
   sources = [
     "src/face_auth_client_impl.cpp",
     "src/face_auth_proxy.cpp",
@@ -56,6 +66,16 @@ ohos_shared_library("faceauth_framework") {
 }
 
 ohos_source_set("faceauth_framework_stub") {
+  sanitize = {
+    integer_overflow = true
+    ubsan = true
+    boundary_sanitize = true
+    cfi = true
+    cfi_cross_dso = true
+    debug = false
+    blocklist = "../../cfi_blocklist.txt"
+  }
+  stack_protector_ret = true
   sources = [ "src/face_auth_stub.cpp" ]
 
   configs = [ "../../common:iam_log_config" ]
