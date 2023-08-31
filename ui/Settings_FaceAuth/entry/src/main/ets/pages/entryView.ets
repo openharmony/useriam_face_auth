@@ -24,25 +24,25 @@ import Constants from '../config/constant'
 @Entry
 @Component
 struct Index {
-  private readonly TAG: string = "Index"
-  @State resultString: string = ""
+  private readonly TAG: string = 'Index'
+  @State resultString: string = ''
   @StorageLink('SYSTEM_STATUS_BAR_HEIGHT') SYSTEM_STATUS_BAR_HEIGHT: number = 0
   @StorageLink('SYSTEM_NAVIGATION_BAR_HEIGHT') SYSTEM_NAVIGATION_BAR_HEIGHT: number = 0
 
   build() {
     Column() {
       BackComponent({ prevTag: this.TAG })
-      Text("临时认证界面")
+      Text('临时认证界面')
         .fontColor(Constants.ohos_id_color_text_primary)
         .fontSize(Constants.ohos_id_text_size_headline7)
         .fontWeight(FontWeight.Bold)
-      Text("请将锁屏密码设置为123456后，点击认证按钮")
+      Text('请将锁屏密码设置为123456后，点击认证按钮')
         .fontColor(Constants.ohos_id_color_text_primary)
         .fontSize(Constants.ohos_id_text_size_subtitle1)
         .fontWeight(FontWeight.Medium)
         .margin({
-          top: "12",
-          bottom: "24"
+          top: '12',
+          bottom: '24'
         })
       Button({ type: ButtonType.Capsule, stateEffect: true }){
         Text('认证')
@@ -53,7 +53,7 @@ struct Index {
       .backgroundColor(Constants.ohos_id_color_control_actived)
       .onClick(()=>{
         EntryViewController.doPINAuth()
-          .catch(()=>{this.resultString = "认证失败，请将锁屏密码设置为123456后重试"})
+          .catch(()=>{this.resultString = '认证失败，请将锁屏密码设置为123456后重试'})
       })
       .width('30%')
       Text(this.resultString)
@@ -62,29 +62,33 @@ struct Index {
       .fontWeight(FontWeight.Medium)
     }
     .alignItems(HorizontalAlign.Center)
-    .width("100%")
-    .height("100%")
-    .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
+    .width('100%')
+    .height('100%')
+    .backgroundColor($r('sys.color.ohos_id_color_sub_background'))
     .onAreaChange((_, newArea) => {
       window.on('systemBarTintChange', (data) => {
-        Log.info(this.TAG, 'receive system bar tint change: ' + JSON.stringify(data));
-        for (let i = 0; i < data.regionTint.length; i++) {
-          let regionData = data.regionTint[i]
-          if (regionData.type === window.WindowType.TYPE_STATUS_BAR) {
-            this.SYSTEM_STATUS_BAR_HEIGHT = px2vp(regionData.region.height)
-            Log.info(this.TAG, "set status bar height " + regionData.region.height)
-            continue
-          }
-          if (regionData.type === window.WindowType.TYPE_NAVIGATION_BAR) {
-            this.SYSTEM_NAVIGATION_BAR_HEIGHT = px2vp(regionData.region.height)
-            Log.info(this.TAG, "set navigation bar height " + this.SYSTEM_NAVIGATION_BAR_HEIGHT)
-            continue
+        if(data !== null && data !== undefined){
+          Log.info(this.TAG, 'receive system bar tint change: ' + JSON.stringify(data));
+          for (let i = 0; i < data.regionTint.length; i++) {
+            let regionData = data.regionTint[i]
+            if(regionData.region){
+              if (regionData.type === window.WindowType.TYPE_STATUS_BAR) {
+                this.SYSTEM_STATUS_BAR_HEIGHT = px2vp(regionData.region.height)
+                Log.info(this.TAG, 'set status bar height ' + regionData.region.height)
+                continue
+              }
+              if (regionData.type === window.WindowType.TYPE_NAVIGATION_BAR) {
+                this.SYSTEM_NAVIGATION_BAR_HEIGHT = px2vp(regionData.region.height)
+                Log.info(this.TAG, 'set navigation bar height ' + this.SYSTEM_NAVIGATION_BAR_HEIGHT)
+                continue
+              }
+            }
           }
         }
       });
-      Log.info(this.TAG, "new display area :" + JSON.stringify(newArea))
+      Log.info(this.TAG, 'new display area :' + JSON.stringify(newArea))
       CommonController.setDisplaySize(Number(newArea.width), Number(newArea.height))
-      Log.info(this.TAG, "total area w: " + newArea.width + " h: " + newArea.height)
+      Log.info(this.TAG, 'total area w: ' + newArea.width + ' h: ' + newArea.height)
     })
   }
 

@@ -46,7 +46,7 @@ import Constants from '../config/constant'
 @Entry
 @Component
 struct EnrollIntro {
-  @State readonly TAG: string = "EnrollIntro"
+  @State readonly TAG: string = 'EnrollIntro'
   @StorageLink('enrollImageHeight') enrollImageHeight: number = 0
   @StorageLink('enrollImageWidth') enrollImageWidth: number = 0
   @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
@@ -63,21 +63,21 @@ struct EnrollIntro {
                 Text($r('app.string.face_checker'))
                   .introSetTitleFormat()
                   .margin({
-                    top : "12vp",
-                    bottom: "24vp"
+                    top : '12vp',
+                    bottom: '24vp'
                   })
                 Image(CommonController.getStartViewImage())
                   .objectFit(ImageFit.Contain)
                   .width(this.enrollImageWidth)
                   .height(this.enrollImageHeight)
                   .margin({
-                    bottom: "24vp"
+                    bottom: '24vp'
                   })
                 Column() {
                   Text($r('app.string.enroll_face_guide_title'))
                     .introSetSubtitleFormat()
                     .margin({
-                      bottom: "8vp"
+                      bottom: '8vp'
                     })
                   Text() {
                     Span($r('app.string.face_guide_2d_way'))
@@ -98,7 +98,7 @@ struct EnrollIntro {
             }
             .scrollBarColor(Constants.ohos_id_color_foreground_60_transparency)
             .scrollBarWidth('5vp')
-            .margin({ right: "12vp" })
+            .margin({ right: '12vp' })
           }
             .width(this.CONTENT_TYPE_WIDTH)
             .flexGrow(1)
@@ -117,28 +117,28 @@ struct EnrollIntro {
               router.replace({ uri: 'pages/enrolling' })
             })
             .margin({
-              top: "16vp",
-              bottom: "24vp"
+              top: '16vp',
+              bottom: '24vp'
             })
           }
             .width(this.CONTENT_TYPE_WIDTH)
         }
-        .width("100%")
-        .height("100%")
+        .width('100%')
+        .height('100%')
         .flexShrink(1)
         .onAreaChange((_, newArea) => {
-          Log.info(this.TAG, "new non app bar area :" + JSON.stringify(newArea))
+          Log.info(this.TAG, 'new non app bar area :' + JSON.stringify(newArea))
           CommonController.setNonAppBarDisplaySize(Number(newArea.width), Number(newArea.height))
-          Log.info(this.TAG, "non app bar area w: " + newArea.width + " h: " + newArea.height)
+          Log.info(this.TAG, 'non app bar area w: ' + newArea.width + ' h: ' + newArea.height)
         })
       }
       .width('100%')
       .height('100%')
-      .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
+      .backgroundColor($r('sys.color.ohos_id_color_sub_background'))
       .onAreaChange((_, newArea) => {
-        Log.info(this.TAG, "new display area :" + JSON.stringify(newArea))
+        Log.info(this.TAG, 'new display area :' + JSON.stringify(newArea))
         CommonController.setDisplaySize(Number(newArea.width), Number(newArea.height))
-        Log.info(this.TAG, "total area w: " + newArea.width + " h: " + newArea.height)
+        Log.info(this.TAG, 'total area w: ' + newArea.width + ' h: ' + newArea.height)
       })
   }
 
