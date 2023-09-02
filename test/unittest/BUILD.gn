@@ -21,6 +21,7 @@ ohos_unittest("face_auth_service_test") {
     cfi = true
     cfi_cross_dso = true
     debug = false
+    blocklist = "../../cfi_blocklist.txt"
   }
   stack_protector_ret = true
   module_out_path = "useriam/face_auth"
@@ -69,6 +70,7 @@ ohos_unittest("face_auth_screen_brightness_test") {
     cfi = true
     cfi_cross_dso = true
     debug = false
+    blocklist = "../../cfi_blocklist.txt"
   }
   stack_protector_ret = true
   module_out_path = "useriam/face_auth"
@@ -104,6 +106,7 @@ ohos_unittest("face_auth_perm_test") {
     cfi = true
     cfi_cross_dso = true
     debug = false
+    blocklist = "../../cfi_blocklist.txt"
   }
   stack_protector_ret = true
   module_out_path = "useriam/face_auth"
