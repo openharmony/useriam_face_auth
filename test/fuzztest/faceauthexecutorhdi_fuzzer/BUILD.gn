@@ -32,7 +32,7 @@ ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
     "face_auth_executor_hdi_fuzzer.cpp",
   ]
 
-  deps = ["../common_fuzzer:faceauthservice_source_set_fuzzer" ]
+  deps = [ "../common_fuzzer:faceauthservice_source_set_fuzzer" ]
 
   external_deps = [
     "drivers_interface_face_auth:libface_auth_proxy_1.1",
