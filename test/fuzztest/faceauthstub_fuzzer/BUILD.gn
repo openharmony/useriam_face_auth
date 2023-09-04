@@ -34,8 +34,8 @@ ohos_fuzztest("FaceAuthStubFuzzTest") {
   ]
 
   deps = [
-    "../../../frameworks/ipc:faceauth_framework_stub",
-    "../../../services:faceauthservice_source_set",
+    "../common_fuzzer:faceauth_framework_stub_fuzzer",
+    "../common_fuzzer:faceauthservice_source_set_fuzzer",
   ]
 
   external_deps = [
