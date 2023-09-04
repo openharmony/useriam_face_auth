@@ -20,7 +20,8 @@ ohos_source_set("faceauth_framework_stub_fuzzer") {
 
   configs = [ "../../../common:iam_log_config" ]
 
-  public_configs = [ "../../../frameworks/ipc:faceauth_framework_public_config" ]
+  public_configs =
+      [ "../../../frameworks/ipc:faceauth_framework_public_config" ]
 
   include_dirs = [
     "../../../common/utils",
