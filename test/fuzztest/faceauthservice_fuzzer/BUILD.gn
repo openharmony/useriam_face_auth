@@ -15,6 +15,7 @@ import("//build/config/features.gni")
 import("//build/test.gni")
 
 ohos_fuzztest("FaceAuthServiceFuzzTest") {
+  stack_protector_ret = true
   module_out_path = "useriam/face_auth"
   fuzz_config_file = "../faceauthservice_fuzzer"
 
@@ -33,8 +34,8 @@ ohos_fuzztest("FaceAuthServiceFuzzTest") {
   ]
 
   deps = [
-    "../../../frameworks/ipc:faceauth_framework_stub",
-    "../../../services:faceauthservice_source_set",
+    "../common_fuzzer:faceauth_framework_stub_fuzzer",
+    "../common_fuzzer:faceauthservice_source_set_fuzzer",
   ]
 
   external_deps = [

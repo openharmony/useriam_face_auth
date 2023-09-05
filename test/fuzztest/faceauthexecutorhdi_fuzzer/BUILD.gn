@@ -15,6 +15,7 @@ import("//build/config/features.gni")
 import("//build/test.gni")
 
 ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
+  stack_protector_ret = true
   module_out_path = "useriam/face_auth"
   fuzz_config_file = "../faceauthexecutorhdi_fuzzer"
 
@@ -31,7 +32,7 @@ ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
     "face_auth_executor_hdi_fuzzer.cpp",
   ]
 
-  deps = [ "../../../services:faceauthservice_source_set" ]
+  deps = [ "../common_fuzzer:faceauthservice_source_set_fuzzer" ]
 
   external_deps = [
     "drivers_interface_face_auth:libface_auth_proxy_1.1",
