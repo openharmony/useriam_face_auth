@@ -20,14 +20,14 @@ import commonController from '../controller/commonController'
 @Preview
 @Component
 export default struct BackComponent {
-  private prevTag: string
-  private title: string | Resource = ""
-  private tag : string = "BackComponent"
+  private prevTag: string = ''
+  private title: string | Resource = ''
+  private tag : string = 'BackComponent'
   @State isTouch: boolean = false
   @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
 
   aboutToAppear() {
-    this.tag = this.prevTag + "BackComp:"
+    this.tag = this.prevTag + 'BackComp:'
   }
 
   build() {
@@ -35,7 +35,7 @@ export default struct BackComponent {
       Image($r('app.media.back_op'))
         .height('24vp')
         .width('24vp')
-        .backgroundColor(this.isTouch ? Constants.ohos_id_color_click_effect : "#00000000")
+        .backgroundColor(this.isTouch ? Constants.ohos_id_color_click_effect : '#00000000')
         .onClick(() => {
           Log.info(this.tag, 'back image onClick +')
           commonController.routeBack()
@@ -48,13 +48,15 @@ export default struct BackComponent {
           right: '16vp',
         })
         .responseRegion({ x: '-12vp', y: '-16vp', width: '48vp', height: '56vp' })
-        .onTouch((event: TouchEvent) => {
+        .onTouch((event?: TouchEvent) => {
           Log.info(this.tag, 'touch event')
-          if (event.type === TouchType.Down) {
-            this.isTouch = true;
-          }
-          if (event.type === TouchType.Up) {
-            this.isTouch = false;
+          if (event !== undefined) {
+            if (event.type === TouchType.Down) {
+              this.isTouch = true;
+            }
+            if (event.type === TouchType.Up) {
+              this.isTouch = false;
+            }
           }
         })
       Text(this.title)

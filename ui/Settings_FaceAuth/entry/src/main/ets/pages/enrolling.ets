@@ -34,21 +34,21 @@ import EnrollingController from '../controller/enrollingController'
 @Entry
 @Component
 struct Enrolling {
-  private readonly TAG: string = "Enrolling"
+  private readonly TAG: string = 'Enrolling'
   private xComponentController = new XComponentController()
-  @StorageLink('enrollStatus') enrollStatus: string = ""
+  @StorageLink('enrollStatus') enrollStatus: string = ''
   @StorageLink('stackVideoVisibility') stackVideoVisibility: Visibility = Visibility.Visible
   @StorageLink('stackVideoBlurRadius') stackVideoBlurRadius: number = 0
   @StorageLink('stackShelterVisibility') stackShelterVisibility: Visibility = Visibility.Visible
-  @StorageLink('stackShelterHeight') stackShelterHeight : string = ""
+  @StorageLink('stackShelterHeight') stackShelterHeight : string = ''
   @StorageLink('stackSuccessVisibility') stackSuccessVisibility: Visibility = Visibility.Hidden
-  @StorageLink('enrollTip') enrollTip: string = ""
-  @StorageLink('enrollTipSize') enrollTipSize: string = ""
+  @StorageLink('enrollTip') enrollTip: string = ''
+  @StorageLink('enrollTipSize') enrollTipSize: string = ''
   @StorageLink('enrollTipVisibility') enrollTipVisibility: Visibility = Visibility.Hidden
   @StorageLink('enrollButtonVisibility') enrollButtonVisibility: Visibility = Visibility.Hidden
   @StorageLink('enrollImageHeight') enrollImageHeight: number = 0
   @StorageLink('enrollImageWidth') enrollImageWidth: number = 0
-  @StorageLink('xComponentSurfaceId') xComponentSurfaceId : string = ""
+  @StorageLink('xComponentSurfaceId') xComponentSurfaceId : string = ''
   @StorageLink('BUTTON_TYPE_WIDTH') BUTTON_TYPE_WIDTH: number = 0
   @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
   // Ring
@@ -60,15 +60,15 @@ struct Enrolling {
   @StorageLink('animationTime') animationTime: number = 0
 
   aboutToAppear() {
-    Log.info(this.TAG, "aboutToAppear+")
+    Log.info(this.TAG, 'aboutToAppear+')
     EnrollingController.init()
-    Log.info(this.TAG, "aboutToAppear-")
+    Log.info(this.TAG, 'aboutToAppear-')
   }
 
   onPageHide() {
-    Log.info(this.TAG, "onPageHide+")
+    Log.info(this.TAG, 'onPageHide+')
     EnrollingController.clear()
-    Log.info(this.TAG, "onPageHide-")
+    Log.info(this.TAG, 'onPageHide-')
   }
 
   getCanvaRadian(progress : number) : number {
@@ -81,13 +81,13 @@ struct Enrolling {
         Text(this.enrollStatus)
           .enrollSetTitleFormat()
           .margin({
-            top: "12vp",
-            bottom: "24vp"
+            top: '12vp',
+            bottom: '24vp'
           })
         Stack() {
           XComponent({
-            id: "faceEnrollPreview",
-            type: "surface",
+            id: 'faceEnrollPreview',
+            type: 'surface',
             controller: this.xComponentController
           })
             .visibility(this.stackVideoVisibility)
@@ -96,10 +96,10 @@ struct Enrolling {
             .markAnchor({ x: '50%', y: '50%'})
             .position({ x: '50%', y: '50%'})
             .onLoad(()=>{
-              Log.info(this.TAG, "onLoad+")
+              Log.info(this.TAG, 'onLoad+')
               this.xComponentSurfaceId = this.xComponentController.getXComponentSurfaceId()
               EnrollingController.startEnroll()
-              Log.info(this.TAG, "onLoad-")
+              Log.info(this.TAG, 'onLoad-')
             })
           Image($r('app.media.shelter'))
             .objectFit(ImageFit.Contain)
@@ -151,7 +151,7 @@ struct Enrolling {
         .visibility(this.enrollTipVisibility)
         .width(this.CONTENT_TYPE_WIDTH)
         .margin({
-          top: "24vp"
+          top: '24vp'
         })
         Blank()
         Button({ type: ButtonType.Capsule, stateEffect: true }) {
@@ -168,12 +168,12 @@ struct Enrolling {
             EnrollingController.init()
           })
           .margin({
-            bottom: "24vp",
+            bottom: '24vp',
           })
       }
       .width('100%')
       .height('100%')
-      .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
+      .backgroundColor($r('sys.color.ohos_id_color_sub_background'))
   }
 
   onBackPress(): boolean {

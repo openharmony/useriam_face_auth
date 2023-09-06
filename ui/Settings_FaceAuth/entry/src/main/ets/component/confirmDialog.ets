@@ -17,13 +17,13 @@ import Log from '../utils/log'
 
 @CustomDialog
 export default struct ConfirmDialog {
-  private readonly TAG: string = "ConfirmDialog"
-  private controller: CustomDialogController;
-  private title: string | Resource
-  private content: string | Resource
-  private confirmText: string | Resource
-  private cancelText: string | Resource
-  private confirmOperation: ()=>{}
+  private readonly TAG: string = 'ConfirmDialog'
+  private controller?: CustomDialogController
+  private title: string | Resource = ''
+  private content: string | Resource = ''
+  private confirmText: string | Resource = ''
+  private cancelText: string | Resource = ''
+  private confirmOperation?: () => void
   @StorageLink('POP_TYPE_WIDTH') POP_TYPE_WIDTH: number = 0
 
   build() {
@@ -34,18 +34,18 @@ export default struct ConfirmDialog {
           .fontSize(Constants.ohos_id_text_size_dialog_title)
           .fontWeight(FontWeight.Medium)
       }
-        .height("64vp")
+        .height('64vp')
         .margin({
-          left: "32vp",
-          right: "32vp",
+          left: '32vp',
+          right: '32vp',
         })
       Text(this.content)
         .fontColor(Constants.ohos_id_color_text_primary)
         .fontSize(Constants.ohos_id_text_size_body1)
         .margin({
-          left: "32vp",
-          right: "32vp",
-          bottom: "8vp"
+          left: '32vp',
+          right: '32vp',
+          bottom: '8vp'
         })
       Flex({ justifyContent: FlexAlign.SpaceEvenly, alignItems: ItemAlign.Center }) {
         Text(this.cancelText)
@@ -55,16 +55,18 @@ export default struct ConfirmDialog {
           .flexGrow(1)
           .textAlign(TextAlign.Center)
           .onClick(() => {
-            Log.info(this.TAG, "click cancel+")
-            this.controller.close()
-            Log.info(this.TAG, "click cancel-")
+            Log.info(this.TAG, 'click cancel+')
+            if(this.controller !== null && this.controller !== undefined) {
+              this.controller.close()
+            }
+            Log.info(this.TAG, 'click cancel-')
           })
         Divider()
           .vertical(true)
           .strokeWidth('2vp')
           .color(Constants.ohos_id_color_list_separator)
           .height('24dp')
-          .margin({ left: "4vp" , right: "4vp"})
+          .margin({ left: '4vp' , right: '4vp'})
         Text(this.confirmText)
           .fontColor(Constants.ohos_id_color_warning)
           .fontSize(Constants.ohos_id_text_button1)
@@ -72,17 +74,21 @@ export default struct ConfirmDialog {
           .flexGrow(1)
           .textAlign(TextAlign.Center)
           .onClick(() => {
-            Log.info(this.TAG, "click confirm+")
-            this.confirmOperation()
-            Log.info(this.TAG, "click confirm-")
-            this.controller.close()
+            Log.info(this.TAG, 'click confirm+')
+            if(this.confirmOperation !== undefined){
+              this.confirmOperation()
+            }
+            Log.info(this.TAG, 'click confirm-')
+            if(this.controller !== undefined){
+              this.controller.close()
+            }
           })
       }
-      .height("40vp")
+      .height('40vp')
       .margin({
-        left: "16vp",
-        right: "16vp",
-        bottom : "16vp"
+        left: '16vp',
+        right: '16vp',
+        bottom : '16vp'
       })
     }
     .borderRadius('24vp')
