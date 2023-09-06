@@ -39,8 +39,8 @@ import CommonController from '../controller/commonController'
 @Entry
 @Component
 export default struct EnrollDeclare {
-  private pattern: string = "2D";
-  private readonly TAG: string = "EnrollDeclare"
+  private pattern: string = '2D';
+  private readonly TAG: string = 'EnrollDeclare'
   @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
 
   build() {
@@ -108,24 +108,24 @@ export default struct EnrollDeclare {
                 }
               }
               .alignItems(HorizontalAlign.Start)
-              .margin({ left: "24vp", right: '24vp' })
+              .margin({ left: '24vp', right: '24vp' })
             }
             .width(this.CONTENT_TYPE_WIDTH)
           }
-          .margin({ top: "24vp" })
-          .width("100%")
+          .margin({ top: '24vp' })
+          .width('100%')
         }
         .scrollBarColor(Constants.ohos_id_color_foreground_60_transparency)
         .scrollBarWidth('5vp')
-        .margin({ right: "12vp", bottom: "24vp" })
+        .margin({ right: '12vp', bottom: '24vp' })
       }
-      .width("100%")
+      .width('100%')
       .height('100%')
       .flexShrink(1)
     }
     .width('100%')
     .height('100%')
-    .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
+    .backgroundColor($r('sys.color.ohos_id_color_sub_background'))
   }
 
   onBackPress(): boolean {

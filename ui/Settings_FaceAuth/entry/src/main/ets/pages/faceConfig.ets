@@ -42,7 +42,7 @@ import Constants from '../config/constant'
 @Entry
 @Component
 struct FaceConfig {
-  @State readonly TAG: string = "FaceConfig"
+  @State readonly TAG: string = 'FaceConfig'
   @State touched: boolean = false
   @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
   @StorageLink('CARD_TYPE_WIDTH') CARD_TYPE_WIDTH: number = 0
@@ -53,20 +53,14 @@ struct FaceConfig {
       content: $r('app.string.wether_delete_face_data'),
       confirmText: $r('app.string.face_record_delete'),
       cancelText: $r('app.string.face_record_cancel'),
-      confirmOperation: this.deleteFace.bind(this)
+      confirmOperation: FaceConfigController.deleteFace
     }),
     alignment: CommonController.getDialogAlignment(),
     offset: {
-      dx : "0vp",
+      dx : '0vp',
       dy : CommonController.getDialogYOffset()
     }
   })
-
-  deleteFace() {
-    Log.info(this.TAG, 'deleteFace+')
-    FaceConfigController.deleteFace()
-    Log.info(this.TAG, 'deleteFace-')
-  }
 
   build() {
     Column() {
@@ -80,7 +74,7 @@ struct FaceConfig {
               .textAlign(TextAlign.Start);
           }
         }
-        .backgroundColor(this.touched ? "#D8D8D8" : "#FFFFFF")
+        .backgroundColor(this.touched ? '#D8D8D8' : '#FFFFFF')
         .height('56vp')
         .margin({
           top: '8vp',
@@ -90,12 +84,14 @@ struct FaceConfig {
         .onClick(() => {
           this.deleteFaceDialogController.open()
         })
-        .onTouch((event: TouchEvent) => {
-          if (event.type === TouchType.Down) {
-            this.touched = true;
-          }
-          if (event.type === TouchType.Up) {
-            this.touched = false;
+        .onTouch((event?: TouchEvent) => {
+          if(event !== undefined){
+            if (event.type === TouchType.Down) {
+              this.touched = true;
+            }
+            if (event.type === TouchType.Up) {
+              this.touched = false;
+            }
           }
         });
         Column() {
@@ -120,13 +116,13 @@ struct FaceConfig {
       .alignItems(HorizontalAlign.Start)
       .width(this.CONTENT_TYPE_WIDTH)
     }
-    .width("100%")
-    .height("100%")
-    .backgroundColor($r("sys.color.ohos_id_color_sub_background"))
+    .width('100%')
+    .height('100%')
+    .backgroundColor($r('sys.color.ohos_id_color_sub_background'))
     .onAreaChange((_, newArea) => {
-      Log.info(this.TAG, "new display area :" + JSON.stringify(newArea))
+      Log.info(this.TAG, 'new display area :' + JSON.stringify(newArea))
       CommonController.setDisplaySize(Number(newArea.width), Number(newArea.height))
-      Log.info(this.TAG, "total area w: " + newArea.width + " h: " + newArea.height)
+      Log.info(this.TAG, 'total area w: ' + newArea.width + ' h: ' + newArea.height)
     })
   }
 
