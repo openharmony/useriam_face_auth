@@ -16,7 +16,7 @@ import("//build/test.gni")
 
 ohos_fuzztest("FaceAuthServiceFuzzTest") {
   stack_protector_ret = true
-  module_out_path = "useriam/face_auth"
+  module_out_path = "face_auth/face_auth"
   fuzz_config_file = "../faceauthservice_fuzzer"
 
   cflags = [
