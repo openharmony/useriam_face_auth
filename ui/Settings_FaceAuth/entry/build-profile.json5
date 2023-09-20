@@ -16,7 +16,7 @@
 {
   "apiType": 'stageMode',
   "buildOption": {
-    "arkEnable": true
+    "compileMode": "esmodule"
   },
   "targets": [
     {
