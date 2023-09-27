@@ -13,5 +13,22 @@
  * limitations under the License.
  */
 
-// Script for compiling build behavior. It is built in the build plug-in and cannot be modified currently.
-module.exports = require('@ohos/hvigor-ohos-plugin').appTasks
+{
+  "name": "settings_faceauth",
+  "license": "ISC",
+  "version": "1.0.0",
+  "description": "example description",
+  "ohos": {
+    "org": "huawei",
+    "buildTool": "hvigor",
+    "directoryLevel": "project"
+  },
+  "repository": {},
+  "devDependencies": {
+    "@ohos/hypium": "1.0.6",
+  },
+  "dependencies": {},
+  "scripts": {
+    "buildOhosHaps": "hvigor assembleHap"
+  }
+}
