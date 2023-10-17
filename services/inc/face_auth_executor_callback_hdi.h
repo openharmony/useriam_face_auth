@@ -29,9 +29,19 @@ namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
 namespace UserAuth = OHOS::UserIam::UserAuth;
+
+enum FaceCallbackHdiType : int32_t {
+    FACE_CALLBACK_ENROLL = 0,
+    FACE_CALLBACK_AUTH = 1,
+    FACE_CALLBACK_IDENTIFY = 2,
+    FACE_CALLBACK_COMMAND = 3,
+    FACE_CALLBACK_INVALID = 4,
+};
+
 class FaceAuthExecutorCallbackHdi : public IExecutorCallback, public NoCopyable {
 public:
-    explicit FaceAuthExecutorCallbackHdi(std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback);
+    FaceAuthExecutorCallbackHdi(
+        std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback, FaceCallbackHdiType faceCallbackHdiType);
     ~FaceAuthExecutorCallbackHdi() override = default;
 
     // IExecutorCallback
@@ -39,9 +49,11 @@ public:
     int32_t OnTip(int32_t tip, const std::vector<uint8_t> &extraInfo) override;
 
 private:
+    void DoVibrator();
     UserIam::UserAuth::ResultCode ConvertResultCode(const int32_t in);
 
     std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback_;
+    FaceCallbackHdiType faceCallbackHdiType_ = FACE_CALLBACK_INVALID;
 };
 } // namespace FaceAuth
 } // namespace UserIam
