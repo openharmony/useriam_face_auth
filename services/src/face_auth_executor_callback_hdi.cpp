@@ -23,6 +23,7 @@
 #include <vector>
 
 #include "hdf_base.h"
+#include "vibrator_agent.h"
 
 #include "iam_check.h"
 #include "iam_executor_iexecute_callback.h"
@@ -36,9 +37,39 @@
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-FaceAuthExecutorCallbackHdi::FaceAuthExecutorCallbackHdi(std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback)
-    : frameworkCallback_(frameworkCallback)
+namespace {
+    constexpr const char *FACE_AUTH_EFFECT = "haptic.clock.timer";
+}
+
+FaceAuthExecutorCallbackHdi::FaceAuthExecutorCallbackHdi(
+    std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback, FaceCallbackHdiType faceCallbackHdiType)
+    : frameworkCallback_(frameworkCallback), faceCallbackHdiType_(faceCallbackHdiType)
 {
+}
+
+void FaceAuthExecutorCallbackHdi::DoVibrator()
+{
+    IAM_LOGI("begin");
+    bool faceEffectState = false;
+    int32_t ret = Sensors::IsSupportEffect(FACE_AUTH_EFFECT, &faceEffectState);
+    if (ret != 0) {
+        IAM_LOGE("call IsSupportEffect fail %{public}d", ret);
+        return;
+    }
+    if (!faceEffectState) {
+        IAM_LOGE("effect not support");
+        return;
+    }
+    if (!Sensors::SetUsage(USAGE_PHYSICAL_FEEDBACK)) {
+        IAM_LOGE("call SetUsage fail");
+        return;
+    }
+    ret = Sensors::StartVibrator(FACE_AUTH_EFFECT);
+    if (ret != 0) {
+        IAM_LOGE("call StartVibrator fail %{public}d", ret);
+        return;
+    }
+    IAM_LOGI("end");
 }
 
 int32_t FaceAuthExecutorCallbackHdi::OnResult(int32_t result, const std::vector<uint8_t> &extraInfo)
@@ -46,6 +77,9 @@ int32_t FaceAuthExecutorCallbackHdi::OnResult(int32_t result, const std::vector<
     IAM_LOGI("OnResult %{public}d", result);
     UserAuth::ResultCode retCode = ConvertResultCode(result);
     IF_FALSE_LOGE_AND_RETURN_VAL(frameworkCallback_ != nullptr, HDF_FAILURE);
+    if ((faceCallbackHdiType_ == FACE_CALLBACK_AUTH) && (retCode == UserAuth::FAIL)) {
+        DoVibrator();
+    }
     frameworkCallback_->OnResult(retCode, extraInfo);
     return HDF_SUCCESS;
 }
