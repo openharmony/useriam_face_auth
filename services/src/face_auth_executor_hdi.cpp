@@ -90,7 +90,8 @@ IamResultCode FaceAuthExecutorHdi::Enroll(uint64_t scheduleId, const UserAuth::E
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
     IF_FALSE_LOGE_AND_RETURN_VAL(callbackObj != nullptr, IamResultCode::GENERAL_ERROR);
-    sptr<IExecutorCallback> callback(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
+    sptr<IExecutorCallback> callback(
+        new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj, FACE_CALLBACK_ENROLL));
     IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
     int32_t status = executorProxy_->Enroll(scheduleId, param.extraInfo, callback);
     IamResultCode result = ConvertResultCode(status);
@@ -106,7 +107,7 @@ IamResultCode FaceAuthExecutorHdi::Authenticate(uint64_t scheduleId, const UserA
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
     IF_FALSE_LOGE_AND_RETURN_VAL(callbackObj != nullptr, IamResultCode::GENERAL_ERROR);
-    sptr<IExecutorCallback> callback(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
+    sptr<IExecutorCallback> callback(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj, FACE_CALLBACK_AUTH));
     IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
     int32_t status = executorProxy_->Authenticate(scheduleId, param.templateIdList, param.extraInfo, callback);
     IamResultCode result = ConvertResultCode(status);
@@ -122,7 +123,8 @@ IamResultCode FaceAuthExecutorHdi::Identify(uint64_t scheduleId, const UserAuth:
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executorProxy_ != nullptr, IamResultCode::GENERAL_ERROR);
     IF_FALSE_LOGE_AND_RETURN_VAL(callbackObj != nullptr, IamResultCode::GENERAL_ERROR);
-    sptr<IExecutorCallback> callback(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
+    sptr<IExecutorCallback> callback(
+        new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj, FACE_CALLBACK_IDENTIFY));
     IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
     int32_t status = executorProxy_->Identify(scheduleId, param.extraInfo, callback);
     IamResultCode result = ConvertResultCode(status);
@@ -168,7 +170,8 @@ IamResultCode FaceAuthExecutorHdi::SendCommand(UserAuth::PropertyMode commandId,
         IAM_LOGE("ConvertCommandId fail result %{public}d", result);
         return result;
     }
-    sptr<IExecutorCallback> callback(new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj));
+    sptr<IExecutorCallback> callback(
+        new (std::nothrow) FaceAuthExecutorCallbackHdi(callbackObj, FACE_CALLBACK_COMMAND));
     IF_FALSE_LOGE_AND_RETURN_VAL(callback != nullptr, IamResultCode::GENERAL_ERROR);
     int32_t status = executorProxy_->SendCommand(hdiCommandId, extraInfo, callback);
     result = ConvertResultCode(status);

@@ -69,7 +69,7 @@ HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnAcquire
             EXPECT_TRUE(testExtraInfo.size() == extraInfo.size());
             EXPECT_TRUE(std::equal(extraInfo.begin(), extraInfo.end(), testExtraInfo.begin()));
         });
-    FaceAuthExecutorCallbackHdi callbackHdi(executeCallback);
+    FaceAuthExecutorCallbackHdi callbackHdi(executeCallback, FACE_CALLBACK_ENROLL);
     callbackHdi.OnTip(testAcquire, testExtraInfo);
 }
 
@@ -93,14 +93,16 @@ HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnResult_
         ASSERT_TRUE(executeCallback != nullptr);
         std::vector<uint8_t> testExtraInfo = {1, 2, 3, 4, 5, 6};
         EXPECT_CALL(*executeCallback, OnResult(_, _))
-            .Times(Exactly(1))
-            .WillOnce([&pair, &testExtraInfo](int32_t result, const std::vector<uint8_t> &extraInfo) {
+            .Times(Exactly(2))
+            .WillRepeatedly([&pair, &testExtraInfo](int32_t result, const std::vector<uint8_t> &extraInfo) {
                 EXPECT_TRUE(result == pair.second);
                 EXPECT_TRUE(testExtraInfo.size() == extraInfo.size());
                 EXPECT_TRUE(std::equal(extraInfo.begin(), extraInfo.end(), testExtraInfo.begin()));
             });
-        FaceAuthExecutorCallbackHdi callbackHdi(executeCallback);
-        callbackHdi.OnResult(pair.first, testExtraInfo);
+        FaceAuthExecutorCallbackHdi callbackHdi1(executeCallback, FACE_CALLBACK_ENROLL);
+        callbackHdi1.OnResult(pair.first, testExtraInfo);
+        FaceAuthExecutorCallbackHdi callbackHdi2(executeCallback, FACE_CALLBACK_AUTH);
+        callbackHdi2.OnResult(pair.first, testExtraInfo);
     }
 }
 } // namespace FaceAuth

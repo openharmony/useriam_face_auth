@@ -31,6 +31,7 @@
           "hilog",
           "init",
           "ipc",
+          "miscdevice",
           "napi",
           "power_manager",
           "safwk",
