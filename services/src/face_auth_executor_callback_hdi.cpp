@@ -38,7 +38,7 @@ namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
 namespace {
-    constexpr const char *FACE_AUTH_EFFECT = "haptic.clock.timer";
+    constexpr const char *FACE_AUTH_EFFECT = "haptic.fail";
 }
 
 FaceAuthExecutorCallbackHdi::FaceAuthExecutorCallbackHdi(
