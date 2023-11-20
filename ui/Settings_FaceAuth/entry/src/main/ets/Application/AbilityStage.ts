@@ -13,12 +13,12 @@
  * limitations under the License.
  */
 
-import AbilityStage from '@ohos.app.ability.AbilityStage'
-import Log from '../utils/log'
+import AbilityStage from '@ohos.app.ability.AbilityStage';
+import Log from '../utils/log';
 
 export default class MyAbilityStage extends AbilityStage {
   private readonly TAG: string = 'MyAbilityStage:';
   onCreate() {
-    Log.info(this.TAG, 'onCreate')
+    Log.info(this.TAG, 'onCreate');
   }
 }

@@ -13,38 +13,38 @@
  * limitations under the License.
  */
 
-import Log from '../utils/log'
+import Log from '../utils/log';
 import display from '@ohos.display';
 
 class Config {
   private readonly TAG: string = 'Config';
   private deviceType : string = 'tablet';
-  private nonAppBarDisplayHeight: number = 0
-  private nonDisplayHeight: number = 0
+  private nonAppBarDisplayHeight: number = 0;
+  private nonDisplayHeight: number = 0;
 
   constructor() {
-    Log.info(this.TAG, "constructor+")
+    Log.info(this.TAG, 'constructor+');
     display.getDefaultDisplay().then((display)=>{
-      if (typeof display.height === "string") {
-        Log.info(this.TAG, "mock mode ")
-        this.deviceType = "tablet"
-        return
+      if (typeof display.height === 'string') {
+        Log.info(this.TAG, 'mock mode ');
+        this.deviceType = 'tablet';
+        return;
       }
-      Log.info(this.TAG, "display height: " + display.height +
-        " display width: " + display.width)
+      Log.info(this.TAG, 'display height: ' + display.height +
+        ' display width: ' + display.width);
       if (display.height > display.width) {
-        this.deviceType = "phone"
+        this.deviceType = 'phone';
       } else {
-        this.deviceType = "tablet"
+        this.deviceType = 'tablet';
       }
     })
-    Log.info(this.TAG, "constructor-")
+    Log.info(this.TAG, 'constructor-');
   }
 
   getDeviceType() : string {
-    return this.deviceType
+    return this.deviceType;
   }
 }
 
 let config = new Config();
-export default config as Config
+export default config as Config;

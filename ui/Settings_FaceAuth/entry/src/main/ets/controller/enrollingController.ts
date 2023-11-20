@@ -13,25 +13,25 @@
  * limitations under the License.
  */
 
-import Constants from '../config/constant'
-import Log from '../utils/log'
+import Constants from '../config/constant';
+import Log from '../utils/log';
 import router from '@system.router';
-import CommonController from '../controller/commonController'
-import UserIdmModel from '../model/userIdmModel'
-import FaceAuthModel from '../model/faceAuthModel'
+import CommonController from '../controller/commonController';
+import UserIdmModel from '../model/userIdmModel';
+import FaceAuthModel from '../model/faceAuthModel';
 
 class EnrollingController {
   private readonly TAG: string = 'EnrollingController';
   private readonly ANIMATION_TIME: number = 2000;
-  private enrolling: boolean = false
+  private enrolling: boolean = false;
 
   constructor() {
-    Log.info(this.TAG, 'constructor+')
-    Log.info(this.TAG, 'constructor-')
+    Log.info(this.TAG, 'constructor+');
+    Log.info(this.TAG, 'constructor-');
   }
 
   init(): void {
-    Log.info(this.TAG, 'init+')
+    Log.info(this.TAG, 'init+');
     AppStorage.Set('stackVideoVisibility', Visibility.Visible);
     AppStorage.Set('stackShelterVisibility', Visibility.Hidden);
     AppStorage.Set('stackProgressVisibility', Visibility.Hidden);
@@ -46,50 +46,50 @@ class EnrollingController {
     AppStorage.Set('stackVideoBlurRadius', 0);
 
     AppStorage.Set('enrollStatus', $r('app.string.enrolling'));
-    this.startEnroll()
-    Log.info(this.TAG, 'init-')
+    this.startEnroll();
+    Log.info(this.TAG, 'init-');
   }
 
   async startEnroll(): Promise<void> {
-    Log.info(this.TAG, 'startEnroll+')
-    if (AppStorage.Get('xComponentSurfaceId') === "") {
-      Log.info(this.TAG, 'surface id is not set, skip start enroll')
-      return
+    Log.info(this.TAG, 'startEnroll+');
+    if (AppStorage.Get('xComponentSurfaceId') === '') {
+      Log.info(this.TAG, 'surface id is not set, skip start enroll');
+      return;
     }
     if (this.enrolling) {
-      Log.info(this.TAG, 'face is enrolling, skip start enroll')
-      return
+      Log.info(this.TAG, 'face is enrolling, skip start enroll');
+      return;
     }
-    await FaceAuthModel.setSurfaceId(AppStorage.Get('xComponentSurfaceId'))
-    UserIdmModel.setOnAcquireCallback(this.onAcquire.bind(this))
-    UserIdmModel.enrollFace().then(this.processResult.bind(this))
-    this.enrolling = true
-    Log.info(this.TAG, 'startEnroll-')
+    await FaceAuthModel.setSurfaceId(AppStorage.Get('xComponentSurfaceId'));
+    UserIdmModel.setOnAcquireCallback(this.onAcquire.bind(this));
+    UserIdmModel.enrollFace().then(this.processResult.bind(this));
+    this.enrolling = true;
+    Log.info(this.TAG, 'startEnroll-');
   }
 
   async processResult(result : number): Promise<void> {
-    await this.faceDetected()
-    await this.enrollProcessing()
+    await this.faceDetected();
+    await this.enrollProcessing();
     if (result === 0) {
-      await this.enrollSuccess()
+      await this.enrollSuccess();
     } else {
-      await this.enrollFail()
+      await this.enrollFail();
     }
-    this.enrolling = false
+    this.enrolling = false;
   }
 
   async onAcquire(result: number): Promise<void> {
-    Log.info(this.TAG, 'onAcquire+ result: ' + result)
+    Log.info(this.TAG, 'onAcquire+ result: ' + result);
     if (result === 25) {
-      Log.info(this.TAG, 'onAcquire face detected+')
-      this.faceDetected()
-      Log.info(this.TAG, 'onAcquire face detected-')
+      Log.info(this.TAG, 'onAcquire face detected+');
+      this.faceDetected();
+      Log.info(this.TAG, 'onAcquire face detected-');
     }
-    Log.info(this.TAG, 'onAcquire-')
+    Log.info(this.TAG, 'onAcquire-');
   }
 
   async faceDetected(): Promise<void> {
-    Log.info(this.TAG, 'faceDetected+')
+    Log.info(this.TAG, 'faceDetected+');
     AppStorage.Set('animationTime', this.ANIMATION_TIME);
     AppStorage.Set('stackVideoVisibility', Visibility.Visible);
     AppStorage.Set('stackShelterVisibility', Visibility.Visible);
@@ -99,13 +99,13 @@ class EnrollingController {
     AppStorage.Set('enrollButtonVisibility', Visibility.Hidden);
 
     AppStorage.Set('stackShelterHeight', AppStorage.Get('stackShelterHeightEnd'));
-    await CommonController.sleepMS(this.ANIMATION_TIME)
+    await CommonController.sleepMS(this.ANIMATION_TIME);
     AppStorage.Set('animationTime', 0);
-    Log.info(this.TAG, 'faceDetected-')
+    Log.info(this.TAG, 'faceDetected-');
   }
 
   async enrollProcessing(): Promise<void> {
-    Log.info(this.TAG, 'enrollProcessing+')
+    Log.info(this.TAG, 'enrollProcessing+');
     AppStorage.Set('stackVideoVisibility', Visibility.Visible);
     AppStorage.Set('stackShelterVisibility', Visibility.Visible);
     AppStorage.Set('stackProgressVisibility', Visibility.Visible);
@@ -113,18 +113,18 @@ class EnrollingController {
     AppStorage.Set('enrollTipVisibility', Visibility.Hidden);
     AppStorage.Set('enrollButtonVisibility', Visibility.Hidden);
 
-    for (let i = 0; i <= 100; i+=1) {
-      await CommonController.sleepMS(30)
+    for (let i = 0; i <= 100; i += 1) {
+      await CommonController.sleepMS(30);
       AppStorage.Set('stackProgressVisibility', Visibility.Hidden);
       AppStorage.Set('stackProgressValue', i);
       AppStorage.Set('stackProgressVisibility', Visibility.Visible);
     }
 
-    Log.info(this.TAG, 'enrollProcessing-')
+    Log.info(this.TAG, 'enrollProcessing-');
   }
 
   async enrollSuccess(): Promise<void> {
-    Log.info(this.TAG, 'enrollSuccess+')
+    Log.info(this.TAG, 'enrollSuccess+');
     AppStorage.Set('stackVideoVisibility', Visibility.Hidden);
     AppStorage.Set('stackShelterVisibility', Visibility.Hidden);
     AppStorage.Set('stackProgressVisibility', Visibility.Hidden);
@@ -133,13 +133,13 @@ class EnrollingController {
     AppStorage.Set('enrollButtonVisibility', Visibility.Hidden);
 
     AppStorage.Set('enrollStatus', $r('app.string.enroll_success'));
-    await CommonController.sleepMS(3000)
-    router.replace({uri: 'pages/faceConfig'})
-    Log.info(this.TAG, 'enrollSuccess-')
+    await CommonController.sleepMS(3000);
+    router.replace({uri: 'pages/faceConfig'});
+    Log.info(this.TAG, 'enrollSuccess-');
   }
 
   async enrollFail(): Promise<void> {
-    Log.info(this.TAG, 'enrollFail+')
+    Log.info(this.TAG, 'enrollFail+');
     AppStorage.Set('stackVideoVisibility', Visibility.Visible);
     AppStorage.Set('stackShelterVisibility', Visibility.Visible);
     AppStorage.Set('stackProgressVisibility', Visibility.Visible);
@@ -148,20 +148,20 @@ class EnrollingController {
     AppStorage.Set('enrollButtonVisibility', Visibility.Visible);
 
     AppStorage.Set('enrollStatus', $r('app.string.enrolling_fail'));
-    AppStorage.Set('enrollTip', $r('app.string.enroll_info_fail'))
+    AppStorage.Set('enrollTip', $r('app.string.enroll_info_fail'));
     AppStorage.Set('enrollTipSize', Constants.ohos_id_text_size_body1);
     AppStorage.Set('stackVideoBlurRadius', 30);
     AppStorage.Set('stackProgressValue', 0);
 
-    Log.info(this.TAG, 'enrollFail-')
+    Log.info(this.TAG, 'enrollFail-');
   }
 
   async clear(): Promise<void> {
-    Log.info(this.TAG, 'clear+')
-    await FaceAuthModel.clearSurfaceId()
-    Log.info(this.TAG, 'clear-')
+    Log.info(this.TAG, 'clear+');
+    await FaceAuthModel.clearSurfaceId();
+    Log.info(this.TAG, 'clear-');
   }
 }
 
 let enrollingController = new EnrollingController();
-export default enrollingController as EnrollingController
+export default enrollingController as EnrollingController;
