@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import hilog from '@ohos.hilog'
+import hilog from '@ohos.hilog';
 
 const TAG = 'Settings_FaceAuth';
 const IAM_DOMAIN_ID_FACE = 0x2442;
@@ -21,10 +21,10 @@ const IAM_DOMAIN_ID_FACE = 0x2442;
 export default class Log {
 
   static info(tag, content): void {
-    hilog.info(IAM_DOMAIN_ID_FACE, TAG + ":" + tag, content,);
+    hilog.info(IAM_DOMAIN_ID_FACE, TAG + ':' + tag, content,);
   }
 
   static error(tag, content): void {
-    hilog.error(IAM_DOMAIN_ID_FACE, TAG + ":" + tag, content,);
+    hilog.error(IAM_DOMAIN_ID_FACE, TAG + ':' + tag, content,);
   }
 }

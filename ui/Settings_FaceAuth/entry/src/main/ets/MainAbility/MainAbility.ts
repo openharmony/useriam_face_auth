@@ -13,39 +13,39 @@
  * limitations under the License.
  */
 
-import Ability from '@ohos.app.ability.UIAbility'
-import Log from '../utils/log'
-import UserIdmModel from '../model/userIdmModel'
-import CommonController from '../controller/commonController'
-import EnrollingController from '../controller/enrollingController'
+import Ability from '@ohos.app.ability.UIAbility';
+import Log from '../utils/log';
+import UserIdmModel from '../model/userIdmModel';
+import CommonController from '../controller/commonController';
+import EnrollingController from '../controller/enrollingController';
 
 export default class MainAbility extends Ability {
   private readonly TAG: string = 'MainAbility:';
-  onCreate(want, launchParam) {
-    Log.info(this.TAG, 'Application onCreate')
+  onCreate(want, launchParam) : void {
+    Log.info(this.TAG, 'Application onCreate');
     globalThis.abilityContext = this.context;
     globalThis.abilityWant = want;
   }
 
-  onDestroy() {
-    Log.info(this.TAG, 'Application onDestroy+')
-    EnrollingController.clear()
-    UserIdmModel.destroy()
-    Log.info(this.TAG, 'Application onDestroy-')
+  onDestroy() : void {
+    Log.info(this.TAG, 'Application onDestroy+');
+    EnrollingController.clear();
+    UserIdmModel.destroy();
+    Log.info(this.TAG, 'Application onDestroy-');
   }
 
-  onWindowStageCreate(windowStage) {
-    Log.info(this.TAG, 'onWindowStageCreate')
-    windowStage.setUIContent(this.context, "pages/entryView", null)
+  onWindowStageCreate(windowStage) : void {
+    Log.info(this.TAG, 'onWindowStageCreate');
+    windowStage.setUIContent(this.context, 'pages/entryView', null);
   }
 
-  onWindowStageDestroy(): void {
-    Log.info(this.TAG, 'onWindowStageDestroy')
+  onWindowStageDestroy() : void {
+    Log.info(this.TAG, 'onWindowStageDestroy');
   }
 
-  onBackground(): void {
-    Log.info(this.TAG, 'Application onBackground+, terminate ability')
-    CommonController.terminateAbility()
-    Log.info(this.TAG, 'Application onBackground-')
+  onBackground() : void {
+    Log.info(this.TAG, 'Application onBackground+, terminate ability');
+    CommonController.terminateAbility();
+    Log.info(this.TAG, 'Application onBackground-');
   }
 }
