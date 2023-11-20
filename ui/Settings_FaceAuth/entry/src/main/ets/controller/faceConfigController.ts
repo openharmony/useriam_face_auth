@@ -13,37 +13,37 @@
  * limitations under the License.
  */
 
-import Log from '../utils/log'
-import UserIdmModel from '../model/userIdmModel'
-import CommonController from '../controller/commonController'
+import Log from '../utils/log';
+import UserIdmModel from '../model/userIdmModel';
+import CommonController from '../controller/commonController';
 
 class FaceConfigController {
   private readonly TAG: string = 'FaceConfigController';
 
   constructor() {
-    Log.info(this.TAG, "constructor+")
-    Log.info(this.TAG, "constructor-")
+    Log.info(this.TAG, 'constructor+');
+    Log.info(this.TAG, 'constructor-');
   }
 
   deleteFace(): void {
-    Log.info(this.TAG, "deleteFace+")
+    Log.info(this.TAG, 'deleteFace+');
     UserIdmModel.deleteFace().then((result)=>{
-      Log.info(this.TAG, "deleteFace result: " + result)
+      Log.info(this.TAG, 'deleteFace result: ' + result);
       if (result === 0) {
-        Log.info(this.TAG, "deleteFace routeBack+")
-        CommonController.routeBack()
-        Log.info(this.TAG, "deleteFace routerBack-")
+        Log.info(this.TAG, 'deleteFace routeBack+');
+        CommonController.routeBack();
+        Log.info(this.TAG, 'deleteFace routerBack-');
       } else {
-        Log.error(this.TAG, "deleteFace fail")
+        Log.error(this.TAG, 'deleteFace fail');
       }
     }).catch(()=>{
-      Log.error(this.TAG, "deleteFace exception")
-      CommonController.routeBack()
+      Log.error(this.TAG, 'deleteFace exception');
+      CommonController.routeBack();
     })
-    setTimeout(()=>{CommonController.routeBack()}, 500)
-    Log.info(this.TAG, "deleteFace-")
+    setTimeout(()=>{CommonController.routeBack()}, 500);
+    Log.info(this.TAG, 'deleteFace-');
   }
 }
 
 let faceConfigController = new FaceConfigController();
-export default faceConfigController as FaceConfigController
+export default faceConfigController as FaceConfigController;

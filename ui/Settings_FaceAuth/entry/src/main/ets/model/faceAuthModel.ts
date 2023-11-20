@@ -13,35 +13,35 @@
  * limitations under the License.
  */
 
-import Log from '../utils/log'
-import CommonController from '../controller/commonController'
+import Log from '../utils/log';
+import CommonController from '../controller/commonController';
 import userIAM_faceAuth from '@ohos.userIAM.faceAuth';
 class FaceAuthModel {
   protected readonly TAG: string = 'FaceAuthModel';
   protected faceAuthManager : userIAM_faceAuth.FaceAuthManager;
 
   constructor() {
-    Log.info(this.TAG, "constructor +")
-    this.faceAuthManager = new userIAM_faceAuth.FaceAuthManager()
-    Log.info(this.TAG, "constructor -")
+    Log.info(this.TAG, 'constructor +');
+    this.faceAuthManager = new userIAM_faceAuth.FaceAuthManager();
+    Log.info(this.TAG, 'constructor -');
   }
 
   async setSurfaceId(surfaceIdString: string) : Promise<void> {
     Log.info(this.TAG, 'set surface id ' + surfaceIdString);
     try {
-      this.faceAuthManager.setSurfaceId(surfaceIdString)
-      Log.info(this.TAG, 'setSurfaceId result is success')
+      this.faceAuthManager.setSurfaceId(surfaceIdString);
+      Log.info(this.TAG, 'setSurfaceId result is success');
     } catch {
-      Log.info(this.TAG, 'setSurfaceId result is failed')
+      Log.info(this.TAG, 'setSurfaceId result is failed');
     }
   }
 
   async clearSurfaceId(): Promise<void> {
     Log.info(this.TAG, 'clearSurfaceId+');
-    await this.setSurfaceId("0")
+    await this.setSurfaceId('0');
     Log.info(this.TAG, 'clearSurfaceId-');
   }
 }
 
 let faceAuthModel = new FaceAuthModel();
-export default faceAuthModel as FaceAuthModel
+export default faceAuthModel as FaceAuthModel;

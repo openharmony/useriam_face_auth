@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import Log from '../utils/log'
-import CommonController from '../controller/commonController'
+import Log from '../utils/log';
+import CommonController from '../controller/commonController';
 import account_osAccount from '@ohos.account.osAccount';
 
 class UserAuthModel {
@@ -24,18 +24,18 @@ class UserAuthModel {
   private readonly CMD_SET_SURFACE_ID = 100;
 
   constructor() {
-    Log.info(this.TAG, "constructor+")
-    this.pinAuthManger = new account_osAccount.PINAuth()
-    this.userAuthManager = new account_osAccount.UserAuth()
-    Log.info(this.TAG, "constructor-")
+    Log.info(this.TAG, 'constructor+');
+    this.pinAuthManger = new account_osAccount.PINAuth();
+    this.userAuthManager = new account_osAccount.UserAuth();
+    Log.info(this.TAG, 'constructor-');
   }
 
   async authPin(challenge: Uint8Array):Promise<Uint8Array> {
-    Log.info(this.TAG, "auth Pin+")
+    Log.info(this.TAG, 'auth Pin+');
     this.pinAuthManger.registerInputer({
       onGetData: (AuthSubType, IInputData) => {
-        Log.info(this.TAG, 'FaceEnroll pin.registerInputer start')
-        IInputData.onSetData(10000, new Uint8Array([49, 50, 51, 52, 53, 54]))
+        Log.info(this.TAG, 'FaceEnroll pin.registerInputer start');
+        IInputData.onSetData(10000, new Uint8Array([49, 50, 51, 52, 53, 54]));
       }
     });
 
@@ -47,7 +47,7 @@ class UserAuthModel {
           if ((result === 0) && extraInfo.token && (Object.keys(extraInfo.token).length > 0)) {
             resolve(extraInfo.token);
             Log.info(this.TAG, 'authPin success');
-            setTimeout(()=>{CommonController.terminateAbility()}, 10 * 60 * 1000)
+            setTimeout(()=>{CommonController.terminateAbility()}, 10 * 60 * 1000);
           } else {
             Log.error(this.TAG, 'authPin fail');
             resolve(new Uint8Array([]));
@@ -55,10 +55,10 @@ class UserAuthModel {
         }
       })
     })
-    Log.info(this.TAG, "auth Pin-")
-    return ret
+    Log.info(this.TAG, 'auth Pin-');
+    return ret;
   }
 }
 
 let userAuthModel = new UserAuthModel();
-export default userAuthModel as UserAuthModel
+export default userAuthModel as UserAuthModel;
