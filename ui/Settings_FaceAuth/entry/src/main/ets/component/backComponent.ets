@@ -35,7 +35,7 @@ export default struct BackComponent {
       Image($r('app.media.back_op'))
         .height('24vp')
         .width('24vp')
-        .backgroundColor(this.isTouch ? Constants.ohos_id_color_click_effect : '#00000000')
+        .backgroundColor(this.isTouch ? $r('sys.color.ohos_id_color_click_effect') : '#00000000')
         .onClick(() => {
           Log.info(this.tag, 'back image onClick +')
           commonController.routeBack()
@@ -60,8 +60,8 @@ export default struct BackComponent {
           }
         })
       Text(this.title)
-        .fontColor(Constants.ohos_id_color_titlebar_text)
-        .fontSize(Constants.ohos_id_text_size_headline8)
+        .fontColor($r('sys.color.ohos_id_color_titlebar_text'))
+        .fontSize($r('sys.float.ohos_id_text_size_headline8'))
         .fontWeight(FontWeight.Bold)
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })

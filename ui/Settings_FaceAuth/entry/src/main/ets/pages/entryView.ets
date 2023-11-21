@@ -33,12 +33,12 @@ struct Index {
     Column() {
       BackComponent({ prevTag: this.TAG })
       Text('临时认证界面')
-        .fontColor(Constants.ohos_id_color_text_primary)
-        .fontSize(Constants.ohos_id_text_size_headline7)
+        .fontColor($r('sys.color.ohos_id_color_text_primary'))
+        .fontSize($r('sys.float.ohos_id_text_size_headline7'))
         .fontWeight(FontWeight.Bold)
       Text('请将锁屏密码设置为123456后，点击认证按钮')
-        .fontColor(Constants.ohos_id_color_text_primary)
-        .fontSize(Constants.ohos_id_text_size_subtitle1)
+        .fontColor($r('sys.color.ohos_id_color_text_primary'))
+        .fontSize($r('sys.float.ohos_id_text_size_sub_title1'))
         .fontWeight(FontWeight.Medium)
         .margin({
           top: '12',
@@ -46,8 +46,8 @@ struct Index {
         })
       Button({ type: ButtonType.Capsule, stateEffect: true }){
         Text('认证')
-          .fontColor(Constants.ohos_id_color_foreground_inverse)
-          .fontSize(Constants.ohos_id_text_button1)
+          .fontColor($r('sys.color.ohos_id_color_foreground_contrary'))
+          .fontSize($r('sys.float.ohos_id_text_size_button1'))
           .fontWeight(FontWeight.Medium)
       }
       .backgroundColor(Constants.ohos_id_color_control_actived)
@@ -57,8 +57,8 @@ struct Index {
       })
       .width('30%')
       Text(this.resultString)
-      .fontColor(Constants.ohos_id_color_text_primary)
-      .fontSize(Constants.ohos_id_text_size_subtitle1)
+      .fontColor($r('sys.color.ohos_id_color_text_primary'))
+      .fontSize($r('sys.float.ohos_id_text_size_sub_title1'))
       .fontWeight(FontWeight.Medium)
     }
     .alignItems(HorizontalAlign.Center)
