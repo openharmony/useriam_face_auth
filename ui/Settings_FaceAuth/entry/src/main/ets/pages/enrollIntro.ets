@@ -20,26 +20,26 @@ import CommonController from '../controller/commonController'
 import Constants from '../config/constant'
 
 @Extend(Text) function introSetTitleFormat() {
-  .fontColor(Constants.ohos_id_color_text_primary)
-  .fontSize(Constants.ohos_id_text_size_headline7)
+  .fontColor($r('sys.color.ohos_id_color_text_primary'))
+  .fontSize($r('sys.float.ohos_id_text_size_headline7'))
   .fontWeight(FontWeight.Bold)
 }
 
 @Extend(Text) function introSetSubtitleFormat() {
-  .fontColor(Constants.ohos_id_color_text_primary)
-  .fontSize(Constants.ohos_id_text_size_subtitle1)
+  .fontColor($r('sys.color.ohos_id_color_text_primary'))
+  .fontSize($r('sys.float.ohos_id_text_size_sub_title1'))
   .fontWeight(FontWeight.Medium)
 }
 
 @Extend(Span) function introSetSpanFormat() {
-  .fontColor(Constants.ohos_id_color_text_secondary)
-  .fontSize(Constants.ohos_id_text_size_body2)
+  .fontColor($r('sys.color.ohos_id_color_text_secondary'))
+  .fontSize($r('sys.float.ohos_id_text_size_body2'))
   .fontWeight(FontWeight.Regular)
 }
 
 @Extend(Span) function introSetLinkFormat() {
-  .fontColor(Constants.ohos_id_color_text_hyperlink)
-  .fontSize(Constants.ohos_id_text_size_body2)
+  .fontColor($r('sys.color.ohos_id_color_text_hyperlink'))
+  .fontSize($r('sys.float.ohos_id_text_size_body2'))
   .fontWeight(FontWeight.Medium)
 }
 
@@ -106,8 +106,8 @@ struct EnrollIntro {
           Column() {
             Button({ type: ButtonType.Capsule, stateEffect: true }) {
               Text($r('app.string.face_recognition_guide'))
-                .fontSize(Constants.ohos_id_text_button1)
-                .fontColor(Constants.ohos_id_color_foreground_inverse)
+                .fontSize($r('sys.float.ohos_id_text_size_button1'))
+                .fontColor($r('sys.color.ohos_id_color_foreground_contrary'))
                 .fontWeight(FontWeight.Medium)
             }
             .backgroundColor(Constants.ohos_id_color_control_actived)

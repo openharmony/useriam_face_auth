@@ -30,7 +30,7 @@ export default struct ConfirmDialog {
     Column() {
       Flex({ alignItems: ItemAlign.Center }) {
         Text(this.title)
-          .fontColor(Constants.ohos_id_color_text_primary)
+          .fontColor($r('sys.color.ohos_id_color_text_primary'))
           .fontSize(Constants.ohos_id_text_size_dialog_title)
           .fontWeight(FontWeight.Medium)
       }
@@ -40,8 +40,8 @@ export default struct ConfirmDialog {
           right: '32vp',
         })
       Text(this.content)
-        .fontColor(Constants.ohos_id_color_text_primary)
-        .fontSize(Constants.ohos_id_text_size_body1)
+        .fontColor($r('sys.color.ohos_id_color_text_primary'))
+        .fontSize($r('sys.float.ohos_id_text_size_body1'))
         .margin({
           left: '32vp',
           right: '32vp',
@@ -50,7 +50,7 @@ export default struct ConfirmDialog {
       Flex({ justifyContent: FlexAlign.SpaceEvenly, alignItems: ItemAlign.Center }) {
         Text(this.cancelText)
           .fontColor(Constants.ohos_id_color_control_highlight)
-          .fontSize(Constants.ohos_id_text_button1)
+          .fontSize($r('sys.float.ohos_id_text_size_button1'))
           .fontWeight(FontWeight.Medium)
           .flexGrow(1)
           .textAlign(TextAlign.Center)
@@ -64,12 +64,12 @@ export default struct ConfirmDialog {
         Divider()
           .vertical(true)
           .strokeWidth('2vp')
-          .color(Constants.ohos_id_color_list_separator)
+          .color($r('sys.color.ohos_id_color_list_separator'))
           .height('24dp')
           .margin({ left: '4vp' , right: '4vp'})
         Text(this.confirmText)
-          .fontColor(Constants.ohos_id_color_warning)
-          .fontSize(Constants.ohos_id_text_button1)
+          .fontColor($r('sys.color.ohos_id_color_warning'))
+          .fontSize($r('sys.float.ohos_id_text_size_button1'))
           .fontWeight(FontWeight.Medium)
           .flexGrow(1)
           .textAlign(TextAlign.Center)
@@ -92,7 +92,7 @@ export default struct ConfirmDialog {
       })
     }
     .borderRadius('24vp')
-    .backgroundColor(Constants.ohos_id_color_dialog_bg)
+    .backgroundColor($r('sys.color.ohos_id_color_dialog_bg'))
     .alignItems(HorizontalAlign.Start)
   }
 }
