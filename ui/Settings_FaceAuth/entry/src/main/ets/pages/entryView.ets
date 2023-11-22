@@ -50,7 +50,7 @@ struct Index {
           .fontSize($r('sys.float.ohos_id_text_size_button1'))
           .fontWeight(FontWeight.Medium)
       }
-      .backgroundColor(Constants.ohos_id_color_control_actived)
+      .backgroundColor(Constants.ohosIdColorControlActived)
       .onClick(()=>{
         EntryViewController.doPINAuth()
           .catch(()=>{this.resultString = '认证失败，请将锁屏密码设置为123456后重试'})

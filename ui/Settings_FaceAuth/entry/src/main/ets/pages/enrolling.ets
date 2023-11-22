@@ -123,14 +123,14 @@ struct Enrolling {
               this.context.beginPath()
               this.context.lineWidth = 4
               this.context.lineCap = 'round'
-              this.context.strokeStyle = Constants.ohos_id_color_foreground_97_transparency
+              this.context.strokeStyle = Constants.ohosIdColorForeground97Transparency
               this.context.arc(this.enrollImageWidth / 2, this.enrollImageHeight / 2, this.stackRingRadius,
                 this.getCanvaRadian(0), this.getCanvaRadian(100), false);
               this.context.stroke()
               this.context.beginPath()
               this.context.lineWidth = 5
               this.context.lineCap = 'round'
-              this.context.strokeStyle = Constants.ohos_id_color_emphasize
+              this.context.strokeStyle = Constants.ohosIdColorEmphasize
               this.context.arc(this.enrollImageWidth / 2, this.enrollImageHeight / 2, this.stackRingRadius,
                 this.getCanvaRadian(0), this.getCanvaRadian(this.stackProgressValue), false);
               this.context.stroke()

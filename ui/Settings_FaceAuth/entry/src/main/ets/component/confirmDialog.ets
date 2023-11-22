@@ -31,7 +31,7 @@ export default struct ConfirmDialog {
       Flex({ alignItems: ItemAlign.Center }) {
         Text(this.title)
           .fontColor($r('sys.color.ohos_id_color_text_primary'))
-          .fontSize(Constants.ohos_id_text_size_dialog_title)
+          .fontSize(Constants.ohosIdTextSizeDialogTitle)
           .fontWeight(FontWeight.Medium)
       }
         .height('64vp')
@@ -49,7 +49,7 @@ export default struct ConfirmDialog {
         })
       Flex({ justifyContent: FlexAlign.SpaceEvenly, alignItems: ItemAlign.Center }) {
         Text(this.cancelText)
-          .fontColor(Constants.ohos_id_color_control_highlight)
+          .fontColor(Constants.ohosIdColorControlHighlight)
           .fontSize($r('sys.float.ohos_id_text_size_button1'))
           .fontWeight(FontWeight.Medium)
           .flexGrow(1)
