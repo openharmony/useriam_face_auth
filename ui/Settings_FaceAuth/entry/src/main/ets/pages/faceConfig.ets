@@ -22,20 +22,20 @@ import router from '@system.router';
 import Constants from '../config/constant'
 
 @Extend(Span) function configSetSpanFormat() {
-  .fontColor(Constants.ohos_id_color_text_secondary)
-  .fontSize(Constants.ohos_id_text_size_caption1)
+  .fontColor($r('sys.color.ohos_id_color_text_secondary'))
+  .fontSize($r('sys.float.ohos_id_text_size_caption1'))
   .fontWeight(FontWeight.Regular)
 }
 
 @Extend(Span) function configSetLinkFormat() {
-  .fontColor(Constants.ohos_id_color_text_hyperlink)
-  .fontSize(Constants.ohos_id_text_size_caption1)
+  .fontColor($r('sys.color.ohos_id_color_text_hyperlink'))
+  .fontSize($r('sys.float.ohos_id_text_size_caption1'))
   .fontWeight(FontWeight.Medium)
 }
 
 @Extend(Text) function configDeleteData() {
-  .fontColor(Constants.ohos_id_color_warning)
-  .fontSize(Constants.ohos_id_text_size_body1)
+  .fontColor($r('sys.color.ohos_id_color_warning'))
+  .fontSize($r('sys.float.ohos_id_text_size_body1'))
   .fontWeight(FontWeight.Medium)
 }
 

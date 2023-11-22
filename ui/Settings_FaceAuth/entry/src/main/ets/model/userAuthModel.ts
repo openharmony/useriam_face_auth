@@ -47,7 +47,9 @@ class UserAuthModel {
           if ((result === 0) && extraInfo.token && (Object.keys(extraInfo.token).length > 0)) {
             resolve(extraInfo.token);
             Log.info(this.TAG, 'authPin success');
-            setTimeout(()=>{CommonController.terminateAbility()}, 10 * 60 * 1000);
+            setTimeout(() => {
+              CommonController.terminateAbility();
+            }, 10 * 60 * 1000);
           } else {
             Log.error(this.TAG, 'authPin fail');
             resolve(new Uint8Array([]));
