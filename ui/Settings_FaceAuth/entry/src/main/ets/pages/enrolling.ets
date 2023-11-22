@@ -20,14 +20,14 @@ import CommonController from '../controller/commonController'
 import EnrollingController from '../controller/enrollingController'
 
 @Extend(Text) function enrollSetTitleFormat() {
-  .fontColor(Constants.ohos_id_color_text_primary)
-  .fontSize(Constants.ohos_id_text_size_headline7)
+  .fontColor($r('sys.color.ohos_id_color_text_primary'))
+  .fontSize($r('sys.float.ohos_id_text_size_headline7'))
   .fontWeight(FontWeight.Bold)
 }
 
 @Extend(Text) function enrollSetSubTitleFormat() {
-  .fontColor(Constants.ohos_id_color_text_primary)
-  .fontSize(Constants.ohos_id_text_size_subtitle1)
+  .fontColor($r('sys.color.ohos_id_color_text_primary'))
+  .fontSize($r('sys.float.ohos_id_text_size_sub_title1'))
   .fontWeight(FontWeight.Medium)
 }
 
@@ -156,11 +156,11 @@ struct Enrolling {
         Blank()
         Button({ type: ButtonType.Capsule, stateEffect: true }) {
           Text($r('app.string.enroll_button_content'))
-            .fontSize(Constants.ohos_id_text_button1)
+            .fontSize($r('sys.float.ohos_id_text_size_button1'))
             .fontWeight(FontWeight.Medium)
-            .fontColor(Constants.ohos_id_color_text_primary_actived)
+            .fontColor($r('sys.color.ohos_id_color_text_primary_activated'))
         }
-          .backgroundColor(Constants.ohos_id_color_button_normal)
+          .backgroundColor($r('sys.color.ohos_id_color_button_normal'))
           .width(this.BUTTON_TYPE_WIDTH)
           .height('40vp')
           .visibility(this.enrollButtonVisibility)
