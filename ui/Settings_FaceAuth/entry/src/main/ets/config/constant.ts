@@ -14,12 +14,12 @@
  */
 
 export default class Constants {
-  static ohos_id_color_control_actived = '#007DFF';
-  static ohos_id_color_control_highlight = '#FF007DFF';
-  static ohos_id_color_emphasize = '#007DFF';
-  static ohos_id_color_foreground_60_transparency = '#99182431';
-  static ohos_id_color_foreground_97_transparency = '#08182431';
-  static ohos_id_text_size_body1 = '16fp';
-  static ohos_id_text_size_dialog_title = '20fp';
-  static ohos_id_text_size_subtitle1 = '18fp';
+  static ohosIdColorControlActived = '#007DFF';
+  static ohosIdColorControlHighlight = '#FF007DFF';
+  static ohosIdColorEmphasize = '#007DFF';
+  static ohosIdColorForeground60Transparency = '#99182431';
+  static ohosIdColorForeground97Transparency = '#08182431';
+  static ohosIdTextSizeBody1 = '16fp';
+  static ohosIdTextSizeDialogTitle = '20fp';
+  static ohosIdTextSizeSubtitle1 = '18fp';
 }
