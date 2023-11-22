@@ -64,8 +64,9 @@ class CommonController {
   }
 
   getShelterHeightPercentageBegin(width: number, height: number) :string {
-    let a = width / 2;
-    let b = height / 2;
+    const HALF = 0.5;
+    let a = width * HALF;
+    let b = height * HALF;
     let R = Math.sqrt(a * a + b * b);
     let H = R / 0.3;
     const H_WEIGHT = 166;
@@ -74,19 +75,20 @@ class CommonController {
   }
 
   setNonAppBarDisplaySize(nonAppBarDisplayWidth: number, nonAppBarDisplayHeight: number): void {
+    const HALF = 0.5;
     if (Config.getDeviceType() !== 'phone') {
       return;
     }
     nonAppBarDisplayHeight = nonAppBarDisplayHeight + AppStorage.Get<number>('SYSTEM_NAVIGATION_BAR_HEIGHT')
     Log.info(this.TAG, 'update nonAppBarDisplayHeight to ' + nonAppBarDisplayHeight);
-    let sideLength = Math.floor(nonAppBarDisplayHeight / 2);
+    let sideLength = Math.floor(nonAppBarDisplayHeight * HALF);
     AppStorage.SetOrCreate('enrollImageHeight', sideLength);
     AppStorage.SetOrCreate('enrollImageWidth', nonAppBarDisplayWidth);
     // when percentage is 166%, circular diameter == height
     AppStorage.SetOrCreate('stackShelterHeightBegin',
-      this.getShelterHeightPercentageBegin(nonAppBarDisplayWidth, nonAppBarDisplayHeight / 2));
+      this.getShelterHeightPercentageBegin(nonAppBarDisplayWidth, nonAppBarDisplayHeight * HALF));
     AppStorage.SetOrCreate('stackShelterHeightEnd', '132.8%'); // 166 * 0.8
-    AppStorage.SetOrCreate('stackRingRadius', (sideLength * 1.328 * 0.6 + 21) / 2);
+    AppStorage.SetOrCreate('stackRingRadius', (sideLength * 1.328 * 0.6 + 21) * HALF);
   }
 
   setDisplaySize(displayWidth: number, displayHeight: number): void {

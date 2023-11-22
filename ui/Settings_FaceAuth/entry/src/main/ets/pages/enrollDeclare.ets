@@ -115,7 +115,7 @@ export default struct EnrollDeclare {
           .margin({ top: '24vp' })
           .width('100%')
         }
-        .scrollBarColor(Constants.ohos_id_color_foreground_60_transparency)
+        .scrollBarColor(Constants.ohosIdColorForeground60Transparency)
         .scrollBarWidth('5vp')
         .margin({ right: '12vp', bottom: '24vp' })
       }

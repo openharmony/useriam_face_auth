@@ -42,7 +42,7 @@ class EnrollingController {
     AppStorage.Set('stackProgressValue', 0);
     AppStorage.Set('stackShelterHeight', AppStorage.Get('stackShelterHeightBegin'));
     AppStorage.Set('enrollTip', $r('app.string.face_intro'));
-    AppStorage.Set('enrollTipSize', Constants.ohos_id_text_size_subtitle1);
+    AppStorage.Set('enrollTipSize', Constants.ohosIdTextSizeSubtitle1);
     AppStorage.Set('stackVideoBlurRadius', 0);
 
     AppStorage.Set('enrollStatus', $r('app.string.enrolling'));
@@ -149,7 +149,7 @@ class EnrollingController {
 
     AppStorage.Set('enrollStatus', $r('app.string.enrolling_fail'));
     AppStorage.Set('enrollTip', $r('app.string.enroll_info_fail'));
-    AppStorage.Set('enrollTipSize', Constants.ohos_id_text_size_body1);
+    AppStorage.Set('enrollTipSize', Constants.ohosIdTextSizeBody1);
     AppStorage.Set('stackVideoBlurRadius', 30);
     AppStorage.Set('stackProgressValue', 0);
 

@@ -33,9 +33,9 @@ class UserAuthModel {
   async authPin(challenge: Uint8Array):Promise<Uint8Array> {
     Log.info(this.TAG, 'auth Pin+');
     this.pinAuthManger.registerInputer({
-      onGetData: (AuthSubType, IInputData) => {
+      onGetData: (authSubType, iInputData) => {
         Log.info(this.TAG, 'FaceEnroll pin.registerInputer start');
-        IInputData.onSetData(10000, new Uint8Array([49, 50, 51, 52, 53, 54]));
+        iInputData.onSetData(10000, new Uint8Array([49, 50, 51, 52, 53, 54]));
       }
     });
 
