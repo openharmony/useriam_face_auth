@@ -96,7 +96,7 @@ struct EnrollIntro {
                 }
               }
             }
-            .scrollBarColor(Constants.ohos_id_color_foreground_60_transparency)
+            .scrollBarColor(Constants.ohosIdColorForeground60Transparency)
             .scrollBarWidth('5vp')
             .margin({ right: '12vp' })
           }
@@ -110,7 +110,7 @@ struct EnrollIntro {
                 .fontColor($r('sys.color.ohos_id_color_foreground_contrary'))
                 .fontWeight(FontWeight.Medium)
             }
-            .backgroundColor(Constants.ohos_id_color_control_actived)
+            .backgroundColor(Constants.ohosIdColorControlActived)
             .width(this.BUTTON_TYPE_WIDTH)
             .height('40vp')
             .onClick(() => {
