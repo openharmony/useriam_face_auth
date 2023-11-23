@@ -35,7 +35,9 @@ class UserAuthModel {
     this.pinAuthManger.registerInputer({
       onGetData: (authSubType, iInputData) => {
         Log.info(this.TAG, 'FaceEnroll pin.registerInputer start');
-        iInputData.onSetData(10000, new Uint8Array([49, 50, 51, 52, 53, 54]));
+        const SIX_DIGITS_PIN = 10000;
+        const PIN_ASCII_LIST = [49, 50, 51, 52, 53, 54];
+        iInputData.onSetData(SIX_DIGITS_PIN, new Uint8Array(PIN_ASCII_LIST));
       }
     });
 
@@ -47,15 +49,18 @@ class UserAuthModel {
           if ((result === 0) && extraInfo.token && (Object.keys(extraInfo.token).length > 0)) {
             resolve(extraInfo.token);
             Log.info(this.TAG, 'authPin success');
+            const TEN_MINUTE = 10;
+            const SIXTY_SECOND = 60;
+            const THOUSAND_MS = 1000;
             setTimeout(() => {
               CommonController.terminateAbility();
-            }, 10 * 60 * 1000);
+            }, TEN_MINUTE * SIXTY_SECOND * THOUSAND_MS);
           } else {
             Log.error(this.TAG, 'authPin fail');
             resolve(new Uint8Array([]));
           }
         }
-      })
+      });
     })
     Log.info(this.TAG, 'auth Pin-');
     return ret;
