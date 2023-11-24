@@ -69,7 +69,8 @@ class UserIdmModel {
   }
 
   updateFaceInfo(): void {
-    this.userIdentityManager.getAuthInfo(2).then((data) => {
+    const AUTH_TYPE_FACE = 2;
+    this.userIdentityManager.getAuthInfo(AUTH_TYPE_FACE).then((data) => {
       Log.info(this.TAG, 'getAuthInfo length ' + data.length);
       AppStorage.SetOrCreate<number>('UserIdm_FaceNum', data.length);
       if (data.length > 0) {
@@ -110,7 +111,7 @@ class UserIdmModel {
           this.onAcquireCallback(number);
           Log.info(this.TAG, 'onAcquireInfo-');
         }
-      })
+      });
     })
   }
 
@@ -126,9 +127,9 @@ class UserIdmModel {
     return new Promise<number>((resolve)=> {
       this.userIdentityManager.delCred(credId, localToken, {
         onResult: (result, extraInfo) => {
-            Log.info(this.TAG, 'FaceEnroll face.delete onResult result = ' + result);
-            this.updateFaceInfo();
-            resolve(result);
+          Log.info(this.TAG, 'FaceEnroll face.delete onResult result = ' + result);
+          this.updateFaceInfo();
+          resolve(result);
         }
       })
     })

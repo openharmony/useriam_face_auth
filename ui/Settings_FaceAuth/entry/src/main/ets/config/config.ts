@@ -37,7 +37,7 @@ class Config {
       } else {
         this.deviceType = 'tablet';
       }
-    })
+    });
     Log.info(this.TAG, 'constructor-');
   }
 
