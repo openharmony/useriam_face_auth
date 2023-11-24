@@ -39,7 +39,7 @@ class FaceConfigController {
     }).catch(()=>{
       Log.error(this.TAG, 'deleteFace exception');
       CommonController.routeBack();
-    })
+    });
     setTimeout(() => {
       CommonController.routeBack();
     }, 500);

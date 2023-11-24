@@ -68,7 +68,8 @@ class CommonController {
     let a = width * HALF;
     let b = height * HALF;
     let R = Math.sqrt(a * a + b * b);
-    let H = R / 0.3;
+    const R_H_RATIO = 0.3;
+    let H = R / R_H_RATIO;
     const H_WEIGHT = 166;
     let hPercentage = '' + Math.trunc(H * H_WEIGHT / height) + '%';
     return hPercentage;
@@ -79,7 +80,7 @@ class CommonController {
     if (Config.getDeviceType() !== 'phone') {
       return;
     }
-    nonAppBarDisplayHeight = nonAppBarDisplayHeight + AppStorage.Get<number>('SYSTEM_NAVIGATION_BAR_HEIGHT')
+    nonAppBarDisplayHeight = nonAppBarDisplayHeight + AppStorage.Get<number>('SYSTEM_NAVIGATION_BAR_HEIGHT');
     Log.info(this.TAG, 'update nonAppBarDisplayHeight to ' + nonAppBarDisplayHeight);
     let sideLength = Math.floor(nonAppBarDisplayHeight * HALF);
     AppStorage.SetOrCreate('enrollImageHeight', sideLength);
@@ -88,7 +89,11 @@ class CommonController {
     AppStorage.SetOrCreate('stackShelterHeightBegin',
       this.getShelterHeightPercentageBegin(nonAppBarDisplayWidth, nonAppBarDisplayHeight * HALF));
     AppStorage.SetOrCreate('stackShelterHeightEnd', '132.8%'); // 166 * 0.8
-    AppStorage.SetOrCreate('stackRingRadius', (sideLength * 1.328 * 0.6 + 21) * HALF);
+    const STACK_SHELTER_HEIGHT_END_RATIO = 1.328;
+    const SCALE = 0.6;
+    const STACKRINGRADIUS_OFFSET = 21;
+    AppStorage.SetOrCreate('stackRingRadius', (sideLength * STACK_SHELTER_HEIGHT_END_RATIO * SCALE +
+      STACKRINGRADIUS_OFFSET) * HALF);
   }
 
   setDisplaySize(displayWidth: number, displayHeight: number): void {
@@ -99,7 +104,9 @@ class CommonController {
     displayHeight = displayHeight + AppStorage.Get<number>('SYSTEM_NAVIGATION_BAR_HEIGHT') +
       AppStorage.Get<number>('SYSTEM_STATUS_BAR_HEIGHT');
     Log.info(this.TAG, 'update displayHeight to ' + displayHeight);
-    let sideLength = Math.floor(Math.min(displayWidth, displayHeight / 2) * 0.8 / 2) * 2;
+    const HALF = 0.5;
+    const DISPLAY_SIDE_LENGTH_RATIO = 0.8;
+    let sideLength = Math.floor(Math.min(displayWidth, displayHeight * HALF) * DISPLAY_SIDE_LENGTH_RATIO * HALF) / HALF;
     Log.info(this.TAG, 'sideLength ' + sideLength);
     AppStorage.SetOrCreate('enrollImageHeight', sideLength);
     AppStorage.SetOrCreate('enrollImageWidth', sideLength);
@@ -107,7 +114,11 @@ class CommonController {
     AppStorage.SetOrCreate('stackShelterHeightBegin',
       this.getShelterHeightPercentageBegin(sideLength, sideLength));
     AppStorage.SetOrCreate('stackShelterHeightEnd', '146%'); // 166 * 0.88
-    AppStorage.SetOrCreate('stackRingRadius', Math.floor((sideLength * 1.46 * 0.6 + 21) / 2));
+    const STACK_SHELTER_HEIGHT_END_RATIO = 1.46;
+    const SCALE = 0.6;
+    const STACKRINGRADIUS_OFFSET = 21;
+    AppStorage.SetOrCreate('stackRingRadius', Math.floor((sideLength * STACK_SHELTER_HEIGHT_END_RATIO * SCALE +
+      STACKRINGRADIUS_OFFSET) * HALF));
   }
 
   setGridWidth(displayWidth: number): void {

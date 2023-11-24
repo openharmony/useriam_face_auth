@@ -80,7 +80,8 @@ class EnrollingController {
 
   async onAcquire(result: number): Promise<void> {
     Log.info(this.TAG, 'onAcquire+ result: ' + result);
-    if (result === 25) {
+    const NEED_FACE_DETECTED = 25;
+    if (result === NEED_FACE_DETECTED) {
       Log.info(this.TAG, 'onAcquire face detected+');
       this.faceDetected();
       Log.info(this.TAG, 'onAcquire face detected-');
@@ -112,9 +113,11 @@ class EnrollingController {
     AppStorage.Set('stackSuccessVisibility', Visibility.Hidden);
     AppStorage.Set('enrollTipVisibility', Visibility.Hidden);
     AppStorage.Set('enrollButtonVisibility', Visibility.Hidden);
-
-    for (let i = 0; i <= 100; i += 1) {
-      await CommonController.sleepMS(30);
+    
+    const PERCENTAGE_100 = 100;
+    for (let i = 0; i <= PERCENTAGE_100; i += 1) {
+      const SLEEP_TIME = 30;
+      await CommonController.sleepMS(SLEEP_TIME);
       AppStorage.Set('stackProgressVisibility', Visibility.Hidden);
       AppStorage.Set('stackProgressValue', i);
       AppStorage.Set('stackProgressVisibility', Visibility.Visible);
@@ -133,7 +136,8 @@ class EnrollingController {
     AppStorage.Set('enrollButtonVisibility', Visibility.Hidden);
 
     AppStorage.Set('enrollStatus', $r('app.string.enroll_success'));
-    await CommonController.sleepMS(3000);
+    const SLEEP_TIME = 3000;
+    await CommonController.sleepMS(SLEEP_TIME);
     router.replace({uri: 'pages/faceConfig'});
     Log.info(this.TAG, 'enrollSuccess-');
   }
@@ -150,7 +154,8 @@ class EnrollingController {
     AppStorage.Set('enrollStatus', $r('app.string.enrolling_fail'));
     AppStorage.Set('enrollTip', $r('app.string.enroll_info_fail'));
     AppStorage.Set('enrollTipSize', Constants.ohosIdTextSizeBody1);
-    AppStorage.Set('stackVideoBlurRadius', 30);
+    const STACK_VIDEO_BLUR_RADIUS = 30;
+    AppStorage.Set('stackVideoBlurRadius', STACK_VIDEO_BLUR_RADIUS);
     AppStorage.Set('stackProgressValue', 0);
 
     Log.info(this.TAG, 'enrollFail-');
