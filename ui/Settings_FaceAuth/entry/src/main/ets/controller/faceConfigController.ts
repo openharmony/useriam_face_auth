@@ -40,9 +40,10 @@ class FaceConfigController {
       Log.error(this.TAG, 'deleteFace exception');
       CommonController.routeBack();
     });
+    const TIME_MS = 500;
     setTimeout(() => {
       CommonController.routeBack();
-    }, 500);
+    }, TIME_MS);
     Log.info(this.TAG, 'deleteFace-');
   }
 }

@@ -42,7 +42,9 @@ class UserAuthModel {
     });
 
     let ret = new Promise<Uint8Array>((resolve)=> {
-      this.userAuthManager.auth(challenge, 1, 10000, {
+      const AUTH_TYPE = account_osAccount.AuthType.PIN;
+      const AUTH_TRUST_LEVEL = account_osAccount.AuthTrustLevel.ATL1;
+      this.userAuthManager.auth(challenge, AUTH_TYPE, AUTH_TRUST_LEVEL, {
         onResult: (result, extraInfo) => {
           Log.info(this.TAG, 'authPin onResult: ' + result);
           this.pinAuthManger.unregisterInputer();
