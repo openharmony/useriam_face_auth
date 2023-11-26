@@ -16,7 +16,7 @@
 import hilog from '@ohos.hilog';
 
 const TAG = 'Settings_FaceAuth';
-const IAM_DOMAIN_ID_FACE = 0x2442;
+const IAM_DOMAIN_ID_FACE = 0x2406;
 
 export default class Log {
 
