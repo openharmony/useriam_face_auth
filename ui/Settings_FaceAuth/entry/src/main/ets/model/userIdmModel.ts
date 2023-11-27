@@ -112,7 +112,7 @@ class UserIdmModel {
           Log.info(this.TAG, 'onAcquireInfo-');
         }
       });
-    })
+    });
   }
 
   async deleteFace() : Promise<number> {
@@ -131,8 +131,8 @@ class UserIdmModel {
           this.updateFaceInfo();
           resolve(result);
         }
-      })
-    })
+      });
+    });
   }
 }
 
