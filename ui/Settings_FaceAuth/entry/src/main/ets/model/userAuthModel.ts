@@ -63,7 +63,7 @@ class UserAuthModel {
           }
         }
       });
-    })
+    });
     Log.info(this.TAG, 'auth Pin-');
     return ret;
   }
