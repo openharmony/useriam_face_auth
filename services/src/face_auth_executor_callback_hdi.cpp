@@ -37,9 +37,6 @@
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
-namespace {
-    constexpr const char *FACE_AUTH_EFFECT = "haptic.fail";
-}
 
 FaceAuthExecutorCallbackHdi::FaceAuthExecutorCallbackHdi(
     std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback, FaceCallbackHdiType faceCallbackHdiType)
@@ -50,8 +47,9 @@ FaceAuthExecutorCallbackHdi::FaceAuthExecutorCallbackHdi(
 void FaceAuthExecutorCallbackHdi::DoVibrator()
 {
     IAM_LOGI("begin");
+    static const char *faceAuthEffect = "haptic.fail";
     bool faceEffectState = false;
-    int32_t ret = Sensors::IsSupportEffect(FACE_AUTH_EFFECT, &faceEffectState);
+    int32_t ret = Sensors::IsSupportEffect(faceAuthEffect, &faceEffectState);
     if (ret != 0) {
         IAM_LOGE("call IsSupportEffect fail %{public}d", ret);
         return;
@@ -64,7 +62,7 @@ void FaceAuthExecutorCallbackHdi::DoVibrator()
         IAM_LOGE("call SetUsage fail");
         return;
     }
-    ret = Sensors::StartVibrator(FACE_AUTH_EFFECT);
+    ret = Sensors::StartVibrator(faceAuthEffect);
     if (ret != 0) {
         IAM_LOGE("call StartVibrator fail %{public}d", ret);
         return;
