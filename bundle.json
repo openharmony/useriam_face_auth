@@ -27,7 +27,7 @@
           "display_manager",
           "drivers_interface_camera",
           "drivers_interface_face_auth",
-          "graphic_2d",
+          "graphic_surface",
           "hilog",
           "init",
           "ipc",
