@@ -34,7 +34,7 @@ ohos_source_set("faceauth_framework_stub_fuzzer") {
   ]
 
   if (defined(global_parts_info.graphic_graphic_2d)) {
-    external_deps += [ "graphic_2d:surface" ]
+    external_deps += [ "graphic_surface:surface" ]
   }
 
   subsystem_name = "useriam"
@@ -73,7 +73,7 @@ ohos_source_set("faceauthservice_source_set_fuzzer") {
   ]
 
   if (defined(global_parts_info.graphic_graphic_2d)) {
-    external_deps += [ "graphic_2d:surface" ]
+    external_deps += [ "graphic_surface:surface" ]
   }
 
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
