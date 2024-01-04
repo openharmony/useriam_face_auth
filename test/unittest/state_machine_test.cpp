@@ -352,46 +352,27 @@ HWTEST_F(StateMachineTest, MachineScheduleExpireNodeExpire, TestSize.Level0)
     handler->EnsureTask(nullptr);
 }
 
-HWTEST_F(StateMachineTest, MachineScheduleEnterAndLeave, TestSize.Level0)
+static void GetTestMachine(std::shared_ptr<FiniteStateMachine> &machine,
+    MockFunction<void(FiniteStateMachine & machine, uint32_t event)> &action,
+    MockFunction<void(FiniteStateMachine & machine, uint32_t event)> &enter,
+    MockFunction<void(FiniteStateMachine & machine, uint32_t event)> &leave)
 {
-    auto handler = ThreadHandler::GetSingleThreadInstance();
-    MockFunction<void(FiniteStateMachine & machine, uint32_t event)> action;
-    MockFunction<void(FiniteStateMachine & machine, uint32_t event)> enter;
-    MockFunction<void(FiniteStateMachine & machine, uint32_t event)> leave;
-
-    InSequence s;
-    EXPECT_CALL(action, Call(_, EVENT_START_AUTH));
-    EXPECT_CALL(leave, Call(_, STATE_INIT));
-    EXPECT_CALL(enter, Call(_, STATE_VERIFY_STARING));
-
-    EXPECT_CALL(action, Call(_, EVENT_VERIFY_STARTED));
-    EXPECT_CALL(leave, Call(_, STATE_VERIFY_STARING));
-    EXPECT_CALL(enter, Call(_, STATE_COLLECT_STARING));
-
-    EXPECT_CALL(action, Call(_, EVENT_COLLECT_STARTED));
-    EXPECT_CALL(leave, Call(_, STATE_COLLECT_STARING));
-    EXPECT_CALL(enter, Call(_, STATE_AUTH_PROCESSING));
-
-    EXPECT_CALL(action, Call(_, EVENT_USER_CANCEL));
-    EXPECT_CALL(leave, Call(_, STATE_AUTH_PROCESSING));
-    EXPECT_CALL(enter, Call(_, STATE_END));
-
     auto machineBuilder = FiniteStateMachine::Builder::New("testMachine13", STATE_INIT);
     ASSERT_NE(machineBuilder, nullptr);
 
     machineBuilder
         ->MakeTransition(STATE_INIT, EVENT_START_AUTH, STATE_VERIFY_STARING,
-            [&action](FiniteStateMachine &machine, uint32_t event) {
-                action.Call(machine, event);
-                machine.Schedule(EVENT_VERIFY_STARTED);
-                machine.Schedule(EVENT_COLLECT_STARTED);
-            })
+        [&action](FiniteStateMachine &machine, uint32_t event) {
+            action.Call(machine, event);
+            machine.Schedule(EVENT_VERIFY_STARTED);
+            machine.Schedule(EVENT_COLLECT_STARTED);
+        })
         ->MakeTransition(STATE_VERIFY_STARING, EVENT_VERIFY_STARTED, STATE_COLLECT_STARING,
-            [&action](FiniteStateMachine &machine, uint32_t event) { action.Call(machine, event); })
+        [&action](FiniteStateMachine &machine, uint32_t event) { action.Call(machine, event); })
         ->MakeTransition(STATE_COLLECT_STARING, EVENT_COLLECT_STARTED, STATE_AUTH_PROCESSING,
-            [&action](FiniteStateMachine &machine, uint32_t event) { action.Call(machine, event); })
+        [&action](FiniteStateMachine &machine, uint32_t event) { action.Call(machine, event); })
         ->MakeTransition(STATE_AUTH_PROCESSING, EVENT_USER_CANCEL, STATE_END,
-            [&action](FiniteStateMachine &machine, uint32_t event) { action.Call(machine, event); });
+        [&action](FiniteStateMachine &machine, uint32_t event) { action.Call(machine, event); });
 
     machineBuilder->MakeOnStateEnter(STATE_INIT,
         [&enter](FiniteStateMachine &machine, uint32_t event) { enter.Call(machine, event); });
@@ -416,7 +397,35 @@ HWTEST_F(StateMachineTest, MachineScheduleEnterAndLeave, TestSize.Level0)
     machineBuilder->MakeOnStateEnter(STATE_END,
         [&enter](FiniteStateMachine &machine, uint32_t event) { enter.Call(machine, event); });
 
-    auto machine = machineBuilder->Build();
+    machine = machineBuilder->Build();
+}
+
+HWTEST_F(StateMachineTest, MachineScheduleEnterAndLeave, TestSize.Level0)
+{
+    auto handler = ThreadHandler::GetSingleThreadInstance();
+    MockFunction<void(FiniteStateMachine & machine, uint32_t event)> action;
+    MockFunction<void(FiniteStateMachine & machine, uint32_t event)> enter;
+    MockFunction<void(FiniteStateMachine & machine, uint32_t event)> leave;
+
+    InSequence s;
+    EXPECT_CALL(action, Call(_, EVENT_START_AUTH));
+    EXPECT_CALL(leave, Call(_, STATE_INIT));
+    EXPECT_CALL(enter, Call(_, STATE_VERIFY_STARING));
+
+    EXPECT_CALL(action, Call(_, EVENT_VERIFY_STARTED));
+    EXPECT_CALL(leave, Call(_, STATE_VERIFY_STARING));
+    EXPECT_CALL(enter, Call(_, STATE_COLLECT_STARING));
+
+    EXPECT_CALL(action, Call(_, EVENT_COLLECT_STARTED));
+    EXPECT_CALL(leave, Call(_, STATE_COLLECT_STARING));
+    EXPECT_CALL(enter, Call(_, STATE_AUTH_PROCESSING));
+
+    EXPECT_CALL(action, Call(_, EVENT_USER_CANCEL));
+    EXPECT_CALL(leave, Call(_, STATE_AUTH_PROCESSING));
+    EXPECT_CALL(enter, Call(_, STATE_END));
+    
+    std::shared_ptr<FiniteStateMachine> machine;
+    GetTestMachine(machine, action, enter, leave);
     ASSERT_NE(machine, nullptr);
 
     machine->SetThreadHandler(handler);
