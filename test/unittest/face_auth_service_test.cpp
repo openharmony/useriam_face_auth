@@ -38,7 +38,7 @@ public:
 
 void FaceAuthServiceTest::SetUpTestCase()
 {
-    static const char *PERMS[] = {
+    static const char *perms[] = {
         "ohos.permission.MANAGE_USER_IDM"
     };
     NativeTokenInfoParams infoInstance = {
@@ -46,7 +46,7 @@ void FaceAuthServiceTest::SetUpTestCase()
         .permsNum = 1,
         .aclsNum = 0,
         .dcaps = nullptr,
-        .perms = PERMS,
+        .perms = perms,
         .acls = nullptr,
         .processName = "face_auth_service_test",
         .aplStr = "system_core",
