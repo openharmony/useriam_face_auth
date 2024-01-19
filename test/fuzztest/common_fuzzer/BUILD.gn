@@ -15,7 +15,7 @@ import("//build/config/features.gni")
 import("//build/test.gni")
 
 ohos_source_set("faceauth_framework_stub_fuzzer") {
-  stack_protector_ret = true
+  branch_protector_ret = "pac_ret"
   sources = [ "../../../frameworks/ipc/src/face_auth_stub.cpp" ]
 
   configs = [ "../../../common:iam_log_config" ]
@@ -42,7 +42,7 @@ ohos_source_set("faceauth_framework_stub_fuzzer") {
 }
 
 ohos_source_set("faceauthservice_source_set_fuzzer") {
-  stack_protector_ret = true
+  branch_protector_ret = "pac_ret"
   sources = [
     "../../../services/src/face_auth_driver_hdi.cpp",
     "../../../services/src/face_auth_executor_callback_hdi.cpp",

@@ -27,7 +27,7 @@ ohos_shared_library("faceauth_framework") {
     debug = false
     blocklist = "../../cfi_blocklist.txt"
   }
-  stack_protector_ret = true
+  branch_protector_ret = "pac_ret"
   sources = [
     "src/face_auth_client_impl.cpp",
     "src/face_auth_proxy.cpp",
@@ -75,7 +75,7 @@ ohos_source_set("faceauth_framework_stub") {
     debug = false
     blocklist = "../../cfi_blocklist.txt"
   }
-  stack_protector_ret = true
+  branch_protector_ret = "pac_ret"
   sources = [ "src/face_auth_stub.cpp" ]
 
   configs = [ "../../common:iam_log_config" ]
