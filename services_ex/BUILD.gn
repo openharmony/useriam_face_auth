@@ -27,7 +27,7 @@ ohos_source_set("faceauthservice_ex_source_set") {
     debug = false
     blocklist = "../cfi_blocklist.txt"
   }
-  stack_protector_ret = true
+  branch_protector_ret = "pac_ret"
   sources = [
     "src/finite_state_machine_builder.cpp",
     "src/finite_state_machine_impl.cpp",
@@ -77,7 +77,7 @@ ohos_shared_library("faceauthservice_ex") {
     debug = false
     blocklist = "../cfi_blocklist.txt"
   }
-  stack_protector_ret = true
+  branch_protector_ret = "pac_ret"
   deps = [ ":faceauthservice_ex_source_set" ]
 
   if (use_musl) {
