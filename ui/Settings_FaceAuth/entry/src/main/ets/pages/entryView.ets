@@ -66,26 +66,30 @@ struct Index {
     .height('100%')
     .backgroundColor($r('sys.color.ohos_id_color_sub_background'))
     .onAreaChange((_, newArea) => {
-      window.on('systemBarTintChange', (data) => {
-        if(data !== null && data !== undefined){
-          Log.info(this.TAG, 'receive system bar tint change: ' + JSON.stringify(data));
-          for (let i = 0; i < data.regionTint.length; i++) {
-            let regionData = data.regionTint[i]
-            if(regionData.region){
-              if (regionData.type === window.WindowType.TYPE_STATUS_BAR) {
-                this.SYSTEM_STATUS_BAR_HEIGHT = px2vp(regionData.region.height)
-                Log.info(this.TAG, 'set status bar height ' + regionData.region.height)
-                continue
-              }
-              if (regionData.type === window.WindowType.TYPE_NAVIGATION_BAR) {
-                this.SYSTEM_NAVIGATION_BAR_HEIGHT = px2vp(regionData.region.height)
-                Log.info(this.TAG, 'set navigation bar height ' + this.SYSTEM_NAVIGATION_BAR_HEIGHT)
-                continue
+      try {
+        window.on('systemBarTintChange', (data) => {
+          if(data !== null && data !== undefined){
+            Log.info(this.TAG, 'receive system bar tint change: ' + JSON.stringify(data));
+            for (let i = 0; i < data.regionTint.length; i++) {
+              let regionData = data.regionTint[i]
+              if(regionData.region){
+                if (regionData.type === window.WindowType.TYPE_STATUS_BAR) {
+                  this.SYSTEM_STATUS_BAR_HEIGHT = px2vp(regionData.region.height)
+                  Log.info(this.TAG, 'set status bar height ' + regionData.region.height)
+                  continue
+                }
+                if (regionData.type === window.WindowType.TYPE_NAVIGATION_BAR) {
+                  this.SYSTEM_NAVIGATION_BAR_HEIGHT = px2vp(regionData.region.height)
+                  Log.info(this.TAG, 'set navigation ba r height ' + this.SYSTEM_NAVIGATION_BAR_HEIGHT)
+                  continue
+                }
               }
             }
           }
-        }
-      });
+        });
+      } catch (exception) {
+        Log.error(this.TAG, 'Failed to register systemBarTintChange' + JSON.stringify(exception))
+      }
       Log.info(this.TAG, 'new display area :' + JSON.stringify(newArea))
       CommonController.setDisplaySize(Number(newArea.width), Number(newArea.height))
       Log.info(this.TAG, 'total area w: ' + newArea.width + ' h: ' + newArea.height)
