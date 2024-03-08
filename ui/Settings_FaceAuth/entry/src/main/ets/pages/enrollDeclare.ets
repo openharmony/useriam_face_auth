@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import Constants from '../config/constant'
-import BackComponent from '../component/backComponent'
-import Log from '../utils/log'
-import CommonController from '../controller/commonController'
+import BackComponent from '../component/backComponent';
+import Log from '../utils/log';
+import CommonController from '../controller/commonController';
+import CommonUtil from '../utils/CommonUtil';
 
 @Extend(Text) function setTitleFormat() {
   .fontColor($r('sys.color.ohos_id_color_text_primary'))
@@ -40,8 +40,15 @@ import CommonController from '../controller/commonController'
 @Component
 export default struct EnrollDeclare {
   private pattern: string = '2D';
-  private readonly TAG: string = 'EnrollDeclare'
-  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
+  private readonly TAG: string = 'EnrollDeclare';
+  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0;
+  private scrollBarColor: string;
+
+  aboutToAppear() {
+    let scrollBarColor = CommonUtil.getColor(getContext(this), $r('sys.color.ohos_id_color_foreground_transparent'));
+    scrollBarColor = CommonUtil.setColorOpacity(scrollBarColor, 0.4);
+    this.scrollBarColor = scrollBarColor;
+  }
 
   build() {
     Column() {
@@ -52,58 +59,58 @@ export default struct EnrollDeclare {
           Column() {
             Column() {
               Column() {
-                Text($r("app.string.face_feature_desc"))
+                Text($r('app.string.face_feature_desc'))
                   .setTitleFormat()
                   .margin({ bottom: '16vp' })
-                Text($r("app.string.face_recognize_announce_message_01"))
+                Text($r('app.string.face_recognize_announce_message_01'))
                   .setContentFormat()
                   .margin({ bottom: '24vp' })
-                Text($r("app.string.face_recognize_announce_message_02"))
+                Text($r('app.string.face_recognize_announce_message_02'))
                   .setTitleFormat()
                   .margin({ bottom: '16vp' })
-                Text($r("app.string.face_recognize_announce_message_03"))
+                Text($r('app.string.face_recognize_announce_message_03'))
                   .setContentFormat()
                   .margin({ bottom: '8vp' })
-                Text($r("app.string.face_recognize_announce_message_04"))
+                Text($r('app.string.face_recognize_announce_message_04'))
                   .setContentFormat()
                   .margin({ bottom: '8vp' })
-                Text($r("app.string.face_recognize_announce_message_05"))
+                Text($r('app.string.face_recognize_announce_message_05'))
                   .setContentFormat()
                   .margin({ bottom: '8vp' })
-                Text($r("app.string.face_recognize_announce_message_06"))
+                Text($r('app.string.face_recognize_announce_message_06'))
                   .setContentFormat()
                   .margin({ bottom: '8vp' })
-                Text($r("app.string.face_recognize_announce_message_07"))
+                Text($r('app.string.face_recognize_announce_message_07'))
                   .setContentFormat()
                   .margin({ bottom: '24vp' })
-                Text($r("app.string.face_recognize_announce_message_08"))
+                Text($r('app.string.face_recognize_announce_message_08'))
                   .setTitleFormat()
                   .margin({ bottom: '16vp' })
-                Text($r("app.string.face_recognize_announce_message_09"))
+                Text($r('app.string.face_recognize_announce_message_09'))
                   .setContentFormat()
                   .margin({ bottom: '8vp' })
-                Text($r("app.string.face_announce_tip1_item2_3d"))
+                Text($r('app.string.face_announce_tip1_item2_3d'))
                   .setContentFormat()
                   .margin({ bottom: '8vp' })
-                Text($r("app.string.face_recognize_announce_message_10"))
+                Text($r('app.string.face_recognize_announce_message_10'))
                   .setContentFormat()
                   .margin({ bottom: '8vp' })
-                Text($r("app.string.face_recognize_announce_message_11"))
+                Text($r('app.string.face_recognize_announce_message_11'))
                   .setContentFormat()
                   .margin({ bottom: '8vp' })
-                Text($r("app.string.face_recognize_announce_message_12"))
+                Text($r('app.string.face_recognize_announce_message_12'))
                   .setContentFormat()
                   .margin({ bottom: '24vp' })
-                Text($r("app.string.face_recognize_announce_message_13"))
+                Text($r('app.string.face_recognize_announce_message_13'))
                   .setTitleFormat()
                   .margin({ bottom: '16vp' })
                 Text() {
-                  Span($r("app.string.face_recognize_announce_message_14_1"))
+                  Span($r('app.string.face_recognize_announce_message_14_1'))
                     .setSpanFormat()
-                  Span($r("app.string.face_recognize_announce_message_14_3"))
+                  Span($r('app.string.face_recognize_announce_message_14_3'))
                     .setSpanFormat()
                     .fontWeight(FontWeight.Bold)
-                  Span($r("app.string.face_recognize_announce_message_14_2"))
+                  Span($r('app.string.face_recognize_announce_message_14_2'))
                     .setSpanFormat()
                 }
               }
@@ -115,7 +122,7 @@ export default struct EnrollDeclare {
           .margin({ top: '24vp' })
           .width('100%')
         }
-        .scrollBarColor(Constants.ohosIdColorForeground60Transparency)
+        .scrollBarColor(this.scrollBarColor)
         .scrollBarWidth('5vp')
         .margin({ right: '12vp', bottom: '24vp' })
       }
@@ -129,9 +136,9 @@ export default struct EnrollDeclare {
   }
 
   onBackPress(): boolean {
-    Log.info(this.TAG, 'onBackPress+')
-    CommonController.routeBack()
-    Log.info(this.TAG, 'onBackPress-')
-    return true
+    Log.info(this.TAG, 'onBackPress+');
+    CommonController.routeBack();
+    Log.info(this.TAG, 'onBackPress-');
+    return true;
   }
 }
