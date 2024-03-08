@@ -13,21 +13,20 @@
  * limitations under the License.
  */
 
-import window from '@ohos.window'
+import window from '@ohos.window';
 
-import BackComponent from '../component/backComponent'
-import Log from '../utils/log'
-import EntryViewController from '../controller/entryViewController'
-import CommonController from '../controller/commonController'
-import Constants from '../config/constant'
+import BackComponent from '../component/backComponent';
+import Log from '../utils/log';
+import EntryViewController from '../controller/entryViewController';
+import CommonController from '../controller/commonController';
 
 @Entry
 @Component
 struct Index {
-  private readonly TAG: string = 'Index'
-  @State resultString: string = ''
-  @StorageLink('SYSTEM_STATUS_BAR_HEIGHT') SYSTEM_STATUS_BAR_HEIGHT: number = 0
-  @StorageLink('SYSTEM_NAVIGATION_BAR_HEIGHT') SYSTEM_NAVIGATION_BAR_HEIGHT: number = 0
+  private readonly TAG: string = 'Index';
+  @State resultString: string = '';
+  @StorageLink('SYSTEM_STATUS_BAR_HEIGHT') SYSTEM_STATUS_BAR_HEIGHT: number = 0;
+  @StorageLink('SYSTEM_NAVIGATION_BAR_HEIGHT') SYSTEM_NAVIGATION_BAR_HEIGHT: number = 0;
 
   build() {
     Column() {
@@ -44,13 +43,13 @@ struct Index {
           top: '12',
           bottom: '24'
         })
-      Button({ type: ButtonType.Capsule, stateEffect: true }){
+      Button({ type: ButtonType.Capsule, stateEffect: true }) {
         Text('认证')
           .fontColor($r('sys.color.ohos_id_color_foreground_contrary'))
           .fontSize($r('sys.float.ohos_id_text_size_button1'))
           .fontWeight(FontWeight.Medium)
       }
-      .backgroundColor(Constants.ohosIdColorControlActived)
+      .backgroundColor($r('sys.color.ohos_id_color_activated'))
       .onClick(()=>{
         EntryViewController.doPINAuth()
           .catch(()=>{this.resultString = '认证失败，请将锁屏密码设置为123456后重试'})
@@ -68,11 +67,11 @@ struct Index {
     .onAreaChange((_, newArea) => {
       try {
         window.on('systemBarTintChange', (data) => {
-          if(data !== null && data !== undefined){
+          if (data !== null && data !== undefined) {
             Log.info(this.TAG, 'receive system bar tint change: ' + JSON.stringify(data));
             for (let i = 0; i < data.regionTint.length; i++) {
               let regionData = data.regionTint[i]
-              if(regionData.region){
+              if (regionData.region) {
                 if (regionData.type === window.WindowType.TYPE_STATUS_BAR) {
                   this.SYSTEM_STATUS_BAR_HEIGHT = px2vp(regionData.region.height)
                   Log.info(this.TAG, 'set status bar height ' + regionData.region.height)
@@ -97,9 +96,9 @@ struct Index {
   }
 
   onBackPress(): boolean {
-    Log.info(this.TAG, 'onBackPress+')
-    CommonController.routeBack()
-    Log.info(this.TAG, 'onBackPress-')
-    return true
+    Log.info(this.TAG, 'onBackPress+');
+    CommonController.routeBack();
+    Log.info(this.TAG, 'onBackPress-');
+    return true;
   }
 }

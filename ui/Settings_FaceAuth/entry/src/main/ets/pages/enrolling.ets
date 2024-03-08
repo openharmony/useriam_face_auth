@@ -13,11 +13,11 @@
  * limitations under the License.
  */
 
-import Constants from '../config/constant'
-import BackComponent from '../component/backComponent'
-import Log from '../utils/log'
-import CommonController from '../controller/commonController'
-import EnrollingController from '../controller/enrollingController'
+import BackComponent from '../component/backComponent';
+import Log from '../utils/log';
+import CommonController from '../controller/commonController';
+import EnrollingController from '../controller/enrollingController';
+import CommonUtil from '../utils/CommonUtil';
 
 @Extend(Text) function enrollSetTitleFormat() {
   .fontColor($r('sys.color.ohos_id_color_text_primary'))
@@ -34,49 +34,49 @@ import EnrollingController from '../controller/enrollingController'
 @Entry
 @Component
 struct Enrolling {
-  private readonly TAG: string = 'Enrolling'
-  private xComponentController = new XComponentController()
-  @StorageLink('enrollStatus') enrollStatus: string = ''
-  @StorageLink('stackVideoVisibility') stackVideoVisibility: Visibility = Visibility.Visible
-  @StorageLink('stackVideoBlurRadius') stackVideoBlurRadius: number = 0
-  @StorageLink('stackShelterVisibility') stackShelterVisibility: Visibility = Visibility.Visible
-  @StorageLink('stackShelterHeight') stackShelterHeight : string = ''
-  @StorageLink('stackSuccessVisibility') stackSuccessVisibility: Visibility = Visibility.Hidden
-  @StorageLink('enrollTip') enrollTip: string = ''
-  @StorageLink('enrollTipSize') enrollTipSize: string = ''
-  @StorageLink('enrollTipVisibility') enrollTipVisibility: Visibility = Visibility.Hidden
-  @StorageLink('enrollButtonVisibility') enrollButtonVisibility: Visibility = Visibility.Hidden
-  @StorageLink('enrollImageHeight') enrollImageHeight: number = 0
-  @StorageLink('enrollImageWidth') enrollImageWidth: number = 0
-  @StorageLink('xComponentSurfaceId') xComponentSurfaceId : string = ''
-  @StorageLink('BUTTON_TYPE_WIDTH') BUTTON_TYPE_WIDTH: number = 0
-  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
+  private readonly TAG: string = 'Enrolling';
+  private xComponentController = new XComponentController();
+  @StorageLink('enrollStatus') enrollStatus: string = '';
+  @StorageLink('stackVideoVisibility') stackVideoVisibility: Visibility = Visibility.Visible;
+  @StorageLink('stackVideoBlurRadius') stackVideoBlurRadius: number = 0;
+  @StorageLink('stackShelterVisibility') stackShelterVisibility: Visibility = Visibility.Visible;
+  @StorageLink('stackShelterHeight') stackShelterHeight : string = '';
+  @StorageLink('stackSuccessVisibility') stackSuccessVisibility: Visibility = Visibility.Hidden;
+  @StorageLink('enrollTip') enrollTip: string = '';
+  @StorageLink('enrollTipSize') enrollTipSize: string = '';
+  @StorageLink('enrollTipVisibility') enrollTipVisibility: Visibility = Visibility.Hidden;
+  @StorageLink('enrollButtonVisibility') enrollButtonVisibility: Visibility = Visibility.Hidden;
+  @StorageLink('enrollImageHeight') enrollImageHeight: number = 0;
+  @StorageLink('enrollImageWidth') enrollImageWidth: number = 0;
+  @StorageLink('xComponentSurfaceId') xComponentSurfaceId : string = '';
+  @StorageLink('BUTTON_TYPE_WIDTH') BUTTON_TYPE_WIDTH: number = 0;
+  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0;
   // Ring
-  private settings: RenderingContextSettings = new RenderingContextSettings(true)
-  private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings)
-  @StorageLink('stackRingRadius') stackRingRadius: number = 0
-  @StorageLink('stackProgressValue') stackProgressValue : number = 0
-  @StorageLink('stackProgressVisibility') stackProgressVisibility: Visibility = Visibility.Hidden
-  @StorageLink('animationTime') animationTime: number = 0
+  private settings: RenderingContextSettings = new RenderingContextSettings(true);
+  private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
+  @StorageLink('stackRingRadius') stackRingRadius: number = 0;
+  @StorageLink('stackProgressValue') stackProgressValue : number = 0;
+  @StorageLink('stackProgressVisibility') stackProgressVisibility: Visibility = Visibility.Hidden;
+  @StorageLink('animationTime') animationTime: number = 0;
 
   aboutToAppear() {
-    Log.info(this.TAG, 'aboutToAppear+')
-    EnrollingController.init()
-    Log.info(this.TAG, 'aboutToAppear-')
+    Log.info(this.TAG, 'aboutToAppear+');
+    EnrollingController.init();
+    Log.info(this.TAG, 'aboutToAppear-');
   }
 
   onPageHide() {
-    Log.info(this.TAG, 'onPageHide+')
-    EnrollingController.clear()
-    Log.info(this.TAG, 'onPageHide-')
+    Log.info(this.TAG, 'onPageHide+');
+    EnrollingController.clear();
+    Log.info(this.TAG, 'onPageHide-');
   }
 
   getCanvaRadian(progress : number) : number {
-    return -0.5 * Math.PI + progress * 2 * Math.PI / 100
+    return -0.5 * Math.PI + progress * 2 * Math.PI / 100;
   }
 
   build() {
-      Column()  {
+      Column() {
         BackComponent({prevTag:this.TAG})
         Text(this.enrollStatus)
           .enrollSetTitleFormat()
@@ -123,14 +123,14 @@ struct Enrolling {
               this.context.beginPath()
               this.context.lineWidth = 4
               this.context.lineCap = 'round'
-              this.context.strokeStyle = Constants.ohosIdColorForeground97Transparency
+              this.context.strokeStyle = '#08182431'
               this.context.arc(this.enrollImageWidth / 2, this.enrollImageHeight / 2, this.stackRingRadius,
                 this.getCanvaRadian(0), this.getCanvaRadian(100), false);
               this.context.stroke()
               this.context.beginPath()
               this.context.lineWidth = 5
               this.context.lineCap = 'round'
-              this.context.strokeStyle = Constants.ohosIdColorEmphasize
+              this.context.strokeStyle = '#007DFF'
               this.context.arc(this.enrollImageWidth / 2, this.enrollImageHeight / 2, this.stackRingRadius,
                 this.getCanvaRadian(0), this.getCanvaRadian(this.stackProgressValue), false);
               this.context.stroke()
@@ -177,9 +177,9 @@ struct Enrolling {
   }
 
   onBackPress(): boolean {
-    Log.info(this.TAG, 'onBackPress+')
-    CommonController.routeBack()
-    Log.info(this.TAG, 'onBackPress-')
-    return true
+    Log.info(this.TAG, 'onBackPress+');
+    CommonController.routeBack();
+    Log.info(this.TAG, 'onBackPress-');
+    return true;
   }
 }
