@@ -22,7 +22,7 @@
 #include "sa_command_manager.h"
 #include "service_ex_manager.h"
 
-#define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
+#define LOG_TAG "FACE_AUTH_SA"
 
 namespace OHOS {
 namespace UserIam {

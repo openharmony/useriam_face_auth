@@ -28,7 +28,7 @@
 
 #include "face_auth_service.h"
 
-#define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
+#define LOG_TAG "FACE_AUTH_SA"
 
 #undef private
 

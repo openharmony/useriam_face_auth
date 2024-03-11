@@ -28,7 +28,7 @@
 #include "face_auth_defines.h"
 #include "face_auth_client.h"
 
-#define LOG_LABEL Common::LABEL_FACE_AUTH_NAPI
+#define LOG_TAG "FACE_AUTH_NAPI"
 
 using namespace std;
 
