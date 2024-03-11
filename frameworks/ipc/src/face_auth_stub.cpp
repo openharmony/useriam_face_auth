@@ -41,7 +41,9 @@ namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
 using namespace OHOS::UserIam;
-FaceAuthStub::FaceAuthStub()
+
+// When true is passed into IRemoteStub, sa will process request serially.
+FaceAuthStub::FaceAuthStub() : IRemoteStub(true)
 {
     IAM_LOGI("start");
     RegisterKeyToHandle();
