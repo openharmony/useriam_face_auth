@@ -23,7 +23,7 @@
 #include "mock_iexecutor.h"
 #include "mock_iface_auth_interface.h"
 
-#define LOG_LABEL OHOS::UserIam::Common::LABEL_FACE_AUTH_SA
+#define LOG_TAG "FACE_AUTH_SA"
 
 using namespace testing;
 using namespace testing::ext;

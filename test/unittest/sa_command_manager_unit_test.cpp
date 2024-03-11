@@ -22,7 +22,7 @@
 #include "face_auth_hdi.h"
 #include "mock_isa_command_processor.h"
 
-#define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
+#define LOG_TAG "FACE_AUTH_SA"
 
 using namespace testing;
 using namespace testing::ext;
