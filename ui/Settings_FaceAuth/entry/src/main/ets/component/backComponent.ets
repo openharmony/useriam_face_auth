@@ -13,21 +13,20 @@
  * limitations under the License.
  */
 
-import Constants from '../config/constant'
-import Log from '../utils/log'
-import commonController from '../controller/commonController'
+import Log from '../utils/log';
+import commonController from '../controller/commonController';
 
 @Preview
 @Component
 export default struct BackComponent {
-  private prevTag: string = ''
-  private title: string | Resource = ''
-  private tag : string = 'BackComponent'
-  @State isTouch: boolean = false
-  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
+  private prevTag: string = '';
+  private title: string | Resource = '';
+  private tag : string = 'BackComponent';
+  @State isTouch: boolean = false;
+  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0;
 
   aboutToAppear() {
-    this.tag = this.prevTag + 'BackComp:'
+    this.tag = this.prevTag + 'BackComp:';
   }
 
   build() {
@@ -45,7 +44,7 @@ export default struct BackComponent {
           top: '16vp',
           bottom: '16vp',
           left: '24vp',
-          right: '16vp',
+          right: '16vp'
         })
         .responseRegion({ x: '-12vp', y: '-16vp', width: '48vp', height: '56vp' })
         .onTouch((event?: TouchEvent) => {
@@ -70,6 +69,6 @@ export default struct BackComponent {
     .height('56vp')
     .width(this.CONTENT_TYPE_WIDTH)
     .alignItems(VerticalAlign.Center)
-    .align(Alignment.Start);
+    .align(Alignment.Start)
   }
 }

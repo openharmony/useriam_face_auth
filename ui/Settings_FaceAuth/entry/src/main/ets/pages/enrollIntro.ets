@@ -14,10 +14,10 @@
  */
 
 import router from '@system.router';
-import BackComponent from '../component/backComponent'
-import Log from '../utils/log'
-import CommonController from '../controller/commonController'
-import Constants from '../config/constant'
+import BackComponent from '../component/backComponent';
+import Log from '../utils/log';
+import CommonController from '../controller/commonController';
+import CommonUtil from '../utils/CommonUtil';
 
 @Extend(Text) function introSetTitleFormat() {
   .fontColor($r('sys.color.ohos_id_color_text_primary'))
@@ -46,11 +46,18 @@ import Constants from '../config/constant'
 @Entry
 @Component
 struct EnrollIntro {
-  @State readonly TAG: string = 'EnrollIntro'
-  @StorageLink('enrollImageHeight') enrollImageHeight: number = 0
-  @StorageLink('enrollImageWidth') enrollImageWidth: number = 0
-  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
-  @StorageLink('BUTTON_TYPE_WIDTH') BUTTON_TYPE_WIDTH: number = 0
+  @State readonly TAG: string = 'EnrollIntro';
+  @StorageLink('enrollImageHeight') enrollImageHeight: number = 0;
+  @StorageLink('enrollImageWidth') enrollImageWidth: number = 0;
+  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0;
+  @StorageLink('BUTTON_TYPE_WIDTH') BUTTON_TYPE_WIDTH: number = 0;
+  private scrollBarColor: string;
+
+  aboutToAppear() {
+    let scrollBarColor = CommonUtil.getColor(getContext(this), $r('sys.color.ohos_id_color_foreground_transparent'));
+    scrollBarColor = CommonUtil.setColorOpacity(scrollBarColor, 0.4);
+    this.scrollBarColor = scrollBarColor;
+  }
 
   build() {
       Column() {
@@ -96,7 +103,7 @@ struct EnrollIntro {
                 }
               }
             }
-            .scrollBarColor(Constants.ohosIdColorForeground60Transparency)
+            .scrollBarColor(this.scrollBarColor)
             .scrollBarWidth('5vp')
             .margin({ right: '12vp' })
           }
@@ -110,7 +117,7 @@ struct EnrollIntro {
                 .fontColor($r('sys.color.ohos_id_color_foreground_contrary'))
                 .fontWeight(FontWeight.Medium)
             }
-            .backgroundColor(Constants.ohosIdColorControlActived)
+            .backgroundColor($r('sys.color.ohos_id_color_activated'))
             .width(this.BUTTON_TYPE_WIDTH)
             .height('40vp')
             .onClick(() => {
@@ -143,9 +150,9 @@ struct EnrollIntro {
   }
 
   onBackPress(): boolean {
-    Log.info(this.TAG, 'onBackPress+')
-    CommonController.routeBack()
-    Log.info(this.TAG, 'onBackPress-')
-    return true
+    Log.info(this.TAG, 'onBackPress+');
+    CommonController.routeBack();
+    Log.info(this.TAG, 'onBackPress-');
+    return true;
   }
 }

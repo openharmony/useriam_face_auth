@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2024-2024 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,14 +12,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+ 
+import abilityTest from './Ability.test';
+import CommonUtilTest from './commonUtil.test';
 
-export default class Constants {
-  static ohosIdColorControlActived = '#007DFF';
-  static ohosIdColorControlHighlight = '#FF007DFF';
-  static ohosIdColorEmphasize = '#007DFF';
-  static ohosIdColorForeground60Transparency = '#99182431';
-  static ohosIdColorForeground97Transparency = '#08182431';
-  static ohosIdTextSizeBody1 = '16fp';
-  static ohosIdTextSizeDialogTitle = '20fp';
-  static ohosIdTextSizeSubtitle1 = '18fp';
+export default function testsuite() {
+  abilityTest();
+  CommonUtilTest();
 }
