@@ -12,26 +12,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Constants from '../config/constant'
-import Log from '../utils/log'
+import Log from '../utils/log';
 
 @CustomDialog
 export default struct ConfirmDialog {
-  private readonly TAG: string = 'ConfirmDialog'
-  private controller?: CustomDialogController
-  private title: string | Resource = ''
-  private content: string | Resource = ''
-  private confirmText: string | Resource = ''
-  private cancelText: string | Resource = ''
-  private confirmOperation?: () => void
-  @StorageLink('POP_TYPE_WIDTH') POP_TYPE_WIDTH: number = 0
+  private readonly TAG: string = 'ConfirmDialog';
+  private controller?: CustomDialogController;
+  private title: string | Resource = '';
+  private content: string | Resource = '';
+  private confirmText: string | Resource = '';
+  private cancelText: string | Resource = '';
+  private confirmOperation?: () => void;
+  @StorageLink('POP_TYPE_WIDTH') POP_TYPE_WIDTH: number = 0;
 
   build() {
     Column() {
       Flex({ alignItems: ItemAlign.Center }) {
         Text(this.title)
           .fontColor($r('sys.color.ohos_id_color_text_primary'))
-          .fontSize(Constants.ohosIdTextSizeDialogTitle)
+          .fontSize($r('sys.float.ohos_id_text_size_dialog_tittle'))
           .fontWeight(FontWeight.Medium)
       }
         .height('64vp')
@@ -49,14 +48,14 @@ export default struct ConfirmDialog {
         })
       Flex({ justifyContent: FlexAlign.SpaceEvenly, alignItems: ItemAlign.Center }) {
         Text(this.cancelText)
-          .fontColor(Constants.ohosIdColorControlHighlight)
+          .fontColor($r('sys.color.ohos_id_color_emphasize_transparent'))
           .fontSize($r('sys.float.ohos_id_text_size_button1'))
           .fontWeight(FontWeight.Medium)
           .flexGrow(1)
           .textAlign(TextAlign.Center)
           .onClick(() => {
             Log.info(this.TAG, 'click cancel+')
-            if(this.controller !== null && this.controller !== undefined) {
+            if (this.controller !== null && this.controller !== undefined) {
               this.controller.close()
             }
             Log.info(this.TAG, 'click cancel-')
@@ -66,7 +65,7 @@ export default struct ConfirmDialog {
           .strokeWidth('2vp')
           .color($r('sys.color.ohos_id_color_list_separator'))
           .height('24dp')
-          .margin({ left: '4vp' , right: '4vp'})
+          .margin({ left: '4vp', right: '4vp'})
         Text(this.confirmText)
           .fontColor($r('sys.color.ohos_id_color_warning'))
           .fontSize($r('sys.float.ohos_id_text_size_button1'))
@@ -75,11 +74,11 @@ export default struct ConfirmDialog {
           .textAlign(TextAlign.Center)
           .onClick(() => {
             Log.info(this.TAG, 'click confirm+')
-            if(this.confirmOperation !== undefined){
+            if (this.confirmOperation !== undefined) {
               this.confirmOperation()
             }
             Log.info(this.TAG, 'click confirm-')
-            if(this.controller !== undefined){
+            if (this.controller !== undefined) {
               this.controller.close()
             }
           })

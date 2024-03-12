@@ -13,13 +13,12 @@
  * limitations under the License.
  */
 
-import BackComponent from '../component/backComponent'
-import Log from '../utils/log'
-import CommonController from '../controller/commonController'
-import FaceConfigController from '../controller/faceConfigController'
-import ConfirmDialog from '../component/confirmDialog'
+import BackComponent from '../component/backComponent';
+import Log from '../utils/log';
+import CommonController from '../controller/commonController';
+import FaceConfigController from '../controller/faceConfigController';
+import ConfirmDialog from '../component/confirmDialog';
 import router from '@system.router';
-import Constants from '../config/constant'
 
 @Extend(Span) function configSetSpanFormat() {
   .fontColor($r('sys.color.ohos_id_color_text_secondary'))
@@ -42,10 +41,10 @@ import Constants from '../config/constant'
 @Entry
 @Component
 struct FaceConfig {
-  @State readonly TAG: string = 'FaceConfig'
-  @State touched: boolean = false
-  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0
-  @StorageLink('CARD_TYPE_WIDTH') CARD_TYPE_WIDTH: number = 0
+  @State readonly TAG: string = 'FaceConfig';
+  @State touched: boolean = false;
+  @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0;
+  @StorageLink('CARD_TYPE_WIDTH') CARD_TYPE_WIDTH: number = 0;
 
   private deleteFaceDialogController: CustomDialogController = new CustomDialogController({
     builder: ConfirmDialog({
@@ -60,7 +59,7 @@ struct FaceConfig {
       dx : '0vp',
       dy : CommonController.getDialogYOffset()
     }
-  })
+  });
 
   build() {
     Column() {
@@ -85,7 +84,7 @@ struct FaceConfig {
           this.deleteFaceDialogController.open()
         })
         .onTouch((event?: TouchEvent) => {
-          if(event !== undefined){
+          if (event !== undefined) {
             if (event.type === TouchType.Down) {
               this.touched = true;
             }
@@ -127,9 +126,9 @@ struct FaceConfig {
   }
 
   onBackPress(): boolean {
-    Log.info(this.TAG, 'onBackPress+')
-    CommonController.routeBack()
-    Log.info(this.TAG, 'onBackPress-')
-    return true
+    Log.info(this.TAG, 'onBackPress+');
+    CommonController.routeBack();
+    Log.info(this.TAG, 'onBackPress-');
+    return true;
   }
 }
