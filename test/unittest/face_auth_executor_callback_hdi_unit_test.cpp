@@ -22,7 +22,7 @@
 #include "face_auth_executor_callback_hdi.h"
 #include "mock_iexecute_callback.h"
 
-#define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
+#define LOG_TAG "FACE_AUTH_SA"
 
 using namespace testing;
 using namespace testing::ext;

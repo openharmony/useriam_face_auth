@@ -24,7 +24,7 @@
 using namespace testing;
 using namespace testing::ext;
 
-#define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
+#define LOG_TAG "FACE_AUTH_SA"
 
 namespace OHOS {
 namespace UserIam {

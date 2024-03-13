@@ -80,6 +80,8 @@ ohos_shared_library("faceauthservice_ex") {
   branch_protector_ret = "pac_ret"
   deps = [ ":faceauthservice_ex_source_set" ]
 
+  external_deps = [ "hilog:libhilog" ]
+
   if (use_musl) {
     version_script = "face_auth_service_ex_map"
   }

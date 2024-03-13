@@ -29,7 +29,7 @@
 #include "finite_state_machine.h"
 #include "screen_brightness_manager.h"
 
-#define LOG_LABEL UserIam::Common::LABEL_FACE_AUTH_SA
+#define LOG_TAG "FACE_AUTH_SA"
 
 namespace OHOS {
 namespace UserIam {
