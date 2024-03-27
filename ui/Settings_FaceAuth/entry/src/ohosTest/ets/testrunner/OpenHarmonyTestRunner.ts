@@ -46,7 +46,7 @@ export default class OpenHarmonyTestRunner implements TestRunner {
             abilityName: testAbilityName,
             onAbilityCreate: onAbilityCreateCallback,
         };
-        abilityDelegator.addAbilityMonitor(lMonitor, addAbilityMonitorCallback)
+        abilityDelegator.addAbilityMonitor(lMonitor, addAbilityMonitorCallback);
         const want = {
             bundleName: bundleName,
             abilityName: testAbilityName
@@ -54,7 +54,7 @@ export default class OpenHarmonyTestRunner implements TestRunner {
         abilityDelegator = AbilityDelegatorRegistry.getAbilityDelegator();
         abilityDelegator.startAbility(want, (err : any, data : any) => {
             hilog.info(0x0000, 'testTag', 'startAbility : err : %{public}s', JSON.stringify(err) ?? '');
-            hilog.info(0x0000, 'testTag', 'startAbility : data : %{public}s',JSON.stringify(data) ?? '');
+            hilog.info(0x0000, 'testTag', 'startAbility : data : %{public}s', JSON.stringify(data) ?? '');
         })
         hilog.info(0x0000, 'testTag', '%{public}s', 'OpenHarmonyTestRunner onRun end');
     }
