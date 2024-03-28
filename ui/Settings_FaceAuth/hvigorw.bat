@@ -11,7 +11,6 @@
 @rem See the License for the specific language governing permissions and
 @rem limitations under the License.
 
-@if "%DEBUG%" == "" @echo off
 @rem ##########################################################################
 @rem
 @rem  Hvigor startup script for Windows
@@ -19,20 +18,27 @@
 @rem ##########################################################################
 
 @rem Set local scope for the variables with windows NT shell
-if "%OS%"=="Windows_NT" setlocal
+
+set WRAPPER_MODULE_PATH=%APP_HOME%\hvigor\hvigor-wrapper.js
+set NODE_EXE=node.exe
+
+:findNodeFromNodeHome
+set NODE_HOME=%NODE_HOME:"=%
+set NODE_EXE_PATH=%NODE_HOME%/%NODE_EXE%
 
 set DIRNAME=%~dp0
 if "%DIRNAME%" == "" set DIRNAME=.
 set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%
 
+if "%OS%"=="Windows_NT" setlocal
+
+
 @rem Resolve any "." and ".." in APP_HOME to make it shorter.
 for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 
-set WRAPPER_MODULE_PATH=%APP_HOME%\hvigor\hvigor-wrapper.js
-set NODE_EXE=node.exe
-
-goto start
+call :start
+exit /b
 
 :start
 @rem Find node.exe
@@ -47,11 +53,8 @@ echo.
 echo Please set the NODE_HOME variable in your environment to match the
 echo location of your NodeJs installation.
 
-goto fail
-
-:findNodeFromNodeHome
-set NODE_HOME=%NODE_HOME:"=%
-set NODE_EXE_PATH=%NODE_HOME%/%NODE_EXE%
+call :fail
+exit /b
 
 if exist "%NODE_EXE_PATH%" goto execute
 echo.
@@ -60,7 +63,8 @@ echo.
 echo Please set the NODE_HOME variable in your environment to match the
 echo location of your NodeJs installation.
 
-goto fail
+call :fail
+exit /b
 
 :execute
 @rem Execute hvigor
