@@ -76,7 +76,7 @@ HWTEST_F(FaceAuthScreenBrightnessTest, FaceAuthScreenBrightnessTest_002, TestSiz
 {
     auto manager = ScreenBrightnessManager::GetInstance();
     EXPECT_TRUE(manager != nullptr);
-    auto executor = Common::MakeShared<FaceAuthExecutorHdi>(nullptr);
+    auto executor = Common::MakeShared<FaceAuthAllInOneExecutorHdi>(nullptr);
     EXPECT_TRUE(executor != nullptr);
 
     SaCommand beginCommand = { SaCommandId::BEGIN_SCREEN_BRIGHTNESS_INCREASE };

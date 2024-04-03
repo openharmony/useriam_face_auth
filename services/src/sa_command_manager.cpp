@@ -64,15 +64,16 @@ void SaCommandManager::UnregisterSaCommandProcessor(std::vector<SaCommandId> com
     }
 }
 
-UserAuth::ResultCode SaCommandManager::ProcessSaCommands(std::shared_ptr<FaceAuthExecutorHdi> executor,
+UserAuth::ResultCode SaCommandManager::ProcessSaCommands(std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor,
     const std::vector<SaCommand> &commands)
 {
     std::shared_lock<std::shared_mutex> lock(mutex_);
 
     for (const auto &command : commands) {
-        auto it = commandId2Processors_.find(command.id);
+        IAM_LOGI("process command %{public}d", command.id);
+        auto it = commandId2Processors_.find(static_cast<SaCommandId>(command.id));
         IF_FALSE_LOGE_AND_RETURN_VAL(it != commandId2Processors_.end(), UserAuth::GENERAL_ERROR);
-        for (const auto &processor : commandId2Processors_[command.id]) {
+        for (const auto &processor : commandId2Processors_[static_cast<SaCommandId>(command.id)]) {
             IF_FALSE_LOGE_AND_RETURN_VAL(processor != nullptr, UserAuth::GENERAL_ERROR);
             UserAuth::ResultCode result = processor->ProcessSaCommand(executor, command);
             IF_FALSE_LOGE_AND_RETURN_VAL(result == UserAuth::SUCCESS, UserAuth::GENERAL_ERROR);
@@ -82,7 +83,7 @@ UserAuth::ResultCode SaCommandManager::ProcessSaCommands(std::shared_ptr<FaceAut
     return UserAuth::SUCCESS;
 }
 
-void SaCommandManager::OnHdiDisconnect(std::shared_ptr<FaceAuthExecutorHdi> executor)
+void SaCommandManager::OnHdiDisconnect(std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor)
 {
     std::shared_lock<std::shared_mutex> lock(mutex_);
 

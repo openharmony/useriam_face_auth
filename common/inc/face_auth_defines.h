@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef FACE_AUTH_DEFINES_H
+#define FACE_AUTH_DEFINES_H
 
 #include <cstdint>
 
@@ -85,4 +85,4 @@ enum ResultCode {
 } // namespace FaceAuth
 } // namespace UserIam
 } // namespace OHOS
-#endif // COMMON_H
+#endif // FACE_AUTH_DEFINES_H

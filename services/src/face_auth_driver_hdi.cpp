@@ -25,8 +25,8 @@
 #include "iam_logger.h"
 #include "iam_ptr.h"
 
+#include "face_auth_all_in_one_executor_hdi.h"
 #include "face_auth_defines.h"
-#include "face_auth_executor_hdi.h"
 #include "face_auth_hdi.h"
 #include "face_auth_interface_adapter.h"
 
@@ -52,8 +52,8 @@ void FaceAuthDriverHdi::GetExecutorList(std::vector<std::shared_ptr<UserAuth::IA
         return;
     }
 
-    std::vector<sptr<IExecutor>> iExecutorList;
-    auto ret = faceIf->GetExecutorListV1_1(iExecutorList);
+    std::vector<sptr<IAllInOneExecutor>> iExecutorList;
+    auto ret = faceIf->GetExecutorList(iExecutorList);
     if (ret != HDF_SUCCESS) {
         IAM_LOGE("GetExecutorList fail");
         return;
@@ -66,7 +66,7 @@ void FaceAuthDriverHdi::GetExecutorList(std::vector<std::shared_ptr<UserAuth::IA
             IAM_LOGE("iExecutor is nullptr");
             continue;
         }
-        auto executor = Common::MakeShared<FaceAuthExecutorHdi>(iExecutor);
+        auto executor = Common::MakeShared<FaceAuthAllInOneExecutorHdi>(iExecutor);
         if (executor == nullptr) {
             IAM_LOGE("make share failed");
             continue;
@@ -93,20 +93,26 @@ void FaceAuthDriverHdi::OnHdiDisconnect()
 
 int32_t FaceAuthDriverHdi::SetBufferProducer(sptr<IBufferProducer> &producer)
 {
-    if (faceAuthExecutorList_.size() == 0) {
-        IAM_LOGE("no executor to set buffer producer");
+    OHOS::sptr<BufferProducerSequenceable> producerSequenceable(nullptr);
+    if (producer != nullptr) {
+        producerSequenceable =
+            sptr<BufferProducerSequenceable>(new (std::nothrow) BufferProducerSequenceable(producer));
+        IF_FALSE_LOGE_AND_RETURN_VAL(producerSequenceable != nullptr, FACE_AUTH_ERROR);
+    }
+
+    IF_FALSE_LOGE_AND_RETURN_VAL(faceAuthInterfaceAdapter_ != nullptr, FACE_AUTH_ERROR);
+    auto faceIf = faceAuthInterfaceAdapter_->Get();
+    if (faceIf == nullptr) {
+        IAM_LOGE("IFaceAuthInterface is null");
         return FACE_AUTH_ERROR;
     }
 
-    std::lock_guard<std::mutex> guard(mutex_);
-    for (auto executor : faceAuthExecutorList_) {
-        IF_FALSE_LOGE_AND_RETURN_VAL(executor != nullptr, FACE_AUTH_ERROR);
-        int32_t ret = executor->SetBufferProducer(producer);
-        if (ret != FACE_AUTH_SUCCESS) {
-            IAM_LOGE("executor SetBufferProducer fail %{public}d", ret);
-            return FACE_AUTH_ERROR;
-        }
+    auto ret = faceIf->SetBufferProducer(producerSequenceable);
+    if (ret != HDF_SUCCESS) {
+        IAM_LOGE("GetExecutorList fail");
+        return FACE_AUTH_ERROR;
     }
+
     return FACE_AUTH_SUCCESS;
 }
 } // namespace FaceAuth
