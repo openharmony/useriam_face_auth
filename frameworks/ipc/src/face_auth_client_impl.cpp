@@ -27,8 +27,8 @@
 #include "nocopyable.h"
 #include "refbase.h"
 #include "system_ability_definition.h"
-#include "tokenid_kit.h"
 #include "token_setproc.h"
+#include "tokenid_kit.h"
 
 #include "iam_logger.h"
 
@@ -58,8 +58,8 @@ private:
     bool CheckSystemPermission();
     void ResetProxy(const wptr<IRemoteObject> &remote);
     sptr<IFaceAuth> GetProxy();
-    sptr<IFaceAuth> proxy_ {nullptr};
-    sptr<IRemoteObject::DeathRecipient> deathRecipient_ {nullptr};
+    sptr<IFaceAuth> proxy_ { nullptr };
+    sptr<IRemoteObject::DeathRecipient> deathRecipient_ { nullptr };
     std::mutex mutex_;
     uint64_t tokenIdLowMask_ = 0xffffffff;
 };

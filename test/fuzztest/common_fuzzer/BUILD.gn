@@ -44,9 +44,9 @@ ohos_source_set("faceauth_framework_stub_fuzzer") {
 ohos_source_set("faceauthservice_source_set_fuzzer") {
   branch_protector_ret = "pac_ret"
   sources = [
+    "../../../services/src/face_auth_all_in_one_executor_hdi.cpp",
     "../../../services/src/face_auth_driver_hdi.cpp",
     "../../../services/src/face_auth_executor_callback_hdi.cpp",
-    "../../../services/src/face_auth_executor_hdi.cpp",
     "../../../services/src/face_auth_interface_adapter.cpp",
     "../../../services/src/face_auth_service.cpp",
     "../../../services/src/sa_command_manager.cpp",
@@ -63,7 +63,7 @@ ohos_source_set("faceauthservice_source_set_fuzzer") {
     "access_token:libtokenid_sdk",
     "c_utils:utils",
     "drivers_interface_camera:libbuffer_producer_sequenceable_1.0",
-    "drivers_interface_face_auth:libface_auth_proxy_1.1",
+    "drivers_interface_face_auth:libface_auth_proxy_2.0",
     "hilog:libhilog",
     "ipc:ipc_single",
     "miscdevice:vibrator_interface_native",

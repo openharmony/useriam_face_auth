@@ -21,7 +21,7 @@
 
 #include "nocopyable.h"
 
-#include "face_auth_executor_hdi.h"
+#include "face_auth_all_in_one_executor_hdi.h"
 #include "face_auth_hdi.h"
 #include "isa_command_processor.h"
 #include "iscreen_brightness_task.h"
@@ -38,19 +38,19 @@ public:
     ~ScreenBrightnessManager() override = default;
     static std::shared_ptr<ScreenBrightnessManager> GetInstance();
 
-    UserAuth::ResultCode ProcessSaCommand(std::shared_ptr<FaceAuthExecutorHdi> executor,
+    UserAuth::ResultCode ProcessSaCommand(std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor,
         const SaCommand &command) override;
-    void OnHdiDisconnect(std::shared_ptr<FaceAuthExecutorHdi> executor) override;
+    void OnHdiDisconnect(std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor) override;
 
     std::shared_ptr<IScreenBrightnessTask> GetCurrentTask();
 
 private:
-    UserAuth::ResultCode ProcessScreenBrightnessIncreaseBegin(std::shared_ptr<FaceAuthExecutorHdi> executor,
+    UserAuth::ResultCode ProcessScreenBrightnessIncreaseBegin(std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor,
         const SaCommandParam param);
-    UserAuth::ResultCode ProcessScreenBrightnessIncreaseEnd(std::shared_ptr<FaceAuthExecutorHdi> executor,
+    UserAuth::ResultCode ProcessScreenBrightnessIncreaseEnd(std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor,
         const SaCommandParam param);
 
-    std::shared_ptr<FaceAuthExecutorHdi> executorInProc_ = nullptr;
+    std::shared_ptr<FaceAuthAllInOneExecutorHdi> executorInProc_ = nullptr;
     std::shared_ptr<IScreenBrightnessTask> taskInProc_ = nullptr;
     std::mutex mutex_;
 };

@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-#ifndef FACE_AUTH_EXECUTOR_HDI_FUZZER_H
-#define FACE_AUTH_EXECUTOR_HDI_FUZZER_H
+#ifndef FACE_AUTH_ALL_IN_ONE_EXECUTOR_HDI_FUZZER_H
+#define FACE_AUTH_ALL_IN_ONE_EXECUTOR_HDI_FUZZER_H
 
-#define FUZZ_PROJECT_NAME "FaceAuthExecutorHdiFuzzTest"
+#define FUZZ_PROJECT_NAME "FaceAuthAllInOneExecutorHdiFuzzTest"
 
-#endif // FACE_AUTH_EXECUTOR_HDI_FUZZER_H
+#endif // FACE_AUTH_ALL_IN_ONE_EXECUTOR_HDI_FUZZER_H

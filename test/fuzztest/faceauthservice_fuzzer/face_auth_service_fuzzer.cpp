@@ -20,9 +20,9 @@
 #include <memory>
 
 #include "ibuffer_producer.h"
+#include "iconsumer_surface.h"
 #include "parcel.h"
 #include "refbase.h"
-#include "iconsumer_surface.h"
 
 #include "iam_logger.h"
 
@@ -59,7 +59,7 @@ void FuzzSetBufferProducer(Parcel &parcel)
 }
 
 using FuzzFunc = decltype(FuzzSetBufferProducer);
-FuzzFunc *g_fuzzFuncs[] = {FuzzSetBufferProducer};
+FuzzFunc *g_fuzzFuncs[] = { FuzzSetBufferProducer };
 
 void FaceAuthServiceFuzzTest(const uint8_t *data, size_t size)
 {

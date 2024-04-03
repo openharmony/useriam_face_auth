@@ -16,8 +16,8 @@
 #ifndef MOCK_FACE_AUTH_INTERFACE_ADAPTER
 #define MOCK_FACE_AUTH_INTERFACE_ADAPTER
 
-#include "face_auth_interface_adapter.h"
 #include "face_auth_hdi.h"
+#include "face_auth_interface_adapter.h"
 #include "gmock/gmock.h"
 
 namespace OHOS {

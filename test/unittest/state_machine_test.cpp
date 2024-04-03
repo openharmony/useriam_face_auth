@@ -353,25 +353,24 @@ HWTEST_F(StateMachineTest, MachineScheduleExpireNodeExpire, TestSize.Level0)
 }
 
 static void GetTestMachine(std::shared_ptr<FiniteStateMachine> &machine,
-    MockFunction<void(FiniteStateMachine & machine, uint32_t event)> &action,
-    MockFunction<void(FiniteStateMachine & machine, uint32_t event)> &enter,
-    MockFunction<void(FiniteStateMachine & machine, uint32_t event)> &leave)
+    MockFunction<void(FiniteStateMachine &machine, uint32_t event)> &action,
+    MockFunction<void(FiniteStateMachine &machine, uint32_t event)> &enter,
+    MockFunction<void(FiniteStateMachine &machine, uint32_t event)> &leave)
 {
     auto machineBuilder = FiniteStateMachine::Builder::New("testMachine13", STATE_INIT);
     ASSERT_NE(machineBuilder, nullptr);
 
-    machineBuilder
-        ->MakeTransition(STATE_INIT, EVENT_START_AUTH, STATE_VERIFY_STARING,
+    machineBuilder->MakeTransition(STATE_INIT, EVENT_START_AUTH, STATE_VERIFY_STARING,
         [&action](FiniteStateMachine &machine, uint32_t event) {
             action.Call(machine, event);
             machine.Schedule(EVENT_VERIFY_STARTED);
             machine.Schedule(EVENT_COLLECT_STARTED);
-        })
-        ->MakeTransition(STATE_VERIFY_STARING, EVENT_VERIFY_STARTED, STATE_COLLECT_STARING,
-        [&action](FiniteStateMachine &machine, uint32_t event) { action.Call(machine, event); })
-        ->MakeTransition(STATE_COLLECT_STARING, EVENT_COLLECT_STARTED, STATE_AUTH_PROCESSING,
-        [&action](FiniteStateMachine &machine, uint32_t event) { action.Call(machine, event); })
-        ->MakeTransition(STATE_AUTH_PROCESSING, EVENT_USER_CANCEL, STATE_END,
+        });
+    machineBuilder->MakeTransition(STATE_VERIFY_STARING, EVENT_VERIFY_STARTED, STATE_COLLECT_STARING,
+        [&action](FiniteStateMachine &machine, uint32_t event) { action.Call(machine, event); });
+    machineBuilder->MakeTransition(STATE_COLLECT_STARING, EVENT_COLLECT_STARTED, STATE_AUTH_PROCESSING,
+        [&action](FiniteStateMachine &machine, uint32_t event) { action.Call(machine, event); });
+    machineBuilder->MakeTransition(STATE_AUTH_PROCESSING, EVENT_USER_CANCEL, STATE_END,
         [&action](FiniteStateMachine &machine, uint32_t event) { action.Call(machine, event); });
 
     machineBuilder->MakeOnStateEnter(STATE_INIT,
@@ -423,7 +422,7 @@ HWTEST_F(StateMachineTest, MachineScheduleEnterAndLeave, TestSize.Level0)
     EXPECT_CALL(action, Call(_, EVENT_USER_CANCEL));
     EXPECT_CALL(leave, Call(_, STATE_AUTH_PROCESSING));
     EXPECT_CALL(enter, Call(_, STATE_END));
-    
+
     std::shared_ptr<FiniteStateMachine> machine;
     GetTestMachine(machine, action, enter, leave);
     ASSERT_NE(machine, nullptr);
