@@ -19,6 +19,7 @@
 
 @rem Set local scope for the variables with windows NT shell
 
+@echo off
 set WRAPPER_MODULE_PATH=%APP_HOME%\hvigor\hvigor-wrapper.js
 set NODE_EXE=node.exe
 
