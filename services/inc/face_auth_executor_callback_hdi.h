@@ -21,7 +21,7 @@
 #include "hdf_base.h"
 #include "nocopyable.h"
 
-#include "face_auth_executor_hdi.h"
+#include "face_auth_all_in_one_executor_hdi.h"
 #include "face_auth_hdi.h"
 #include "iam_executor_iexecute_callback.h"
 
@@ -40,13 +40,13 @@ enum FaceCallbackHdiType : int32_t {
 
 class FaceAuthExecutorCallbackHdi : public IExecutorCallback, public NoCopyable {
 public:
-    FaceAuthExecutorCallbackHdi(
-        std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback, FaceCallbackHdiType faceCallbackHdiType);
+    FaceAuthExecutorCallbackHdi(std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback,
+        FaceCallbackHdiType faceCallbackHdiType);
     ~FaceAuthExecutorCallbackHdi() override = default;
 
-    // IExecutorCallback
     int32_t OnResult(int32_t result, const std::vector<uint8_t> &extraInfo) override;
     int32_t OnTip(int32_t tip, const std::vector<uint8_t> &extraInfo) override;
+    int32_t OnMessage(int32_t destRole, const std::vector<uint8_t> &msg) override;
 
 private:
     void DoVibrator();

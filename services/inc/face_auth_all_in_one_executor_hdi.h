@@ -13,16 +13,14 @@
  * limitations under the License.
  */
 
-#ifndef FACE_AUTH_EXECUTOR_HDI_H
-#define FACE_AUTH_EXECUTOR_HDI_H
+#ifndef FACE_AUTH_ALL_IN_ONE_EXECUTOR_HDI_H
+#define FACE_AUTH_ALL_IN_ONE_EXECUTOR_HDI_H
 
 #include <cstdint>
 #include <map>
 #include <vector>
 
 #include "nocopyable.h"
-
-#include "ibuffer_producer.h"
 
 #include "face_auth_hdi.h"
 #include "iam_executor_framework_types.h"
@@ -33,12 +31,12 @@ namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
 namespace UserAuth = OHOS::UserIam::UserAuth;
-class FaceAuthExecutorHdi : public std::enable_shared_from_this<FaceAuthExecutorHdi>,
-                            public UserAuth::IAuthExecutorHdi,
-                            public NoCopyable {
+class FaceAuthAllInOneExecutorHdi : public std::enable_shared_from_this<FaceAuthAllInOneExecutorHdi>,
+                                    public UserAuth::IAuthExecutorHdi,
+                                    public NoCopyable {
 public:
-    explicit FaceAuthExecutorHdi(sptr<IExecutor> executorProxy);
-    ~FaceAuthExecutorHdi() override = default;
+    explicit FaceAuthAllInOneExecutorHdi(sptr<IAllInOneExecutor> executorProxy);
+    ~FaceAuthAllInOneExecutorHdi() override = default;
 
     UserAuth::ResultCode GetExecutorInfo(UserAuth::ExecutorInfo &info) override;
     UserAuth::ResultCode OnRegisterFinish(const std::vector<uint64_t> &templateIdList,
@@ -56,41 +54,38 @@ public:
     UserAuth::ResultCode GetProperty(const std::vector<uint64_t> &templateIdList,
         const std::vector<UserAuth::Attributes::AttributeKey> &keys, UserAuth::Property &property) override;
     UserAuth::ResultCode SetCachedTemplates(const std::vector<uint64_t> &templateIdList) override;
-    int32_t SetBufferProducer(sptr<IBufferProducer> &producer);
     void OnHdiDisconnect();
 
 private:
     class SaCommandCallback;
 
     UserAuth::ResultCode MoveHdiExecutorInfo(ExecutorInfo &in, UserAuth::ExecutorInfo &out);
-    void MoveHdiTemplateInfo(TemplateInfo &in, UserAuth::TemplateInfo &out);
     void MoveHdiProperty(Property &in, UserAuth::Property &out);
-    UserAuth::ResultCode ConvertCommandId(const UserAuth::PropertyMode in, CommandId &out);
-    UserAuth::ResultCode ConvertAuthType(const AuthType in, UserAuth::AuthType &out);
-    UserAuth::ResultCode ConvertExecutorRole(const ExecutorRole in, UserAuth::ExecutorRole &out);
-    UserAuth::ResultCode ConvertExecutorSecureLevel(const ExecutorSecureLevel in, UserAuth::ExecutorSecureLevel &out);
+    UserAuth::ResultCode ConvertCommandId(const UserAuth::PropertyMode in, int32_t &out);
+    UserAuth::ResultCode ConvertAuthType(const int32_t in, UserAuth::AuthType &out);
+    UserAuth::ResultCode ConvertExecutorRole(const int32_t in, UserAuth::ExecutorRole &out);
+    UserAuth::ResultCode ConvertExecutorSecureLevel(const int32_t in, UserAuth::ExecutorSecureLevel &out);
     UserAuth::ResultCode ConvertResultCode(const int32_t in);
-    UserAuth::ResultCode ConvertAttributeKeyToPropertyType(const UserAuth::Attributes::AttributeKey in,
-        GetPropertyType &out);
+    UserAuth::ResultCode ConvertAttributeKeyToPropertyType(const UserAuth::Attributes::AttributeKey in, int32_t &out);
     UserAuth::ResultCode ConvertAttributeKeyVectorToPropertyType(
-        const std::vector<UserAuth::Attributes::AttributeKey> inVector, std::vector<GetPropertyType> &outVector);
+        const std::vector<UserAuth::Attributes::AttributeKey> inVector, std::vector<int32_t> &outVector);
     UserAuth::ResultCode RegisterSaCommandCallback();
 
-    sptr<IExecutor> executorProxy_;
+    sptr<IAllInOneExecutor> executorProxy_;
     sptr<SaCommandCallback> saCommandCallback_;
 };
 
-class FaceAuthExecutorHdi::SaCommandCallback : public ISaCommandCallback, public NoCopyable {
+class FaceAuthAllInOneExecutorHdi::SaCommandCallback : public ISaCommandCallback, public NoCopyable {
 public:
-    explicit SaCommandCallback(std::shared_ptr<FaceAuthExecutorHdi> executorHdi) : executorHdi_(executorHdi) {};
+    explicit SaCommandCallback(std::shared_ptr<FaceAuthAllInOneExecutorHdi> executorHdi) : executorHdi_(executorHdi) {};
     ~SaCommandCallback() override {};
     int32_t OnSaCommands(const std::vector<SaCommand> &commands) override;
 
 private:
-    std::shared_ptr<FaceAuthExecutorHdi> executorHdi_;
+    std::shared_ptr<FaceAuthAllInOneExecutorHdi> executorHdi_;
 };
 } // namespace FaceAuth
 } // namespace UserIam
 } // namespace OHOS
 
-#endif // FACE_AUTH_EXECUTOR_HDI_H
+#endif // FACE_AUTH_ALL_IN_ONE_EXECUTOR_HDI_H

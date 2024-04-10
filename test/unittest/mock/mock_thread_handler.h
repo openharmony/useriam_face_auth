@@ -45,7 +45,7 @@ public:
         return handler;
     }
 };
-} // namespace UserAuth
+} // namespace FaceAuth
 } // namespace UserIam
 } // namespace OHOS
 #endif // IAM_MOCK_THREAD_HANDLER_H

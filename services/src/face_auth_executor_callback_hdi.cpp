@@ -38,9 +38,10 @@ namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
 
-FaceAuthExecutorCallbackHdi::FaceAuthExecutorCallbackHdi(
-    std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback, FaceCallbackHdiType faceCallbackHdiType)
-    : frameworkCallback_(frameworkCallback), faceCallbackHdiType_(faceCallbackHdiType)
+FaceAuthExecutorCallbackHdi::FaceAuthExecutorCallbackHdi(std::shared_ptr<UserAuth::IExecuteCallback> frameworkCallback,
+    FaceCallbackHdiType faceCallbackHdiType)
+    : frameworkCallback_(frameworkCallback),
+      faceCallbackHdiType_(faceCallbackHdiType)
 {
 }
 
@@ -87,6 +88,12 @@ int32_t FaceAuthExecutorCallbackHdi::OnTip(int32_t tip, const std::vector<uint8_
     IAM_LOGI("OnTip %{public}d", tip);
     IF_FALSE_LOGE_AND_RETURN_VAL(frameworkCallback_ != nullptr, HDF_FAILURE);
     frameworkCallback_->OnAcquireInfo(tip, extraInfo);
+    return HDF_SUCCESS;
+}
+
+int32_t FaceAuthExecutorCallbackHdi::OnMessage(int32_t destRole, const std::vector<uint8_t> &msg)
+{
+    IAM_LOGI("OnMessage destRole %{public}d msg len %{public}zu", destRole, msg.size());
     return HDF_SUCCESS;
 }
 

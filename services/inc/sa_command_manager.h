@@ -24,7 +24,7 @@
 
 #include "face_auth_hdi.h"
 
-#include "face_auth_executor_hdi.h"
+#include "face_auth_all_in_one_executor_hdi.h"
 #include "isa_command_processor.h"
 
 namespace OHOS {
@@ -40,9 +40,9 @@ public:
     void UnregisterSaCommandProcessor(std::vector<SaCommandId> commandIds,
         std::shared_ptr<ISaCommandProcessor> processor);
 
-    UserAuth::ResultCode ProcessSaCommands(std::shared_ptr<FaceAuthExecutorHdi> executor,
+    UserAuth::ResultCode ProcessSaCommands(std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor,
         const std::vector<SaCommand> &commands);
-    void OnHdiDisconnect(std::shared_ptr<FaceAuthExecutorHdi> executor);
+    void OnHdiDisconnect(std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor);
 
 private:
     SaCommandManager() = default;

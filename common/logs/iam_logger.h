@@ -41,8 +41,8 @@ namespace Common {
 #define FACE_ERROR(...) HILOG_ERROR(LOG_CORE, __VA_ARGS__)
 #define FACE_FATAL(...) HILOG_FATAL(LOG_CORE, __VA_ARGS__)
 
-#define ARGS(fmt, ...) "[%{public}s@%{public}s:%{public}d] " fmt, \
-    __FUNCTION__, FACE_AUTH_LOG_FILE, __LINE__, ##__VA_ARGS__
+#define ARGS(fmt, ...) \
+    "[%{public}s@%{public}s:%{public}d] " fmt, __FUNCTION__, FACE_AUTH_LOG_FILE, __LINE__, ##__VA_ARGS__
 #define FACE_LOG(level, ...) FACE_##level(ARGS(__VA_ARGS__))
 
 #define IAM_LOGD(...) FACE_LOG(DEBUG, __VA_ARGS__)

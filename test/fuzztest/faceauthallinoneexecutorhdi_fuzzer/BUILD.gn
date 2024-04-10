@@ -14,10 +14,10 @@
 import("//build/config/features.gni")
 import("//build/test.gni")
 
-ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
+ohos_fuzztest("FaceAuthAllInOneExecutorHdiFuzzTest") {
   branch_protector_ret = "pac_ret"
   module_out_path = "face_auth/face_auth"
-  fuzz_config_file = "../faceauthexecutorhdi_fuzzer"
+  fuzz_config_file = "."
 
   cflags = [
     "-g",
@@ -29,13 +29,13 @@ ohos_fuzztest("FaceAuthExecutorHdiFuzzTest") {
 
   sources = [
     "../iamfuzz/iam_fuzz_test.cpp",
-    "face_auth_executor_hdi_fuzzer.cpp",
+    "face_auth_all_in_one_executor_hdi_fuzzer.cpp",
   ]
 
   deps = [ "../common_fuzzer:faceauthservice_source_set_fuzzer" ]
 
   external_deps = [
-    "drivers_interface_face_auth:libface_auth_proxy_1.1",
+    "drivers_interface_face_auth:libface_auth_proxy_2.0",
     "graphic_surface:surface",
     "hilog:libhilog",
     "user_auth_framework:userauth_executors",

@@ -54,7 +54,7 @@ std::shared_ptr<IScreenBrightnessTask> ScreenBrightnessManager::GetCurrentTask()
     return taskInProc_;
 }
 
-UserAuth::ResultCode ScreenBrightnessManager::ProcessSaCommand(std::shared_ptr<FaceAuthExecutorHdi> executor,
+UserAuth::ResultCode ScreenBrightnessManager::ProcessSaCommand(std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor,
     const SaCommand &command)
 {
     IF_FALSE_LOGE_AND_RETURN_VAL(executor != nullptr, UserAuth::GENERAL_ERROR);
@@ -75,7 +75,7 @@ UserAuth::ResultCode ScreenBrightnessManager::ProcessSaCommand(std::shared_ptr<F
     return result;
 }
 
-void ScreenBrightnessManager::OnHdiDisconnect(std::shared_ptr<FaceAuthExecutorHdi> executor)
+void ScreenBrightnessManager::OnHdiDisconnect(std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor)
 {
     IF_FALSE_LOGE_AND_RETURN(executor != nullptr);
 
@@ -96,7 +96,7 @@ void ScreenBrightnessManager::OnHdiDisconnect(std::shared_ptr<FaceAuthExecutorHd
 }
 
 UserAuth::ResultCode ScreenBrightnessManager::ProcessScreenBrightnessIncreaseBegin(
-    std::shared_ptr<FaceAuthExecutorHdi> executor, const SaCommandParam param)
+    std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor, const SaCommandParam param)
 {
     if (executorInProc_ != nullptr) {
         IAM_LOGE("another executor is using this module");
@@ -131,7 +131,7 @@ UserAuth::ResultCode ScreenBrightnessManager::ProcessScreenBrightnessIncreaseBeg
 }
 
 UserAuth::ResultCode ScreenBrightnessManager::ProcessScreenBrightnessIncreaseEnd(
-    std::shared_ptr<FaceAuthExecutorHdi> executor, const SaCommandParam param)
+    std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor, const SaCommandParam param)
 {
     if (executorInProc_ != executor) {
         IAM_LOGE("another executor is using this module");
