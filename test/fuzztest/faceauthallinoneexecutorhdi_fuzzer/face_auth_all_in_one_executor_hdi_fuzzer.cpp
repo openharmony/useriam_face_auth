@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "face_auth_executor_hdi_fuzzer.h"
+#include "face_auth_all_in_one_executor_hdi_fuzzer.h"
 
 #include <cstddef>
 #include <cstdint>
@@ -22,14 +22,13 @@
 
 #include "parcel.h"
 #include "refbase.h"
-#include "iconsumer_surface.h"
 
 #include "iam_check.h"
 #include "iam_fuzz_test.h"
 #include "iam_logger.h"
 #include "iam_ptr.h"
 
-#include "face_auth_executor_hdi.h"
+#include "face_auth_all_in_one_executor_hdi.h"
 
 #define LOG_TAG "FACE_AUTH_SA"
 
@@ -38,14 +37,13 @@
 using namespace std;
 using namespace OHOS::UserIam::Common;
 using namespace OHOS::UserIam::UserAuth;
-using BufferProducerSequenceable = OHOS::HDI::Camera::V1_0::BufferProducerSequenceable;
 
 namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
 namespace {
 constexpr uint32_t MAX_VECTOR_LEN = 100;
-class DummyExecutorProxy : public IExecutor {
+class DummyExecutorProxy : public IAllInOneExecutor {
 public:
     DummyExecutorProxy() : fuzzParcel_(nullptr)
     {
@@ -57,13 +55,6 @@ public:
     {
         IF_FALSE_LOGE_AND_RETURN_VAL(fuzzParcel_ != nullptr, 0);
         FillFuzzHdiExecutorInfo(*fuzzParcel_, executorInfo);
-        return (*fuzzParcel_).ReadInt32();
-    }
-
-    int32_t GetTemplateInfo(uint64_t templateId, TemplateInfo &templateInfo)
-    {
-        IF_FALSE_LOGE_AND_RETURN_VAL(fuzzParcel_ != nullptr, 0);
-        FillFuzzHdiTemplateInfo(*fuzzParcel_, templateInfo);
         return (*fuzzParcel_).ReadInt32();
     }
 
@@ -114,13 +105,13 @@ public:
         return (*fuzzParcel_).ReadInt32();
     }
 
-    int32_t SetBufferProducer(const sptr<BufferProducerSequenceable> &bufferProducer)
+    int32_t SendMessage(uint64_t scheduleId, int32_t srcRole, const std::vector<uint8_t> &msg)
     {
         IF_FALSE_LOGE_AND_RETURN_VAL(fuzzParcel_ != nullptr, 0);
         return (*fuzzParcel_).ReadInt32();
     }
 
-    int32_t GetProperty(const std::vector<uint64_t> &templateIdList, const std::vector<GetPropertyType> &propertyTypes,
+    int32_t GetProperty(const std::vector<uint64_t> &templateIdList, const std::vector<int32_t> &propertyTypes,
         Property &property)
     {
         IF_FALSE_LOGE_AND_RETURN_VAL(fuzzParcel_ != nullptr, 0);
@@ -166,21 +157,13 @@ private:
     void FillFuzzHdiExecutorInfo(Parcel &parcel, ExecutorInfo &executorInfo)
     {
         executorInfo.sensorId = parcel.ReadUint16();
-        executorInfo.executorType = parcel.ReadUint32();
+        executorInfo.executorMatcher = parcel.ReadUint32();
         executorInfo.executorRole = static_cast<ExecutorRole>(parcel.ReadInt32());
         executorInfo.authType = static_cast<AuthType>(parcel.ReadInt32());
         executorInfo.esl = static_cast<ExecutorSecureLevel>(parcel.ReadInt32());
+        executorInfo.maxTemplateAcl = parcel.ReadInt32();
         FillFuzzUint8Vector(parcel, executorInfo.publicKey);
         FillFuzzUint8Vector(parcel, executorInfo.extraInfo);
-        IAM_LOGI("success");
-    }
-
-    void FillFuzzHdiTemplateInfo(Parcel &parcel, TemplateInfo &templateInfo)
-    {
-        templateInfo.executorType = parcel.ReadUint32();
-        templateInfo.lockoutDuration = parcel.ReadInt32();
-        templateInfo.remainAttempts = parcel.ReadInt32();
-        FillFuzzUint8Vector(parcel, templateInfo.extraInfo);
         IAM_LOGI("success");
     }
 
@@ -212,7 +195,7 @@ private:
     }
 
     Parcel *fuzzParcel_;
-    sptr<ISaCommandCallback> callbackObj_ {nullptr};
+    sptr<ISaCommandCallback> callbackObj_ { nullptr };
 };
 
 class DummyExecuteCallback : public UserAuth::IExecuteCallback {
@@ -233,7 +216,7 @@ public:
 };
 
 auto g_proxy = new (nothrow) DummyExecutorProxy();
-auto g_hdi = Common::MakeShared<FaceAuthExecutorHdi>(g_proxy);
+auto g_hdi = Common::MakeShared<FaceAuthAllInOneExecutorHdi>(g_proxy);
 
 void FillFuzzExecutorInfo(Parcel &parcel, UserAuth::ExecutorInfo &executorInfo)
 {
@@ -262,7 +245,7 @@ void FillFuzzAttributeKeyVector(Parcel &parcel, std::vector<UserAuth::Attributes
 {
     std::vector<uint32_t> vals;
     FillFuzzUint32Vector(parcel, vals);
-    for (const auto& val : vals) {
+    for (const auto &val : vals) {
         keys.push_back(static_cast<UserAuth::Attributes::AttributeKey>(val));
     }
 
@@ -300,7 +283,7 @@ void FuzzEnroll(Parcel &parcel)
     FillFuzzUint8Vector(parcel, extraInfo);
     std::shared_ptr<UserAuth::IExecuteCallback> callbackObj;
     FillFuzzIExecuteCallback(parcel, callbackObj);
-    g_hdi->Enroll(scheduleId, EnrollParam{ tokenId, extraInfo }, callbackObj);
+    g_hdi->Enroll(scheduleId, EnrollParam { tokenId, extraInfo }, callbackObj);
     IAM_LOGI("end");
 }
 
@@ -316,7 +299,7 @@ void FuzzAuthenticate(Parcel &parcel)
     std::shared_ptr<UserAuth::IExecuteCallback> callbackObj;
     FillFuzzIExecuteCallback(parcel, callbackObj);
     bool endAfterFirstFail = parcel.ReadBool();
-    g_hdi->Authenticate(scheduleId, AuthenticateParam{ tokenId, templateIdList, extraInfo, endAfterFirstFail },
+    g_hdi->Authenticate(scheduleId, AuthenticateParam { tokenId, templateIdList, extraInfo, endAfterFirstFail },
         callbackObj);
     IAM_LOGI("end");
 }
@@ -330,7 +313,7 @@ void FuzzIdentify(Parcel &parcel)
     FillFuzzUint8Vector(parcel, extraInfo);
     std::shared_ptr<UserAuth::IExecuteCallback> callbackObj;
     FillFuzzIExecuteCallback(parcel, callbackObj);
-    g_hdi->Identify(scheduleId, IdentifyParam{ tokenId, extraInfo }, callbackObj);
+    g_hdi->Identify(scheduleId, IdentifyParam { tokenId, extraInfo }, callbackObj);
     IAM_LOGI("end");
 }
 
@@ -384,19 +367,9 @@ void FuzzSetCachedTemplates(Parcel &parcel)
     IAM_LOGI("end");
 }
 
-void FuzzSetBufferProducer(Parcel &parcel)
+void FuzzSendMessage(Parcel &parcel)
 {
     IAM_LOGI("begin");
-    sptr<IBufferProducer> bufferProducer(nullptr);
-    if (parcel.ReadBool()) {
-        auto surface = IConsumerSurface::Create();
-        if (surface == nullptr) {
-            IAM_LOGE("CreateSurfaceAsConsumer fail");
-            return;
-        }
-        bufferProducer = surface->GetProducer();
-    }
-    g_hdi->SetBufferProducer(bufferProducer);
     IAM_LOGI("end");
 }
 
@@ -426,9 +399,9 @@ void ClearProxyParcel()
 }
 
 using FuzzFunc = decltype(FuzzGetExecutorInfo);
-FuzzFunc *g_fuzzFuncs[] = { FuzzGetExecutorInfo, FuzzOnRegisterFinish, FuzzEnroll,
-    FuzzAuthenticate, FuzzIdentify, FuzzDelete, FuzzCancel, FuzzSendCommand,
-    FuzzGetProperty, FuzzSetCachedTemplates, FuzzSetBufferProducer, FuzzTriggerSaCommandCallback };
+FuzzFunc *g_fuzzFuncs[] = { FuzzGetExecutorInfo, FuzzOnRegisterFinish, FuzzEnroll, FuzzAuthenticate, FuzzIdentify,
+    FuzzDelete, FuzzCancel, FuzzSendCommand, FuzzGetProperty, FuzzSetCachedTemplates, FuzzTriggerSaCommandCallback,
+    FuzzSendMessage };
 
 void FaceAuthServiceFuzzTest(const uint8_t *data, size_t size)
 {

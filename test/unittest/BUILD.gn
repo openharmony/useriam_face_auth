@@ -27,9 +27,9 @@ ohos_unittest("face_auth_service_test") {
   module_out_path = "useriam/face_auth"
 
   sources = [
+    "face_auth_all_in_one_executor_hdi_unit_test.cpp",
     "face_auth_driver_hdi_unit_test.cpp",
     "face_auth_executor_callback_hdi_unit_test.cpp",
-    "face_auth_executor_hdi_unit_test.cpp",
     "face_auth_service_test.cpp",
     "sa_command_manager_unit_test.cpp",
     "state_machine_test.cpp",
@@ -50,7 +50,7 @@ ohos_unittest("face_auth_service_test") {
     "access_token:libnativetoken",
     "access_token:libtoken_setproc",
     "access_token:libtokenid_sdk",
-    "drivers_interface_face_auth:libface_auth_proxy_1.1",
+    "drivers_interface_face_auth:libface_auth_proxy_2.0",
     "graphic_surface:surface",
     "hilog:libhilog",
     "user_auth_framework:userauth_executors",
@@ -86,7 +86,7 @@ ohos_unittest("face_auth_screen_brightness_test") {
   ]
 
   external_deps = [
-    "drivers_interface_face_auth:libface_auth_proxy_1.1",
+    "drivers_interface_face_auth:libface_auth_proxy_2.0",
     "graphic_surface:surface",
     "hilog:libhilog",
     "user_auth_framework:userauth_executors",
@@ -125,7 +125,7 @@ ohos_unittest("face_auth_perm_test") {
   external_deps = [
     "access_token:libaccesstoken_sdk",
     "access_token:libnativetoken",
-    "drivers_interface_face_auth:libface_auth_proxy_1.1",
+    "drivers_interface_face_auth:libface_auth_proxy_2.0",
     "graphic_surface:surface",
     "hilog:libhilog",
     "user_auth_framework:userauth_executors",

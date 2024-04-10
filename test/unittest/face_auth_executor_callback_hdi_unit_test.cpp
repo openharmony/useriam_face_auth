@@ -61,7 +61,7 @@ HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnAcquire
     auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
     ASSERT_TRUE(executeCallback != nullptr);
     const int32_t testAcquire = 5;
-    const std::vector<uint8_t> testExtraInfo = {1, 2, 3, 4, 5, 6};
+    const std::vector<uint8_t> testExtraInfo = { 1, 2, 3, 4, 5, 6 };
     EXPECT_CALL(*executeCallback, OnAcquireInfo(_, _))
         .Times(Exactly(1))
         .WillOnce([&testAcquire, &testExtraInfo](int32_t acquire, const std::vector<uint8_t> &extraInfo) {
@@ -75,23 +75,22 @@ HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnAcquire
 
 HWTEST_F(FaceAuthExecutorCallbackHdiUnitTest, FaceAuthExecutorCallback_OnResult_001, TestSize.Level0)
 {
-    static const std::map<ResultCode, IamResultCode> data = {{ResultCode::SUCCESS, IamResultCode::SUCCESS},
-        {ResultCode::FAIL, IamResultCode::FAIL}, {ResultCode::GENERAL_ERROR, IamResultCode::GENERAL_ERROR},
-        {ResultCode::CANCELED, IamResultCode::CANCELED}, {ResultCode::TIMEOUT, IamResultCode::TIMEOUT},
-        {ResultCode::BUSY, IamResultCode::BUSY},
-        {ResultCode::INVALID_PARAMETERS, IamResultCode::INVALID_PARAMETERS},
-        {ResultCode::LOCKED, IamResultCode::LOCKED},
-        {ResultCode::NOT_ENROLLED, IamResultCode::NOT_ENROLLED},
-        {ResultCode::OPERATION_NOT_SUPPORT, IamResultCode::FAIL},
-        {static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN - 1), IamResultCode::GENERAL_ERROR},
-        {static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN), IamResultCode::GENERAL_ERROR},
-        {static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN + 1),
-            static_cast<IamResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN + 1)}};
+    static const std::map<ResultCode, IamResultCode> data = { { ResultCode::SUCCESS, IamResultCode::SUCCESS },
+        { ResultCode::FAIL, IamResultCode::FAIL }, { ResultCode::GENERAL_ERROR, IamResultCode::GENERAL_ERROR },
+        { ResultCode::CANCELED, IamResultCode::CANCELED }, { ResultCode::TIMEOUT, IamResultCode::TIMEOUT },
+        { ResultCode::BUSY, IamResultCode::BUSY },
+        { ResultCode::INVALID_PARAMETERS, IamResultCode::INVALID_PARAMETERS },
+        { ResultCode::LOCKED, IamResultCode::LOCKED }, { ResultCode::NOT_ENROLLED, IamResultCode::NOT_ENROLLED },
+        { ResultCode::OPERATION_NOT_SUPPORT, IamResultCode::FAIL },
+        { static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN - 1), IamResultCode::GENERAL_ERROR },
+        { static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN), IamResultCode::GENERAL_ERROR },
+        { static_cast<ResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN + 1),
+            static_cast<IamResultCode>(ResultCode::VENDOR_RESULT_CODE_BEGIN + 1) } };
 
     for (const auto &pair : data) {
         auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
         ASSERT_TRUE(executeCallback != nullptr);
-        std::vector<uint8_t> testExtraInfo = {1, 2, 3, 4, 5, 6};
+        std::vector<uint8_t> testExtraInfo = { 1, 2, 3, 4, 5, 6 };
         EXPECT_CALL(*executeCallback, OnResult(_, _))
             .Times(Exactly(2))
             .WillRepeatedly([&pair, &testExtraInfo](int32_t result, const std::vector<uint8_t> &extraInfo) {

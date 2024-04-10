@@ -24,7 +24,7 @@
 #include "iam_executor_iauth_driver_hdi.h"
 #include "iam_executor_iauth_executor_hdi.h"
 
-#include "face_auth_executor_hdi.h"
+#include "face_auth_all_in_one_executor_hdi.h"
 #include "face_auth_interface_adapter.h"
 
 namespace OHOS {
@@ -44,7 +44,7 @@ public:
 private:
     static std::mutex mutex_;
     const std::shared_ptr<FaceAuthInterfaceAdapter> faceAuthInterfaceAdapter_;
-    std::vector<std::shared_ptr<FaceAuthExecutorHdi>> faceAuthExecutorList_;
+    std::vector<std::shared_ptr<FaceAuthAllInOneExecutorHdi>> faceAuthExecutorList_;
 };
 } // namespace FaceAuth
 } // namespace UserIam

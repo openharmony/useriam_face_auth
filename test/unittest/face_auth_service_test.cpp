@@ -38,9 +38,7 @@ public:
 
 void FaceAuthServiceTest::SetUpTestCase()
 {
-    static const char *perms[] = {
-        "ohos.permission.MANAGE_USER_IDM"
-    };
+    static const char *perms[] = { "ohos.permission.MANAGE_USER_IDM" };
     NativeTokenInfoParams infoInstance = {
         .dcapsNum = 0,
         .permsNum = 1,
@@ -74,7 +72,7 @@ HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_001, TestSize.Level0)
     EXPECT_NE(service, nullptr);
     sptr<IBufferProducer> producer(nullptr);
     int32_t ret = service->SetBufferProducer(producer);
-    EXPECT_EQ(ret, FACE_AUTH_ERROR);
+    EXPECT_EQ(ret, FACE_AUTH_SUCCESS);
 }
 
 HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_002, TestSize.Level0)
@@ -91,7 +89,7 @@ HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_002, TestSize.Level0)
     EXPECT_EQ(service->OnRemoteRequest(code, data, reply, option), 0);
     int32_t result = -1;
     EXPECT_TRUE(reply.ReadInt32(result));
-    EXPECT_EQ(result, FACE_AUTH_ERROR);
+    EXPECT_EQ(result, FACE_AUTH_SUCCESS);
 }
 } // namespace FaceAuth
 } // namespace UserIam

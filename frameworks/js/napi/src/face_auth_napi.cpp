@@ -14,8 +14,8 @@
  */
 
 #include <cstdint>
-#include <string>
 #include <sstream>
+#include <string>
 
 #include "napi/native_common.h"
 #include "node_api.h"
@@ -25,8 +25,8 @@
 
 #include "iam_logger.h"
 
-#include "face_auth_defines.h"
 #include "face_auth_client.h"
+#include "face_auth_defines.h"
 
 #define LOG_TAG "FACE_AUTH_NAPI"
 
@@ -43,9 +43,9 @@ enum ResultCode : int32_t {
 };
 
 const std::map<int32_t, std::string> g_result2Str = {
-    {OHOS_CHECK_PERMISSION_FAILED, "Permission verification failed."},
-    {OHOS_CHECK_SYSTEM_PERMISSION_FAILED, "The caller is not a system application."},
-    {RESULT_CODE_FAIL, "The operation is failed."},
+    { OHOS_CHECK_PERMISSION_FAILED, "Permission verification failed." },
+    { OHOS_CHECK_SYSTEM_PERMISSION_FAILED, "The caller is not a system application." },
+    { RESULT_CODE_FAIL, "The operation is failed." },
 };
 
 napi_value FaceAuthManagerConstructor(napi_env env, napi_callback_info info)
@@ -123,7 +123,7 @@ napi_value SetSurfaceId(napi_env env, napi_callback_info info)
         return nullptr;
     }
     static constexpr int maxLen = 25;
-    char buf[maxLen] = {'\0'};
+    char buf[maxLen] = { '\0' };
     size_t len;
     ret = napi_get_value_string_utf8(env, argv, buf, maxLen, &len);
     if (ret != napi_ok) {
@@ -155,10 +155,11 @@ napi_value SetSurfaceId(napi_env env, napi_callback_info info)
 napi_value GetFaceAuthManagerConstructor(napi_env env)
 {
     IAM_LOGI("start");
-    napi_property_descriptor methods[] = {DECLARE_NAPI_FUNCTION("setSurfaceId", SetSurfaceId)};
+    napi_property_descriptor methods[] = { DECLARE_NAPI_FUNCTION("setSurfaceId", SetSurfaceId) };
     napi_value result = nullptr;
-    NAPI_CALL(env, napi_define_class(env, "FaceAuth", NAPI_AUTO_LENGTH, FaceAuthManagerConstructor, nullptr,
-                       sizeof(methods) / sizeof(napi_property_descriptor), methods, &result));
+    NAPI_CALL(env,
+        napi_define_class(env, "FaceAuth", NAPI_AUTO_LENGTH, FaceAuthManagerConstructor, nullptr,
+            sizeof(methods) / sizeof(napi_property_descriptor), methods, &result));
     return result;
 }
 
@@ -189,13 +190,13 @@ napi_value ModuleInit(napi_env env, napi_value exports)
 
 extern "C" __attribute__((constructor)) void RegisterModule(void)
 {
-    napi_module module = {.nm_version = 1,
+    napi_module module = { .nm_version = 1,
         .nm_flags = 0,
         .nm_filename = nullptr,
         .nm_register_func = ModuleInit,
         .nm_modname = "userIAM.faceAuth",
         .nm_priv = nullptr,
-        .reserved = {}};
+        .reserved = {} };
     napi_module_register(&module);
 }
 } // namespace FaceAuth

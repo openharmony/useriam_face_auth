@@ -21,9 +21,9 @@
 
 #include "parcel.h"
 
+#include "face_auth_service.h"
 #include "iam_fuzz_test.h"
 #include "iam_logger.h"
-#include "face_auth_service.h"
 
 #define LOG_TAG "FACE_AUTH_SA"
 

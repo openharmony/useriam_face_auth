@@ -18,12 +18,12 @@
 #include <list>
 #include <vector>
 
+#include "ibuffer_producer.h"
 #include "iremote_broker.h"
 #include "iremote_object.h"
-#include "ibuffer_producer.h"
 
-#include "iface_auth_ipc_interface_code.h"
 #include "face_auth_defines.h"
+#include "iface_auth_ipc_interface_code.h"
 
 namespace OHOS {
 namespace UserIam {

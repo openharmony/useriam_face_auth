@@ -34,9 +34,9 @@ ohos_source_set("faceauthservice_source_set") {
   }
   branch_protector_ret = "pac_ret"
   sources = [
+    "src/face_auth_all_in_one_executor_hdi.cpp",
     "src/face_auth_driver_hdi.cpp",
     "src/face_auth_executor_callback_hdi.cpp",
-    "src/face_auth_executor_hdi.cpp",
     "src/face_auth_interface_adapter.cpp",
     "src/face_auth_service.cpp",
     "src/sa_command_manager.cpp",
@@ -59,7 +59,7 @@ ohos_source_set("faceauthservice_source_set") {
     "access_token:libtokenid_sdk",
     "c_utils:utils",
     "drivers_interface_camera:libbuffer_producer_sequenceable_1.0",
-    "drivers_interface_face_auth:libface_auth_proxy_1.1",
+    "drivers_interface_face_auth:libface_auth_proxy_2.0",
     "hilog:libhilog",
     "ipc:ipc_single",
     "miscdevice:vibrator_interface_native",

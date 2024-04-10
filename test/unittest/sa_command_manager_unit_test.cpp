@@ -17,9 +17,9 @@
 
 #include "sa_command_manager.h"
 
+#include "face_auth_hdi.h"
 #include "iam_logger.h"
 #include "iam_ptr.h"
-#include "face_auth_hdi.h"
 #include "mock_isa_command_processor.h"
 
 #define LOG_TAG "FACE_AUTH_SA"
@@ -87,17 +87,14 @@ HWTEST_F(SaCommandManagerUnitTest, SaCommandManagerUnitTest_002, TestSize.Level0
     ASSERT_TRUE(saCommandProcessor != nullptr);
     EXPECT_CALL(*saCommandProcessor, OnHdiDisconnect(_))
         .Times(Exactly(1))
-        .WillOnce([](std::shared_ptr<FaceAuthExecutorHdi> executor) {
+        .WillOnce([](std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor) {
             IAM_LOGI("SaCommandManagerUnitTest_002 OnHdiDisconnect called");
             return;
         });
     std::vector<SaCommandId> commandIds = { getSaCommandId() };
     SaCommandManager::GetInstance().RegisterSaCommandProcessor(commandIds, saCommandProcessor);
     std::vector<SaCommand> commands;
-    SaCommand saCommand = {
-        .id = getSaCommandId(),
-        .param = {}
-    };
+    SaCommand saCommand = { .id = getSaCommandId(), .param = {} };
     commands.push_back(saCommand);
     IAM_LOGI("ProcessSaCommands %{public}d", saCommand.id);
     auto ret = SaCommandManager::GetInstance().ProcessSaCommands(nullptr, commands);
@@ -113,17 +110,14 @@ HWTEST_F(SaCommandManagerUnitTest, SaCommandManagerUnitTest_003, TestSize.Level0
     ASSERT_TRUE(saCommandProcessor != nullptr);
     EXPECT_CALL(*saCommandProcessor, ProcessSaCommand(_, _))
         .Times(Exactly(1))
-        .WillOnce([](std::shared_ptr<FaceAuthExecutorHdi> executor, const SaCommand &command) {
+        .WillOnce([](std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor, const SaCommand &command) {
             IAM_LOGI("SaCommandManagerUnitTest_003 ProcessSaCommand called");
             return UserAuth::SUCCESS;
         });
     std::vector<SaCommandId> commandIds = { getSaCommandId() };
     SaCommandManager::GetInstance().RegisterSaCommandProcessor(commandIds, saCommandProcessor);
     std::vector<SaCommand> commands;
-    SaCommand saCommand = {
-        .id = commandIds[0],
-        .param = {}
-    };
+    SaCommand saCommand = { .id = commandIds[0], .param = {} };
     commands.push_back(saCommand);
     IAM_LOGI("ProcessSaCommands %{public}d", commandIds[0]);
     auto ret = SaCommandManager::GetInstance().ProcessSaCommands(nullptr, commands);
@@ -138,17 +132,14 @@ HWTEST_F(SaCommandManagerUnitTest, SaCommandManagerUnitTest_004, TestSize.Level0
     ASSERT_TRUE(saCommandProcessor != nullptr);
     EXPECT_CALL(*saCommandProcessor, ProcessSaCommand(_, _))
         .Times(Exactly(1))
-        .WillOnce([](std::shared_ptr<FaceAuthExecutorHdi> executor, const SaCommand &command) {
+        .WillOnce([](std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor, const SaCommand &command) {
             IAM_LOGI("SaCommandManagerUnitTest_004 ProcessSaCommand called");
             return UserAuth::GENERAL_ERROR;
         });
     std::vector<SaCommandId> commandIds = { getSaCommandId() };
     SaCommandManager::GetInstance().RegisterSaCommandProcessor(commandIds, saCommandProcessor);
     std::vector<SaCommand> commands;
-    SaCommand saCommand = {
-        .id = commandIds[0],
-        .param = {}
-    };
+    SaCommand saCommand = { .id = commandIds[0], .param = {} };
     commands.push_back(saCommand);
     IAM_LOGI("ProcessSaCommands %{public}d", commandIds[0]);
     auto ret = SaCommandManager::GetInstance().ProcessSaCommands(nullptr, commands);

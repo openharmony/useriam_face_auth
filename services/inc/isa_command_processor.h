@@ -18,7 +18,7 @@
 
 #include "face_auth_hdi.h"
 
-#include "face_auth_executor_hdi.h"
+#include "face_auth_all_in_one_executor_hdi.h"
 
 namespace OHOS {
 namespace UserIam {
@@ -29,9 +29,9 @@ public:
     ISaCommandProcessor() = default;
     virtual ~ISaCommandProcessor() = default;
 
-    virtual UserAuth::ResultCode ProcessSaCommand(std::shared_ptr<FaceAuthExecutorHdi> executor,
+    virtual UserAuth::ResultCode ProcessSaCommand(std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor,
         const SaCommand &command) = 0;
-    virtual void OnHdiDisconnect(std::shared_ptr<FaceAuthExecutorHdi> executor) = 0;
+    virtual void OnHdiDisconnect(std::shared_ptr<FaceAuthAllInOneExecutorHdi> executor) = 0;
 };
 } // namespace FaceAuth
 } // namespace UserIam
