@@ -202,17 +202,20 @@ class DummyExecuteCallback : public UserAuth::IExecuteCallback {
 public:
     virtual ~DummyExecuteCallback() = default;
 
-    void OnResult(ResultCode result, const std::vector<uint8_t> &extraInfo)
+    void OnResult(ResultCode result, const std::vector<uint8_t> &extraInfo) override
     {
     }
 
-    void OnResult(ResultCode result)
+    void OnResult(ResultCode result) override
     {
     }
 
-    void OnAcquireInfo(int32_t acquire, const std::vector<uint8_t> &extraInfo)
+    void OnAcquireInfo(int32_t acquire, const std::vector<uint8_t> &extraInfo) override
     {
     }
+
+    void OnMessage(int destRole, const std::vector<uint8_t> &msg) override
+    {}
 };
 
 auto g_proxy = new (nothrow) DummyExecutorProxy();
