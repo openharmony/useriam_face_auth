@@ -41,6 +41,7 @@ public:
     UserAuth::ResultCode GetExecutorInfo(UserAuth::ExecutorInfo &info) override;
     UserAuth::ResultCode OnRegisterFinish(const std::vector<uint64_t> &templateIdList,
         const std::vector<uint8_t> &frameworkPublicKey, const std::vector<uint8_t> &extraInfo) override;
+    UserAuth::ResultCode SendMessage(uint64_t scheduleId, int32_t srcRole, const std::vector<uint8_t> &msg) override;
     UserAuth::ResultCode Enroll(uint64_t scheduleId, const UserAuth::EnrollParam &param,
         const std::shared_ptr<UserAuth::IExecuteCallback> &callbackObj) override;
     UserAuth::ResultCode Authenticate(uint64_t scheduleId, const UserAuth::AuthenticateParam &param,

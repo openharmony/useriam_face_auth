@@ -496,6 +496,24 @@ HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_SendCo
     }
 }
 
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_SendMessage_001, TestSize.Level0)
+{
+    for (const auto &pair : RESULT_CODE_MAP) {
+        sptr<MockIAllInOneExecutor> executorProxy(new (std::nothrow) MockIAllInOneExecutor());
+        ASSERT_TRUE(executorProxy != nullptr);
+        EXPECT_CALL(*executorProxy, SendMessage(_, _, _))
+            .Times(Exactly(1))
+            .WillOnce(Return(pair.first));
+        auto executorHdi = MakeShared<FaceAuthAllInOneExecutorHdi>(executorProxy);
+        auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
+        ASSERT_TRUE(executeCallback != nullptr);
+        std::vector<uint8_t> data;
+        auto ret =
+            executorHdi->SendMessage(1, 1, data);
+        EXPECT_TRUE(ret == pair.second);
+    }
+}
+
 HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_GetProperty_001, TestSize.Level0)
 {
     auto executorHdi = MakeShared<FaceAuthAllInOneExecutorHdi>(nullptr);

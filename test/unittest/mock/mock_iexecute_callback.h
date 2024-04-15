@@ -31,6 +31,7 @@ public:
     MOCK_METHOD2(OnResult, void(ResultCode result, const std::vector<uint8_t> &extraInfo));
     MOCK_METHOD1(OnResult, void(ResultCode result));
     MOCK_METHOD2(OnAcquireInfo, void(int32_t acquire, const std::vector<uint8_t> &extraInfo));
+    MOCK_METHOD2(OnMessage, void(int destRole, const std::vector<uint8_t> &msg));
 };
 } // namespace UserAuth
 } // namespace UserIam

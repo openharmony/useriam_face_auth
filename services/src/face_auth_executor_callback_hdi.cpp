@@ -94,6 +94,8 @@ int32_t FaceAuthExecutorCallbackHdi::OnTip(int32_t tip, const std::vector<uint8_
 int32_t FaceAuthExecutorCallbackHdi::OnMessage(int32_t destRole, const std::vector<uint8_t> &msg)
 {
     IAM_LOGI("OnMessage destRole %{public}d msg len %{public}zu", destRole, msg.size());
+    IF_FALSE_LOGE_AND_RETURN_VAL(frameworkCallback_ != nullptr, HDF_FAILURE);
+    frameworkCallback_->OnMessage(destRole, msg);
     return HDF_SUCCESS;
 }
 
