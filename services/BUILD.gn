@@ -13,6 +13,10 @@
 
 import("//build/ohos.gni")
 
+declare_args() {
+  oh_faceauth_fwk_enabled = true
+}
+
 config("faceauthservice_config") {
   include_dirs = [
     "inc",
