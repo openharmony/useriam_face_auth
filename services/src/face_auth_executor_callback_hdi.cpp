@@ -48,7 +48,7 @@ FaceAuthExecutorCallbackHdi::FaceAuthExecutorCallbackHdi(std::shared_ptr<UserAut
 void FaceAuthExecutorCallbackHdi::DoVibrator()
 {
     IAM_LOGI("begin");
-    static const char *faceAuthEffect = "haptic.fail";
+    static const char *faceAuthEffect = "haptic.notice.fail";
     bool faceEffectState = false;
     int32_t ret = Sensors::IsSupportEffect(faceAuthEffect, &faceEffectState);
     if (ret != 0) {
