@@ -14,7 +14,7 @@
 import("//build/ohos.gni")
 
 declare_args() {
-  oh_faceauth_fwk_enabled = true
+  face_auth_enabled = true
 }
 
 config("faceauthservice_config") {
