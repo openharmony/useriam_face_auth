@@ -33,8 +33,6 @@ public:
     int32_t OnRemoteRequest(uint32_t code, MessageParcel &data, MessageParcel &reply, MessageOption &option) override;
 
 private:
-    using Handler = int32_t (FaceAuthStub::*)(MessageParcel &data, MessageParcel &reply);
-    std::map<uint32_t, Handler> keyToHandle_;
     void RegisterKeyToHandle();
     int32_t FaceAuthSetBufferProducer(MessageParcel &data, MessageParcel &reply);
 };
