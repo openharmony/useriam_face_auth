@@ -46,16 +46,10 @@ using namespace OHOS::UserIam;
 FaceAuthStub::FaceAuthStub() : IRemoteStub(true)
 {
     IAM_LOGI("start");
-    RegisterKeyToHandle();
     // For iface_cast<IBufferProducer> to work, static variable BrokerDelegator of BufferClientProducer must be
     // initialized. Create an unused surface would include BufferClientProducer and ensure BrokerDelegator is
     // initialized.
     OHOS::Surface::CreateSurfaceAsConsumer("unused");
-}
-
-void FaceAuthStub::RegisterKeyToHandle()
-{
-    keyToHandle_[IFaceAuthInterfaceCode::FACE_AUTH_SET_BUFFER_PRODUCER] = &FaceAuthStub::FaceAuthSetBufferProducer;
 }
 
 int32_t FaceAuthStub::FaceAuthSetBufferProducer(MessageParcel &data, MessageParcel &reply)
@@ -83,14 +77,11 @@ int32_t FaceAuthStub::OnRemoteRequest(uint32_t code, MessageParcel &data, Messag
         IAM_LOGE("descriptor is not matched");
         return FACE_AUTH_ERROR;
     }
-    auto itFunc = keyToHandle_.find(code);
-    if (itFunc == keyToHandle_.end()) {
-        IAM_LOGE("key not match, send to IPCObjectStub on default");
-        return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
+    if (code == IFaceAuthInterfaceCode::FACE_AUTH_SET_BUFFER_PRODUCER) {
+        return this->FaceAuthSetBufferProducer(data, reply);
     }
-    auto requestFunc = itFunc->second;
-    IF_FALSE_LOGE_AND_RETURN_VAL(requestFunc != nullptr, FACE_AUTH_ERROR);
-    return (this->*requestFunc)(data, reply);
+    IAM_LOGE("key not match, send to IPCObjectStub on default");
+    return IPCObjectStub::OnRemoteRequest(code, data, reply, option);
 }
 } // namespace FaceAuth
 } // namespace UserIam
