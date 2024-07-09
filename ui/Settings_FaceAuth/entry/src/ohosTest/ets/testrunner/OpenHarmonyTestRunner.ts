@@ -18,8 +18,8 @@ import TestRunner from '@ohos.application.testRunner';
 import AbilityDelegatorRegistry from '@ohos.app.ability.abilityDelegatorRegistry';
 import { BusinessError } from '@ohos.base';
 
-var abilityDelegator = undefined;
-var abilityDelegatorArguments = undefined;
+let abilityDelegator = undefined;
+let abilityDelegatorArguments = undefined;
 
 async function onAbilityCreateCallback(): Promise<void> {
     hilog.info(0x0000, 'testTag', '%{public}s', 'onAbilityCreateCallback');
