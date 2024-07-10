@@ -18,7 +18,7 @@ import Log from './log';
 const TAG = 'CommonUtils';
 
 class CommonUtil {
-  public setColorOpacity(color: string, opacity: number) {
+  public setColorOpacity(color: string, opacity: number): string {
     try {
       let r;
       let g;
