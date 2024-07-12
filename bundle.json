@@ -1,5 +1,5 @@
 {
-    "name": "@openharmony/face_auth",
+    "name": "@ohos/face_auth",
     "version": "4.0",
     "description": "Face authentication capability",
     "homePage": "https://gitee.com/openharmony",
@@ -37,7 +37,8 @@
           "safwk",
           "samgr",
           "sensor",
-          "user_auth_framework"
+          "user_auth_framework",
+          "hdf_core"
         ]
       },
       "build": {
