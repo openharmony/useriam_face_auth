@@ -197,7 +197,7 @@ class CommonController {
     return new Uint8Array(buffer);
   }
 
-  getStartViewImage() : any {
+  getStartViewImage() : Resource {
     if (Config.getDeviceType() === 'tablet') {
       return $r('app.media.face_start_view_pad');
     }
