@@ -17,7 +17,7 @@
       "subsystem": "useriam",
       "adapted_system_type": [ "standard" ],
       "syscap": ["SystemCapability.UserIAM.UserAuth.FaceAuth"],
-      "features": [],
+      "features": ["face_auth_enabled"],
       "rom": "1024KB",
       "ram": "1306KB",
       "deps": {
