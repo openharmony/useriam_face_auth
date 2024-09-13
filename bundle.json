@@ -37,8 +37,7 @@
           "safwk",
           "samgr",
           "sensor",
-          "user_auth_framework",
-          "hdf_core"
+          "user_auth_framework"
         ]
       },
       "build": {
