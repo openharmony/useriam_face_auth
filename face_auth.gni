@@ -12,19 +12,19 @@
 # limitations under the License.
 
 declare_args() {
-  face_use_display_manager_component = true
+  face_use_display_manager_component = false
   if (defined(global_parts_info) &&
       !defined(global_parts_info.powermgr_display_manager)) {
     face_use_display_manager_component = false
   }
 
-  face_use_power_manager_component = true
+  face_use_power_manager_component = false
   if (defined(global_parts_info) &&
       !defined(global_parts_info.powermgr_power_manager)) {
     face_use_power_manager_component = false
   }
 
-  face_use_sensor_component = true
+  face_use_sensor_component = false
   if (defined(global_parts_info) &&
       !defined(global_parts_info.sensors_sensor)) {
     face_use_sensor_component = false
