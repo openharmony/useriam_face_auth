@@ -43,7 +43,7 @@ using ResultCode = UserAuth::ResultCode;
 using namespace DisplayPowerMgr;
 #endif
 namespace {
-#ifdef FACE_USE_SENSORS_SENSOR_COMPONENT    
+#ifdef FACE_USE_SENSORS_SENSOR_COMPONENT
 constexpr SensorUser SENSOR_USER = {
     "FaceAuthService",
     [](SensorEvent *event) {
@@ -137,17 +137,17 @@ ResultCode SubscribeSensor()
     IF_FALSE_LOGE_AND_RETURN_VAL(setModeRet == 0, ResultCode::GENERAL_ERROR);
 
     return ResultCode::SUCCESS;
-#endif 
+#endif
 }
 
 void UnsubscribeSensor()
 {
-#ifdef FACE_USE_SENSORS_SENSOR_COMPONENT    
+#ifdef FACE_USE_SENSORS_SENSOR_COMPONENT
     IAM_LOGI("start");
     DeactivateSensor(SENSOR_TYPE_ID_AMBIENT_LIGHT, &SENSOR_USER);
     UnsubscribeSensor(SENSOR_TYPE_ID_AMBIENT_LIGHT, &SENSOR_USER);
     return;
-#endif  
+#endif
 }
 
 uint32_t GetIncreaseBrightnessStartIndex(uint32_t currentBrightness)
@@ -162,7 +162,7 @@ uint32_t GetIncreaseBrightnessStartIndex(uint32_t currentBrightness)
 
 void OverrideScreenBrightness(uint32_t brightness)
 {
-#ifdef FACE_USE_DISPLAY_MANAGER_COMPONENT    
+#ifdef FACE_USE_DISPLAY_MANAGER_COMPONENT
     int32_t displayId = DisplayPowerMgrClient::GetInstance().GetMainDisplayId();
     if (!DisplayPowerMgrClient::GetInstance().OverrideBrightness(brightness, displayId)) {
         IAM_LOGE("override brightness fail");
@@ -170,7 +170,7 @@ void OverrideScreenBrightness(uint32_t brightness)
     }
 #else
         return;
-#endif  
+#endif
 }
 
 void RestoreScreenBrightness()
@@ -183,12 +183,12 @@ void RestoreScreenBrightness()
     }
 #else
         return;
-#endif    
+#endif
 }
 
 uint32_t GetCurrentScreenBrightness()
 {
-#ifdef FACE_USE_DISPLAY_MANAGER_COMPONENT    
+#ifdef FACE_USE_DISPLAY_MANAGER_COMPONENT
     return DisplayPowerMgrClient::GetInstance().GetDeviceBrightness();
 #else
         return INVALID_BRIGHTNESS;
