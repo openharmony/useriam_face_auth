@@ -175,11 +175,15 @@ void OverrideScreenBrightness(uint32_t brightness)
 
 void RestoreScreenBrightness()
 {
+#ifdef FACE_USE_DISPLAY_MANAGER_COMPONENT
     int32_t displayId = DisplayPowerMgrClient::GetInstance().GetMainDisplayId();
     if (!DisplayPowerMgrClient::GetInstance().RestoreBrightness(displayId)) {
         IAM_LOGE("restore brightness fail");
         return;
     }
+#else
+        return;
+#endif    
 }
 
 uint32_t GetCurrentScreenBrightness()
