@@ -63,14 +63,9 @@ ohos_source_set("faceauthservice_ex_source_set") {
     defines += [ "FACE_USE_DISPLAY_MANAGER_COMPONENT" ]
   }
 
-  if (face_use_power_manager_component) {
-    external_deps += [ "power_manager:powermgr_client" ]
-    defines += [ "FACE_USE_POWER_MANAGER_COMPONENT" ]
-  }
-
-  if (defined(face_use_sensors_sensor_component)) {
+  if (defined(face_use_sensor_component)) {
     external_deps += [ "sensor:sensor_interface_native" ]
-    defines += [ "FACE_USE_SENSORS_SENSOR_COMPONENT" ]
+    defines += [ "FACE_USE_SENSOR_COMPONENT" ]
   }
 
   if (defined(global_parts_info.graphic_graphic_2d)) {

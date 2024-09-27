@@ -22,7 +22,7 @@
 #include "display_power_mgr_client.h"
 #endif
 #include "parameter.h"
-#ifdef FACE_USE_SENSORS_SENSOR_COMPONENT
+#ifdef FACE_USE_SENSOR_COMPONENT
 #include "sensor_agent.h"
 #endif
 
@@ -43,7 +43,7 @@ using ResultCode = UserAuth::ResultCode;
 using namespace DisplayPowerMgr;
 #endif
 namespace {
-#ifdef FACE_USE_SENSORS_SENSOR_COMPONENT
+#ifdef FACE_USE_SENSOR_COMPONENT
 constexpr SensorUser SENSOR_USER = {
     "FaceAuthService",
     [](SensorEvent *event) {
@@ -124,8 +124,8 @@ uint32_t GetIncreaseBrightnessMax()
 
 ResultCode SubscribeSensor()
 {
-#ifdef FACE_USE_SENSORS_SENSOR_COMPONENT
     IAM_LOGI("start");
+#ifdef FACE_USE_SENSOR_COMPONENT
     int32_t subscribeSensorRet = SubscribeSensor(SENSOR_TYPE_ID_AMBIENT_LIGHT, &SENSOR_USER);
     IF_FALSE_LOGE_AND_RETURN_VAL(subscribeSensorRet == 0, ResultCode::GENERAL_ERROR);
     int32_t setBatchRet = SetBatch(SENSOR_TYPE_ID_AMBIENT_LIGHT, &SENSOR_USER, SENSOR_SAMPLE_AND_REPORT_INTERVAL,
@@ -135,18 +135,23 @@ ResultCode SubscribeSensor()
     IF_FALSE_LOGE_AND_RETURN_VAL(activateSensorRet == 0, ResultCode::GENERAL_ERROR);
     int32_t setModeRet = SetMode(SENSOR_TYPE_ID_AMBIENT_LIGHT, &SENSOR_USER, SENSOR_ON_CHANGE);
     IF_FALSE_LOGE_AND_RETURN_VAL(setModeRet == 0, ResultCode::GENERAL_ERROR);
-
     return ResultCode::SUCCESS;
+#else
+    IAM_LOGI("Sensor component is not used");
+    return ResultCode::GENERAL_ERROR
 #endif
 }
 
 void UnsubscribeSensor()
 {
-#ifdef FACE_USE_SENSORS_SENSOR_COMPONENT
     IAM_LOGI("start");
+#ifdef FACE_USE_SENSOR_COMPONENT   
     DeactivateSensor(SENSOR_TYPE_ID_AMBIENT_LIGHT, &SENSOR_USER);
     UnsubscribeSensor(SENSOR_TYPE_ID_AMBIENT_LIGHT, &SENSOR_USER);
     return;
+#else
+    IAM_LOGI("Sensor component is not used");
+    return;   
 #endif
 }
 
@@ -169,7 +174,7 @@ void OverrideScreenBrightness(uint32_t brightness)
         return;
     }
 #else
-        return;
+    return;
 #endif
 }
 
@@ -182,7 +187,7 @@ void RestoreScreenBrightness()
         return;
     }
 #else
-        return;
+    return;
 #endif
 }
 
