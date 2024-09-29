@@ -52,7 +52,6 @@ ohos_source_set("faceauthservice_ex_source_set") {
     "drivers_interface_camera:libbuffer_producer_sequenceable_1.0",
     "drivers_interface_face_auth:libface_auth_proxy_2.0",
     "hilog:libhilog",
-    "power_manager:powermgr_client",
     "init:libbegetutil",
     "user_auth_framework:userauth_executors",
   ]
@@ -62,6 +61,10 @@ ohos_source_set("faceauthservice_ex_source_set") {
   if (face_use_display_manager_component) {
     external_deps += [ "display_manager:displaymgr" ]
     defines += [ "FACE_USE_DISPLAY_MANAGER_COMPONENT" ]
+  }
+
+  if (face_use_power_manager_component) {
+    external_deps += ["power_manager:powermgr_client" ]
   }
 
   if (defined(face_use_sensor_component)) {
