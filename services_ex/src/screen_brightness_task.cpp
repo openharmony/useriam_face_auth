@@ -174,6 +174,7 @@ void OverrideScreenBrightness(uint32_t brightness)
         return;
     }
 #else
+    IAM_LOGI("display_manager component is not used.");
     return;
 #endif
 }
@@ -187,6 +188,7 @@ void RestoreScreenBrightness()
         return;
     }
 #else
+    IAM_LOGI("display_manager component is not used.");
     return;
 #endif
 }
