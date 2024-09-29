@@ -196,6 +196,7 @@ uint32_t GetCurrentScreenBrightness()
 #ifdef FACE_USE_DISPLAY_MANAGER_COMPONENT
     return DisplayPowerMgrClient::GetInstance().GetDeviceBrightness();
 #else
+    IAM_LOGI("display_manager component is not used.");
     return INVALID_BRIGHTNESS;
 #endif
 }
