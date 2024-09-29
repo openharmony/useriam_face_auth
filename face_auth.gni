@@ -12,7 +12,7 @@
 # limitations under the License.
 
 declare_args() {
-  face_use_display_manager_component = false
+  face_use_display_manager_component = true
   if (defined(global_parts_info) &&
       !defined(global_parts_info.powermgr_display_manager)) {
     face_use_display_manager_component = false
