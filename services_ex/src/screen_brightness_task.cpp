@@ -18,9 +18,13 @@
 #include <string>
 #include <vector>
 
+#ifdef FACE_USE_DISPLAY_MANAGER_COMPONENT
 #include "display_power_mgr_client.h"
+#endif
 #include "parameter.h"
+#ifdef FACE_USE_SENSOR_COMPONENT
 #include "sensor_agent.h"
+#endif
 
 #include "iam_check.h"
 #include "iam_logger.h"
@@ -35,8 +39,11 @@ namespace OHOS {
 namespace UserIam {
 namespace FaceAuth {
 using ResultCode = UserAuth::ResultCode;
+#ifdef FACE_USE_DISPLAY_MANAGER_COMPONENT
 using namespace DisplayPowerMgr;
+#endif
 namespace {
+#ifdef FACE_USE_SENSOR_COMPONENT
 constexpr SensorUser SENSOR_USER = {
     "FaceAuthService",
     [](SensorEvent *event) {
@@ -53,6 +60,7 @@ constexpr SensorUser SENSOR_USER = {
         task->SetAmbientLight(data->intensity);
     },
 };
+#endif
 constexpr uint32_t INVALID_BRIGHTNESS = -1;
 constexpr uint32_t SENSOR_SAMPLE_AND_REPORT_INTERVAL = 100 * 1000 * 1000; // ns
 constexpr uint32_t INCREASE_BRIGHTNESS_START_DELAY = 100;                 // ms
@@ -117,6 +125,7 @@ uint32_t GetIncreaseBrightnessMax()
 ResultCode SubscribeSensor()
 {
     IAM_LOGI("start");
+#ifdef FACE_USE_SENSOR_COMPONENT
     int32_t subscribeSensorRet = SubscribeSensor(SENSOR_TYPE_ID_AMBIENT_LIGHT, &SENSOR_USER);
     IF_FALSE_LOGE_AND_RETURN_VAL(subscribeSensorRet == 0, ResultCode::GENERAL_ERROR);
     int32_t setBatchRet = SetBatch(SENSOR_TYPE_ID_AMBIENT_LIGHT, &SENSOR_USER, SENSOR_SAMPLE_AND_REPORT_INTERVAL,
@@ -126,16 +135,24 @@ ResultCode SubscribeSensor()
     IF_FALSE_LOGE_AND_RETURN_VAL(activateSensorRet == 0, ResultCode::GENERAL_ERROR);
     int32_t setModeRet = SetMode(SENSOR_TYPE_ID_AMBIENT_LIGHT, &SENSOR_USER, SENSOR_ON_CHANGE);
     IF_FALSE_LOGE_AND_RETURN_VAL(setModeRet == 0, ResultCode::GENERAL_ERROR);
-
     return ResultCode::SUCCESS;
+#else
+    IAM_LOGI("sensor component is not used");
+    return ResultCode::GENERAL_ERROR
+#endif
 }
 
 void UnsubscribeSensor()
 {
     IAM_LOGI("start");
+#ifdef FACE_USE_SENSOR_COMPONENT
     DeactivateSensor(SENSOR_TYPE_ID_AMBIENT_LIGHT, &SENSOR_USER);
     UnsubscribeSensor(SENSOR_TYPE_ID_AMBIENT_LIGHT, &SENSOR_USER);
     return;
+#else
+    IAM_LOGI("sensor component is not used");
+    return;
+#endif
 }
 
 uint32_t GetIncreaseBrightnessStartIndex(uint32_t currentBrightness)
@@ -150,25 +167,40 @@ uint32_t GetIncreaseBrightnessStartIndex(uint32_t currentBrightness)
 
 void OverrideScreenBrightness(uint32_t brightness)
 {
+#ifdef FACE_USE_DISPLAY_MANAGER_COMPONENT
     int32_t displayId = DisplayPowerMgrClient::GetInstance().GetMainDisplayId();
     if (!DisplayPowerMgrClient::GetInstance().OverrideBrightness(brightness, displayId)) {
         IAM_LOGE("override brightness fail");
         return;
     }
+#else
+    IAM_LOGI("display_manager component is not used.");
+    return;
+#endif
 }
 
 void RestoreScreenBrightness()
 {
+#ifdef FACE_USE_DISPLAY_MANAGER_COMPONENT
     int32_t displayId = DisplayPowerMgrClient::GetInstance().GetMainDisplayId();
     if (!DisplayPowerMgrClient::GetInstance().RestoreBrightness(displayId)) {
         IAM_LOGE("restore brightness fail");
         return;
     }
+#else
+    IAM_LOGI("display_manager component is not used.");
+    return;
+#endif
 }
 
 uint32_t GetCurrentScreenBrightness()
 {
+#ifdef FACE_USE_DISPLAY_MANAGER_COMPONENT
     return DisplayPowerMgrClient::GetInstance().GetDeviceBrightness();
+#else
+    IAM_LOGI("display_manager component is not used.");
+    return INVALID_BRIGHTNESS;
+#endif
 }
 
 bool ShouldBeginIncreaseBrightness(float currentAmbientLightLux)
