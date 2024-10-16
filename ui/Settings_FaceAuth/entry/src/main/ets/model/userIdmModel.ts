@@ -106,7 +106,7 @@ class UserIdmModel {
           Log.info(this.TAG, 'enrollFace onResult-');
           resolve(result);
         },
-        onAcquireInfo(moduleId, number, extraInfo) {
+        onAcquireInfo: (moduleId, number, extraInfo) => {
           Log.info(this.TAG, 'onAcquireInfo+ ' + moduleId + ':' + number + ':' + JSON.stringify(extraInfo));
           this.onAcquireCallback(number);
           Log.info(this.TAG, 'onAcquireInfo-');
