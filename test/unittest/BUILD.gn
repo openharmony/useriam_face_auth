@@ -41,8 +41,6 @@ ohos_unittest("face_auth_service_test") {
     "../../frameworks/ipc:faceauth_framework_stub",
     "../../services:faceauthservice_source_set",
     "../../services_ex:faceauthservice_ex_source_set",
-    "//third_party/googletest:gmock_main",
-    "//third_party/googletest:gtest_main",
   ]
 
   external_deps = [
@@ -52,6 +50,8 @@ ohos_unittest("face_auth_service_test") {
     "access_token:libtokenid_sdk",
     "drivers_interface_camera:libbuffer_producer_sequenceable_1.0",
     "drivers_interface_face_auth:libface_auth_proxy_2.0",
+    "googletest:gmock_main",
+    "googletest:gtest_main",
     "graphic_surface:surface",
     "hilog:libhilog",
     "user_auth_framework:userauth_executors",
@@ -80,15 +80,13 @@ ohos_unittest("face_auth_screen_brightness_test") {
 
   sources = [ "face_auth_screen_brightness_test.cpp" ]
 
-  deps = [
-    "../../services:faceauthservice_source_set",
-    "//third_party/googletest:gmock_main",
-    "//third_party/googletest:gtest_main",
-  ]
+  deps = [ "../../services:faceauthservice_source_set" ]
 
   external_deps = [
     "drivers_interface_camera:libbuffer_producer_sequenceable_1.0",
     "drivers_interface_face_auth:libface_auth_proxy_2.0",
+    "googletest:gmock_main",
+    "googletest:gtest_main",
     "graphic_surface:surface",
     "hilog:libhilog",
     "user_auth_framework:userauth_executors",
@@ -120,8 +118,6 @@ ohos_unittest("face_auth_perm_test") {
   deps = [
     "../../frameworks/ipc:faceauth_framework_stub",
     "../../services:faceauthservice_source_set",
-    "//third_party/googletest:gmock_main",
-    "//third_party/googletest:gtest_main",
   ]
 
   external_deps = [
@@ -129,6 +125,8 @@ ohos_unittest("face_auth_perm_test") {
     "access_token:libnativetoken",
     "drivers_interface_camera:libbuffer_producer_sequenceable_1.0",
     "drivers_interface_face_auth:libface_auth_proxy_2.0",
+    "googletest:gmock_main",
+    "googletest:gtest_main",
     "graphic_surface:surface",
     "hilog:libhilog",
     "user_auth_framework:userauth_executors",
