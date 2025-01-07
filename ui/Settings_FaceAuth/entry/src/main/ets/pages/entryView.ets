@@ -66,32 +66,29 @@ struct Index {
     .backgroundColor($r('sys.color.ohos_id_color_sub_background'))
     .onAreaChange((_, newArea) => {
       try {
-        window.on('systemBarTintChange', (data) => {
-          if (data !== null && data !== undefined) {
-            Log.info(this.TAG, 'receive system bar tint change: ' + JSON.stringify(data));
-            for (let i = 0; i < data.regionTint.length; i++) {
-              let regionData = data.regionTint[i]
-              if (regionData.region) {
-                if (regionData.type === window.WindowType.TYPE_STATUS_BAR) {
-                  this.SYSTEM_STATUS_BAR_HEIGHT = px2vp(regionData.region.height)
-                  Log.info(this.TAG, 'set status bar height ' + regionData.region.height)
-                  continue
-                }
-                if (regionData.type === window.WindowType.TYPE_NAVIGATION_BAR) {
-                  this.SYSTEM_NAVIGATION_BAR_HEIGHT = px2vp(regionData.region.height)
-                  Log.info(this.TAG, 'set navigation ba r height ' + this.SYSTEM_NAVIGATION_BAR_HEIGHT)
-                  continue
-                }
-              }
-            }
-          }
-        });
-      } catch (exception) {
-        Log.error(this.TAG, 'Failed to register systemBarTintChange' + JSON.stringify(exception))
+        window.getLastWindow(getContext(this))
+          .then((windowClass) => {
+            let type = window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR;
+            let avoidArea = windowClass.getWindowAvoidArea(type);
+            this.SYSTEM_NAVIGATION_BAR_HEIGHT = px2vp(avoidArea.bottomRect.height);
+
+            type = window.AvoidAreaType.TYPE_SYSTEM;
+            avoidArea = windowClass.getWindowAvoidArea(type);
+            this.SYSTEM_STATUS_BAR_HEIGHT = px2vp(avoidArea.topRect.height);
+
+            Log.info(this.TAG, `SYSTEM_STATUS_BAR_HEIGHT:${this.SYSTEM_STATUS_BAR_HEIGHT},
+              SYSTEM_NAVIGATION_BAR_HEIGHT:${this.SYSTEM_NAVIGATION_BAR_HEIGHT}`);
+
+            Log.info(this.TAG, 'new display area :' + JSON.stringify(newArea));
+            CommonController.setDisplaySize(Number(newArea.width), Number(newArea.height));
+            Log.info(this.TAG, 'total area w: ' + newArea.width + ' h: ' + newArea.height);
+          })
+          .catch(() => {
+            Log.error(this.TAG, 'getLastWindow Fail');
+          })
+      } catch (err) {
+        Log.error(this.TAG, `getLastWindow error, errCode:${err?.code}, errMessage:${err?.message}`);
       }
-      Log.info(this.TAG, 'new display area :' + JSON.stringify(newArea))
-      CommonController.setDisplaySize(Number(newArea.width), Number(newArea.height))
-      Log.info(this.TAG, 'total area w: ' + newArea.width + ' h: ' + newArea.height)
     })
   }
 
