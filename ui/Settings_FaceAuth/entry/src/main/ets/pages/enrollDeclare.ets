@@ -42,7 +42,7 @@ export default struct EnrollDeclare {
   private pattern: string = '2D';
   private readonly TAG: string = 'EnrollDeclare';
   @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0;
-  private scrollBarColor: string;
+  private scrollBarColor: string = '';
 
   aboutToAppear() {
     let scrollBarColor = CommonUtil.getColor(getContext(this), $r('sys.color.ohos_id_color_foreground_transparent'));
