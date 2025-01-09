@@ -14,6 +14,7 @@
  */
 
 {
+  "modelVersion": "5.0.0",
   "name": "settings_faceauth",
   "license": "ISC",
   "version": "1.0.0",
@@ -25,7 +26,7 @@
   },
   "repository": {},
   "devDependencies": {
-    "@ohos/hypium": "1.0.6",
+    "@ohos/hypium": "1.0.6"
   },
   "dependencies": {},
   "scripts": {

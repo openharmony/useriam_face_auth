@@ -51,7 +51,7 @@ struct EnrollIntro {
   @StorageLink('enrollImageWidth') enrollImageWidth: number = 0;
   @StorageLink('CONTENT_TYPE_WIDTH') CONTENT_TYPE_WIDTH: number = 0;
   @StorageLink('BUTTON_TYPE_WIDTH') BUTTON_TYPE_WIDTH: number = 0;
-  private scrollBarColor: string;
+  private scrollBarColor: string = '';
 
   aboutToAppear() {
     let scrollBarColor = CommonUtil.getColor(getContext(this), $r('sys.color.ohos_id_color_foreground_transparent'));
