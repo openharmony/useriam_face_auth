@@ -54,6 +54,7 @@ ohos_unittest("face_auth_service_test") {
     "googletest:gtest_main",
     "graphic_surface:surface",
     "hilog:libhilog",
+    "safwk:system_ability_fwk",
     "user_auth_framework:userauth_executors",
   ]
 
@@ -89,6 +90,7 @@ ohos_unittest("face_auth_screen_brightness_test") {
     "googletest:gtest_main",
     "graphic_surface:surface",
     "hilog:libhilog",
+    "safwk:system_ability_fwk",
     "user_auth_framework:userauth_executors",
   ]
 
@@ -129,6 +131,7 @@ ohos_unittest("face_auth_perm_test") {
     "googletest:gtest_main",
     "graphic_surface:surface",
     "hilog:libhilog",
+    "safwk:system_ability_fwk",
     "user_auth_framework:userauth_executors",
   ]
 
