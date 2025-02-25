@@ -59,7 +59,10 @@ ohos_source_set("faceauthservice_ex_source_set") {
   defines = []
 
   if (face_use_display_manager_component) {
-    external_deps += [ "display_manager:displaymgr" ]
+    external_deps += [
+      "display_manager:displaymgr",
+      "ipc:ipc_core",
+    ]
     defines += [ "FACE_USE_DISPLAY_MANAGER_COMPONENT" ]
   }
 
