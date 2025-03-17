@@ -66,7 +66,7 @@ void FaceAuthServiceTest::TearDown()
 {
 }
 
-HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_001, TestSize.Level0)
+HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_001, TestSize.Level2)
 {
     auto service = FaceAuthService::GetInstance();
     EXPECT_NE(service, nullptr);
@@ -75,7 +75,7 @@ HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_001, TestSize.Level0)
     EXPECT_EQ(ret, FACE_AUTH_SUCCESS);
 }
 
-HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_002, TestSize.Level0)
+HWTEST_F(FaceAuthServiceTest, FaceAuthServiceTest_002, TestSize.Level2)
 {
     MessageParcel data;
     MessageParcel reply;

@@ -24,7 +24,7 @@ ohos_unittest("face_auth_service_test") {
     blocklist = "../../cfi_blocklist.txt"
   }
   branch_protector_ret = "pac_ret"
-  module_out_path = "useriam/face_auth"
+  module_out_path = "face_auth/face_auth"
 
   sources = [
     "face_auth_all_in_one_executor_hdi_unit_test.cpp",
@@ -75,7 +75,7 @@ ohos_unittest("face_auth_screen_brightness_test") {
     blocklist = "../../cfi_blocklist.txt"
   }
   branch_protector_ret = "pac_ret"
-  module_out_path = "useriam/face_auth"
+  module_out_path = "face_auth/face_auth"
 
   include_dirs = [ "mock" ]
 
@@ -111,7 +111,7 @@ ohos_unittest("face_auth_perm_test") {
     blocklist = "../../cfi_blocklist.txt"
   }
   branch_protector_ret = "pac_ret"
-  module_out_path = "useriam/face_auth"
+  module_out_path = "face_auth/face_auth"
 
   sources = [ "face_auth_service_perm_test.cpp" ]
 
