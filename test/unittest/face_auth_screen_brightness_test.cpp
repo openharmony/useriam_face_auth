@@ -53,7 +53,7 @@ void FaceAuthScreenBrightnessTest::TearDown()
 {
 }
 
-HWTEST_F(FaceAuthScreenBrightnessTest, FaceAuthScreenBrightnessTest_001, TestSize.Level0)
+HWTEST_F(FaceAuthScreenBrightnessTest, FaceAuthScreenBrightnessTest_001, TestSize.Level4)
 {
     auto acquireRet = ServiceExManager::GetInstance().Acquire();
     EXPECT_TRUE(acquireRet == UserAuth::SUCCESS);
@@ -72,7 +72,7 @@ HWTEST_F(FaceAuthScreenBrightnessTest, FaceAuthScreenBrightnessTest_001, TestSiz
     task = nullptr;
 }
 
-HWTEST_F(FaceAuthScreenBrightnessTest, FaceAuthScreenBrightnessTest_002, TestSize.Level0)
+HWTEST_F(FaceAuthScreenBrightnessTest, FaceAuthScreenBrightnessTest_002, TestSize.Level4)
 {
     auto manager = ScreenBrightnessManager::GetInstance();
     EXPECT_TRUE(manager != nullptr);

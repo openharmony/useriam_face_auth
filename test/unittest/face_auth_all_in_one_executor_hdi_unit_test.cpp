@@ -268,7 +268,7 @@ HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_OnRegi
     }
 }
 
-HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Enroll_001, TestSize.Level0)
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Enroll_001, TestSize.Level1)
 {
     for (const auto &pair : RESULT_CODE_MAP) {
         sptr<MockIAllInOneExecutor> executorProxy(new (std::nothrow) MockIAllInOneExecutor());
@@ -285,7 +285,7 @@ HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Enroll
     }
 }
 
-HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Enroll_002, TestSize.Level0)
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Enroll_002, TestSize.Level1)
 {
     sptr<MockIAllInOneExecutor> executorProxy(new (std::nothrow) MockIAllInOneExecutor());
     ASSERT_TRUE(executorProxy != nullptr);
@@ -295,7 +295,7 @@ HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Enroll
     EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
-HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Enroll_003, TestSize.Level0)
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Enroll_003, TestSize.Level1)
 {
     auto executorHdi = MakeShared<FaceAuthAllInOneExecutorHdi>(nullptr);
     auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
@@ -304,7 +304,7 @@ HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Enroll
     EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
-HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Authenticate_001, TestSize.Level0)
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Authenticate_001, TestSize.Level1)
 {
     for (const auto &pair : RESULT_CODE_MAP) {
         sptr<MockIAllInOneExecutor> executorProxy(new (std::nothrow) MockIAllInOneExecutor());
@@ -323,7 +323,7 @@ HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Authen
     }
 }
 
-HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Authenticate_002, TestSize.Level0)
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Authenticate_002, TestSize.Level1)
 {
     auto executorProxy = new (std::nothrow) MockIAllInOneExecutor();
     ASSERT_TRUE(executorProxy != nullptr);
@@ -334,7 +334,7 @@ HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Authen
     EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
-HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Authenticate_003, TestSize.Level0)
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Authenticate_003, TestSize.Level1)
 {
     auto executorHdi = MakeShared<FaceAuthAllInOneExecutorHdi>(nullptr);
     auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
@@ -343,7 +343,7 @@ HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Authen
         UserAuth::AuthenticateParam { 0, std::vector<uint64_t>(), std::vector<uint8_t>(), false }, executeCallback);
     EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
-HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Identify_001, TestSize.Level0)
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Identify_001, TestSize.Level1)
 {
     for (const auto &pair : RESULT_CODE_MAP) {
         sptr<MockIAllInOneExecutor> executorProxy(new (std::nothrow) MockIAllInOneExecutor());
@@ -360,7 +360,7 @@ HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Identi
     }
 }
 
-HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Identify_002, TestSize.Level0)
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Identify_002, TestSize.Level1)
 {
     auto executorProxy = new (std::nothrow) MockIAllInOneExecutor();
     ASSERT_TRUE(executorProxy != nullptr);
@@ -370,7 +370,7 @@ HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Identi
     EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
-HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Identify_003, TestSize.Level0)
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Identify_003, TestSize.Level1)
 {
     auto executorHdi = MakeShared<FaceAuthAllInOneExecutorHdi>(nullptr);
     auto executeCallback = MakeShared<UserIam::UserAuth::MockIExecuteCallback>();
@@ -379,7 +379,7 @@ HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Identi
     EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
-HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Delete_001, TestSize.Level0)
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Delete_001, TestSize.Level1)
 {
     for (const auto &pair : RESULT_CODE_MAP) {
         auto executorProxy = new (std::nothrow) MockIAllInOneExecutor();
@@ -393,14 +393,14 @@ HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Delete
     }
 }
 
-HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Delete_002, TestSize.Level0)
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Delete_002, TestSize.Level1)
 {
     auto executorHdi = MakeShared<FaceAuthAllInOneExecutorHdi>(nullptr);
     auto ret = executorHdi->Delete(std::vector<uint64_t>());
     EXPECT_TRUE(ret == IamResultCode::GENERAL_ERROR);
 }
 
-HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Cancel_001, TestSize.Level0)
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Cancel_001, TestSize.Level1)
 {
     for (const auto &pair : RESULT_CODE_MAP) {
         auto executorProxy = new (std::nothrow) MockIAllInOneExecutor();
@@ -414,7 +414,7 @@ HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Cancel
     }
 }
 
-HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Cancel_002, TestSize.Level0)
+HWTEST_F(FaceAuthAllInOneExecutorHdiUnitTest, FaceAuthAllInOneExecutorHdi_Cancel_002, TestSize.Level1)
 {
     auto executorHdi = MakeShared<FaceAuthAllInOneExecutorHdi>(nullptr);
     auto ret = executorHdi->Cancel(0);
