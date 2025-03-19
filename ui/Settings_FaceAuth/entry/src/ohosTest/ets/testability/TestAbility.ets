@@ -24,9 +24,17 @@ import AbilityConstant from '@ohos.app.ability.AbilityConstant';
 
 export default class TestAbility extends UIAbility {
     onCreate(want: Want, launchParam: AbilityConstant.LaunchParam) {
+        let wantParam = '';
+        let launchParam = '';
+        try {
+            wantParam = JSON.stringify(want);
+            launchParam = JSON.stringify(launchParam);
+        } catch (err) {
+            Log.error(TAG, `stringify Failed, error code: ${error.code}, message: ${error.message}.`);
+        }
         hilog.info(0x0000, 'testTag', '%{public}s', 'TestAbility onCreate');
-        hilog.info(0x0000, 'testTag', '%{public}s', 'want param:' + JSON.stringify(want) ?? '');
-        hilog.info(0x0000, 'testTag', '%{public}s', 'launchParam:' + JSON.stringify(launchParam) ?? '');
+        hilog.info(0x0000, 'testTag', '%{public}s', 'want param:' + wantParam ?? '');
+        hilog.info(0x0000, 'testTag', '%{public}s', 'launchParam:' + launchParam ?? '');
         let abilityDelegator: AbilityDelegatorRegistry.AbilityDelegator;
         abilityDelegator = AbilityDelegatorRegistry.getAbilityDelegator();
         let abilityDelegatorArguments: AbilityDelegatorRegistry.AbilityDelegatorArgs;
@@ -42,12 +50,20 @@ export default class TestAbility extends UIAbility {
     onWindowStageCreate(windowStage: window.WindowStage) {
         hilog.info(0x0000, 'testTag', '%{public}s', 'TestAbility onWindowStageCreate');
         windowStage.loadContent('testability/pages/Index', (err, data) => {
+            let errString = '';
+            let dataString = '';
+            try {
+                errString = JSON.stringify(err);
+                dataString = JSON.stringify(data);
+            } catch (err) {
+                Log.error(TAG, `stringify Failed, error code: ${error.code}, message: ${error.message}.`);
+            }
             if (err.code) {
-                hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
+                hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', errString ?? '');
                 return;
             }
             hilog.info(0x0000, 'testTag', 'Succeeded in loading the content. Data: %{public}s',
-                JSON.stringify(data) ?? '');
+                dataString ?? '');
         });
     }
 
