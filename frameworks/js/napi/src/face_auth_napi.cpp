@@ -45,7 +45,7 @@ enum ResultCode : int32_t {
 const std::map<int32_t, std::string> g_result2Str = {
     { OHOS_CHECK_PERMISSION_FAILED, "Permission verification failed." },
     { OHOS_CHECK_SYSTEM_PERMISSION_FAILED, "The caller is not a system application." },
-    { RESULT_CODE_FAIL, "The operation is failed." },
+    { RESULT_CODE_FAIL, "The service is unavailable." },
 };
 
 napi_value FaceAuthManagerConstructor(napi_env env, napi_callback_info info)
