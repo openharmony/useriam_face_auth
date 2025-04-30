@@ -51,6 +51,7 @@ ohos_source_set("faceauthservice_ex_source_set") {
     "c_utils:utils",
     "drivers_interface_camera:libbuffer_producer_sequenceable_1.0",
     "drivers_interface_face_auth:libface_auth_proxy_2.0",
+    "hdf_core:libhdf_utils",
     "hilog:libhilog",
     "init:libbegetutil",
     "user_auth_framework:userauth_executors",
