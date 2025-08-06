@@ -38,8 +38,7 @@
           "safwk",
           "samgr",
           "sensor",
-          "user_auth_framework",
-          "runtime_core"
+          "user_auth_framework"
         ]
       },
       "build": {
@@ -47,8 +46,7 @@
           "base_group": [
           ],
           "fwk_group": [
-            "//base/useriam/face_auth/frameworks/js/napi:faceauth",
-            "//base/useriam/face_auth/frameworks/ets/ani:face_auth_ani"
+            "//base/useriam/face_auth/frameworks/js/napi:faceauth"
           ],
           "service_group": [
             "//base/useriam/face_auth/sa_profile:faceauth_sa_profile",
