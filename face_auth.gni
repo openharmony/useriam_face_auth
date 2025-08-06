@@ -29,5 +29,4 @@ declare_args() {
       !defined(global_parts_info.sensors_sensor)) {
     face_use_sensor_component = false
   }
-  face_auth_path = "//base/useriam/face_auth"
 }
