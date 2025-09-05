@@ -57,6 +57,7 @@ ohos_unittest("face_auth_service_test") {
     "hilog:libhilog",
     "safwk:system_ability_fwk",
     "user_auth_framework:userauth_executors",
+    "selinux_adapter:librestorecon"
   ]
 
   remove_configs = [ "//build/config/compiler:no_exceptions" ]
