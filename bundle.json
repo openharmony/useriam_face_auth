@@ -39,7 +39,8 @@
           "samgr",
           "sensor",
           "user_auth_framework",
-          "runtime_core"
+          "runtime_core",
+          "selinux_adapter"
         ]
       },
       "build": {
