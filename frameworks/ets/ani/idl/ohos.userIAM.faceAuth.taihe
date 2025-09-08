@@ -16,7 +16,7 @@
 @!namespace("@ohos.userIAM.faceAuth", "faceAuth")
 
 @!sts_inject("""
-static { loadLibrary("faceauth_ani.z"); }
+static { loadLibraryWithPermissionCheck("faceauth_ani.z", "@ohos.userIAM.faceAuth"); }
 """)
 
 @class
