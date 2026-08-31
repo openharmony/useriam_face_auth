@@ -29,6 +29,7 @@
 #include "iam_check.h"
 #include "iam_logger.h"
 #include "iam_ptr.h"
+#include "parse_face_auth_param_uint32.h"
 
 #include "finite_state_machine.h"
 #include "screen_brightness_manager.h"
@@ -84,19 +85,11 @@ uint32_t GetUInt32Param(const char *key, uint32_t defaultValue)
         IAM_LOGE("failed to get param %{public}s, return default value", key);
         return defaultValue;
     }
-    uint32_t uintValue;
-    try {
-        unsigned long longValue = std::stoul(str);
-        if (longValue > std::numeric_limits<uint32_t>::max()) {
-            IAM_LOGE("value exceeds uint32");
-            return std::numeric_limits<uint32_t>::max();
-        }
-        uintValue = static_cast<uint32_t>(longValue);
-    } catch (const std::exception &e) {
-        IAM_LOGE("failed to convert %{public}s to int, return default value", str);
+    uint32_t uintValue = 0;
+    if (!ParseFaceAuthParamUInt32(str, uintValue)) {
+        IAM_LOGE("invalid param %{public}s value %{public}s, return default value", key, str);
         return defaultValue;
     }
-
     return uintValue;
 }
 
